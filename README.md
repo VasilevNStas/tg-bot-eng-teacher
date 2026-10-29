@@ -91,7 +91,7 @@ MVP работает в режиме polling — публичный URL не т�
 запуск от non-root пользователя `app` (UID 10001).
 
 ```bash
-install -d -o 10001 -g 10001 data   # один раз, нужен root
+install -d -o 10001 -g 10001 data   # локально; на VDS — см. DEPLOY.md
 cp .env.example .env                # заполнить BOT_TOKEN и LLM_*
 docker compose build
 docker compose run --rm bot python -m app.cli import-content content/topics
@@ -117,69 +117,22 @@ docker compose exec bot sh -c \
 
 ## CI/CD
 
-Релиз запускается тегом `vX.Y.Z`: GitHub Actions заходит по SSH на VDS, делает
-`git fetch`, собирает образ **на самом VDS** и перезапускает контейнер.
-Перед сборкой скрипт `scripts/deploy.sh` делает `sqlite3 .backup` и хранит
-последние 10 бэкапов в `backups/`.
+Релиз запускается тегом `vX.Y.Z`: GitHub Actions проверяет, что тег есть в
+`main`, заходит по SSH на VDS, собирает образ **на самом VDS** и перезапускает
+контейнер. Перед сборкой `scripts/deploy.sh` делает бэкап SQLite и хранит
+последние 10 файлов в `backups/`.
 
-Тег должен указывать на коммит из `main` (там уже требуется зелёный CI).
+Полная пошаговая инструкция — **[DEPLOY.md](DEPLOY.md)**: подготовка VDS,
+swap, пользователь `deploy`, forced-command ключ, секреты GitHub, первый релиз,
+проверка, откат, бэкапы и диагностика.
 
-### One-time setup на VDS
-
-Как root:
-
-```bash
-useradd --create-home --shell /bin/bash --groups docker deploy
-install -d -o deploy -g deploy /srv/tg-bot-eng-teacher
-sudo -u deploy git clone https://github.com/VasilevNStas/tg-bot-eng-teacher.git \
-  /srv/tg-bot-eng-teacher
-install -d -o 10001 -g 10001 /srv/tg-bot-eng-teacher/data
-sudo -u deploy cp /srv/tg-bot-eng-teacher/.env.example \
-  /srv/tg-bot-eng-teacher/.env
-# заполнить .env: BOT_TOKEN, LLM_API_KEY, LLM_MODEL_FAST, LLM_MODEL_SMART
-```
-
-SSH-ключ для деплоя (на локальной машине):
-
-```bash
-ssh-keygen -t ed25519 -f ~/.ssh/tg_bot_eng_teacher_deploy -N "" -C "gha-deploy"
-```
-
-Публичный ключ на VDS (root), с forced command:
-
-```bash
-install -d -m 700 -o deploy -g deploy /home/deploy/.ssh
-printf 'command="bash /srv/tg-bot-eng-teacher/scripts/deploy.sh",no-agent-forwarding,no-port-forwarding,no-pty,no-user-rc,no-X11-forwarding %s\n' \
-  "$(cat tg_bot_eng_teacher_deploy.pub)" >> /home/deploy/.ssh/authorized_keys
-chown deploy:deploy /home/deploy/.ssh/authorized_keys
-chmod 600 /home/deploy/.ssh/authorized_keys
-```
-
-Секреты GitHub:
-
-```bash
-gh secret set VDS_HOST --body "193.168.49.204"
-gh secret set VDS_USER --body "deploy"
-gh secret set VDS_SSH_KEY < ~/.ssh/tg_bot_eng_teacher_deploy
-ssh-keyscan -H 193.168.49.204 | gh secret set VDS_KNOWN_HOSTS
-```
-
-### Выпуск релиза
+Коротко:
 
 ```bash
 git tag -a v0.1.0 -m "v0.1.0"
 git push origin v0.1.0
 gh run watch
 ```
-
-Повторный деплой без нового тега:
-
-```bash
-gh workflow run release.yml -f tag=v0.1.0
-```
-
-Первый деплой создаёт БД и применяет миграции автоматически
-(`alembic upgrade head` в команде контейнера).
 
 ## Тесты и проверки
 

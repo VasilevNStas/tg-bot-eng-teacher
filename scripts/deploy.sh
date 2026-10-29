@@ -30,7 +30,8 @@ if [[ -f data/bot.db ]]; then
   backup="backups/pre-release-$(date +%Y%m%d-%H%M%S).db"
   echo "==> backup $backup"
   sqlite3 data/bot.db ".backup '$backup'"
-  ls -1t backups/*.db | tail -n +11 | xargs -r rm -f
+  find backups -maxdepth 1 -type f -name '*.db' -printf '%T@\t%p\n' \
+    | sort -rn | tail -n +11 | cut -f2- | xargs -r rm -f
 fi
 
 echo "==> build"
