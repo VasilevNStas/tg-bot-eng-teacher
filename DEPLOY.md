@@ -163,6 +163,15 @@ sudo -u deploy vi /srv/tg-bot-eng-teacher/.env   # или любой редак�
 Проверьте, что `BOT_TOKEN` **не совпадает** с токеном уже запущенного
 `tg-bot-ytdl` (иначе Telegram вернёт `409 Conflict`).
 
+Формат токена — `<цифры>:<35 символов>`, без кавычек и пробелов. Безопасная
+проверка (токен не печатается):
+
+```bash
+sudo -u deploy grep -qE '^BOT_TOKEN=[0-9]+:[A-Za-z0-9_-]{35}$' \
+  /srv/tg-bot-eng-teacher/.env \
+  && echo "token format ok" || echo "token format INVALID"
+```
+
 Остальные переменные можно оставить по умолчанию; `DB_PATH` и `PROMPTS_DIR`
 переопределяются в `docker-compose.yml` на `/app/data/bot.db` и `/app/prompts`.
 
@@ -307,6 +316,8 @@ sudo -u deploy docker compose restart bot
 ```bash
 cd /srv/tg-bot-eng-teacher
 sudo -u deploy docker compose ps
+sudo -u deploy docker inspect -f '{{.State.Status}} restarts={{.RestartCount}}' \
+  "$(sudo -u deploy docker compose ps -q bot)"
 sudo -u deploy docker compose logs --tail=100 bot
 ls -lh backups/ | tail -5
 ```
@@ -314,6 +325,7 @@ ls -lh backups/ | tail -5
 Ожидаемо:
 
 - контейнер `tg-bot-eng-teacher-bot-1` в статусе `Up`;
+- `running restarts=0` (иначе бот падает и перезапускается);
 - в логах `bot_started`, нет `401/402/429`, нет traceback;
 - в `backups/` появился свежий файл (со второго релиза).
 
@@ -442,6 +454,8 @@ sudo -u deploy docker compose up -d
 | `env file ... not found` | нет `.env` | создать `.env` или обновить Compose |
 | `env_file.required` unknown | Compose < 2.24 | обновите Compose или замените на `env_file: .env` |
 | Контейнер перезапускается | неверный `.env` / ошибка валидации | `docker compose logs --tail=200 bot` |
+| `TokenValidationError: Token is invalid!` | пустой/неверный `BOT_TOKEN`, кавычки/пробелы, токен отозван | проверьте формат (3.6), перевыпустите в @BotFather, затем `up -d --force-recreate` |
+| Изменения `.env` не применились | `docker compose restart` не пересоздаёт контейнер | `docker compose up -d --force-recreate` |
 | `409 Conflict` в Telegram | тот же `BOT_TOKEN` запущен дважды | остановите второй процесс/старый systemd-юнит |
 | OOM kill при сборке | мало RAM, нет swap | добавьте swap (3.1), повторите |
 | `No space left on device` | образы/build cache | `docker system prune -af`, удалите старые бэкапы |
