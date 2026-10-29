@@ -6,6 +6,7 @@ from datetime import UTC, datetime, timedelta
 from decimal import Decimal
 from pathlib import Path
 from typing import Any
+from unittest.mock import AsyncMock
 
 from aiogram import Bot
 from aiogram.client.session.base import BaseSession
@@ -14,10 +15,11 @@ from aiogram.types import CallbackQuery, Chat, Message
 from aiogram.types import User as TgUser
 from sqlalchemy import func, select
 
-from app.bot.callbacks import ReviewCB, RoleplayCB
+from app.bot.callbacks import DeleteCB, ReviewCB, RoleplayCB
 from app.bot.formatters import TELEGRAM_LIMIT
 from app.bot.handlers.chat import handle_chat
 from app.bot.handlers.correction import handle_correction
+from app.bot.handlers.privacy import handle_delete_callback, handle_delete_me
 from app.bot.handlers.review import handle_grade, handle_review
 from app.bot.handlers.roleplay import handle_roleplay, handle_start, handle_stop
 from app.bot.handlers.stats import handle_stats
@@ -674,6 +676,74 @@ async def test_review_card_and_grade(tmp_path: Path) -> None:
         reminder = (await db_session.scalars(select(Reminder))).one()
         assert reminder.sent_at is None
         assert reminder.payload["source"] == "srs"
+
+    await bot.session.close()
+    await database.dispose()
+
+
+async def test_delete_me_requires_confirmation_and_deletes_user(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    await make_onboarded_user(database)
+    services = make_services(database, FakeLLM())
+    bot, session = await make_bot()
+
+    await handle_delete_me(make_message(bot, "/delete_me"), services)
+
+    sent = session.methods[-1]
+    assert isinstance(sent, SendMessage)
+    assert sent.text == ru.DELETE_WARNING
+    callbacks = [
+        DeleteCB.unpack(button.callback_data)
+        for row in sent.reply_markup.inline_keyboard
+        for button in row
+        if button.callback_data
+    ]
+    assert [callback.action for callback in callbacks] == ["confirm", "cancel"]
+
+    data = DeleteCB(action="confirm")
+    callback = CallbackQuery(
+        id="cb-delete",
+        from_user=TgUser(id=100, is_bot=False, first_name="Tester"),
+        chat_instance="chat-instance",
+        message=make_message(bot, "warning"),
+        data=data.pack(),
+    ).as_(bot)
+    state = AsyncMock()
+    await handle_delete_callback(callback, services, state)
+
+    edits = [method for method in session.methods if isinstance(method, EditMessageText)]
+    assert edits[-1].text.startswith("<b>Готово.</b>")
+    assert await count(database, User) == 0
+    state.clear.assert_awaited_once()
+
+    await handle_delete_me(make_message(bot, "/delete_me"), services)
+    assert session.methods[-1].text == ru.DELETE_NOTHING
+
+    await bot.session.close()
+    await database.dispose()
+
+
+async def test_delete_me_cancel_keeps_user(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    await make_onboarded_user(database)
+    services = make_services(database, FakeLLM())
+    bot, session = await make_bot()
+
+    data = DeleteCB(action="cancel")
+    callback = CallbackQuery(
+        id="cb-cancel",
+        from_user=TgUser(id=100, is_bot=False, first_name="Tester"),
+        chat_instance="chat-instance",
+        message=make_message(bot, "warning"),
+        data=data.pack(),
+    ).as_(bot)
+    state = AsyncMock()
+    await handle_delete_callback(callback, services, state)
+
+    edits = [method for method in session.methods if isinstance(method, EditMessageText)]
+    assert edits[-1].text == ru.DELETE_CANCELLED
+    assert await count(database, User) == 1
+    state.clear.assert_not_awaited()
 
     await bot.session.close()
     await database.dispose()

@@ -16,6 +16,8 @@ MVP-каркас работает:
 - `/stats` — прогресс, слабые темы и слова;
 - `/roleplay` — ролевые сцены, `/stop` — выход;
 - `/timezone` и `/quiet` — часовой пояс и тихие часы;
+- `/delete_me` — удаление профиля и всех данных с подтверждением;
+- retention диалогов 90 дней + `prune-history`;
 - DB-backed напоминания с quiet hours и DST-safe переносом;
 - контент в YAML с импортом в SQLite, тегами, темами и вариантами;
 - coverage-отчёт и CI-валидация контента.
@@ -63,6 +65,14 @@ uv run python -m app.cli import-content content/topics --dry-run
 uv run python -m app.cli content-report
 ```
 
+Retention диалогов по умолчанию 90 дней (`HISTORY_RETENTION_DAYS`, 0 = off),
+применяется при старте и вручную:
+
+```bash
+uv run python -m app.cli prune-history
+uv run python -m app.cli prune-history --days 30
+```
+
 ## Запуск
 
 ```bash
@@ -71,7 +81,8 @@ uv run python -m app
 
 MVP работает в режиме polling — публичный URL не требуется.
 Команды бота: `/start`, `/help`, `/correction <текст>`, `/drill`, `/vocab`,
-`/review`, `/stats`, `/roleplay`, `/stop`, `/timezone`, `/quiet`, `/cancel`.
+`/review`, `/stats`, `/roleplay`, `/stop`, `/timezone`, `/quiet`, `/delete_me`,
+`/cancel`.
 
 ## Тесты и проверки
 

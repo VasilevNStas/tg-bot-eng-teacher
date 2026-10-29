@@ -110,6 +110,22 @@ ROLEPLAY_NONE = "Сейчас нет активной ролевой сцены.
 ROLEPLAY_UNKNOWN = "Сцена не найдена. Открой список: /roleplay."
 ROLEPLAY_UNAVAILABLE = "Сценарии пока недоступны."
 
+DELETE_WARNING = (
+    "<b>Удалить все данные?</b>\n\n"
+    "Будут удалены история диалогов, исправления, словарь, SRS, прогресс, "
+    "попытки и напоминания. Действие необратимо."
+)
+BUTTON_DELETE = "Удалить всё"
+BUTTON_DELETE_CANCEL = "Отмена"
+DELETE_CANCELLED = "Удаление отменено."
+DELETE_NOTHING = "Данных для удаления нет."
+DELETE_ALREADY = "Данные уже удалены."
+DELETE_DONE = (
+    "<b>Готово.</b>\n\n"
+    "Удалено диалогов: {conversations}, сообщений: {messages}, слов: {vocabulary}.\n"
+    "Профиль и настройки тоже удалены. /start создаст новый."
+)
+
 REMINDER_SRS = "Пора повторить слова: /review"
 REMINDER_DAILY = "Пора немного попрактиковаться: /review или /drill"
 
@@ -170,5 +186,6 @@ HELP = (
     "/timezone — часовой пояс\n"
     "/quiet — тихие часы\n"
     "/cancel — завершить тренировку\n"
+    "/delete_me — удалить все мои данные\n"
     "/help — эта справка"
 )

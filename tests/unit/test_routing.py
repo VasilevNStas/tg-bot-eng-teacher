@@ -262,6 +262,26 @@ async def test_roleplay_command_routes_to_roleplay_handler(tmp_path: Path) -> No
     await database.dispose()
 
 
+async def test_delete_me_command_routes_to_privacy_handler(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    await make_onboarded_user(database)
+    services = make_services(database, FakeLLM())
+    dispatcher = create_dispatcher(services)
+    session = RecordingSession()
+    bot = Bot(token="123456:secret-token", session=session)
+
+    await dispatcher.feed_update(bot, make_update(1, "/delete_me"))
+
+    assert len(session.methods) == 1
+    sent = session.methods[0]
+    assert isinstance(sent, SendMessage)
+    assert sent.text == ru.DELETE_WARNING
+    assert sent.reply_markup is not None
+
+    await bot.session.close()
+    await database.dispose()
+
+
 async def test_duplicate_update_is_processed_once(tmp_path: Path) -> None:
     database = await make_database(tmp_path)
     await make_onboarded_user(database)

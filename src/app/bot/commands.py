@@ -17,4 +17,5 @@ BOT_COMMANDS: list[BotCommand] = [
     BotCommand(command="timezone", description="Часовой пояс"),
     BotCommand(command="quiet", description="Тихие часы"),
     BotCommand(command="cancel", description="Завершить тренировку"),
+    BotCommand(command="delete_me", description="Удалить мои данные"),
 ]

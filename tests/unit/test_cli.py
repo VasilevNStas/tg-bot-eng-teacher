@@ -96,3 +96,17 @@ def test_cli_content_report(
     assert payload["active_items"] == 5
     assert payload["memberships"] == 5
     assert payload["duplicates"] == []
+
+
+def test_cli_prune_history(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    db_path = tmp_path / "bot.db"
+    setup_logging("WARNING", stream=sys.stderr)
+    asyncio.run(prepare_database(db_path))
+    monkeypatch.setenv("DB_PATH", str(db_path))
+
+    assert main(["prune-history", "--days", "0"]) == 0
+    assert "deleted conversations: 0" in capsys.readouterr().out

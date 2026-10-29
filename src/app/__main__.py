@@ -16,6 +16,7 @@ from app.core.config import BotMode, Settings, get_settings
 from app.core.di import build_services
 from app.core.logging import get_logger, setup_logging
 from app.db.database import Database
+from app.services.privacy.service import PrivacyService
 from app.services.reminders.scheduler import ReminderScheduler
 from app.services.reminders.service import ReminderService
 
@@ -35,6 +36,10 @@ async def run_polling(settings: Settings) -> None:
     )
     if removed:
         logger.info("processed_updates_pruned", count=removed)
+
+    pruned = await PrivacyService(database).prune_history(settings.history_retention_days)
+    if pruned:
+        logger.info("history_pruned", count=pruned)
 
     reminder_task = asyncio.create_task(
         ReminderScheduler(

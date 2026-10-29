@@ -21,3 +21,7 @@ class ReviewCB(CallbackData, prefix="rev"):
 class RoleplayCB(CallbackData, prefix="rp"):
     action: Literal["start"]
     slug: str
+
+
+class DeleteCB(CallbackData, prefix="del"):
+    action: Literal["confirm", "cancel"]

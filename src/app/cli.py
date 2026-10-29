@@ -16,6 +16,7 @@ from app.curriculum.errors import ContentError
 from app.curriculum.importer import ContentImporter
 from app.curriculum.loader import load_content_path
 from app.db.database import Database
+from app.services.privacy.service import PrivacyService
 
 
 async def import_content(path: Path, *, dry_run: bool) -> int:
@@ -61,6 +62,18 @@ async def content_report(*, as_json: bool) -> int:
     return 0
 
 
+async def prune_history(*, days: int) -> int:
+    db_path = Path(os.environ.get("DB_PATH", "./data/bot.db"))
+    database = Database()
+    database.init(db_path)
+    try:
+        deleted = await PrivacyService(database).prune_history(days)
+    finally:
+        await database.dispose()
+    print(f"deleted conversations: {deleted}")
+    return 0
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="app.cli")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -85,12 +98,23 @@ def main(argv: Sequence[str] | None = None) -> int:
         action="store_true",
         help="Emit machine-readable JSON",
     )
+
+    prune_parser = subparsers.add_parser(
+        "prune-history",
+        help="Delete conversations older than the retention period",
+    )
+    prune_parser.add_argument(
+        "--days",
+        type=int,
+        default=None,
+        help="Retention in days (default: HISTORY_RETENTION_DAYS or 90)",
+    )
     args = parser.parse_args(argv)
 
-    report_command = args.command == "content-report"
+    quiet_command = args.command in {"content-report", "prune-history"}
     setup_logging(
-        "WARNING" if report_command else "INFO",
-        stream=sys.stderr if report_command else sys.stdout,
+        "WARNING" if quiet_command else "INFO",
+        stream=sys.stderr if quiet_command else sys.stdout,
     )
 
     try:
@@ -98,6 +122,11 @@ def main(argv: Sequence[str] | None = None) -> int:
             return asyncio.run(import_content(args.path, dry_run=args.dry_run))
         if args.command == "content-report":
             return asyncio.run(content_report(as_json=args.json))
+        if args.command == "prune-history":
+            days = args.days
+            if days is None:
+                days = int(os.environ.get("HISTORY_RETENTION_DAYS", "90"))
+            return asyncio.run(prune_history(days=days))
     except ContentError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
