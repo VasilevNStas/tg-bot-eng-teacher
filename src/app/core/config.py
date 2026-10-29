@@ -50,6 +50,8 @@ class Settings(BaseSettings):
     daily_token_budget: int = Field(default=50_000, gt=0)
     user_lock_timeout_seconds: float = Field(default=90.0, gt=0)
     processed_updates_retention_days: int = Field(default=7, ge=1)
+    reminder_poll_seconds: int = Field(default=60, ge=5, le=3600)
+    reminder_batch_size: int = Field(default=100, ge=1, le=1000)
 
     log_level: str = "INFO"
     log_json: bool = False

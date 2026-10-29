@@ -53,6 +53,25 @@ async def test_get_or_create_is_idempotent_and_updates_username(tmp_path: Path) 
     await database.dispose()
 
 
+async def test_update_timezone_and_quiet_hours(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+
+    async with database.session() as session:
+        repository = UserRepository(session)
+        await repository.get_or_create(tg_id=100, username=None)
+        assert await repository.update_timezone(100, "Europe/Berlin")
+        assert await repository.update_quiet_hours(100, "22:00", "08:00")
+        assert not await repository.update_timezone(999, "UTC")
+
+    async with database.session() as session:
+        user = await UserRepository(session).get_by_tg_id(100)
+    assert user is not None
+    assert user.timezone == "Europe/Berlin"
+    assert (user.quiet_hours_start, user.quiet_hours_end) == ("22:00", "08:00")
+
+    await database.dispose()
+
+
 async def test_touch_sets_last_seen(tmp_path: Path) -> None:
     database = await make_database(tmp_path)
     moment = datetime(2026, 10, 29, 12, 0, tzinfo=UTC)

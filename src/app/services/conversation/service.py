@@ -12,7 +12,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.database import Database
 from app.db.enums import ConversationMode, MessageRole
 from app.db.models import Conversation, User
+from app.db.models import Correction as DbCorrection
 from app.db.models import Message as DbMessage
+from app.db.repositories.vocabulary import VocabularyRepository
 from app.llm.errors import LLMInvalidResponse
 from app.llm.port import LLMClient, LLMResponse
 from app.llm.port import Message as LlmMessage
@@ -22,6 +24,7 @@ from app.services.correction.schema import (
     NewVocabularyItem,
 )
 from app.services.prompts.builder import PromptBuilder, PromptContext
+from app.services.prompts.registry import PromptTemplate
 from app.services.usage.service import UsageService
 
 STRUCTURED_MODES = frozenset({ConversationMode.CHAT, ConversationMode.CORRECTION})
@@ -73,8 +76,10 @@ class ConversationService:
         *,
         mode: ConversationMode = ConversationMode.CHAT,
         update_id: int | None = None,
+        scenario: PromptTemplate | None = None,
     ) -> ConversationTurn:
-        conversation, history = await self._prepare(user, mode)
+        topic = scenario.id if scenario is not None else None
+        conversation, history = await self._prepare(user, mode, topic)
 
         prompt = self._builder.build(
             PromptContext(
@@ -85,6 +90,7 @@ class ConversationService:
                 summary=conversation.summary,
                 history=history,
                 native_language=user.native_lang,
+                scenario=scenario,
             )
         )
 
@@ -127,6 +133,64 @@ class ConversationService:
             cost_usd=response.cost_usd,
         )
 
+    async def start_roleplay(self, user_id: int, scenario_id: str) -> None:
+        now = datetime.now(UTC)
+        async with self._database.session() as session:
+            active = await session.scalars(
+                select(Conversation).where(
+                    Conversation.user_id == user_id,
+                    Conversation.mode == ConversationMode.ROLEPLAY,
+                    Conversation.ended_at.is_(None),
+                )
+            )
+            same = False
+            for conversation in active:
+                if conversation.topic == scenario_id:
+                    same = True
+                else:
+                    conversation.ended_at = now
+            if same:
+                return
+            session.add(
+                Conversation(
+                    user_id=user_id,
+                    mode=ConversationMode.ROLEPLAY,
+                    topic=scenario_id,
+                    started_at=now,
+                )
+            )
+
+    async def stop_roleplay(self, user_id: int) -> str | None:
+        now = datetime.now(UTC)
+        async with self._database.session() as session:
+            conversation = await session.scalar(
+                select(Conversation)
+                .where(
+                    Conversation.user_id == user_id,
+                    Conversation.mode == ConversationMode.ROLEPLAY,
+                    Conversation.ended_at.is_(None),
+                )
+                .order_by(Conversation.started_at.desc())
+                .limit(1)
+            )
+            if conversation is None:
+                return None
+            conversation.ended_at = now
+            return conversation.topic
+
+    async def active_roleplay(self, user_id: int) -> str | None:
+        async with self._database.session() as session:
+            return await session.scalar(
+                select(Conversation.topic)
+                .where(
+                    Conversation.user_id == user_id,
+                    Conversation.mode == ConversationMode.ROLEPLAY,
+                    Conversation.ended_at.is_(None),
+                )
+                .order_by(Conversation.started_at.desc())
+                .limit(1)
+            )
+
     def _model_for(self, mode: ConversationMode) -> str:
         if mode is ConversationMode.CORRECTION:
             return self._model_smart
@@ -148,6 +212,7 @@ class ConversationService:
         self,
         user: User,
         mode: ConversationMode,
+        topic: str | None,
     ) -> tuple[Conversation, list[LlmMessage]]:
         now = datetime.now(UTC)
         async with self._database.session() as session:
@@ -156,6 +221,7 @@ class ConversationService:
                 .where(
                     Conversation.user_id == user.id,
                     Conversation.mode == mode,
+                    Conversation.topic == topic,
                     Conversation.ended_at.is_(None),
                 )
                 .order_by(Conversation.started_at.desc())
@@ -232,6 +298,21 @@ class ConversationService:
         async with self._database.session() as session:
             session.add_all((user_row, assistant_row))
             await session.flush()
+            session.add_all(
+                DbCorrection(
+                    message_id=user_row.id,
+                    original=correction.original,
+                    corrected=correction.corrected,
+                    category=correction.category,
+                    explanation=correction.explanation_ru,
+                )
+                for correction in payload.corrections
+            )
+            await VocabularyRepository(session).save_many(
+                user.id,
+                [(word.term, word.translation_ru, word.context) for word in payload.new_vocabulary],
+                source_message_id=assistant_row.id,
+            )
             session.add(
                 self._usage.build_entry(
                     user_id=user.id,

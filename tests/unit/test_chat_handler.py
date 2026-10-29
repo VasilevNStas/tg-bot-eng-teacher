@@ -9,20 +9,34 @@ from typing import Any
 
 from aiogram import Bot
 from aiogram.client.session.base import BaseSession
-from aiogram.methods import SendMessage, TelegramMethod
-from aiogram.types import Chat, Message
+from aiogram.methods import EditMessageText, SendMessage, TelegramMethod
+from aiogram.types import CallbackQuery, Chat, Message
 from aiogram.types import User as TgUser
 from sqlalchemy import func, select
 
+from app.bot.callbacks import ReviewCB, RoleplayCB
 from app.bot.formatters import TELEGRAM_LIMIT
 from app.bot.handlers.chat import handle_chat
+from app.bot.handlers.correction import handle_correction
+from app.bot.handlers.review import handle_grade, handle_review
+from app.bot.handlers.roleplay import handle_roleplay, handle_start, handle_stop
+from app.bot.handlers.stats import handle_stats
+from app.bot.handlers.vocab import handle_vocab
 from app.core.config import Settings
 from app.core.di import AppServices
 from app.db.base import Base
 from app.db.database import Database
-from app.db.enums import CEFRLevel
+from app.db.enums import CEFRLevel, ConversationMode
+from app.db.models import (
+    Conversation,
+    Correction,
+    Reminder,
+    SrsReview,
+    UsageLedger,
+    User,
+    Vocabulary,
+)
 from app.db.models import Message as DbMessage
-from app.db.models import UsageLedger, User
 from app.db.repositories.users import UserRepository
 from app.llm.errors import LLMUnavailable
 from app.llm.port import LLMResponse
@@ -99,15 +113,28 @@ def structured_response(
     *,
     reply: str = "Great!",
     corrections: list[dict[str, str]] | None = None,
+    new_vocabulary: list[dict[str, str]] | None = None,
 ) -> LLMResponse:
     parsed = {
         "reply": reply,
         "corrections": corrections or [],
-        "new_vocabulary": [],
+        "new_vocabulary": new_vocabulary or [],
     }
     return LLMResponse(
         content=json.dumps(parsed),
         parsed=parsed,
+        model="fake/model",
+        input_tokens=10,
+        output_tokens=5,
+        cost_usd=Decimal("0.0001"),
+        latency_ms=12,
+    )
+
+
+def plain_response(content: str = "Sure, what would you like?") -> LLMResponse:
+    return LLMResponse(
+        content=content,
+        parsed=None,
         model="fake/model",
         input_tokens=10,
         output_tokens=5,
@@ -122,6 +149,14 @@ def correction() -> dict[str, str]:
         "corrected": "I went",
         "category": "tense",
         "explanation_ru": "Past Simple.",
+    }
+
+
+def vocabulary() -> dict[str, str]:
+    return {
+        "term": "cinema",
+        "translation_ru": "кинотеатр",
+        "context": "I went to the cinema",
     }
 
 
@@ -379,6 +414,266 @@ async def test_chat_sends_reply_only_when_no_corrections(tmp_path: Path) -> None
     assert isinstance(sent, SendMessage)
     assert sent.text == "Great!"
     assert len(sent.text) < TELEGRAM_LIMIT
+
+    await bot.session.close()
+    await database.dispose()
+
+
+async def test_correction_requires_text(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    services = make_services(database, FakeLLM())
+    bot, session = await make_bot()
+
+    await handle_correction(make_message(bot, "/correction"), services)
+
+    assert len(session.methods) == 1
+    sent = session.methods[0]
+    assert isinstance(sent, SendMessage)
+    assert sent.text == ru.CORRECTION_USAGE
+
+    await bot.session.close()
+    await database.dispose()
+
+
+async def test_correction_requires_onboarding(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    services = make_services(database, FakeLLM())
+    bot, session = await make_bot()
+
+    await handle_correction(make_message(bot, "/correction I go to school"), services)
+
+    assert len(session.methods) == 1
+    sent = session.methods[0]
+    assert isinstance(sent, SendMessage)
+    assert sent.text == ru.ONBOARDING_REQUIRED
+
+    await bot.session.close()
+    await database.dispose()
+
+
+async def test_correction_sends_full_report_and_persists(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    await make_onboarded_user(database)
+    llm = FakeLLM(
+        structured_response(
+            corrections=[correction()],
+            new_vocabulary=[vocabulary()],
+        )
+    )
+    services = make_services(database, llm)
+    bot, session = await make_bot()
+
+    await handle_correction(
+        make_message(bot, "/correction I go to cinema"),
+        services,
+        update_id=77,
+    )
+
+    assert len(session.methods) == 1
+    sent = session.methods[0]
+    assert isinstance(sent, SendMessage)
+    assert "Разбор" in sent.text
+    assert "Время" in sent.text
+    assert "I went" in sent.text
+    assert "cinema" in sent.text
+    assert "<blockquote" not in sent.text
+    assert llm.calls[0]["model"] == "smart/model"
+    assert await count(database, Correction) == 1
+    assert await count(database, Vocabulary) == 1
+
+    async with database.session() as db_session:
+        conversation = (await db_session.scalars(select(Conversation))).one()
+        assert conversation.mode is ConversationMode.CORRECTION
+
+    await bot.session.close()
+    await database.dispose()
+
+
+async def test_vocab_lists_saved_words(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    await make_onboarded_user(database)
+    services = make_services(
+        database,
+        FakeLLM(structured_response(new_vocabulary=[vocabulary()])),
+    )
+    bot, session = await make_bot()
+
+    await handle_chat(make_message(bot, "I like cinema"), services)
+    await handle_vocab(make_message(bot, "/vocab"), services)
+
+    assert len(session.methods) == 2
+    sent = session.methods[-1]
+    assert isinstance(sent, SendMessage)
+    assert "Сохранённые слова" in sent.text
+    assert "cinema" in sent.text
+    assert "кинотеатр" in sent.text
+
+    await bot.session.close()
+    await database.dispose()
+
+
+async def test_vocab_empty_list(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    await make_onboarded_user(database)
+    services = make_services(database, FakeLLM())
+    bot, session = await make_bot()
+
+    await handle_vocab(make_message(bot, "/vocab"), services)
+
+    assert len(session.methods) == 1
+    sent = session.methods[0]
+    assert isinstance(sent, SendMessage)
+    assert sent.text == ru.VOCAB_EMPTY
+
+    await bot.session.close()
+    await database.dispose()
+
+
+async def test_review_empty_list(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    await make_onboarded_user(database)
+    services = make_services(database, FakeLLM())
+    bot, session = await make_bot()
+
+    await handle_review(make_message(bot, "/review"), services)
+
+    assert len(session.methods) == 1
+    sent = session.methods[0]
+    assert isinstance(sent, SendMessage)
+    assert sent.text == ru.REVIEW_EMPTY
+
+    await bot.session.close()
+    await database.dispose()
+
+
+async def test_stats_empty_overview(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    await make_onboarded_user(database)
+    services = make_services(database, FakeLLM())
+    bot, session = await make_bot()
+
+    await handle_stats(make_message(bot, "/stats"), services)
+
+    assert len(session.methods) == 1
+    sent = session.methods[0]
+    assert isinstance(sent, SendMessage)
+    assert ru.STATS_HEADER in sent.text
+    assert ru.STATS_NO_PRACTICE in sent.text
+
+    await bot.session.close()
+    await database.dispose()
+
+
+async def test_roleplay_select_start_text_and_stop(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    user = await make_onboarded_user(database)
+    llm = FakeLLM(plain_response("Welcome to the café!"))
+    services = make_services(database, llm)
+    bot, session = await make_bot()
+
+    await handle_roleplay(make_message(bot, "/roleplay"), services)
+    sent = session.methods[-1]
+    assert isinstance(sent, SendMessage)
+    assert sent.text == ru.ROLEPLAY_CHOOSE
+    callbacks = [
+        RoleplayCB.unpack(button.callback_data)
+        for row in sent.reply_markup.inline_keyboard
+        for button in row
+        if button.callback_data
+    ]
+    assert "cafe" in {callback.slug for callback in callbacks}
+
+    data = RoleplayCB(action="start", slug="cafe")
+    callback = CallbackQuery(
+        id="cb-roleplay",
+        from_user=TgUser(id=100, is_bot=False, first_name="Tester"),
+        chat_instance="chat-instance",
+        message=make_message(bot, "choose"),
+        data=data.pack(),
+    ).as_(bot)
+    await handle_start(callback, data, services)
+
+    assert await services.conversation.active_roleplay(user.id) == "cafe"
+    edits = [method for method in session.methods if isinstance(method, EditMessageText)]
+    assert "В кафе" in edits[-1].text
+
+    await handle_chat(make_message(bot, "I would like a coffee"), services)
+    assert llm.calls[0]["messages"][0].content.count("barista") == 1
+    assert "В кафе" in llm.calls[0]["messages"][0].content
+    assert session.methods[-1].text == "Welcome to the café!"
+
+    await handle_stop(make_message(bot, "/stop"), services)
+    assert await services.conversation.active_roleplay(user.id) is None
+    assert session.methods[-1].text == ru.ROLEPLAY_STOPPED
+
+    await bot.session.close()
+    await database.dispose()
+
+
+async def test_roleplay_unknown_scenario_and_empty_stop(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    await make_onboarded_user(database)
+    services = make_services(database, FakeLLM())
+    bot, session = await make_bot()
+
+    await handle_roleplay(make_message(bot, "/roleplay nope"), services)
+    assert session.methods[-1].text == ru.ROLEPLAY_UNKNOWN
+
+    await handle_stop(make_message(bot, "/stop"), services)
+    assert session.methods[-1].text == ru.ROLEPLAY_NONE
+
+    await bot.session.close()
+    await database.dispose()
+
+
+async def test_review_card_and_grade(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    user = await make_onboarded_user(database)
+    async with database.session() as db_session:
+        word = Vocabulary(
+            user_id=user.id,
+            term="cinema",
+            translation="кинотеатр",
+            context="I went to the cinema",
+        )
+        db_session.add(word)
+    services = make_services(database, FakeLLM())
+    bot, session = await make_bot()
+
+    await handle_review(make_message(bot, "/review"), services)
+
+    sent = session.methods[-1]
+    assert isinstance(sent, SendMessage)
+    assert "cinema" in sent.text
+    assert "кинотеатр" in sent.text
+    assert sent.reply_markup is not None
+    callbacks = [
+        ReviewCB.unpack(button.callback_data)
+        for row in sent.reply_markup.inline_keyboard
+        for button in row
+        if button.callback_data
+    ]
+    assert [callback.action for callback in callbacks] == ["again", "good", "easy"]
+
+    data = ReviewCB(action="good", vocabulary_id=word.id)
+    callback = CallbackQuery(
+        id="cb-review",
+        from_user=TgUser(id=100, is_bot=False, first_name="Tester"),
+        chat_instance="chat-instance",
+        message=make_message(bot, "card"),
+        data=data.pack(),
+    ).as_(bot)
+    await handle_grade(callback, data, services)
+
+    edits = [method for method in session.methods if isinstance(method, EditMessageText)]
+    assert edits[-1].text == ru.REVIEW_DONE
+    async with database.session() as db_session:
+        review = (await db_session.scalars(select(SrsReview))).one()
+        assert review.reps == 1
+        assert review.interval_days == 1
+        reminder = (await db_session.scalars(select(Reminder))).one()
+        assert reminder.sent_at is None
+        assert reminder.payload["source"] == "srs"
 
     await bot.session.close()
     await database.dispose()

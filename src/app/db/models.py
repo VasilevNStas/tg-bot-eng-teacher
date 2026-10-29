@@ -55,6 +55,8 @@ class User(TimestampMixin, Base):
     native_lang: Mapped[str] = mapped_column(String(8), default="ru", nullable=False)
     level: Mapped[CEFRLevel] = mapped_column(default=CEFRLevel.A2, nullable=False)
     timezone: Mapped[str] = mapped_column(String(64), default="UTC", nullable=False)
+    quiet_hours_start: Mapped[str | None] = mapped_column(String(5))
+    quiet_hours_end: Mapped[str | None] = mapped_column(String(5))
     onboarding_state: Mapped[str] = mapped_column(String(32), default="new", nullable=False)
     profile: Mapped[json_dict_not_null]
     last_seen_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))

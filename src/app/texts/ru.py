@@ -54,6 +54,83 @@ DRILL_QUESTION = (
 DRILL_FORM_PAST = "Past Simple (V2)"
 DRILL_FORM_PARTICIPLE = "Past Participle (V3)"
 
+CORRECTION_USAGE = "Отправь текст для разбора:\n<code>/correction I go to school yesterday</code>"
+CORRECTION_HEADER = "<b>Разбор</b>"
+CORRECTION_NONE = "Ошибок не найдено."
+NEW_VOCABULARY_HEADER = "<b>Новые слова</b>"
+
+ERROR_CATEGORY_RU: dict[str, str] = {
+    "tense": "Время",
+    "article": "Артикль",
+    "preposition": "Предлог",
+    "word_order": "Порядок слов",
+    "spelling": "Орфография",
+    "vocabulary": "Лексика",
+    "register": "Регистр",
+}
+
+VOCAB_EMPTY = "Пока нет сохранённых слов. Они появятся после диалога."
+VOCAB_HEADER = "<b>Сохранённые слова</b> ({count})"
+VOCAB_ITEM = "{number}. <b>{term}</b> — {translation}"
+VOCAB_CONTEXT = "<i>{context}</i>"
+
+REVIEW_HEADER = "<b>Повторение</b>"
+REVIEW_PROMPT = "Насколько легко вспомнил слово?"
+REVIEW_EMPTY = "Нет слов к повторению. Новые слова сохраняются автоматически после диалога."
+REVIEW_DONE = "Готово! Слов к повторению пока нет."
+REVIEW_UNKNOWN = "Эта карточка уже недоступна."
+BUTTON_AGAIN = "Ещё раз"
+BUTTON_GOOD = "Хорошо"
+BUTTON_EASY = "Легко"
+
+TIMEZONE_CURRENT = (
+    "Часовой пояс: <b>{timezone}</b>\n"
+    "Изменить: <code>/timezone Europe/Moscow</code>\n"
+    "Примеры: Europe/Moscow, Asia/Almaty, Europe/Berlin."
+)
+TIMEZONE_SET = "Часовой пояс сохранён: <b>{timezone}</b>."
+TIMEZONE_INVALID = "Неизвестный часовой пояс. Примеры: Europe/Moscow, Asia/Almaty, Europe/Berlin."
+QUIET_CURRENT_ON = (
+    "Тихие часы: <b>{start}–{end}</b> ({timezone}).\nНапоминания в это время откладываются."
+)
+QUIET_CURRENT_OFF = (
+    "Тихие часы выключены.\n"
+    "Установить: <code>/quiet 22:00-08:00</code>; выключить: <code>/quiet off</code>."
+)
+QUIET_SET = "Тихие часы сохранены: <b>{start}–{end}</b> ({timezone})."
+QUIET_OFF = "Тихие часы выключены."
+QUIET_INVALID = "Формат: <code>/quiet 22:00-08:00</code> или <code>/quiet off</code>."
+
+ROLEPLAY_CHOOSE = "<b>Ролевые сценарии</b>\n\nВыбери сцену:"
+ROLEPLAY_STARTED = (
+    "<b>Сцена: {title}</b>\n\nПиши по-английски — я останусь в роли. Чтобы выйти, отправь /stop."
+)
+ROLEPLAY_STOPPED = "Ролевая сцена завершена."
+ROLEPLAY_NONE = "Сейчас нет активной ролевой сцены."
+ROLEPLAY_UNKNOWN = "Сцена не найдена. Открой список: /roleplay."
+ROLEPLAY_UNAVAILABLE = "Сценарии пока недоступны."
+
+REMINDER_SRS = "Пора повторить слова: /review"
+REMINDER_DAILY = "Пора немного попрактиковаться: /review или /drill"
+
+STATS_HEADER = "<b>Статистика</b>"
+STATS_PRACTICE_HEADER = "<b>Практика</b>"
+STATS_ATTEMPTS = "Попыток: {total}, верно: {correct} ({accuracy}%)"
+STATS_BREAKDOWN = "Почти: {partial}, ошибок: {incorrect}, сессий: {sessions}"
+STATS_NO_PRACTICE = "Пока нет попыток в /drill."
+STATS_STREAK = "Лучшая серия: {streak}"
+STATS_WEAK_TOPICS_HEADER = "<b>Слабые темы</b>"
+STATS_TOPIC_ITEM = "{title} — {accuracy}% ({attempts} попыток)"
+STATS_NO_TOPICS = "Пока нет данных по темам."
+STATS_VOCAB_HEADER = "<b>Слова</b>"
+STATS_VOCAB_TOTAL = "Сохранено: {total}, к повторению: {due}"
+STATS_WEAK_WORDS_HEADER = "<b>Слабые слова</b>"
+STATS_WEAK_WORD_ITEM = "{term} — {lapses} провалов"
+STATS_NO_WEAK_WORDS = "Слабых слов пока нет."
+STATS_ERRORS_HEADER = "<b>Ошибки в разборе</b>"
+STATS_ERROR_ITEM = "{category}: {count}"
+STATS_NO_ERRORS = "Ошибок в разборе пока нет."
+
 DRILL_CORRECT = "✅ Верно!"
 DRILL_PARTIAL = "Почти! Похоже на опечатку."
 DRILL_INCORRECT = "❌ Неверно."
@@ -83,7 +160,15 @@ DRILL_SESSION_ERROR = "Сессия тренировки потеряна. На�
 HELP = (
     "<b>Команды</b>\n"
     "/start — начать заново\n"
+    "/correction &lt;текст&gt; — полный разбор ошибок\n"
     "/drill — тренировка неправильных глаголов\n"
+    "/vocab — сохранённые слова\n"
+    "/review — повторение слов\n"
+    "/stats — прогресс и слабые темы\n"
+    "/roleplay — ролевая сцена\n"
+    "/stop — завершить ролевую сцену\n"
+    "/timezone — часовой пояс\n"
+    "/quiet — тихие часы\n"
     "/cancel — завершить тренировку\n"
     "/help — эта справка"
 )

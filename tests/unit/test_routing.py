@@ -204,6 +204,64 @@ async def test_command_routes_to_common_handler(tmp_path: Path) -> None:
     await database.dispose()
 
 
+async def test_stats_command_routes_to_stats_handler(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    await make_onboarded_user(database)
+    services = make_services(database, FakeLLM())
+    dispatcher = create_dispatcher(services)
+    session = RecordingSession()
+    bot = Bot(token="123456:secret-token", session=session)
+
+    await dispatcher.feed_update(bot, make_update(1, "/stats"))
+
+    assert len(session.methods) == 1
+    sent = session.methods[0]
+    assert isinstance(sent, SendMessage)
+    assert ru.STATS_HEADER in sent.text
+
+    await bot.session.close()
+    await database.dispose()
+
+
+async def test_review_command_routes_to_review_handler(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    await make_onboarded_user(database)
+    services = make_services(database, FakeLLM())
+    dispatcher = create_dispatcher(services)
+    session = RecordingSession()
+    bot = Bot(token="123456:secret-token", session=session)
+
+    await dispatcher.feed_update(bot, make_update(1, "/review"))
+
+    assert len(session.methods) == 1
+    sent = session.methods[0]
+    assert isinstance(sent, SendMessage)
+    assert sent.text == ru.REVIEW_EMPTY
+
+    await bot.session.close()
+    await database.dispose()
+
+
+async def test_roleplay_command_routes_to_roleplay_handler(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    await make_onboarded_user(database)
+    services = make_services(database, FakeLLM())
+    dispatcher = create_dispatcher(services)
+    session = RecordingSession()
+    bot = Bot(token="123456:secret-token", session=session)
+
+    await dispatcher.feed_update(bot, make_update(1, "/roleplay"))
+
+    assert len(session.methods) == 1
+    sent = session.methods[0]
+    assert isinstance(sent, SendMessage)
+    assert sent.text == ru.ROLEPLAY_CHOOSE
+    assert sent.reply_markup is not None
+
+    await bot.session.close()
+    await database.dispose()
+
+
 async def test_duplicate_update_is_processed_once(tmp_path: Path) -> None:
     database = await make_database(tmp_path)
     await make_onboarded_user(database)

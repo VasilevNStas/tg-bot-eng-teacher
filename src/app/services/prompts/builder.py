@@ -11,7 +11,7 @@ from app.db.enums import CEFRLevel, ConversationMode
 from app.llm.port import Message
 from app.llm.tokens import estimate_messages_tokens
 from app.services.prompts.errors import PromptTooLong
-from app.services.prompts.registry import PromptRegistry
+from app.services.prompts.registry import PromptRegistry, PromptTemplate
 
 
 @dataclass(frozen=True, slots=True)
@@ -23,6 +23,7 @@ class PromptContext:
     summary: str | None = None
     history: Sequence[Message] = field(default_factory=tuple)
     native_language: str = "ru"
+    scenario: PromptTemplate | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -57,7 +58,12 @@ class PromptBuilder:
         level = self._registry.level(context.level)
         mode = self._registry.mode(context.mode)
 
-        system = "\n\n".join((persona.content, level.content, mode.content))
+        system_parts = [persona.content, level.content, mode.content]
+        versions = [persona.version, level.version, mode.version]
+        if context.scenario is not None:
+            system_parts.append(context.scenario.content)
+            versions.append(context.scenario.version)
+        system = "\n\n".join(system_parts)
         if context.native_language != "ru":
             system = f"{system}\n\n# Language\nExplain in {context.native_language}."
 
@@ -91,7 +97,7 @@ class PromptBuilder:
 
         return BuiltPrompt(
             messages=messages,
-            prompt_version=_combined_version(persona.version, level.version, mode.version),
+            prompt_version=_combined_version(*versions),
             estimated_input_tokens=estimate_messages_tokens(messages),
         )
 

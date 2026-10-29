@@ -51,6 +51,26 @@ class UserRepository(BaseRepository[User]):
         user.onboarding_state = "done"
         return True
 
+    async def update_timezone(self, tg_id: int, timezone: str) -> bool:
+        user = await self.get_by_tg_id(tg_id)
+        if user is None:
+            return False
+        user.timezone = timezone
+        return True
+
+    async def update_quiet_hours(
+        self,
+        tg_id: int,
+        start: str | None,
+        end: str | None,
+    ) -> bool:
+        user = await self.get_by_tg_id(tg_id)
+        if user is None:
+            return False
+        user.quiet_hours_start = start
+        user.quiet_hours_end = end
+        return True
+
     @staticmethod
     def touch(user: User, at: datetime | None = None) -> None:
         user.last_seen_at = at or datetime.now(UTC)

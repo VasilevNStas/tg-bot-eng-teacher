@@ -6,25 +6,17 @@ from aiogram import F, Router
 from aiogram.types import Message
 
 from app.bot.formatters import TELEGRAM_LIMIT, format_corrections, format_reply
+from app.bot.handlers.errors import answer_llm_error
 from app.bot.keyboards.onboarding import start_keyboard
 from app.bot.user_context import resolve_user
 from app.core.di import AppServices
-from app.core.logging import get_logger
 from app.db.enums import ConversationMode
-from app.llm.errors import (
-    LLMBalanceExhausted,
-    LLMError,
-    LLMInvalidResponse,
-    LLMRateLimited,
-    LLMTimeout,
-    LLMUnavailable,
-)
+from app.llm.errors import LLMError
 from app.services.conversation.service import ConversationTurn
-from app.services.prompts.errors import PromptTooLong
+from app.services.prompts.errors import PromptTemplateNotFound, PromptTooLong
+from app.services.prompts.registry import PromptTemplate
 from app.services.usage.service import DailyBudgetExceeded
 from app.texts import ru
-
-logger = get_logger(__name__)
 
 
 async def handle_chat(
@@ -40,36 +32,33 @@ async def handle_chat(
         await message.answer(ru.ONBOARDING_REQUIRED, reply_markup=start_keyboard())
         return
 
+    mode: ConversationMode = ConversationMode.CHAT
+    scenario: PromptTemplate | None = None
+    active_scenario = await services.conversation.active_roleplay(user.id)
+    if active_scenario is not None:
+        try:
+            scenario = services.prompts.scenario(active_scenario)
+        except PromptTemplateNotFound:
+            await services.conversation.stop_roleplay(user.id)
+            await message.answer(ru.ROLEPLAY_UNAVAILABLE)
+            return
+        mode = ConversationMode.ROLEPLAY
+
     try:
         turn = await services.conversation.respond(
             user,
             message.text,
-            mode=ConversationMode.CHAT,
+            mode=mode,
             update_id=update_id,
+            scenario=scenario,
         )
-    except PromptTooLong:
-        logger.info("chat_prompt_too_long", user_id=user.id)
-        await message.answer(ru.MESSAGE_TOO_LONG)
-        return
-    except DailyBudgetExceeded:
-        logger.info("chat_budget_exhausted", user_id=user.id)
-        await message.answer(ru.BUDGET_EXHAUSTED)
-        return
-    except LLMBalanceExhausted:
-        logger.error("llm_balance_exhausted")
-        await message.answer(ru.LLM_UNAVAILABLE)
-        return
-    except (LLMTimeout, LLMRateLimited, LLMUnavailable) as exc:
-        logger.warning("llm_temporary_failure", error=type(exc).__name__)
-        await message.answer(ru.LLM_TEMPORARY_ERROR)
-        return
-    except LLMInvalidResponse:
-        logger.warning("llm_invalid_response")
-        await message.answer(ru.LLM_INVALID_RESPONSE)
-        return
-    except LLMError as exc:
-        logger.error("llm_failure", error=type(exc).__name__)
-        await message.answer(ru.LLM_UNAVAILABLE)
+    except (PromptTooLong, DailyBudgetExceeded, LLMError) as exc:
+        await answer_llm_error(
+            message,
+            exc,
+            user_id=user.id,
+            operation="roleplay" if scenario is not None else "chat",
+        )
         return
 
     await _send_turn(message, turn)

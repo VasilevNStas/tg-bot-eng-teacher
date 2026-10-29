@@ -18,6 +18,13 @@ jobs:
 
       - run: uv sync --frozen --all-extras
 
+      - name: Check migrations
+        env:
+          DB_PATH: ./ci.db
+        run: |
+          uv run alembic upgrade head
+          uv run alembic check
+
       - run: uv run ruff check .
 
       - run: uv run ruff format --check .

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import sys
+from contextlib import suppress
 
 from aiogram.exceptions import TelegramAPIError
 from pydantic import ValidationError
@@ -15,6 +16,8 @@ from app.core.config import BotMode, Settings, get_settings
 from app.core.di import build_services
 from app.core.logging import get_logger, setup_logging
 from app.db.database import Database
+from app.services.reminders.scheduler import ReminderScheduler
+from app.services.reminders.service import ReminderService
 
 logger = get_logger(__name__)
 
@@ -33,6 +36,16 @@ async def run_polling(settings: Settings) -> None:
     if removed:
         logger.info("processed_updates_pruned", count=removed)
 
+    reminder_task = asyncio.create_task(
+        ReminderScheduler(
+            bot,
+            ReminderService(database),
+            interval_seconds=settings.reminder_poll_seconds,
+            batch_size=settings.reminder_batch_size,
+        ).run_forever(),
+        name="reminder-scheduler",
+    )
+
     try:
         await bot.delete_webhook(drop_pending_updates=True)
         try:
@@ -42,6 +55,9 @@ async def run_polling(settings: Settings) -> None:
         logger.info("bot_started", mode=settings.bot_mode.value)
         await dispatcher.start_polling(bot)
     finally:
+        reminder_task.cancel()
+        with suppress(asyncio.CancelledError):
+            await reminder_task
         await services.aclose()
         await database.dispose()
         await bot.session.close()

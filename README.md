@@ -9,12 +9,19 @@ MVP-каркас работает:
 
 - онбординг: короткий placement-тест или ручной выбор уровня;
 - чат с LLM-персоной и expandable-коррекциями;
+- `/correction <текст>` — полный разбор ошибок;
 - `/drill` — неправильные глаголы, mastery/streak, `/cancel`;
+- `/vocab` — автосохранённые слова из диалога;
+- `/review` — интервальное повторение слов (упрощённый SM-2);
+- `/stats` — прогресс, слабые темы и слова;
+- `/roleplay` — ролевые сцены, `/stop` — выход;
+- `/timezone` и `/quiet` — часовой пояс и тихие часы;
+- DB-backed напоминания с quiet hours и DST-safe переносом;
 - контент в YAML с импортом в SQLite, тегами, темами и вариантами;
 - coverage-отчёт и CI-валидация контента.
 
-Ещё не реализованы: отдельный режим `/correction`, `/vocab`/SRS, webhook,
-бэкапы и продуктовые метрики — см. локальный план в `.opencode/_backlog.md`.
+Ещё не реализованы: webhook, бэкапы и голос — см. локальный план в
+`.opencode/_backlog.md`.
 
 ## Стек
 
@@ -63,7 +70,8 @@ uv run python -m app
 ```
 
 MVP работает в режиме polling — публичный URL не требуется.
-Команды бота: `/start`, `/help`, `/drill`, `/cancel`.
+Команды бота: `/start`, `/help`, `/correction <текст>`, `/drill`, `/vocab`,
+`/review`, `/stats`, `/roleplay`, `/stop`, `/timezone`, `/quiet`, `/cancel`.
 
 ## Тесты и проверки
 

@@ -12,7 +12,7 @@ from sqlalchemy import func, select
 from app.db.base import Base
 from app.db.database import Database
 from app.db.enums import CEFRLevel, ConversationMode, ErrorCategory, MessageRole
-from app.db.models import Conversation, UsageLedger, User
+from app.db.models import Conversation, Correction, UsageLedger, User, Vocabulary
 from app.db.models import Message as DbMessage
 from app.llm.errors import LLMUnavailable
 from app.llm.port import LLMResponse
@@ -62,13 +62,14 @@ def structured_response(
     *,
     reply: str = "Nice!",
     corrections: list[dict[str, str]] | None = None,
+    new_vocabulary: list[dict[str, str]] | None = None,
     input_tokens: int = 10,
     output_tokens: int = 5,
 ) -> LLMResponse:
     parsed: dict[str, Any] = {
         "reply": reply,
         "corrections": corrections or [],
-        "new_vocabulary": [],
+        "new_vocabulary": new_vocabulary or [],
     }
     return LLMResponse(
         content=json.dumps(parsed),
@@ -87,6 +88,14 @@ def correction() -> dict[str, str]:
         "corrected": "I went to the cinema",
         "category": "tense",
         "explanation_ru": "Past Simple для завершённого действия.",
+    }
+
+
+def vocabulary() -> dict[str, str]:
+    return {
+        "term": "cinema",
+        "translation_ru": "кинотеатр",
+        "context": "I went to the cinema",
     }
 
 
@@ -166,6 +175,52 @@ async def test_first_turn_persists_messages_and_usage(tmp_path: Path) -> None:
         assert ledger.input_tokens == 10
         assert ledger.output_tokens == 5
         assert ledger.conversation_id == turn.conversation_id
+
+    await database.dispose()
+
+
+async def test_turn_persists_corrections_and_vocabulary(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    user = await make_user(database)
+    llm = FakeLLM(
+        structured_response(
+            corrections=[correction()],
+            new_vocabulary=[vocabulary()],
+        )
+    )
+    service = make_service(database, llm, UsageService(database, daily_budget=10_000))
+
+    turn = await service.respond(user, "I go to cinema")
+
+    assert await count(database, Correction) == 1
+    assert await count(database, Vocabulary) == 1
+    async with database.session() as session:
+        correction_row = (await session.scalars(select(Correction))).one()
+        assert correction_row.message_id == turn.user_message_id
+        assert correction_row.category is ErrorCategory.TENSE
+        word = (await session.scalars(select(Vocabulary))).one()
+        assert word.term == "cinema"
+        assert word.translation == "кинотеатр"
+        assert word.source_message_id == turn.assistant_message_id
+
+    await database.dispose()
+
+
+async def test_vocabulary_deduplicates_case_insensitively(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    user = await make_user(database)
+    llm = FakeLLM(
+        structured_response(new_vocabulary=[vocabulary()]),
+        structured_response(
+            new_vocabulary=[{**vocabulary(), "term": "Cinema", "translation_ru": "кино"}]
+        ),
+    )
+    service = make_service(database, llm, UsageService(database, daily_budget=10_000))
+
+    await service.respond(user, "I like cinema")
+    await service.respond(user, "cinema again")
+
+    assert await count(database, Vocabulary) == 1
 
     await database.dispose()
 
@@ -294,6 +349,33 @@ async def test_llm_failure_persists_no_messages_or_usage(tmp_path: Path) -> None
 
     assert await count(database, DbMessage) == 0
     assert await count(database, UsageLedger) == 0
+
+    await database.dispose()
+
+
+async def test_roleplay_conversations_are_isolated_by_scenario(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    user = await make_user(database)
+    service = make_service(database, FakeLLM(), UsageService(database, daily_budget=10_000))
+
+    await service.start_roleplay(user.id, "cafe")
+    await service.start_roleplay(user.id, "airport")
+
+    assert await service.active_roleplay(user.id) == "airport"
+    async with database.session() as session:
+        conversations = list(
+            await session.scalars(
+                select(Conversation).where(
+                    Conversation.user_id == user.id,
+                    Conversation.mode == ConversationMode.ROLEPLAY,
+                )
+            )
+        )
+    assert len(conversations) == 2
+    assert sum(conversation.ended_at is None for conversation in conversations) == 1
+
+    assert await service.stop_roleplay(user.id) == "airport"
+    assert await service.active_roleplay(user.id) is None
 
     await database.dispose()
 

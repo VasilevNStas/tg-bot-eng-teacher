@@ -3,11 +3,14 @@
 from __future__ import annotations
 
 import hashlib
+import re
 from dataclasses import dataclass
 from pathlib import Path
 
 from app.db.enums import CEFRLevel, ConversationMode
 from app.services.prompts.errors import PromptTemplateNotFound
+
+SCENARIO_SLUG = re.compile(r"^[a-z0-9][a-z0-9-]{1,63}$")
 
 
 @dataclass(frozen=True, slots=True)
@@ -15,6 +18,7 @@ class PromptTemplate:
     id: str
     content: str
     version: str
+    title: str | None = None
 
 
 class PromptRegistry:
@@ -30,6 +34,30 @@ class PromptRegistry:
 
     def mode(self, mode: ConversationMode) -> PromptTemplate:
         return self._load(f"modes/{mode.value}")
+
+    def scenario(self, slug: str) -> PromptTemplate:
+        if not SCENARIO_SLUG.fullmatch(slug):
+            raise PromptTemplateNotFound(f"invalid scenario slug: {slug!r}")
+        template = self._load(f"scenarios/{slug}")
+        title = _scenario_title(template.content)
+        if title is None:
+            raise PromptTemplateNotFound(f"scenario has no heading: {slug}")
+        return PromptTemplate(
+            id=slug,
+            content=template.content,
+            version=template.version,
+            title=title,
+        )
+
+    def scenarios(self) -> tuple[PromptTemplate, ...]:
+        directory = self._root / "scenarios"
+        if not directory.is_dir():
+            return ()
+        return tuple(
+            self.scenario(path.stem)
+            for path in sorted(directory.glob("*.md"))
+            if SCENARIO_SLUG.fullmatch(path.stem)
+        )
 
     def _load(self, key: str) -> PromptTemplate:
         cached = self._cache.get(key)
@@ -51,3 +79,11 @@ class PromptRegistry:
         )
         self._cache[key] = template
         return template
+
+
+def _scenario_title(content: str) -> str | None:
+    first = content.splitlines()[0].strip()
+    if not first.startswith("# "):
+        return None
+    title = first[2:].strip()
+    return title or None

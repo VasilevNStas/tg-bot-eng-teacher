@@ -28,6 +28,26 @@ def test_all_modes_load() -> None:
         assert len(template.version) == 12
 
 
+def test_scenarios_load_with_titles() -> None:
+    registry = PromptRegistry(PROMPTS_DIR)
+
+    scenarios = registry.scenarios()
+
+    assert {scenario.id for scenario in scenarios} == {"airport", "cafe", "interview"}
+    assert all(scenario.title for scenario in scenarios)
+    assert registry.scenario("cafe").title == "В кафе"
+
+
+def test_scenario_requires_heading(tmp_path: Path) -> None:
+    directory = tmp_path / "scenarios"
+    directory.mkdir()
+    (directory / "bad.md").write_text("No title", encoding="utf-8")
+    registry = PromptRegistry(tmp_path)
+
+    with pytest.raises(PromptTemplateNotFound):
+        registry.scenario("bad")
+
+
 def test_missing_template_raises(tmp_path: Path) -> None:
     registry = PromptRegistry(tmp_path)
 

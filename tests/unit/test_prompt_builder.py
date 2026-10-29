@@ -106,6 +106,19 @@ def test_version_depends_on_level_and_mode() -> None:
     assert len(base.prompt_version) == 12
 
 
+def test_scenario_is_injected_and_versions_prompt() -> None:
+    registry = PromptRegistry(PROMPTS_DIR)
+    scenario = registry.scenario("cafe")
+    builder = PromptBuilder(registry, max_input_tokens=8000, history_window=12)
+
+    with_scenario = builder.build(make_context(mode=ConversationMode.ROLEPLAY, scenario=scenario))
+    without_scenario = builder.build(make_context(mode=ConversationMode.ROLEPLAY))
+
+    assert "barista" in with_scenario.messages[0].content
+    assert "barista" not in without_scenario.messages[0].content
+    assert with_scenario.prompt_version != without_scenario.prompt_version
+
+
 def test_non_russian_native_language_is_declared() -> None:
     prompt = make_builder().build(make_context(native_language="de"))
 

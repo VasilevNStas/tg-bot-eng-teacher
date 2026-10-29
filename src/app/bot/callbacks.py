@@ -11,3 +11,13 @@ class OnboardingCB(CallbackData, prefix="onb"):
     action: Literal["test", "skip", "answer", "level"]
     index: int = 0
     value: str = ""
+
+
+class ReviewCB(CallbackData, prefix="rev"):
+    action: Literal["again", "good", "easy"]
+    vocabulary_id: int
+
+
+class RoleplayCB(CallbackData, prefix="rp"):
+    action: Literal["start"]
+    slug: str
