@@ -9,7 +9,7 @@ import yaml
 
 from app.curriculum.errors import ContentLoadError
 from app.curriculum.loader import load_content_file, load_content_path
-from app.curriculum.models import ContentFile
+from app.curriculum.models import ContentFile, VocabularyPayload
 from app.db.enums import ContentKind
 
 
@@ -74,6 +74,20 @@ def valid_doc() -> dict[str, Any]:
                     "correct_index": 2,
                 },
             },
+            {
+                "slug": "test-vocabulary-abandon",
+                "level": "B1",
+                "tags": ["purpose:vocabulary"],
+                "payload": {
+                    "kind": "vocabulary",
+                    "term": "abandon",
+                    "translations_ru": ["оставить", "забросить"],
+                    "accepted_en": ["abandon"],
+                    "frequency": 812,
+                    "frequency_rank": 812,
+                    "transcription": "əˈbændən",
+                },
+            },
         ],
     }
 
@@ -91,6 +105,7 @@ def test_valid_document_parses_all_payload_kinds() -> None:
         ContentKind.TRANSLATION_PAIR,
         ContentKind.WORD_ORDER,
         ContentKind.MULTIPLE_CHOICE,
+        ContentKind.VOCABULARY,
     ]
 
 
@@ -101,7 +116,7 @@ def test_loader_reads_yaml(tmp_path: Path) -> None:
     content = load_content_file(path)
 
     assert content.topic.slug == "test-topic"
-    assert len(content.items) == 5
+    assert len(content.items) == 6
 
 
 def test_item_topics_are_parsed() -> None:
@@ -291,6 +306,51 @@ def test_multiple_choice_index_must_be_in_range() -> None:
 
     with pytest.raises(ValueError, match="out of range"):
         ContentFile.model_validate(doc)
+
+
+def test_vocabulary_payload_is_parsed() -> None:
+    doc = valid_doc()
+    content = ContentFile.model_validate(doc)
+    payload = content.items[5].payload
+
+    assert isinstance(payload, VocabularyPayload)
+    assert payload.kind is ContentKind.VOCABULARY
+    assert payload.term == "abandon"
+    assert payload.translations_ru == ["оставить", "забросить"]
+    assert payload.accepted_en == ["abandon"]
+    assert payload.frequency == 812
+    assert payload.frequency_rank == 812
+    assert payload.function_word is False
+    assert payload.transcription == "əˈbændən"
+
+
+def test_vocabulary_term_is_stripped_and_required() -> None:
+    doc = valid_doc()
+    doc["items"][5]["payload"]["term"] = "  abandon  "
+    content = ContentFile.model_validate(doc)
+    assert content.items[5].payload.term == "abandon"
+
+    doc["items"][5]["payload"]["term"] = "   "
+    with pytest.raises(ValueError, match="non-empty"):
+        ContentFile.model_validate(doc)
+
+
+def test_vocabulary_translations_must_be_unique() -> None:
+    doc = valid_doc()
+    doc["items"][5]["payload"]["translations_ru"] = ["оставить", "Оставить"]
+
+    with pytest.raises(ValueError, match="unique"):
+        ContentFile.model_validate(doc)
+
+
+def test_vocabulary_frequency_is_optional() -> None:
+    doc = valid_doc()
+    doc["items"][5]["payload"].pop("frequency")
+    doc["items"][5]["payload"].pop("frequency_rank")
+    content = ContentFile.model_validate(doc)
+
+    assert content.items[5].payload.frequency is None
+    assert content.items[5].payload.frequency_rank is None
 
 
 def test_duplicate_slugs_in_one_file_are_rejected() -> None:

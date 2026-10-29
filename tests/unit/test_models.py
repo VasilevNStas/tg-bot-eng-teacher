@@ -25,6 +25,7 @@ EXPECTED_TABLES = {
     "usage_ledger",
     "reminders",
     "events",
+    "word_progress",
 }
 
 

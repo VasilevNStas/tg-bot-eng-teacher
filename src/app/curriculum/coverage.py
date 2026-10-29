@@ -209,6 +209,8 @@ def _signature(spec: ContentItemSpec) -> str:
                 *(normalize_answer(option) for option in payload.options),
                 str(payload.correct_index),
             ]
+        case ContentKind.VOCABULARY:
+            parts = [payload.kind.value, normalize_answer(payload.term)]
         case _:
             parts = [payload.kind.value, str(payload)]
     return " | ".join(parts)

@@ -12,6 +12,7 @@ from app.curriculum.models import (
     IrregularVerbPayload,
     MultipleChoicePayload,
     TranslationPayload,
+    VocabularyPayload,
     WordOrderPayload,
 )
 from app.db.enums import Checker, Verdict
@@ -112,6 +113,9 @@ def accepted_answers(
 
     if isinstance(payload, MultipleChoicePayload):
         return (payload.options[payload.correct_index],)
+
+    if isinstance(payload, VocabularyPayload):
+        return (payload.term, *payload.accepted_en)
 
     raise TypeError(f"unsupported content payload: {type(payload)!r}")
 

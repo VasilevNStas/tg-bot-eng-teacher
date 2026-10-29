@@ -37,12 +37,23 @@ class ContentKind(StrEnum):
     TRANSLATION_PAIR = "translation_pair"
     WORD_ORDER = "word_order"
     MULTIPLE_CHOICE = "multiple_choice"
+    VOCABULARY = "vocabulary"
 
 
 class ExerciseState(StrEnum):
     ACTIVE = "active"
     FINISHED = "finished"
     ABANDONED = "abandoned"
+
+
+class ExerciseSessionKind(StrEnum):
+    DRILL = "drill"
+    WORDS = "words"
+
+
+class WordDirection(StrEnum):
+    EN_RU = "en_ru"
+    RU_EN = "ru_en"
 
 
 class Verdict(StrEnum):

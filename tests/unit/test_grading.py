@@ -11,6 +11,7 @@ from app.curriculum.models import (
     IrregularVerbPayload,
     MultipleChoicePayload,
     TranslationPayload,
+    VocabularyPayload,
     WordOrderPayload,
 )
 from app.db.enums import CEFRLevel, Checker, Verdict
@@ -166,6 +167,20 @@ def test_translation_uses_reference_and_accepted() -> None:
     )
 
     assert grade_item(item, "yesterday i went to the cinema").verdict is Verdict.CORRECT
+
+
+def test_vocabulary_uses_term_and_accepted_english() -> None:
+    item = make_item(
+        VocabularyPayload(
+            term="abandon",
+            translations_ru=["оставить", "забросить"],
+            accepted_en=["to abandon"],
+        )
+    )
+
+    assert accepted_answers(item) == ("abandon", "to abandon")
+    assert grade_item(item, "to abandon").verdict is Verdict.CORRECT
+    assert grade_item(item, "abandom").verdict is Verdict.PARTIAL
 
 
 def test_word_order_uses_expected_sentence() -> None:

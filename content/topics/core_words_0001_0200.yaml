@@ -1,0 +1,3170 @@
+topic:
+  slug: core-words-0001-0200
+  title: Core words 1-200
+  level: A1
+  description: Пилотный частотный блок для карточек слов
+  tags:
+  - purpose:vocabulary
+source: 3000_words.html + 5000_word.rtf (normalized)
+license: unknown
+items:
+- slug: word-one
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: one
+    translations_ru:
+    - один
+    accepted_en:
+    - one
+    frequency: 143095
+    frequency_rank: 19
+    function_word: false
+    transcription: wʌn
+- slug: word-see
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: see
+    translations_ru:
+    - видеть
+    accepted_en:
+    - see
+    frequency: 139635
+    frequency_rank: 20
+    function_word: false
+    transcription: siː
+- slug: word-know
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: know
+    translations_ru:
+    - знать
+    accepted_en:
+    - know
+    frequency: 138416
+    frequency_rank: 21
+    function_word: false
+    transcription: nəʊ
+- slug: word-say
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: say
+    translations_ru:
+    - сказать
+    accepted_en:
+    - say
+    frequency: 131863
+    frequency_rank: 23
+    function_word: false
+    transcription: seɪ
+- slug: word-go
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: go
+    translations_ru:
+    - идти
+    accepted_en:
+    - go
+    frequency: 130708
+    frequency_rank: 24
+    function_word: false
+    transcription: gəʊ
+- slug: word-like
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: like
+    translations_ru:
+    - любить
+    - нравиться
+    - как
+    accepted_en:
+    - like
+    frequency: 104236
+    frequency_rank: 30
+    function_word: false
+    transcription: laɪk
+- slug: word-get
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: get
+    translations_ru:
+    - получить
+    - становиться
+    accepted_en:
+    - get
+    frequency: 100620
+    frequency_rank: 33
+    function_word: false
+    transcription: get
+- slug: word-come
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: come
+    translations_ru:
+    - приходить
+    accepted_en:
+    - come
+    frequency: 95718
+    frequency_rank: 36
+    function_word: false
+    transcription: kʌm
+- slug: word-man
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: man
+    translations_ru:
+    - мужчина
+    accepted_en:
+    - man
+    frequency: 89332
+    frequency_rank: 37
+    function_word: false
+    transcription: mæn
+- slug: word-time
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: time
+    translations_ru:
+    - время
+    accepted_en:
+    - time
+    frequency: 77096
+    frequency_rank: 45
+    function_word: false
+    transcription: taɪm
+- slug: word-think
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: think
+    translations_ru:
+    - думать
+    accepted_en:
+    - think
+    frequency: 75232
+    frequency_rank: 48
+    function_word: false
+    transcription: θɪŋk
+- slug: word-look
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: look
+    translations_ru:
+    - смотреть
+    - выглядеть
+    accepted_en:
+    - look
+    frequency: 68578
+    frequency_rank: 50
+    function_word: false
+    transcription: lʊk
+- slug: word-good
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: good
+    translations_ru:
+    - хороший
+    accepted_en:
+    - good
+    frequency: 67488
+    frequency_rank: 51
+    function_word: false
+    transcription: gʊd
+- slug: word-take
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: take
+    translations_ru:
+    - брать
+    - воспринимать
+    accepted_en:
+    - take
+    frequency: 67312
+    frequency_rank: 52
+    function_word: false
+    transcription: teɪk
+- slug: word-little
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: little
+    translations_ru:
+    - маленький
+    - незначительный
+    accepted_en:
+    - little
+    frequency: 64618
+    frequency_rank: 54
+    function_word: false
+    transcription: lɪtl
+- slug: word-want
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: want
+    translations_ru:
+    - хотеть
+    accepted_en:
+    - want
+    frequency: 63384
+    frequency_rank: 56
+    function_word: false
+    transcription: wɒnt
+- slug: word-back
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: back
+    translations_ru:
+    - назад
+    accepted_en:
+    - back
+    frequency: 63156
+    frequency_rank: 57
+    function_word: false
+    transcription: bæk
+- slug: word-make
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: make
+    translations_ru:
+    - делать
+    - создавать
+    accepted_en:
+    - make
+    frequency: 61913
+    frequency_rank: 58
+    function_word: false
+    transcription: meɪk
+- slug: word-put
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: put
+    translations_ru:
+    - класть
+    - помещать
+    accepted_en:
+    - put
+    frequency: 54559
+    frequency_rank: 63
+    function_word: false
+    transcription: pʊt
+- slug: word-tell
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: tell
+    translations_ru:
+    - рассказывать
+    accepted_en:
+    - tell
+    frequency: 52827
+    frequency_rank: 65
+    function_word: false
+    transcription: tel
+- slug: word-work
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: work
+    translations_ru:
+    - работа
+    - работать
+    accepted_en:
+    - work
+    frequency: 52226
+    frequency_rank: 67
+    function_word: false
+    transcription: wɜːk
+- slug: word-old
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: old
+    translations_ru:
+    - старый
+    accepted_en:
+    - old
+    frequency: 50919
+    frequency_rank: 69
+    function_word: false
+    transcription: əʊld
+- slug: word-leave
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: leave
+    translations_ru:
+    - покидать
+    accepted_en:
+    - leave
+    frequency: 48335
+    frequency_rank: 72
+    function_word: false
+    transcription: liːv
+- slug: word-night
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: night
+    translations_ru:
+    - ночь
+    accepted_en:
+    - night
+    frequency: 46817
+    frequency_rank: 75
+    function_word: false
+    transcription: naɪt
+- slug: word-give
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: give
+    translations_ru:
+    - давать
+    accepted_en:
+    - give
+    frequency: 46156
+    frequency_rank: 76
+    function_word: false
+    transcription: gɪv
+- slug: word-face
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: face
+    translations_ru:
+    - лицо
+    - столкнуться
+    accepted_en:
+    - face
+    frequency: 42848
+    frequency_rank: 79
+    function_word: false
+    transcription: feɪs
+    notes_ru: перен
+- slug: word-head
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: head
+    translations_ru:
+    - голова
+    accepted_en:
+    - head
+    frequency: 42326
+    frequency_rank: 80
+    function_word: false
+    transcription: hed
+- slug: word-great
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: great
+    translations_ru:
+    - прекрасный
+    - великий
+    - отличный
+    accepted_en:
+    - great
+    frequency: 40657
+    frequency_rank: 81
+    function_word: false
+    transcription: greɪt
+- slug: word-hand
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: hand
+    translations_ru:
+    - рука
+    - ладонь
+    accepted_en:
+    - hand
+    frequency: 40073
+    frequency_rank: 83
+    function_word: false
+    transcription: hænd
+- slug: word-hold
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: hold
+    translations_ru:
+    - держать
+    accepted_en:
+    - hold
+    frequency: 38253
+    frequency_rank: 87
+    function_word: false
+    transcription: həʊld
+- slug: word-find
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: find
+    translations_ru:
+    - находить
+    accepted_en:
+    - find
+    frequency: 37906
+    frequency_rank: 89
+    function_word: false
+    transcription: faɪnd
+- slug: word-people
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: people
+    translations_ru:
+    - люди
+    accepted_en:
+    - people
+    frequency: 37875
+    frequency_rank: 90
+    function_word: false
+    transcription: piːpl
+- slug: word-understand
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: understand
+    translations_ru:
+    - понимать
+    accepted_en:
+    - understand
+    frequency: 37821
+    frequency_rank: 91
+    function_word: false
+    transcription: ʌndəˈstænd
+- slug: word-long
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: long
+    translations_ru:
+    - длинный
+    - долгий
+    accepted_en:
+    - long
+    frequency: 37399
+    frequency_rank: 92
+    function_word: false
+    transcription: lɒŋ
+- slug: word-day
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: day
+    translations_ru:
+    - день
+    accepted_en:
+    - day
+    frequency: 37310
+    frequency_rank: 93
+    function_word: false
+    transcription: deɪ
+- slug: word-way
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: way
+    translations_ru:
+    - путь
+    - способ
+    accepted_en:
+    - way
+    frequency: 36730
+    frequency_rank: 94
+    function_word: false
+    transcription: weɪ
+- slug: word-voice
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: voice
+    translations_ru:
+    - голос
+    accepted_en:
+    - voice
+    frequency: 35384
+    frequency_rank: 95
+    function_word: false
+    transcription: vɔɪs
+- slug: word-now
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: now
+    translations_ru:
+    - сейчас
+    accepted_en:
+    - now
+    frequency: 35075
+    frequency_rank: 96
+    function_word: false
+    transcription: naʊ
+- slug: word-use
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: use
+    translations_ru:
+    - использовать
+    - привыкать
+    accepted_en:
+    - use
+    frequency: 34028
+    frequency_rank: 97
+    function_word: false
+- slug: word-well
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: well
+    translations_ru:
+    - хорошо
+    - колодец
+    accepted_en:
+    - well
+    frequency: 33893
+    frequency_rank: 98
+    function_word: false
+    transcription: wel
+- slug: word-life
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: life
+    translations_ru:
+    - жизнь
+    accepted_en:
+    - life
+    frequency: 33828
+    frequency_rank: 99
+    function_word: false
+    transcription: laɪf
+- slug: word-even
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: even
+    translations_ru:
+    - даже
+    - ровный
+    accepted_en:
+    - even
+    frequency: 31095
+    frequency_rank: 104
+    function_word: false
+    transcription: ˈiːvən
+- slug: word-last
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: last
+    translations_ru:
+    - последний
+    - длиться
+    accepted_en:
+    - last
+    frequency: 30934
+    frequency_rank: 105
+    function_word: false
+    transcription: lɑːst
+- slug: word-place
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: place
+    translations_ru:
+    - место
+    accepted_en:
+    - place
+    frequency: 30617
+    frequency_rank: 106
+    function_word: false
+    transcription: pleɪs
+- slug: word-thing
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: thing
+    translations_ru:
+    - вещь
+    accepted_en:
+    - thing
+    frequency: 30181
+    frequency_rank: 107
+    function_word: false
+    transcription: θɪŋ
+- slug: word-right
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: right
+    translations_ru:
+    - правый
+    - правильный
+    - право
+    accepted_en:
+    - right
+    frequency: 30029
+    frequency_rank: 108
+    function_word: false
+    transcription: raɪt
+- slug: word-break
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: break
+    translations_ru:
+    - ломать
+    - разбивать
+    - перерыв
+    - перемена
+    accepted_en:
+    - break
+    frequency: 30018
+    frequency_rank: 109
+    function_word: false
+    transcription: breɪk
+- slug: word-name
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: name
+    translations_ru:
+    - имя
+    accepted_en:
+    - name
+    frequency: 28506
+    frequency_rank: 111
+    function_word: false
+    transcription: neɪm
+- slug: word-need
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: need
+    translations_ru:
+    - нуждаться
+    - требоваться
+    accepted_en:
+    - need
+    frequency: 27918
+    frequency_rank: 112
+    function_word: false
+    transcription: niːd
+- slug: word-point
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: point
+    translations_ru:
+    - точка
+    - смысл
+    - суть
+    - очко
+    - острие
+    - кончик
+    - пункт
+    accepted_en:
+    - point
+    frequency: 27889
+    frequency_rank: 113
+    function_word: false
+    transcription: pɔɪnt
+- slug: word-love
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: love
+    translations_ru:
+    - любить
+    accepted_en:
+    - love
+    frequency: 27795
+    frequency_rank: 114
+    function_word: false
+    transcription: lʌv
+- slug: word-value
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: value
+    translations_ru:
+    - стоимость
+    - значимость
+    - ценность
+    - оценивать
+    accepted_en:
+    - value
+    frequency: 27313
+    frequency_rank: 115
+    function_word: false
+    transcription: ˈvæljuː
+- slug: word-keep
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: keep
+    translations_ru:
+    - держать
+    - продолжать
+    accepted_en:
+    - keep
+    frequency: 27272
+    frequency_rank: 116
+    function_word: false
+    transcription: kiːp
+- slug: word-hear
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: hear
+    translations_ru:
+    - слышать
+    accepted_en:
+    - hear
+    frequency: 26900
+    frequency_rank: 117
+    function_word: false
+    transcription: hɪə
+- slug: word-light
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: light
+    translations_ru:
+    - свет
+    - осветить
+    accepted_en:
+    - light
+    frequency: 26768
+    frequency_rank: 118
+    function_word: false
+    transcription: laɪt
+- slug: word-let
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: let
+    translations_ru:
+    - позволять
+    accepted_en:
+    - let
+    frequency: 26632
+    frequency_rank: 119
+    function_word: false
+    transcription: let
+- slug: word-two
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: two
+    translations_ru:
+    - два
+    accepted_en:
+    - two
+    frequency: 26296
+    frequency_rank: 121
+    function_word: false
+    transcription: tuː
+- slug: word-far
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: far
+    translations_ru:
+    - далеко
+    accepted_en:
+    - far
+    frequency: 25645
+    frequency_rank: 123
+    function_word: false
+    transcription: fɑː
+- slug: word-ask
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: ask
+    translations_ru:
+    - спрашивать
+    accepted_en:
+    - ask
+    frequency: 25381
+    frequency_rank: 125
+    function_word: false
+    transcription: ɑːsk
+- slug: word-end
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: end
+    translations_ru:
+    - конец
+    accepted_en:
+    - end
+    frequency: 25175
+    frequency_rank: 126
+    function_word: false
+    transcription: end
+- slug: word-soon
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: soon
+    translations_ru:
+    - скоро
+    - рано
+    accepted_en:
+    - soon
+    frequency: 24948
+    frequency_rank: 127
+    function_word: false
+    transcription: suːn
+- slug: word-moment
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: moment
+    translations_ru:
+    - момент
+    accepted_en:
+    - moment
+    frequency: 24858
+    frequency_rank: 128
+    function_word: false
+    transcription: ˈməʊmənt
+- slug: word-mean
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: mean
+    translations_ru:
+    - означать
+    - иметь ввиду
+    - неважный
+    - посредственный
+    accepted_en:
+    - mean
+    frequency: 24768
+    frequency_rank: 129
+    function_word: false
+    transcription: miːn
+- slug: word-set
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: set
+    translations_ru:
+    - установить
+    - набор
+    - комплект
+    accepted_en:
+    - set
+    frequency: 24695
+    frequency_rank: 130
+    function_word: false
+    transcription: set
+- slug: word-feel
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: feel
+    translations_ru:
+    - чувствовать
+    accepted_en:
+    - feel
+    frequency: 24465
+    frequency_rank: 131
+    function_word: false
+    transcription: fiːl
+- slug: word-help
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: help
+    translations_ru:
+    - помощь
+    - помогать
+    accepted_en:
+    - help
+    frequency: 23830
+    frequency_rank: 132
+    function_word: false
+    transcription: help
+- slug: word-call
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: call
+    translations_ru:
+    - звонить
+    - вызвать
+    accepted_en:
+    - call
+    frequency: 23718
+    frequency_rank: 133
+    function_word: false
+    transcription: kɔːl
+- slug: word-speak
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: speak
+    translations_ru:
+    - говорить
+    accepted_en:
+    - speak
+    frequency: 23216
+    frequency_rank: 134
+    function_word: false
+    transcription: spiːk
+- slug: word-house
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: house
+    translations_ru:
+    - дом
+    accepted_en:
+    - house
+    frequency: 23099
+    frequency_rank: 135
+    function_word: false
+    transcription: haʊs
+- slug: word-mind
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: mind
+    translations_ru:
+    - разум
+    - ум
+    - возражать
+    accepted_en:
+    - mind
+    frequency: 22783
+    frequency_rank: 136
+    function_word: false
+    transcription: maɪnd
+- slug: word-run
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: run
+    translations_ru:
+    - бежать
+    - управлять
+    accepted_en:
+    - run
+    frequency: 22615
+    frequency_rank: 139
+    function_word: false
+    transcription: rʌn
+- slug: word-door
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: door
+    translations_ru:
+    - дверь
+    accepted_en:
+    - door
+    frequency: 22523
+    frequency_rank: 140
+    function_word: false
+    transcription: dɔː
+- slug: word-room
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: room
+    translations_ru:
+    - комната
+    - место
+    - пространство
+    accepted_en:
+    - room
+    frequency: 21868
+    frequency_rank: 142
+    function_word: false
+    transcription: rum
+- slug: word-new
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: new
+    translations_ru:
+    - новый
+    accepted_en:
+    - new
+    frequency: 21425
+    frequency_rank: 143
+    function_word: false
+    transcription: njuː
+- slug: word-dark
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: dark
+    translations_ru:
+    - темный
+    - темнота
+    accepted_en:
+    - dark
+    frequency: 21275
+    frequency_rank: 144
+    function_word: false
+    transcription: dɑːk
+- slug: word-play
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: play
+    translations_ru:
+    - играть
+    accepted_en:
+    - play
+    frequency: 20783
+    frequency_rank: 146
+    function_word: false
+    transcription: pleɪ
+- slug: word-talk
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: talk
+    translations_ru:
+    - говорить
+    - разговаривать
+    accepted_en:
+    - talk
+    frequency: 20152
+    frequency_rank: 147
+    function_word: false
+    transcription: tɔːk
+- slug: word-try
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: try
+    translations_ru:
+    - пробовать
+    accepted_en:
+    - try
+    frequency: 20103
+    frequency_rank: 148
+    function_word: false
+    transcription: traɪ
+- slug: word-young
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: young
+    translations_ru:
+    - молодой
+    - юный
+    accepted_en:
+    - young
+    frequency: 19587
+    frequency_rank: 151
+    function_word: false
+    transcription: jʌŋ
+- slug: word-again
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: again
+    translations_ru:
+    - снова
+    accepted_en:
+    - again
+    frequency: 19071
+    frequency_rank: 152
+    function_word: false
+    transcription: əˈgen
+- slug: word-world
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: world
+    translations_ru:
+    - мир
+    accepted_en:
+    - world
+    frequency: 18835
+    frequency_rank: 155
+    function_word: false
+    transcription: wɜːld
+- slug: word-word
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: word
+    translations_ru:
+    - слово
+    accepted_en:
+    - word
+    frequency: 18708
+    frequency_rank: 156
+    function_word: false
+    transcription: wɜːd
+- slug: word-believe
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: believe
+    translations_ru:
+    - верить
+    accepted_en:
+    - believe
+    frequency: 18695
+    frequency_rank: 157
+    function_word: false
+    transcription: bɪˈliːv
+- slug: word-seem
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: seem
+    translations_ru:
+    - казаться
+    accepted_en:
+    - seem
+    frequency: 18595
+    frequency_rank: 158
+    function_word: false
+    transcription: siːm
+- slug: word-never
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: never
+    translations_ru:
+    - никогда
+    - так и не
+    accepted_en:
+    - never
+    frequency: 18545
+    frequency_rank: 159
+    function_word: false
+    transcription: ˈnevə
+- slug: word-eye
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: eye
+    translations_ru:
+    - глаз
+    accepted_en:
+    - eye
+    frequency: 18544
+    frequency_rank: 160
+    function_word: false
+    transcription: aɪ
+- slug: word-first
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: first
+    translations_ru:
+    - первый
+    accepted_en:
+    - first
+    frequency: 18485
+    frequency_rank: 161
+    function_word: false
+    transcription: fɜːst
+- slug: word-child
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: child
+    translations_ru:
+    - ребенок
+    accepted_en:
+    - child
+    frequency: 18396
+    frequency_rank: 163
+    function_word: false
+    transcription: ʧaɪld
+- slug: word-woman
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: woman
+    translations_ru:
+    - женщина
+    accepted_en:
+    - woman
+    frequency: 18309
+    frequency_rank: 164
+    function_word: false
+    transcription: ˈwʊmən
+- slug: word-turn
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: turn
+    translations_ru:
+    - поворачивать
+    - очередь
+    - смена
+    accepted_en:
+    - turn
+    frequency: 18157
+    frequency_rank: 165
+    function_word: false
+    transcription: tɜːn
+- slug: word-part
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: part
+    translations_ru:
+    - часть
+    - роль
+    - разделять
+    accepted_en:
+    - part
+    frequency: 18105
+    frequency_rank: 166
+    function_word: false
+    transcription: pɑːt
+    notes_ru: ся
+- slug: word-prince
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: prince
+    translations_ru:
+    - принц
+    accepted_en:
+    - prince
+    frequency: 17981
+    frequency_rank: 169
+    function_word: false
+    transcription: prɪns
+- slug: word-year
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: year
+    translations_ru:
+    - год
+    accepted_en:
+    - year
+    frequency: 17833
+    frequency_rank: 170
+    function_word: false
+    transcription: jɪə
+- slug: word-show
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: show
+    translations_ru:
+    - показывать
+    accepted_en:
+    - show
+    frequency: 17283
+    frequency_rank: 171
+    function_word: false
+    transcription: ʃəʊ
+- slug: word-read
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: read
+    translations_ru:
+    - читать
+    accepted_en:
+    - read
+    frequency: 17216
+    frequency_rank: 172
+    function_word: false
+    transcription: riːd
+- slug: word-return
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: return
+    translations_ru:
+    - вернуть
+    - возвращаться
+    accepted_en:
+    - return
+    frequency: 17176
+    frequency_rank: 173
+    function_word: false
+    transcription: rɪˈtɜːn
+- slug: word-answer
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: answer
+    translations_ru:
+    - отвечать
+    - ответ
+    accepted_en:
+    - answer
+    frequency: 17174
+    frequency_rank: 174
+    function_word: false
+    transcription: ˈɑːnsə
+- slug: word-friend
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: friend
+    translations_ru:
+    - друг
+    accepted_en:
+    - friend
+    frequency: 16847
+    frequency_rank: 176
+    function_word: false
+    transcription: frend
+- slug: word-begin
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: begin
+    translations_ru:
+    - начать
+    accepted_en:
+    - begin
+    frequency: 16545
+    frequency_rank: 178
+    function_word: false
+    transcription: bɪˈgɪn
+- slug: word-view
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: view
+    translations_ru:
+    - вид
+    - взгляд
+    accepted_en:
+    - view
+    frequency: 16528
+    frequency_rank: 179
+    function_word: false
+    transcription: vjuː
+- slug: word-father
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: father
+    translations_ru:
+    - отец
+    accepted_en:
+    - father
+    frequency: 16489
+    frequency_rank: 180
+    function_word: false
+    transcription: ˈfɑːðə
+- slug: word-bad
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: bad
+    translations_ru:
+    - плохой
+    accepted_en:
+    - bad
+    frequency: 16339
+    frequency_rank: 182
+    function_word: false
+    transcription: bæd
+- slug: word-count
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: count
+    translations_ru:
+    - считать
+    - количество
+    - граф
+    - считаться
+    - иметь значение
+    accepted_en:
+    - count
+    frequency: 16292
+    frequency_rank: 183
+    function_word: false
+    transcription: kaʊnt
+- slug: word-close
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: close
+    translations_ru:
+    - закрывать
+    - близкий
+    accepted_en:
+    - close
+    frequency: 16267
+    frequency_rank: 184
+    function_word: false
+    transcription: kləʊs
+- slug: word-table
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: table
+    translations_ru:
+    - стол
+    - таблица
+    accepted_en:
+    - table
+    frequency: 16118
+    frequency_rank: 186
+    function_word: false
+    transcription: teɪbl
+- slug: word-request
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: request
+    translations_ru:
+    - запрос
+    - запрашивать
+    accepted_en:
+    - request
+    frequency: 15975
+    frequency_rank: 188
+    function_word: false
+    transcription: rɪˈkwest
+- slug: word-start
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: start
+    translations_ru:
+    - начать
+    accepted_en:
+    - start
+    frequency: 15820
+    frequency_rank: 189
+    function_word: false
+    transcription: stɑːt
+- slug: word-king
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: king
+    translations_ru:
+    - король
+    accepted_en:
+    - king
+    frequency: 15659
+    frequency_rank: 190
+    function_word: false
+    transcription: kɪŋ
+- slug: word-round
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: round
+    translations_ru:
+    - вокруг
+    - круглый
+    - раунд
+    - круг
+    accepted_en:
+    - round
+    frequency: 15641
+    frequency_rank: 191
+    function_word: false
+    transcription: raʊnd
+- slug: word-boy
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: boy
+    translations_ru:
+    - мальчик
+    accepted_en:
+    - boy
+    frequency: 15373
+    frequency_rank: 192
+    function_word: false
+    transcription: bɔɪ
+- slug: word-still
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: still
+    translations_ru:
+    - все еще
+    - спокойный
+    - неподвижный
+    accepted_en:
+    - still
+    frequency: 15228
+    frequency_rank: 194
+    function_word: false
+    transcription: stɪl
+- slug: word-stand
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: stand
+    translations_ru:
+    - стоять
+    - терпеть
+    - выносить
+    accepted_en:
+    - stand
+    frequency: 15136
+    frequency_rank: 195
+    function_word: false
+    transcription: stænd
+- slug: word-girl
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: girl
+    translations_ru:
+    - девочка
+    accepted_en:
+    - girl
+    frequency: 14969
+    frequency_rank: 196
+    function_word: false
+    transcription: gɜːl
+- slug: word-thought
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: thought
+    translations_ru:
+    - мысль
+    accepted_en:
+    - thought
+    frequency: 14935
+    frequency_rank: 197
+    function_word: false
+    transcription: θɔːt
+- slug: word-away
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: away
+    translations_ru:
+    - прочь
+    accepted_en:
+    - away
+    frequency: 14792
+    frequency_rank: 199
+    function_word: false
+    transcription: əˈweɪ
+- slug: word-side
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: side
+    translations_ru:
+    - сторона
+    accepted_en:
+    - side
+    frequency: 14720
+    frequency_rank: 200
+    function_word: false
+    transcription: saɪd
+- slug: word-order
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: order
+    translations_ru:
+    - заказ
+    - порядок
+    - приказ
+    - упорядочивать
+    - заказывать
+    accepted_en:
+    - order
+    frequency: 14506
+    frequency_rank: 202
+    function_word: false
+    transcription: ˈɔːdə
+- slug: word-live
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: live
+    translations_ru:
+    - жить
+    accepted_en:
+    - live
+    frequency: 14460
+    frequency_rank: 204
+    function_word: false
+- slug: word-heart
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: heart
+    translations_ru:
+    - сердце
+    accepted_en:
+    - heart
+    frequency: 14357
+    frequency_rank: 205
+    function_word: false
+    transcription: hɑːt
+- slug: word-change
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: change
+    translations_ru:
+    - менять
+    - сдача
+    - мелочь
+    accepted_en:
+    - change
+    frequency: 14356
+    frequency_rank: 206
+    function_word: false
+    transcription: ʧeɪnʤ
+- slug: word-high
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: high
+    translations_ru:
+    - высокий
+    accepted_en:
+    - high
+    frequency: 14325
+    frequency_rank: 208
+    function_word: false
+    transcription: haɪ
+- slug: word-big
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: big
+    translations_ru:
+    - большой
+    - крупный
+    accepted_en:
+    - big
+    frequency: 14266
+    frequency_rank: 209
+    function_word: false
+    transcription: bɪg
+- slug: word-become
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: become
+    translations_ru:
+    - становиться
+    accepted_en:
+    - become
+    frequency: 13925
+    frequency_rank: 210
+    function_word: false
+    transcription: bɪˈkʌm
+- slug: word-dear
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: dear
+    translations_ru:
+    - дорогой
+    - милый
+    accepted_en:
+    - dear
+    frequency: 13871
+    frequency_rank: 211
+    function_word: false
+    transcription: dɪə
+- slug: word-mother
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: mother
+    translations_ru:
+    - мама
+    accepted_en:
+    - mother
+    frequency: 13811
+    frequency_rank: 212
+    function_word: false
+    transcription: ˈmʌðə
+- slug: word-small
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: small
+    translations_ru:
+    - маленький
+    - небольшой
+    accepted_en:
+    - small
+    frequency: 13783
+    frequency_rank: 213
+    function_word: false
+    transcription: smɔːl
+- slug: word-write
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: write
+    translations_ru:
+    - писать
+    accepted_en:
+    - write
+    frequency: 13751
+    frequency_rank: 214
+    function_word: false
+    transcription: raɪt
+- slug: word-water
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: water
+    translations_ru:
+    - вода
+    accepted_en:
+    - water
+    frequency: 13734
+    frequency_rank: 215
+    function_word: false
+    transcription: ˈwɔːtə
+- slug: word-learn
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: learn
+    translations_ru:
+    - учить
+    accepted_en:
+    - learn
+    frequency: 13679
+    frequency_rank: 216
+    function_word: false
+    transcription: lɜːn
+- slug: word-often
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: often
+    translations_ru:
+    - часто
+    accepted_en:
+    - often
+    frequency: 13652
+    frequency_rank: 217
+    function_word: false
+    transcription: ˈɒf(t)ən
+- slug: word-remember
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: remember
+    translations_ru:
+    - помнить
+    accepted_en:
+    - remember
+    frequency: 13633
+    frequency_rank: 218
+    function_word: false
+    transcription: rɪˈmembə
+- slug: word-stop
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: stop
+    translations_ru:
+    - остановить
+    accepted_en:
+    - stop
+    frequency: 13510
+    frequency_rank: 219
+    function_word: false
+    transcription: stɒp
+- slug: word-trouble
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: trouble
+    translations_ru:
+    - беда
+    - неприятность
+    - беспокойство
+    accepted_en:
+    - trouble
+    frequency: 13230
+    frequency_rank: 221
+    function_word: false
+    transcription: trʌbl
+- slug: word-object
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: object
+    translations_ru:
+    - объект
+    - возражать
+    accepted_en:
+    - object
+    frequency: 13184
+    frequency_rank: 222
+    function_word: false
+    transcription: ˈɒbʤɛkt
+- slug: word-sit
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: sit
+    translations_ru:
+    - сидеть
+    accepted_en:
+    - sit
+    frequency: 13138
+    frequency_rank: 225
+    function_word: false
+    transcription: sɪt
+- slug: word-route
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: route
+    translations_ru:
+    - маршрут
+    accepted_en:
+    - route
+    frequency: 13108
+    frequency_rank: 226
+    function_word: false
+    transcription: ruːt
+- slug: word-sleep
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: sleep
+    translations_ru:
+    - спать
+    accepted_en:
+    - sleep
+    frequency: 13061
+    frequency_rank: 227
+    function_word: false
+    transcription: sliːp
+- slug: word-three
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: three
+    translations_ru:
+    - три
+    accepted_en:
+    - three
+    frequency: 13032
+    frequency_rank: 228
+    function_word: false
+    transcription: θriː
+- slug: word-kind
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: kind
+    translations_ru:
+    - добрый
+    - тип
+    - вид
+    accepted_en:
+    - kind
+    frequency: 12928
+    frequency_rank: 230
+    function_word: false
+    transcription: kaɪnd
+- slug: word-project
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: project
+    translations_ru:
+    - проект
+    accepted_en:
+    - project
+    frequency: 12917
+    frequency_rank: 231
+    function_word: false
+    transcription: ˈprɒʤəkt
+- slug: word-question
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: question
+    translations_ru:
+    - вопрос
+    - подвергать сомнению
+    accepted_en:
+    - question
+    frequency: 12905
+    frequency_rank: 232
+    function_word: false
+    transcription: ˈkwesʧən
+- slug: word-really
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: really
+    translations_ru:
+    - действительно
+    accepted_en:
+    - really
+    frequency: 12695
+    frequency_rank: 234
+    function_word: false
+    transcription: ˈrɪəlɪ
+- slug: word-hope
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: hope
+    translations_ru:
+    - надежда
+    - надеяться
+    accepted_en:
+    - hope
+    frequency: 12609
+    frequency_rank: 235
+    function_word: false
+    transcription: həʊp
+- slug: word-bring
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: bring
+    translations_ru:
+    - приносить
+    accepted_en:
+    - bring
+    frequency: 12588
+    frequency_rank: 236
+    function_word: false
+    transcription: brɪŋ
+- slug: word-follow
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: follow
+    translations_ru:
+    - следовать
+    - следить
+    accepted_en:
+    - follow
+    frequency: 12477
+    frequency_rank: 237
+    function_word: false
+    transcription: ˈfɒləʊ
+- slug: word-result
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: result
+    translations_ru:
+    - результат
+    accepted_en:
+    - result
+    frequency: 12455
+    frequency_rank: 238
+    function_word: false
+    transcription: rɪˈzʌlt
+- slug: word-lie
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: lie
+    translations_ru:
+    - ложь
+    - врать
+    - лежать
+    - лгать
+    accepted_en:
+    - lie
+    frequency: 12400
+    frequency_rank: 239
+    function_word: false
+    transcription: laɪ
+- slug: word-open
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: open
+    translations_ru:
+    - открывать
+    accepted_en:
+    - open
+    frequency: 12340
+    frequency_rank: 240
+    function_word: false
+    transcription: ˈəʊpən
+- slug: word-wish
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: wish
+    translations_ru:
+    - желание
+    - хотеть
+    accepted_en:
+    - wish
+    frequency: 12325
+    frequency_rank: 241
+    function_word: false
+    transcription: wɪʃ
+- slug: word-home
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: home
+    translations_ru:
+    - дом
+    accepted_en:
+    - home
+    frequency: 12234
+    frequency_rank: 242
+    function_word: false
+    transcription: həʊm
+- slug: word-hard
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: hard
+    translations_ru:
+    - трудный
+    - сильный
+    accepted_en:
+    - hard
+    frequency: 12200
+    frequency_rank: 243
+    function_word: false
+    transcription: hɑːd
+- slug: word-once
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: once
+    translations_ru:
+    - когда-то
+    - как только
+    - однажды
+    - когда-либо
+    accepted_en:
+    - once
+    frequency: 12181
+    frequency_rank: 244
+    function_word: false
+    transcription: wʌns
+- slug: word-wait
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: wait
+    translations_ru:
+    - ждать
+    accepted_en:
+    - wait
+    frequency: 12105
+    frequency_rank: 246
+    function_word: false
+    transcription: weɪt
+- slug: word-large
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: large
+    translations_ru:
+    - большой
+    - вместительный
+    - широкий
+    accepted_en:
+    - large
+    frequency: 12055
+    frequency_rank: 247
+    function_word: false
+    transcription: lɑːʤ
+- slug: word-chapter
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: chapter
+    translations_ru:
+    - глава
+    accepted_en:
+    - chapter
+    frequency: 12055
+    frequency_rank: 248
+    function_word: false
+    transcription: ˈʧæptə
+- slug: word-rest
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: rest
+    translations_ru:
+    - остальное
+    - отдых
+    - покой
+    - остаток
+    - отдыхать
+    - покоиться
+    accepted_en:
+    - rest
+    frequency: 12042
+    frequency_rank: 249
+    function_word: false
+    transcription: rest
+- slug: word-walk
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: walk
+    translations_ru:
+    - идти пешком
+    - гулять
+    accepted_en:
+    - walk
+    frequency: 12013
+    frequency_rank: 250
+    function_word: false
+    transcription: wɔːk
+- slug: word-sound
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: sound
+    translations_ru:
+    - звук
+    - здоровый
+    accepted_en:
+    - sound
+    frequency: 11814
+    frequency_rank: 254
+    function_word: false
+    transcription: saʊnd
+- slug: word-send
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: send
+    translations_ru:
+    - посылать
+    accepted_en:
+    - send
+    frequency: 11792
+    frequency_rank: 255
+    function_word: false
+    transcription: send
+- slug: word-smile
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: smile
+    translations_ru:
+    - улыбка
+    - улыбаться
+    accepted_en:
+    - smile
+    frequency: 11711
+    frequency_rank: 257
+    function_word: false
+    transcription: smaɪl
+- slug: word-fall
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: fall
+    translations_ru:
+    - падать
+    - осень
+    accepted_en:
+    - fall
+    frequency: 11701
+    frequency_rank: 258
+    function_word: false
+    transcription: fɔːl
+    notes_ru: амер.
+- slug: word-move
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: move
+    translations_ru:
+    - двигаться
+    - переезжать
+    accepted_en:
+    - move
+    frequency: 11684
+    frequency_rank: 259
+    function_word: false
+    transcription: muːv
+- slug: word-course
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: course
+    translations_ru:
+    - курс
+    - конечно
+    accepted_en:
+    - course
+    frequency: 11680
+    frequency_rank: 260
+    function_word: false
+    transcription: kɔːs
+    notes_ru: of course
+- slug: word-fear
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: fear
+    translations_ru:
+    - страх
+    - бояться
+    accepted_en:
+    - fear
+    frequency: 11656
+    frequency_rank: 261
+    function_word: false
+    transcription: fɪə
+- slug: word-book
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: book
+    translations_ru:
+    - книга
+    - бронировать
+    - купить
+    - забронировать
+    accepted_en:
+    - book
+    frequency: 11643
+    frequency_rank: 262
+    function_word: false
+    transcription: bʊk
+- slug: word-near
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: near
+    translations_ru:
+    - рядом
+    accepted_en:
+    - near
+    frequency: 11579
+    frequency_rank: 263
+    function_word: false
+    transcription: nɪə
+- slug: word-money
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: money
+    translations_ru:
+    - деньги
+    accepted_en:
+    - money
+    frequency: 11267
+    frequency_rank: 266
+    function_word: false
+    transcription: ˈmʌnɪ
+- slug: word-cry
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: cry
+    translations_ru:
+    - плакать
+    accepted_en:
+    - cry
+    frequency: 11224
+    frequency_rank: 268
+    function_word: false
+    transcription: kraɪ
+- slug: word-fire
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: fire
+    translations_ru:
+    - огонь
+    - пожар
+    - уволить
+    accepted_en:
+    - fire
+    frequency: 11183
+    frequency_rank: 269
+    function_word: false
+    transcription: ˈfaɪə
+- slug: word-morning
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: morning
+    translations_ru:
+    - утро
+    accepted_en:
+    - morning
+    frequency: 11154
+    frequency_rank: 270
+    function_word: false
+    transcription: ˈmɔːnɪŋ
+- slug: word-late
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: late
+    translations_ru:
+    - поздний
+    - позже
+    - опаздывать
+    - покойный
+    accepted_en:
+    - late
+    frequency: 11141
+    frequency_rank: 271
+    function_word: false
+    transcription: leɪt
+- slug: word-stay
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: stay
+    translations_ru:
+    - остаться
+    - оставаться
+    - остановиться пожить
+    accepted_en:
+    - stay
+    frequency: 11056
+    frequency_rank: 272
+    function_word: false
+    transcription: steɪ
+- slug: word-watch
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: watch
+    translations_ru:
+    - смотреть
+    - часы
+    accepted_en:
+    - watch
+    frequency: 10985
+    frequency_rank: 273
+    function_word: false
+    transcription: wɒʧ
+    notes_ru: наручные
+- slug: word-eat
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: eat
+    translations_ru:
+    - есть
+    accepted_en:
+    - eat
+    frequency: 10984
+    frequency_rank: 274
+    function_word: false
+    transcription: iːt
+- slug: word-master
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: master
+    translations_ru:
+    - мастер
+    - хозяин
+    - овладеть
+    accepted_en:
+    - master
+    frequency: 10979
+    frequency_rank: 275
+    function_word: false
+    transcription: ˈmɑːstə
+    notes_ru: напр. искусством
+- slug: word-happen
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: happen
+    translations_ru:
+    - случаться
+    - случиться
+    - происходить
+    accepted_en:
+    - happen
+    frequency: 10951
+    frequency_rank: 276
+    function_word: false
+    transcription: ˈhæpən
+- slug: word-miss
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: miss
+    translations_ru:
+    - мисс
+    - скучать
+    - пропустить
+    - пропускать
+    - упустить
+    accepted_en:
+    - miss
+    frequency: 10904
+    frequency_rank: 277
+    function_word: false
+    transcription: mɪs
+- slug: word-control
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: control
+    translations_ru:
+    - контроль
+    - управлять
+    accepted_en:
+    - control
+    frequency: 10795
+    frequency_rank: 278
+    function_word: false
+    transcription: kɒnˈtrəʊl
+- slug: word-always
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: always
+    translations_ru:
+    - всегда
+    accepted_en:
+    - always
+    frequency: 10777
+    frequency_rank: 279
+    function_word: false
+    transcription: ˈɔːlw(e)ɪz
+- slug: word-build
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: build
+    translations_ru:
+    - строить
+    - создавать
+    accepted_en:
+    - build
+    frequency: 10769
+    frequency_rank: 280
+    function_word: false
+    transcription: bɪld
+- slug: word-white
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: white
+    translations_ru:
+    - белый
+    accepted_en:
+    - white
+    frequency: 10592
+    frequency_rank: 281
+    function_word: false
+    transcription: waɪt
+- slug: word-number
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: number
+    translations_ru:
+    - число
+    - количество
+    - нумеровать
+    accepted_en:
+    - number
+    frequency: 10565
+    frequency_rank: 282
+    function_word: false
+    transcription: ˈnʌmbə
+- slug: word-interest
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: interest
+    translations_ru:
+    - интерес
+    - интересный
+    - интересоваться
+    accepted_en:
+    - interest
+    frequency: 10560
+    frequency_rank: 283
+    function_word: false
+    transcription: ˈɪntrɪst
+- slug: word-pass
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: pass
+    translations_ru:
+    - проходить
+    - пройти
+    accepted_en:
+    - pass
+    frequency: 10475
+    frequency_rank: 284
+    function_word: false
+    transcription: pɑːs
+- slug: word-clear
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: clear
+    translations_ru:
+    - ясно
+    - понятно
+    - ясный
+    - чистый
+    accepted_en:
+    - clear
+    frequency: 10435
+    frequency_rank: 285
+    function_word: false
+    transcription: klɪə
+    notes_ru: пр. и перен.
+- slug: word-code
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: code
+    translations_ru:
+    - код
+    - кодировать
+    accepted_en:
+    - code
+    frequency: 10409
+    frequency_rank: 286
+    function_word: false
+    transcription: kəʊd
+- slug: word-kill
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: kill
+    translations_ru:
+    - убивать
+    accepted_en:
+    - kill
+    frequency: 10364
+    frequency_rank: 287
+    function_word: false
+    transcription: kɪl
+- slug: word-study
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: study
+    translations_ru:
+    - изучать
+    - учиться
+    accepted_en:
+    - study
+    frequency: 10289
+    frequency_rank: 288
+    function_word: false
+    transcription: ˈstʌdɪ
+- slug: word-person
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: person
+    translations_ru:
+    - человек
+    - личность
+    accepted_en:
+    - person
+    frequency: 10263
+    frequency_rank: 289
+    function_word: false
+    transcription: pɜːsn
+- slug: word-matter
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: matter
+    translations_ru:
+    - дело
+    - вопрос
+    - вещество
+    - материя
+    - иметь значение
+    accepted_en:
+    - matter
+    frequency: 10187
+    frequency_rank: 291
+    function_word: false
+    transcription: ˈmætə
+    notes_ru: тема для обсуждения
+- slug: word-ever
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: ever
+    translations_ru:
+    - когда-то
+    - всегда
+    - когда-либо
+    accepted_en:
+    - ever
+    frequency: 10181
+    frequency_rank: 292
+    function_word: false
+    transcription: ˈevə
+- slug: word-arm
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: arm
+    translations_ru:
+    - рука
+    accepted_en:
+    - arm
+    frequency: 10157
+    frequency_rank: 293
+    function_word: false
+    transcription: ɑːm
+- slug: word-hour
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: hour
+    translations_ru:
+    - час
+    accepted_en:
+    - hour
+    frequency: 10122
+    frequency_rank: 294
+    function_word: false
+    transcription: ˈaʊə
+- slug: word-wife
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: wife
+    translations_ru:
+    - жена
+    accepted_en:
+    - wife
+    frequency: 10083
+    frequency_rank: 295
+    function_word: false
+    transcription: waɪf
+- slug: word-response
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: response
+    translations_ru:
+    - ответ
+    - ответная реакция
+    - отклик
+    accepted_en:
+    - response
+    frequency: 10072
+    frequency_rank: 296
+    function_word: false
+    transcription: rɪsˈpɒns
+- slug: word-sort
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: sort
+    translations_ru:
+    - сортировать
+    accepted_en:
+    - sort
+    frequency: 10065
+    frequency_rank: 297
+    function_word: false
+    transcription: sɔːt
+- slug: word-dead
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: dead
+    translations_ru:
+    - мертвый
+    accepted_en:
+    - dead
+    frequency: 10047
+    frequency_rank: 298
+    function_word: false
+    transcription: ded
+- slug: word-women
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: women
+    translations_ru:
+    - женщины
+    accepted_en:
+    - women
+    frequency: 10004
+    frequency_rank: 299
+    function_word: false
+    transcription: ˈwɪmɪn
+    notes_ru: мн.число
+- slug: word-die
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: die
+    translations_ru:
+    - умирать
+    accepted_en:
+    - die
+    frequency: 9973
+    frequency_rank: 300
+    function_word: false
+    transcription: daɪ
+- slug: word-pay
+  level: A1
+  tags:
+  - purpose:vocabulary
+  payload:
+    kind: vocabulary
+    term: pay
+    translations_ru:
+    - платить
+    accepted_en:
+    - pay
+    frequency: 9965
+    frequency_rank: 301
+    function_word: false
+    transcription: peɪ

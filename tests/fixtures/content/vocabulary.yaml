@@ -1,0 +1,43 @@
+topic:
+  slug: test-vocabulary
+  title: "Test vocabulary"
+  level: A2
+  description: "Vocabulary payload fixture"
+  tags: [purpose:vocabulary]
+
+source: "Test fixture"
+license: "unknown"
+
+items:
+  - slug: test-vocabulary-abandon
+    level: B1
+    tags: [purpose:vocabulary]
+    payload:
+      kind: vocabulary
+      term: abandon
+      translations_ru: [оставить, забросить]
+      accepted_en: [abandon]
+      frequency: 812
+      frequency_rank: 812
+      transcription: "əˈbændən"
+
+  - slug: test-vocabulary-abandon-alt
+    level: B1
+    tags: [purpose:vocabulary]
+    payload:
+      kind: vocabulary
+      term: abandon
+      translations_ru: [покинуть]
+      frequency: 812
+      frequency_rank: 812
+
+  - slug: test-vocabulary-care
+    level: A2
+    tags: [purpose:vocabulary]
+    payload:
+      kind: vocabulary
+      term: care
+      translations_ru: [забота, беспокойство]
+      accepted_en: [care]
+      frequency: 9482
+      frequency_rank: 315

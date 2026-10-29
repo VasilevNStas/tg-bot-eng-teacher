@@ -89,12 +89,48 @@ class MultipleChoicePayload(PayloadBase):
         return self
 
 
+class VocabularyPayload(PayloadBase):
+    kind: Literal[ContentKind.VOCABULARY] = ContentKind.VOCABULARY
+    term: str = Field(min_length=1, max_length=128)
+    translations_ru: list[str] = Field(min_length=1, max_length=20)
+    accepted_en: list[str] = Field(default_factory=list, max_length=20)
+    frequency: int | None = Field(default=None, ge=0)
+    frequency_rank: int | None = Field(default=None, ge=1)
+    function_word: bool = False
+    transcription: str | None = Field(default=None, max_length=128)
+    notes_ru: str | None = Field(default=None, max_length=512)
+    example_en: str | None = Field(default=None, max_length=512)
+
+    @field_validator("term")
+    @classmethod
+    def check_term(cls, term: str) -> str:
+        term = term.strip()
+        if not term:
+            raise ValueError("term must be non-empty")
+        if "\n" in term or "\r" in term:
+            raise ValueError("term must be a single line")
+        return term
+
+    @field_validator("translations_ru", "accepted_en")
+    @classmethod
+    def check_variants(cls, values: list[str]) -> list[str]:
+        cleaned = [value.strip() for value in values]
+        if any(not value for value in cleaned):
+            raise ValueError("translations must be non-empty")
+        if any(len(value) > 256 for value in cleaned):
+            raise ValueError("translation is too long")
+        if len({value.casefold() for value in cleaned}) != len(cleaned):
+            raise ValueError("translations must be unique")
+        return cleaned
+
+
 ContentPayload = Annotated[
     IrregularVerbPayload
     | GapFillPayload
     | TranslationPayload
     | WordOrderPayload
-    | MultipleChoicePayload,
+    | MultipleChoicePayload
+    | VocabularyPayload,
     Field(discriminator="kind"),
 ]
 

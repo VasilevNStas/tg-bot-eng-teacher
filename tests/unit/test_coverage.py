@@ -13,6 +13,7 @@ from app.db.enums import CEFRLevel, ContentKind
 from app.db.models import ContentItem, ContentItemTag, Topic
 
 FIXTURE = Path(__file__).resolve().parents[1] / "fixtures" / "content" / "sample.yaml"
+VOCAB_FIXTURE = Path(__file__).resolve().parents[1] / "fixtures" / "content" / "vocabulary.yaml"
 
 
 async def make_database(tmp_path: Path) -> Database:
@@ -94,6 +95,18 @@ async def test_coverage_reports_matrix_tags_uncollected_and_duplicates(
     assert "theme:cinema | 2" in text
     assert "test-gap-present-simple, test-gap-present-simple-copy" in text
     assert "Items with unknown license:" in text
+
+    await database.dispose()
+
+
+async def test_coverage_flags_duplicate_vocabulary_terms(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    await ContentImporter(database).import_file(load_content_file(VOCAB_FIXTURE))
+
+    report = await CoverageService(database).build()
+
+    group = next(group for group in report.duplicates if "vocabulary | abandon" in group.signature)
+    assert group.slugs == ("test-vocabulary-abandon", "test-vocabulary-abandon-alt")
 
     await database.dispose()
 

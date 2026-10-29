@@ -19,6 +19,7 @@ from app.db.models import ContentItem, ContentItemTag, Topic, TopicItem
 from app.db.repositories.content import ContentRepository
 
 FIXTURE = Path(__file__).resolve().parents[1] / "fixtures" / "content" / "sample.yaml"
+VOCAB_FIXTURE = Path(__file__).resolve().parents[1] / "fixtures" / "content" / "vocabulary.yaml"
 
 
 async def make_database(tmp_path: Path) -> Database:
@@ -73,6 +74,27 @@ async def test_import_creates_topic_and_items(tmp_path: Path) -> None:
             )
         )
         assert tags == {"grammar:irregular-verbs"}
+
+    await database.dispose()
+
+
+async def test_import_vocabulary_payload(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    content = load_content_file(VOCAB_FIXTURE)
+
+    result = await ContentImporter(database).import_file(content)
+
+    assert result.created == 3
+    async with database.session() as session:
+        item = await session.scalar(
+            select(ContentItem).where(ContentItem.slug == "test-vocabulary-care")
+        )
+        assert item is not None
+        assert item.kind is ContentKind.VOCABULARY
+        assert item.payload["term"] == "care"
+        assert item.payload["frequency"] == 9482
+        assert item.payload["frequency_rank"] == 315
+        assert item.payload["translations_ru"] == ["забота", "беспокойство"]
 
     await database.dispose()
 

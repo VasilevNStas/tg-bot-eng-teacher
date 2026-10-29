@@ -11,6 +11,7 @@ from sqlalchemy import (
     BigInteger,
     DateTime,
     ForeignKey,
+    Index,
     Numeric,
     String,
     Text,
@@ -24,6 +25,7 @@ from app.db.annotations import (
     json_dict_not_null,
     str_64,
     str_128,
+    str_enum,
     text,
     tg_id,
 )
@@ -34,11 +36,13 @@ from app.db.enums import (
     ContentKind,
     ConversationMode,
     ErrorCategory,
+    ExerciseSessionKind,
     ExerciseState,
     MessageRole,
     MessageType,
     ReminderKind,
     Verdict,
+    WordDirection,
 )
 
 
@@ -169,6 +173,12 @@ class ExerciseSession(TimestampMixin, Base):
     topic_id: Mapped[int | None] = mapped_column(
         ForeignKey("topics.id", ondelete="SET NULL"), index=True
     )
+    kind: Mapped[ExerciseSessionKind] = mapped_column(
+        str_enum(ExerciseSessionKind),
+        default=ExerciseSessionKind.DRILL,
+        nullable=False,
+    )
+    meta: Mapped[json_dict_not_null]
     state: Mapped[ExerciseState] = mapped_column(default=ExerciseState.ACTIVE, nullable=False)
     started_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=_now, nullable=False
@@ -192,6 +202,7 @@ class ExerciseAttempt(CreatedAtMixin, Base):
     answer: Mapped[text]
     verdict: Mapped[Verdict] = mapped_column(nullable=False)
     checker: Mapped[Checker] = mapped_column(nullable=False)
+    direction: Mapped[WordDirection | None] = mapped_column(str_enum(WordDirection))
     latency_ms: Mapped[int | None]
 
 
@@ -256,6 +267,32 @@ class SrsReview(TimestampMixin, Base):
     reps: Mapped[int] = mapped_column(default=0, nullable=False)
     lapses: Mapped[int] = mapped_column(default=0, nullable=False)
     last_reviewed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class WordProgress(TimestampMixin, Base):
+    __tablename__ = "word_progress"
+    __table_args__ = (
+        UniqueConstraint("user_id", "content_item_id", name="uq_word_progress_user_item"),
+        Index("ix_word_progress_user_due_at", "user_id", "next_due_at"),
+    )
+
+    id: Mapped[int_pk]
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), index=True, nullable=False
+    )
+    content_item_id: Mapped[int] = mapped_column(
+        ForeignKey("content_items.id", ondelete="CASCADE"), index=True, nullable=False
+    )
+    shown_count: Mapped[int] = mapped_column(default=0, nullable=False)
+    attempt_count: Mapped[int] = mapped_column(default=0, nullable=False)
+    correct_count: Mapped[int] = mapped_column(default=0, nullable=False)
+    partial_count: Mapped[int] = mapped_column(default=0, nullable=False)
+    wrong_count: Mapped[int] = mapped_column(default=0, nullable=False)
+    streak: Mapped[int] = mapped_column(default=0, nullable=False)
+    best_streak: Mapped[int] = mapped_column(default=0, nullable=False)
+    last_shown_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    last_attempted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    next_due_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
 class UsageLedger(CreatedAtMixin, Base):
