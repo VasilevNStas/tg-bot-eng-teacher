@@ -6,6 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     image: tg-bot-eng-teacher:local
+    user: "${BOT_UID:-10001}:${BOT_GID:-10001}"
     env_file:
       - path: .env
         required: false
