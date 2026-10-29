@@ -173,11 +173,46 @@ DRILL_NOTHING_TO_CANCEL = "Сейчас нет активной трениров
 DRILL_UNAVAILABLE = "Банк упражнений пуст. Попроси администратора импортировать контент."
 DRILL_SESSION_ERROR = "Сессия тренировки потеряна. Начни заново: /drill."
 
+WORDS_UNAVAILABLE = "Банк слов пуст. Попроси администратора импортировать контент."
+WORDS_HEADER = "<b>Карточка слов</b> ({count})"
+WORDS_STUDY_ITEM = "{number}. <b>{term}</b>{ipa} — {translation}"
+WORDS_STUDY_FOOTER = "Запомни слова и начни квиз."
+WORDS_QUESTION = "<b>Вопрос {number} из {total}</b>\n\n{prompt}\n\n{direction}"
+WORDS_DIRECTION_EN_RU = "Напиши перевод на русский."
+WORDS_DIRECTION_RU_EN = "Напиши слово по-английски."
+WORDS_CORRECT = "✅ Верно!"
+WORDS_PARTIAL = "Почти! Похоже на опечатку."
+WORDS_INCORRECT = "❌ Неверно."
+WORDS_ANSWER = "Твой ответ: <b>{answer}</b>"
+WORDS_EXPECTED = "Правильно: <b>{expected}</b>"
+WORDS_SUMMARY = (
+    "<b>Карточка завершена.</b>\n\n"
+    "Верно: <b>{correct}</b> из {total}\n"
+    "Почти: {partial}, ошибок: {incorrect}"
+)
+WORDS_CANCELLED = "Карточка завершена досрочно."
+WORDS_CANCELLED_STATS = "Карточка завершена досрочно.\n\nВерно: <b>{correct}</b> из {total}"
+WORDS_NOTHING_TO_CANCEL = "Сейчас нет активной карточки."
+WORDS_SESSION_ERROR = "Сессия карточки потеряна. Начни заново: /words."
+WORDS_SETTINGS = "<b>Настройки карточек</b>\n\nСлов: <b>{size}</b>\nНаправление: <b>{direction}</b>"
+WORDS_NO_ERRORS_TO_RETRY = "Ошибок нет — можно начать новую карточку."
+WORDS_DIRECTION_LABELS: dict[str, str] = {
+    "en_ru": "English → русский",
+    "ru_en": "русский → English",
+    "both": "в обе стороны",
+    "mix": "смешанное",
+}
+BUTTON_START_QUIZ = "Начать квиз"
+BUTTON_SETTINGS = "Настройки"
+BUTTON_RETRY_WRONG = "Повторить ошибки"
+BUTTON_NEW_CARD = "Новая карточка"
+
 HELP = (
     "<b>Команды</b>\n"
     "/start — начать заново\n"
     "/correction &lt;текст&gt; — полный разбор ошибок\n"
     "/drill — тренировка неправильных глаголов\n"
+    "/words — карточки слов\n"
     "/vocab — сохранённые слова\n"
     "/review — повторение слов\n"
     "/stats — прогресс и слабые темы\n"

@@ -25,3 +25,8 @@ class RoleplayCB(CallbackData, prefix="rp"):
 
 class DeleteCB(CallbackData, prefix="del"):
     action: Literal["confirm", "cancel"]
+
+
+class WordsCB(CallbackData, prefix="wrd"):
+    action: Literal["quiz", "settings", "size", "direction", "retry", "new"]
+    value: str = ""

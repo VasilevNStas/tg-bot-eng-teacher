@@ -12,3 +12,8 @@ class Onboarding(StatesGroup):
 
 class Drill(StatesGroup):
     active = State()
+
+
+class Words(StatesGroup):
+    study = State()
+    quiz = State()

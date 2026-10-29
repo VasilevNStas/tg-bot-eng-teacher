@@ -71,6 +71,23 @@ class UserRepository(BaseRepository[User]):
         user.quiet_hours_end = end
         return True
 
+    async def update_profile_section(
+        self,
+        tg_id: int,
+        section: str,
+        values: dict[str, object],
+    ) -> bool:
+        user = await self.get_by_tg_id(tg_id)
+        if user is None:
+            return False
+        profile = dict(user.profile or {})
+        current = profile.get(section)
+        merged = dict(current) if isinstance(current, dict) else {}
+        merged.update(values)
+        profile[section] = merged
+        user.profile = profile
+        return True
+
     @staticmethod
     def touch(user: User, at: datetime | None = None) -> None:
         user.last_seen_at = at or datetime.now(UTC)

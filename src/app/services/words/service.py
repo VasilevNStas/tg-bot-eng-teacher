@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import math
 import random
+from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from enum import StrEnum
@@ -131,6 +132,7 @@ class WordCardService:
         direction: WordCardDirection = WordCardDirection.MIX,
         card_size: int | None = None,
         source: str = "adaptive",
+        item_ids: Sequence[int] | None = None,
         now: datetime | None = None,
     ) -> WordCardSession:
         size = self._card_size if card_size is None else card_size
@@ -138,14 +140,24 @@ class WordCardService:
             raise WordCardError("card_size must be positive")
         if source not in {"adaptive", "random"}:
             raise WordCardError(f"unsupported card source: {source}")
+        restrict = tuple(dict.fromkeys(item_ids)) if item_ids is not None else None
+        if restrict is not None:
+            if not restrict:
+                raise WordCardError("item_ids must not be empty")
+            size = len(restrict)
         at = now or datetime.now(UTC)
 
         async with self._database.session() as session:
-            candidates = await self._candidates(session, user, size=size)
+            candidates = await self._candidates(session, user, size=size, restrict=restrict)
             if not candidates:
                 raise WordCardUnavailable("vocabulary bank is empty")
 
-            selected = self._select(candidates, size=size, source=source, now=at)
+            if restrict is None:
+                selected = self._select(candidates, size=size, source=source, now=at)
+            else:
+                selected = list(candidates)
+                self._rng.shuffle(selected)
+            size = len(selected)
             questions = self._build_questions(selected, direction)
 
             exercise_repo = ExerciseRepository(session)
@@ -305,6 +317,7 @@ class WordCardService:
         user: User,
         *,
         size: int,
+        restrict: Sequence[int] | None = None,
     ) -> list[_Candidate]:
         content_repo = ContentRepository(session)
         items = await content_repo.list_active(kind=ContentKind.VOCABULARY, level=user.level)
@@ -313,6 +326,14 @@ class WordCardService:
 
         payloads = {item.id: VocabularyPayload.model_validate(item.payload) for item in items}
         items = [item for item in items if not payloads[item.id].function_word]
+        if restrict is not None:
+            allowed = set(restrict)
+            items = [item for item in items if item.id in allowed]
+        else:
+            unique_terms: dict[str, ContentItem] = {}
+            for item in items:
+                unique_terms.setdefault(payloads[item.id].term.casefold(), item)
+            items = list(unique_terms.values())
 
         progress_repo = WordProgressRepository(session)
         progress_by_item = await progress_repo.list_for_user(user.id)
@@ -323,7 +344,7 @@ class WordCardService:
             )
         )
         fresh = [item for item in items if item.id not in recent]
-        if len(fresh) >= size:
+        if restrict is None and len(fresh) >= size:
             items = fresh
 
         frequencies = [math.log1p(payloads[item.id].frequency or 0) for item in items]

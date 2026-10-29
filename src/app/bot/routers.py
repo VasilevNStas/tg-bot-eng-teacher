@@ -15,12 +15,14 @@ from app.bot.handlers.review import build_router as build_review_router
 from app.bot.handlers.roleplay import build_router as build_roleplay_router
 from app.bot.handlers.stats import build_router as build_stats_router
 from app.bot.handlers.vocab import build_router as build_vocab_router
+from app.bot.handlers.words import build_router as build_words_router
 
 
 def register_routers(dispatcher: Dispatcher) -> None:
     dispatcher.include_router(build_common_router())
     dispatcher.include_router(build_onboarding_router())
     dispatcher.include_router(build_drill_router())
+    dispatcher.include_router(build_words_router())
     dispatcher.include_router(build_correction_router())
     dispatcher.include_router(build_vocab_router())
     dispatcher.include_router(build_review_router())

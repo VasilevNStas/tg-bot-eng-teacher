@@ -9,6 +9,7 @@ BOT_COMMANDS: list[BotCommand] = [
     BotCommand(command="help", description="Справка"),
     BotCommand(command="correction", description="Разбор ошибок"),
     BotCommand(command="drill", description="Тренировка глаголов"),
+    BotCommand(command="words", description="Карточки слов"),
     BotCommand(command="vocab", description="Сохранённые слова"),
     BotCommand(command="review", description="Повторение слов"),
     BotCommand(command="stats", description="Прогресс и слабые темы"),
