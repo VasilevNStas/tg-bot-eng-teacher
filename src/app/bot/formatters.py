@@ -164,6 +164,33 @@ def format_stats(report: StatsReport) -> str:
     else:
         lines.extend(["", ru.STATS_NO_WEAK_WORDS])
 
+    lines.extend(["", ru.STATS_WORDS_HEADER])
+    if report.word_attempts:
+        lines.append(
+            ru.STATS_WORDS_SUMMARY.format(
+                sessions=report.word_sessions,
+                attempts=report.word_attempts,
+                correct=report.word_correct,
+                accuracy=report.word_accuracy,
+            )
+        )
+        lines.append(ru.STATS_WORDS_SEEN.format(seen=report.bank_words_seen))
+    else:
+        lines.append(ru.STATS_WORDS_NO_DATA)
+
+    if report.weak_bank_words:
+        lines.extend(["", ru.STATS_WEAK_BANK_WORDS_HEADER])
+        lines.extend(
+            ru.STATS_WEAK_BANK_WORD_ITEM.format(
+                term=escape(word.term, quote=False),
+                wrong=word.wrong,
+                attempts=word.attempts,
+            )
+            for word in report.weak_bank_words
+        )
+    else:
+        lines.extend(["", ru.STATS_NO_WEAK_BANK_WORDS])
+
     lines.extend(["", ru.STATS_ERRORS_HEADER])
     if report.error_categories:
         lines.extend(

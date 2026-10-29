@@ -11,8 +11,10 @@ from app.db.base import Base
 from app.db.database import Database
 from app.db.enums import (
     Checker,
+    ContentKind,
     ConversationMode,
     ErrorCategory,
+    ExerciseSessionKind,
     ExerciseState,
     MessageRole,
     Verdict,
@@ -29,11 +31,13 @@ from app.db.models import (
     User,
     UserProgress,
     Vocabulary,
+    WordProgress,
 )
 from app.services.stats.service import StatsService
 
 NOW = datetime(2026, 10, 29, 12, 0, tzinfo=UTC)
 SAMPLE = Path(__file__).resolve().parents[1] / "fixtures" / "content" / "sample.yaml"
+VOCABULARY = Path(__file__).resolve().parents[1] / "fixtures" / "content" / "vocabulary.yaml"
 
 
 async def make_database(tmp_path: Path) -> Database:
@@ -63,6 +67,11 @@ async def test_empty_stats(tmp_path: Path) -> None:
     assert report.weak_words == ()
     assert report.error_categories == ()
     assert report.best_streak == 0
+    assert report.word_sessions == 0
+    assert report.word_attempts == 0
+    assert report.word_accuracy == 0
+    assert report.bank_words_seen == 0
+    assert report.weak_bank_words == ()
 
     await database.dispose()
 
@@ -203,6 +212,96 @@ async def test_stats_aggregates_attempts_words_and_errors(tmp_path: Path) -> Non
     assert [(item.category, item.count) for item in report.error_categories] == [
         (ErrorCategory.TENSE, 2),
         (ErrorCategory.ARTICLE, 1),
+    ]
+
+    await database.dispose()
+
+
+async def test_stats_includes_word_cards(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    await ContentImporter(database).import_file(load_content_file(VOCABULARY))
+
+    async with database.session() as session:
+        user = User(tg_id=100)
+        session.add(user)
+        await session.flush()
+
+        items = list(
+            await session.scalars(
+                select(ContentItem)
+                .where(ContentItem.kind == ContentKind.VOCABULARY)
+                .order_by(ContentItem.id)
+            )
+        )
+        assert len(items) == 3
+
+        card = ExerciseSession(
+            user_id=user.id,
+            kind=ExerciseSessionKind.WORDS,
+            state=ExerciseState.FINISHED,
+            meta={"item_ids": [items[0].id, items[2].id]},
+        )
+        session.add(card)
+        await session.flush()
+        session.add_all(
+            [
+                ExerciseAttempt(
+                    user_id=user.id,
+                    session_id=card.id,
+                    content_item_id=items[0].id,
+                    answer="оставить",
+                    verdict=Verdict.CORRECT,
+                    checker=Checker.CODE,
+                ),
+                ExerciseAttempt(
+                    user_id=user.id,
+                    session_id=card.id,
+                    content_item_id=items[2].id,
+                    answer="zzz",
+                    verdict=Verdict.INCORRECT,
+                    checker=Checker.CODE,
+                ),
+                ExerciseAttempt(
+                    user_id=user.id,
+                    session_id=card.id,
+                    content_item_id=items[0].id,
+                    answer="zzz",
+                    verdict=Verdict.INCORRECT,
+                    checker=Checker.CODE,
+                ),
+            ]
+        )
+        session.add_all(
+            [
+                WordProgress(
+                    user_id=user.id,
+                    content_item_id=items[0].id,
+                    shown_count=2,
+                    attempt_count=2,
+                    correct_count=1,
+                    wrong_count=1,
+                ),
+                WordProgress(
+                    user_id=user.id,
+                    content_item_id=items[2].id,
+                    shown_count=1,
+                    attempt_count=1,
+                    wrong_count=1,
+                ),
+            ]
+        )
+        user_id = user.id
+
+    report = await StatsService(database).overview(user_id, now=NOW)
+
+    assert report.word_sessions == 1
+    assert report.word_attempts == 3
+    assert report.word_correct == 1
+    assert report.word_accuracy == 33
+    assert report.bank_words_seen == 2
+    assert [(word.term, word.wrong, word.attempts) for word in report.weak_bank_words] == [
+        ("abandon", 1, 2),
+        ("care", 1, 1),
     ]
 
     await database.dispose()

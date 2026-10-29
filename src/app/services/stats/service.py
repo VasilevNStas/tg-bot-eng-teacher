@@ -8,8 +8,9 @@ from datetime import UTC, datetime
 from sqlalchemy import func, or_, select
 
 from app.db.database import Database
-from app.db.enums import ErrorCategory, ExerciseState, Verdict
+from app.db.enums import ErrorCategory, ExerciseSessionKind, ExerciseState, Verdict
 from app.db.models import (
+    ContentItem,
     Conversation,
     Correction,
     ExerciseAttempt,
@@ -19,6 +20,7 @@ from app.db.models import (
     Topic,
     UserProgress,
     Vocabulary,
+    WordProgress,
 )
 
 
@@ -48,6 +50,13 @@ class ErrorCategoryCount:
 
 
 @dataclass(frozen=True, slots=True)
+class WeakBankWord:
+    term: str
+    wrong: int
+    attempts: int
+
+
+@dataclass(frozen=True, slots=True)
 class StatsReport:
     attempts_total: int
     correct: int
@@ -60,10 +69,19 @@ class StatsReport:
     due_count: int
     weak_words: tuple[WeakWord, ...]
     error_categories: tuple[ErrorCategoryCount, ...]
+    word_sessions: int
+    word_attempts: int
+    word_correct: int
+    bank_words_seen: int
+    weak_bank_words: tuple[WeakBankWord, ...]
 
     @property
     def accuracy(self) -> int:
         return round(self.correct * 100 / self.attempts_total) if self.attempts_total else 0
+
+    @property
+    def word_accuracy(self) -> int:
+        return round(self.word_correct * 100 / self.word_attempts) if self.word_attempts else 0
 
 
 @dataclass(slots=True)
@@ -197,6 +215,62 @@ class StatsService:
                 or 0
             )
 
+            word_sessions = int(
+                await session.scalar(
+                    select(func.count())
+                    .select_from(ExerciseSession)
+                    .where(
+                        ExerciseSession.user_id == user_id,
+                        ExerciseSession.kind == ExerciseSessionKind.WORDS,
+                        ExerciseSession.state == ExerciseState.FINISHED,
+                    )
+                )
+                or 0
+            )
+            word_attempt_rows = await session.execute(
+                select(ExerciseAttempt.verdict, func.count())
+                .join(ExerciseSession, ExerciseSession.id == ExerciseAttempt.session_id)
+                .where(
+                    ExerciseAttempt.user_id == user_id,
+                    ExerciseSession.kind == ExerciseSessionKind.WORDS,
+                )
+                .group_by(ExerciseAttempt.verdict)
+            )
+            word_counts = {verdict: int(count) for verdict, count in word_attempt_rows}
+            word_attempts = sum(word_counts.values())
+            word_correct = word_counts.get(Verdict.CORRECT, 0)
+
+            bank_words_seen = int(
+                await session.scalar(
+                    select(func.count())
+                    .select_from(WordProgress)
+                    .where(WordProgress.user_id == user_id)
+                )
+                or 0
+            )
+            weak_bank_rows = await session.execute(
+                select(
+                    ContentItem.payload,
+                    WordProgress.wrong_count,
+                    WordProgress.attempt_count,
+                )
+                .join(WordProgress, WordProgress.content_item_id == ContentItem.id)
+                .where(
+                    WordProgress.user_id == user_id,
+                    WordProgress.wrong_count > 0,
+                )
+                .order_by(WordProgress.wrong_count.desc(), ContentItem.id)
+                .limit(3)
+            )
+            weak_bank_words = tuple(
+                WeakBankWord(
+                    term=str(payload["term"]),
+                    wrong=int(wrong),
+                    attempts=int(attempts),
+                )
+                for payload, wrong, attempts in weak_bank_rows
+            )
+
         return StatsReport(
             attempts_total=total,
             correct=counts.get(Verdict.CORRECT, 0),
@@ -209,4 +283,9 @@ class StatsService:
             weak_words=weak_words,
             error_categories=error_categories,
             best_streak=progress_streak,
+            word_sessions=word_sessions,
+            word_attempts=word_attempts,
+            word_correct=word_correct,
+            bank_words_seen=bank_words_seen,
+            weak_bank_words=weak_bank_words,
         )
