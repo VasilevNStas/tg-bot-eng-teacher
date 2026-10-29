@@ -15,6 +15,7 @@ from app.services.exercises.service import ExerciseService
 from app.services.prompts.builder import PromptBuilder
 from app.services.prompts.registry import PromptRegistry
 from app.services.usage.service import UsageService
+from app.services.words.service import WordCardService
 
 
 @dataclass(slots=True)
@@ -27,6 +28,7 @@ class AppServices:
     builder: PromptBuilder
     conversation: ConversationService
     exercise: ExerciseService
+    words: WordCardService
 
     async def aclose(self) -> None:
         await self.llm.aclose()
@@ -61,6 +63,10 @@ def build_services(database: Database, settings: Settings) -> AppServices:
         database,
         session_size=settings.drill_session_size,
     )
+    words = WordCardService(
+        database,
+        card_size=settings.words_card_size,
+    )
     return AppServices(
         settings=settings,
         database=database,
@@ -70,4 +76,5 @@ def build_services(database: Database, settings: Settings) -> AppServices:
         builder=builder,
         conversation=conversation,
         exercise=exercise,
+        words=words,
     )

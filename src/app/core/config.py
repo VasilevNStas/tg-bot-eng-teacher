@@ -45,6 +45,7 @@ class Settings(BaseSettings):
     prompt_history_window: int = Field(default=12, ge=0, le=50)
     conversation_idle_minutes: int = Field(default=30, ge=1, le=1440)
     drill_session_size: int = Field(default=5, ge=1, le=20)
+    words_card_size: int = Field(default=10, ge=1, le=20)
 
     db_path: Path = Path("./data/bot.db")
     daily_token_budget: int = Field(default=50_000, gt=0)

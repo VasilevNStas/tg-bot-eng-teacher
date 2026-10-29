@@ -7,7 +7,7 @@ from datetime import datetime
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.db.enums import Checker, ExerciseState, Verdict
+from app.db.enums import Checker, ExerciseSessionKind, ExerciseState, Verdict, WordDirection
 from app.db.models import ExerciseAttempt, ExerciseSession, UserProgress
 from app.db.repository import BaseRepository
 
@@ -28,24 +28,34 @@ class ExerciseRepository(BaseRepository[ExerciseSession]):
             )
         )
 
-    async def get_active(self, user_id: int) -> ExerciseSession | None:
-        return await self._session.scalar(
-            select(ExerciseSession)
-            .where(
-                ExerciseSession.user_id == user_id,
-                ExerciseSession.state == ExerciseState.ACTIVE,
-            )
-            .order_by(ExerciseSession.started_at.desc())
-            .limit(1)
+    async def get_active(
+        self,
+        user_id: int,
+        *,
+        kind: ExerciseSessionKind | None = None,
+    ) -> ExerciseSession | None:
+        stmt = select(ExerciseSession).where(
+            ExerciseSession.user_id == user_id,
+            ExerciseSession.state == ExerciseState.ACTIVE,
         )
+        if kind is not None:
+            stmt = stmt.where(ExerciseSession.kind == kind)
+        return await self._session.scalar(stmt.order_by(ExerciseSession.started_at.desc()).limit(1))
 
-    async def abandon_active(self, user_id: int, at: datetime) -> int:
-        sessions = await self._scalars(
-            select(ExerciseSession).where(
-                ExerciseSession.user_id == user_id,
-                ExerciseSession.state == ExerciseState.ACTIVE,
-            )
+    async def abandon_active(
+        self,
+        user_id: int,
+        at: datetime,
+        *,
+        kind: ExerciseSessionKind | None = None,
+    ) -> int:
+        stmt = select(ExerciseSession).where(
+            ExerciseSession.user_id == user_id,
+            ExerciseSession.state == ExerciseState.ACTIVE,
         )
+        if kind is not None:
+            stmt = stmt.where(ExerciseSession.kind == kind)
+        sessions = await self._scalars(stmt)
         for item in sessions:
             item.state = ExerciseState.ABANDONED
             item.finished_at = at
@@ -71,6 +81,7 @@ class ExerciseRepository(BaseRepository[ExerciseSession]):
         verdict: Verdict,
         checker: Checker,
         latency_ms: int | None,
+        direction: WordDirection | None = None,
     ) -> ExerciseAttempt:
         attempt = ExerciseAttempt(
             user_id=user_id,
@@ -80,6 +91,7 @@ class ExerciseRepository(BaseRepository[ExerciseSession]):
             verdict=verdict,
             checker=checker,
             latency_ms=latency_ms,
+            direction=direction,
         )
         self._session.add(attempt)
         await self._session.flush()
@@ -92,6 +104,18 @@ class ExerciseRepository(BaseRepository[ExerciseSession]):
             .group_by(ExerciseAttempt.verdict)
         )
         return {verdict: int(count) for verdict, count in rows}
+
+    async def incorrect_item_ids(self, session_id: int) -> tuple[int, ...]:
+        rows = await self._session.execute(
+            select(ExerciseAttempt.content_item_id)
+            .where(
+                ExerciseAttempt.session_id == session_id,
+                ExerciseAttempt.verdict != Verdict.CORRECT,
+            )
+            .distinct()
+            .order_by(ExerciseAttempt.content_item_id)
+        )
+        return tuple(int(item_id) for item_id in rows.scalars())
 
 
 class ProgressRepository(BaseRepository[UserProgress]):

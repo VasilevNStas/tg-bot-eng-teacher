@@ -29,6 +29,7 @@ from app.services.exercises.service import ExerciseService
 from app.services.prompts.builder import PromptBuilder
 from app.services.prompts.registry import PromptRegistry
 from app.services.usage.service import UsageService
+from app.services.words.service import WordCardService
 from app.texts import ru
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -136,6 +137,7 @@ def make_services(database: Database) -> AppServices:
             rng=random.Random(7),
             topic_slug="test-topic-a1",
         ),
+        words=WordCardService(database),
     )
 
 

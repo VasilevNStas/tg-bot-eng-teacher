@@ -11,7 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.curriculum.models import ContentItemSpec, IrregularVerbPayload
 from app.curriculum.selector import ContentSelector, SelectionCriteria
 from app.db.database import Database
-from app.db.enums import ContentKind, ExerciseState, Verdict
+from app.db.enums import ContentKind, ExerciseSessionKind, ExerciseState, Verdict
 from app.db.models import ContentItem, ExerciseSession, User
 from app.db.repositories.content import ContentRepository
 from app.db.repositories.exercises import ExerciseRepository, ProgressRepository
@@ -121,7 +121,11 @@ class ExerciseService:
 
             exercise_repo = ExerciseRepository(session)
             now = datetime.now(UTC)
-            await exercise_repo.abandon_active(user.id, at=now)
+            await exercise_repo.abandon_active(
+                user.id,
+                at=now,
+                kind=ExerciseSessionKind.DRILL,
+            )
             exercise_session = await exercise_repo.add(
                 user_id=user.id,
                 topic_id=topic.id,
@@ -212,7 +216,10 @@ class ExerciseService:
     async def cancel_active(self, user: User) -> SessionStats | None:
         async with self._database.session() as session:
             exercise_repo = ExerciseRepository(session)
-            exercise_session = await exercise_repo.get_active(user.id)
+            exercise_session = await exercise_repo.get_active(
+                user.id,
+                kind=ExerciseSessionKind.DRILL,
+            )
             if exercise_session is None:
                 return None
             await exercise_repo.finish(

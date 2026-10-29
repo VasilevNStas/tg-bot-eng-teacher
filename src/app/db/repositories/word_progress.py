@@ -24,6 +24,22 @@ class WordProgressRepository(BaseRepository[WordProgress]):
             )
         )
 
+    async def list_for_user(self, user_id: int) -> dict[int, WordProgress]:
+        rows = await self._scalars(select(WordProgress).where(WordProgress.user_id == user_id))
+        return {row.content_item_id: row for row in rows}
+
+    async def recent_item_ids(self, user_id: int, *, limit: int) -> tuple[int, ...]:
+        rows = await self._session.execute(
+            select(WordProgress.content_item_id)
+            .where(
+                WordProgress.user_id == user_id,
+                WordProgress.last_shown_at.is_not(None),
+            )
+            .order_by(WordProgress.last_shown_at.desc())
+            .limit(limit)
+        )
+        return tuple(int(item_id) for item_id in rows.scalars())
+
     async def get_or_create(self, user_id: int, content_item_id: int) -> WordProgress:
         progress = await self.get_for(user_id, content_item_id)
         if progress is None:
