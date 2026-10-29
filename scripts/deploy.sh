@@ -46,16 +46,27 @@ if [[ -z "$container" ]]; then
   exit 1
 fi
 
-for _ in $(seq 1 30); do
-  if [[ "$(docker inspect -f '{{.State.Running}}' "$container")" == "true" ]]; then
+echo "==> verify"
+sleep 5
+status="unknown"
+restarts="0"
+for _ in $(seq 1 15); do
+  status="$(docker inspect -f '{{.State.Status}}' "$container" 2>/dev/null || echo missing)"
+  restarts="$(docker inspect -f '{{.RestartCount}}' "$container" 2>/dev/null || echo 0)"
+  if [[ "$status" == "running" && "$restarts" == "0" ]]; then
     break
   fi
   sleep 2
 done
 
-if [[ "$(docker inspect -f '{{.State.Running}}' "$container")" != "true" ]]; then
+# Даём приложению время упасть при неверной конфигурации.
+sleep 5
+status="$(docker inspect -f '{{.State.Status}}' "$container" 2>/dev/null || echo missing)"
+restarts="$(docker inspect -f '{{.RestartCount}}' "$container" 2>/dev/null || echo 0)"
+
+if [[ "$status" != "running" || "$restarts" != "0" ]]; then
   docker compose logs --tail=100 bot >&2
-  echo "bot is not running after deploy" >&2
+  echo "bot is not healthy (status=$status, restarts=$restarts)" >&2
   exit 1
 fi
 
