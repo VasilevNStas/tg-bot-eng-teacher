@@ -1,0 +1,33 @@
+name: tg-bot-eng-teacher
+
+services:
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: tg-bot-eng-teacher:local
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DB_PATH: /app/data/bot.db
+      PROMPTS_DIR: /app/prompts
+      LOG_JSON: "true"
+    volumes:
+      - ./data:/app/data
+    command:
+      - sh
+      - -c
+      - alembic upgrade head && exec python -m app
+    init: true
+    restart: unless-stopped
+    stop_grace_period: 30s
+    mem_limit: 320m
+    cpus: 0.8
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
