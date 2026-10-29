@@ -11,6 +11,7 @@ MVP-каркас работает:
 - чат с LLM-персоной и expandable-коррекциями;
 - `/correction <текст>` — полный разбор ошибок;
 - `/drill` — неправильные глаголы, mastery/streak, `/cancel`;
+- `/words` — адаптивные карточки слов: study → quiz → результат, настройки и повтор ошибок;
 - `/vocab` — автосохранённые слова из диалога;
 - `/review` — интервальное повторение слов (упрощённый SM-2);
 - `/stats` — прогресс, слабые темы и слова;
@@ -80,9 +81,105 @@ uv run python -m app
 ```
 
 MVP работает в режиме polling — публичный URL не требуется.
-Команды бота: `/start`, `/help`, `/correction <текст>`, `/drill`, `/vocab`,
-`/review`, `/stats`, `/roleplay`, `/stop`, `/timezone`, `/quiet`, `/delete_me`,
-`/cancel`.
+Команды бота: `/start`, `/help`, `/correction <текст>`, `/drill`, `/words`,
+`/vocab`, `/review`, `/stats`, `/roleplay`, `/stop`, `/timezone`, `/quiet`,
+`/delete_me`, `/cancel`.
+
+## Docker
+
+Образ собирается из `Dockerfile`: multi-stage, зависимости через `uv.lock`,
+запуск от non-root пользователя `app` (UID 10001).
+
+```bash
+install -d -o 10001 -g 10001 data   # один раз, нужен root
+cp .env.example .env                # заполнить BOT_TOKEN и LLM_*
+docker compose build
+docker compose run --rm bot python -m app.cli import-content content/topics
+docker compose up -d
+docker compose logs -f bot
+```
+
+Миграции применяются автоматически при старте контейнера
+(`alembic upgrade head`). Данные лежат в `./data` (bind mount), поэтому
+`docker compose down` их не удаляет.
+
+Каждый бот запускается своим compose-проектом: имя `tg-bot-eng-teacher` задано
+в `docker-compose.yml`, контейнеры и сети изолированы от других ботов на VDS.
+Лимиты по умолчанию — `320m` RAM и `0.8` CPU; при нехватке ресурсов меняйте
+`mem_limit`/`cpus`.
+
+Бэкап SQLite:
+
+```bash
+docker compose exec bot sh -c \
+  'sqlite3 /app/data/bot.db ".backup /app/data/backup-$(date +%F).db"'
+```
+
+## CI/CD
+
+Релиз запускается тегом `vX.Y.Z`: GitHub Actions заходит по SSH на VDS, делает
+`git fetch`, собирает образ **на самом VDS** и перезапускает контейнер.
+Перед сборкой скрипт `scripts/deploy.sh` делает `sqlite3 .backup` и хранит
+последние 10 бэкапов в `backups/`.
+
+Тег должен указывать на коммит из `main` (там уже требуется зелёный CI).
+
+### One-time setup на VDS
+
+Как root:
+
+```bash
+useradd --create-home --shell /bin/bash --groups docker deploy
+install -d -o deploy -g deploy /srv/tg-bot-eng-teacher
+sudo -u deploy git clone https://github.com/VasilevNStas/tg-bot-eng-teacher.git \
+  /srv/tg-bot-eng-teacher
+install -d -o 10001 -g 10001 /srv/tg-bot-eng-teacher/data
+sudo -u deploy cp /srv/tg-bot-eng-teacher/.env.example \
+  /srv/tg-bot-eng-teacher/.env
+# заполнить .env: BOT_TOKEN, LLM_API_KEY, LLM_MODEL_FAST, LLM_MODEL_SMART
+```
+
+SSH-ключ для деплоя (на локальной машине):
+
+```bash
+ssh-keygen -t ed25519 -f ~/.ssh/tg_bot_eng_teacher_deploy -N "" -C "gha-deploy"
+```
+
+Публичный ключ на VDS (root), с forced command:
+
+```bash
+install -d -m 700 -o deploy -g deploy /home/deploy/.ssh
+printf 'command="bash /srv/tg-bot-eng-teacher/scripts/deploy.sh",no-agent-forwarding,no-port-forwarding,no-pty,no-user-rc,no-X11-forwarding %s\n' \
+  "$(cat tg_bot_eng_teacher_deploy.pub)" >> /home/deploy/.ssh/authorized_keys
+chown deploy:deploy /home/deploy/.ssh/authorized_keys
+chmod 600 /home/deploy/.ssh/authorized_keys
+```
+
+Секреты GitHub:
+
+```bash
+gh secret set VDS_HOST --body "193.168.49.204"
+gh secret set VDS_USER --body "deploy"
+gh secret set VDS_SSH_KEY < ~/.ssh/tg_bot_eng_teacher_deploy
+ssh-keyscan -H 193.168.49.204 | gh secret set VDS_KNOWN_HOSTS
+```
+
+### Выпуск релиза
+
+```bash
+git tag -a v0.1.0 -m "v0.1.0"
+git push origin v0.1.0
+gh run watch
+```
+
+Повторный деплой без нового тега:
+
+```bash
+gh workflow run release.yml -f tag=v0.1.0
+```
+
+Первый деплой создаёт БД и применяет миграции автоматически
+(`alembic upgrade head` в команде контейнера).
 
 ## Тесты и проверки
 
