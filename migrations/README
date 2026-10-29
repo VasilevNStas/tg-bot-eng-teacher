@@ -1,0 +1,10 @@
+Alembic migrations for tg-bot-eng-teacher.
+
+Generate:
+    uv run alembic revision --autogenerate -m "describe change"
+
+Apply:
+    uv run alembic upgrade head
+
+Rollback one step:
+    uv run alembic downgrade -1

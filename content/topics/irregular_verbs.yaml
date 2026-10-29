@@ -1,0 +1,1655 @@
+topic:
+  slug: irregular-verbs
+  title: "Неправильные глаголы"
+  level: A2
+  description: "Неправильные глаголы: формы, перевод и транскрипция"
+  tags: [verbs, irregular]
+
+source: "Project educational materials (irregular verb tables)"
+license: "unknown"
+
+items:
+  - slug: irregular-verb-be
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "be"
+      past: ["was", "were"]
+      participle: ["been"]
+      translation_ru: "быть"
+      base_ipa: "biː"
+      past_ipa: "wɒz / wɜː"
+      participle_ipa: "biːn"
+  - slug: irregular-verb-have
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "have"
+      past: ["had"]
+      participle: ["had"]
+      translation_ru: "иметь"
+      base_ipa: "hæv"
+      past_ipa: "hæd"
+      participle_ipa: "hæd"
+  - slug: irregular-verb-do
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "do"
+      past: ["did"]
+      participle: ["done"]
+      translation_ru: "делать"
+      base_ipa: "duː"
+      past_ipa: "dɪd"
+      participle_ipa: "dʌn"
+  - slug: irregular-verb-say
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "say"
+      past: ["said"]
+      participle: ["said"]
+      translation_ru: "говорить"
+      base_ipa: "seɪ"
+      past_ipa: "sɛd"
+      participle_ipa: "sɛd"
+  - slug: irregular-verb-go
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "go"
+      past: ["went"]
+      participle: ["gone"]
+      translation_ru: "идти"
+      base_ipa: "ɡəʊ"
+      past_ipa: "wɛnt"
+      participle_ipa: "ɡɒn"
+  - slug: irregular-verb-get
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "get"
+      past: ["got"]
+      participle: ["got", "gotten"]
+      translation_ru: "получать"
+      base_ipa: "ɡet"
+      past_ipa: "ɡɒt"
+      participle_ipa: "ɡɒt / ˈɡɒtn"
+  - slug: irregular-verb-make
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "make"
+      past: ["made"]
+      participle: ["made"]
+      translation_ru: "делать"
+      base_ipa: "meɪk"
+      past_ipa: "meɪd"
+      participle_ipa: "meɪd"
+  - slug: irregular-verb-know
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "know"
+      past: ["knew"]
+      participle: ["known"]
+      translation_ru: "знать"
+      base_ipa: "nəʊ"
+      past_ipa: "njuː"
+      participle_ipa: "nəʊn"
+  - slug: irregular-verb-think
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "think"
+      past: ["thought"]
+      participle: ["thought"]
+      translation_ru: "думать"
+      base_ipa: "θɪŋk"
+      past_ipa: "θɔːt"
+      participle_ipa: "θɔːt"
+  - slug: irregular-verb-take
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "take"
+      past: ["took"]
+      participle: ["taken"]
+      translation_ru: "брать"
+      base_ipa: "teɪk"
+      past_ipa: "tʊk"
+      participle_ipa: "ˈteɪkən"
+  - slug: irregular-verb-see
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "see"
+      past: ["saw"]
+      participle: ["seen"]
+      translation_ru: "видеть"
+      base_ipa: "siː"
+      past_ipa: "sɔː"
+      participle_ipa: "siːn"
+  - slug: irregular-verb-come
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "come"
+      past: ["came"]
+      participle: ["come"]
+      translation_ru: "приходить"
+      base_ipa: "kʌm"
+      past_ipa: "keɪm"
+      participle_ipa: "kʌm"
+  - slug: irregular-verb-give
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "give"
+      past: ["gave"]
+      participle: ["given"]
+      translation_ru: "давать"
+      base_ipa: "ɡɪv"
+      past_ipa: "ɡeɪv"
+      participle_ipa: "ˈɡɪvn"
+  - slug: irregular-verb-find
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "find"
+      past: ["found"]
+      participle: ["found"]
+      translation_ru: "находить"
+      base_ipa: "faɪnd"
+      past_ipa: "faʊnd"
+      participle_ipa: "faʊnd"
+  - slug: irregular-verb-tell
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "tell"
+      past: ["told"]
+      participle: ["told"]
+      translation_ru: "рассказывать"
+      base_ipa: "tɛl"
+      past_ipa: "təʊld"
+      participle_ipa: "təʊld"
+  - slug: irregular-verb-become
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "become"
+      past: ["became"]
+      participle: ["become"]
+      translation_ru: "становиться"
+      base_ipa: "bɪˈkʌm"
+      past_ipa: "bɪˈkeɪm"
+      participle_ipa: "bɪˈkʌm"
+  - slug: irregular-verb-leave
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "leave"
+      past: ["left"]
+      participle: ["left"]
+      translation_ru: "оставлять"
+      base_ipa: "liːv"
+      past_ipa: "lɛft"
+      participle_ipa: "lɛft"
+  - slug: irregular-verb-feel
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "feel"
+      past: ["felt"]
+      participle: ["felt"]
+      translation_ru: "чувствовать"
+      base_ipa: "fiːl"
+      past_ipa: "fɛlt"
+      participle_ipa: "fɛlt"
+  - slug: irregular-verb-bring
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "bring"
+      past: ["brought"]
+      participle: ["brought"]
+      translation_ru: "приносить"
+      base_ipa: "brɪŋ"
+      past_ipa: "brɔːt"
+      participle_ipa: "brɔːt"
+  - slug: irregular-verb-begin
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "begin"
+      past: ["began"]
+      participle: ["begun"]
+      translation_ru: "начинать"
+      base_ipa: "bɪˈɡɪn"
+      past_ipa: "bɪˈɡæn"
+      participle_ipa: "bɪˈɡʌn"
+  - slug: irregular-verb-keep
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "keep"
+      past: ["kept"]
+      participle: ["kept"]
+      translation_ru: "хранить, держать"
+      base_ipa: "kiːp"
+      past_ipa: "kɛpt"
+      participle_ipa: "kɛpt"
+  - slug: irregular-verb-hold
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "hold"
+      past: ["held"]
+      participle: ["held"]
+      translation_ru: "держать"
+      base_ipa: "həʊld"
+      past_ipa: "hɛld"
+      participle_ipa: "hɛld"
+  - slug: irregular-verb-write
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "write"
+      past: ["wrote"]
+      participle: ["written"]
+      translation_ru: "писать"
+      base_ipa: "raɪt"
+      past_ipa: "rəʊt"
+      participle_ipa: "ˈrɪtn"
+  - slug: irregular-verb-stand
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "stand"
+      past: ["stood"]
+      participle: ["stood"]
+      translation_ru: "стоять"
+      base_ipa: "stænd"
+      past_ipa: "stʊd"
+      participle_ipa: "stʊd"
+  - slug: irregular-verb-hear
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "hear"
+      past: ["heard"]
+      participle: ["heard"]
+      translation_ru: "слышать"
+      base_ipa: "hɪə"
+      past_ipa: "hɜːd"
+      participle_ipa: "hɜːd"
+  - slug: irregular-verb-let
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "let"
+      past: ["let"]
+      participle: ["let"]
+      translation_ru: "позволять"
+      base_ipa: "lɛt"
+      past_ipa: "lɛt"
+      participle_ipa: "lɛt"
+  - slug: irregular-verb-mean
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "mean"
+      past: ["meant"]
+      participle: ["meant"]
+      translation_ru: "означать"
+      base_ipa: "miːn"
+      past_ipa: "mɛnt"
+      participle_ipa: "mɛnt"
+  - slug: irregular-verb-set
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "set"
+      past: ["set"]
+      participle: ["set"]
+      translation_ru: "устанавливать"
+      base_ipa: "sɛt"
+      past_ipa: "sɛt"
+      participle_ipa: "sɛt"
+  - slug: irregular-verb-meet
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "meet"
+      past: ["met"]
+      participle: ["met"]
+      translation_ru: "встречать"
+      base_ipa: "miːt"
+      past_ipa: "mɛt"
+      participle_ipa: "mɛt"
+  - slug: irregular-verb-run
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "run"
+      past: ["ran"]
+      participle: ["run"]
+      translation_ru: "бежать"
+      base_ipa: "rʌn"
+      past_ipa: "ræn"
+      participle_ipa: "rʌn"
+  - slug: irregular-verb-pay
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "pay"
+      past: ["paid"]
+      participle: ["paid"]
+      translation_ru: "платить"
+      base_ipa: "peɪ"
+      past_ipa: "peɪd"
+      participle_ipa: "peɪd"
+  - slug: irregular-verb-sit
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "sit"
+      past: ["sat"]
+      participle: ["sat"]
+      translation_ru: "сидеть"
+      base_ipa: "sɪt"
+      past_ipa: "sæt"
+      participle_ipa: "sæt"
+  - slug: irregular-verb-speak
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "speak"
+      past: ["spoke"]
+      participle: ["spoken"]
+      translation_ru: "говорить"
+      base_ipa: "spiːk"
+      past_ipa: "spəʊk"
+      participle_ipa: "ˈspəʊkən"
+  - slug: irregular-verb-lie
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "lie"
+      past: ["lay"]
+      participle: ["lain"]
+      translation_ru: "лежать"
+      base_ipa: "laɪ"
+      past_ipa: "leɪ"
+      participle_ipa: "leɪn"
+  - slug: irregular-verb-lead
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "lead"
+      past: ["led"]
+      participle: ["led"]
+      translation_ru: "вести"
+      base_ipa: "liːd"
+      past_ipa: "lɛd"
+      participle_ipa: "lɛd"
+  - slug: irregular-verb-read
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "read"
+      past: ["read"]
+      participle: ["read"]
+      translation_ru: "читать"
+      base_ipa: "riːd"
+      past_ipa: "rɛd"
+      participle_ipa: "rɛd"
+  - slug: irregular-verb-grow
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "grow"
+      past: ["grew"]
+      participle: ["grown"]
+      translation_ru: "расти"
+      base_ipa: "ɡrəʊ"
+      past_ipa: "ɡruː"
+      participle_ipa: "ɡrəʊn"
+  - slug: irregular-verb-lose
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "lose"
+      past: ["lost"]
+      participle: ["lost"]
+      translation_ru: "терять"
+      base_ipa: "luːz"
+      past_ipa: "lɒst"
+      participle_ipa: "lɒst"
+  - slug: irregular-verb-fall
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "fall"
+      past: ["fell"]
+      participle: ["fallen"]
+      translation_ru: "падать"
+      base_ipa: "fɔːl"
+      past_ipa: "fɛl"
+      participle_ipa: "ˈfɔːlən"
+  - slug: irregular-verb-send
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "send"
+      past: ["sent"]
+      participle: ["sent"]
+      translation_ru: "посылать"
+      base_ipa: "sɛnd"
+      past_ipa: "sɛnt"
+      participle_ipa: "sɛnt"
+  - slug: irregular-verb-build
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "build"
+      past: ["built"]
+      participle: ["built"]
+      translation_ru: "строить"
+      base_ipa: "bɪld"
+      past_ipa: "bɪlt"
+      participle_ipa: "bɪlt"
+  - slug: irregular-verb-understand
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "understand"
+      past: ["understood"]
+      participle: ["understood"]
+      translation_ru: "понимать"
+      base_ipa: "ˌʌndəˈstænd"
+      past_ipa: "ˌʌndəˈstʊd"
+      participle_ipa: "ˌʌndəˈstʊd"
+  - slug: irregular-verb-draw
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "draw"
+      past: ["drew"]
+      participle: ["drawn"]
+      translation_ru: "рисовать"
+      base_ipa: "drɔː"
+      past_ipa: "druː"
+      participle_ipa: "drɔːn"
+  - slug: irregular-verb-break
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "break"
+      past: ["broke"]
+      participle: ["broken"]
+      translation_ru: "ломать"
+      base_ipa: "breɪk"
+      past_ipa: "brəʊk"
+      participle_ipa: "ˈbrəʊkən"
+  - slug: irregular-verb-spend
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "spend"
+      past: ["spent"]
+      participle: ["spent"]
+      translation_ru: "тратить"
+      base_ipa: "spɛnd"
+      past_ipa: "spɛnt"
+      participle_ipa: "spɛnt"
+  - slug: irregular-verb-cut
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "cut"
+      past: ["cut"]
+      participle: ["cut"]
+      translation_ru: "резать"
+      base_ipa: "kʌt"
+      past_ipa: "kʌt"
+      participle_ipa: "kʌt"
+  - slug: irregular-verb-rise
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "rise"
+      past: ["rose"]
+      participle: ["risen"]
+      translation_ru: "подниматься"
+      base_ipa: "raɪz"
+      past_ipa: "rəʊz"
+      participle_ipa: "ˈrɪzn"
+  - slug: irregular-verb-drive
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "drive"
+      past: ["drove"]
+      participle: ["driven"]
+      translation_ru: "водить (машину)"
+      base_ipa: "draɪv"
+      past_ipa: "drəʊv"
+      participle_ipa: "ˈdrɪvn"
+  - slug: irregular-verb-buy
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "buy"
+      past: ["bought"]
+      participle: ["bought"]
+      translation_ru: "покупать"
+      base_ipa: "baɪ"
+      past_ipa: "bɔːt"
+      participle_ipa: "bɔːt"
+  - slug: irregular-verb-wear
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "wear"
+      past: ["wore"]
+      participle: ["worn"]
+      translation_ru: "носить (одежду)"
+      base_ipa: "weə"
+      past_ipa: "wɔː"
+      participle_ipa: "wɔːn"
+  - slug: irregular-verb-arise
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "arise"
+      past: ["arose"]
+      participle: ["arisen"]
+      translation_ru: "возникать"
+      base_ipa: "əˈraɪz"
+      past_ipa: "əˈrəʊz"
+      participle_ipa: "əˈrɪzən"
+  - slug: irregular-verb-awake
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "awake"
+      past: ["awoke"]
+      participle: ["awoken"]
+      translation_ru: "просыпаться"
+      base_ipa: "əˈweɪk"
+      past_ipa: "əˈwəʊk"
+      participle_ipa: "əˈwəʊkən"
+  - slug: irregular-verb-bear
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "bear"
+      past: ["bore"]
+      participle: ["borne", "born"]
+      translation_ru: "нести; рожать"
+      base_ipa: "beər"
+      past_ipa: "bɔːr"
+      participle_ipa: "bɔːrn"
+  - slug: irregular-verb-beat
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "beat"
+      past: ["beat"]
+      participle: ["beaten"]
+      translation_ru: "бить"
+      base_ipa: "biːt"
+      past_ipa: "biːt"
+      participle_ipa: "ˈbiːtn"
+  - slug: irregular-verb-bend
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "bend"
+      past: ["bent"]
+      participle: ["bent"]
+      translation_ru: "сгибать"
+      base_ipa: "bɛnd"
+      past_ipa: "bɛnt"
+      participle_ipa: "bɛnt"
+  - slug: irregular-verb-bet
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "bet"
+      past: ["bet"]
+      participle: ["bet"]
+      translation_ru: "спорить"
+      base_ipa: "bɛt"
+      past_ipa: "bɛt"
+      participle_ipa: "bɛt"
+  - slug: irregular-verb-bid
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "bid"
+      past: ["bade", "bid"]
+      participle: ["bidden", "bid"]
+      translation_ru: "предлагать"
+      base_ipa: "bɪd"
+      past_ipa: "bæd / bɪd"
+      participle_ipa: "ˈbɪdn / bɪd"
+  - slug: irregular-verb-bind
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "bind"
+      past: ["bound"]
+      participle: ["bound"]
+      translation_ru: "связывать"
+      base_ipa: "baɪnd"
+      past_ipa: "baʊnd"
+      participle_ipa: "baʊnd"
+  - slug: irregular-verb-bite
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "bite"
+      past: ["bit"]
+      participle: ["bitten"]
+      translation_ru: "кусать"
+      base_ipa: "baɪt"
+      past_ipa: "bɪt"
+      participle_ipa: "ˈbɪtn"
+  - slug: irregular-verb-bleed
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "bleed"
+      past: ["bled"]
+      participle: ["bled"]
+      translation_ru: "кровоточить"
+      base_ipa: "bliːd"
+      past_ipa: "blɛd"
+      participle_ipa: "blɛd"
+  - slug: irregular-verb-blow
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "blow"
+      past: ["blew"]
+      participle: ["blown"]
+      translation_ru: "дуть"
+      base_ipa: "bləʊ"
+      past_ipa: "bluː"
+      participle_ipa: "bləʊn"
+  - slug: irregular-verb-breed
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "breed"
+      past: ["bred"]
+      participle: ["bred"]
+      translation_ru: "размножаться"
+      base_ipa: "briːd"
+      past_ipa: "brɛd"
+      participle_ipa: "brɛd"
+  - slug: irregular-verb-broadcast
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "broadcast"
+      past: ["broadcast"]
+      participle: ["broadcast"]
+      translation_ru: "транслировать"
+      base_ipa: "ˈbrɔːdkɑːst"
+      past_ipa: "ˈbrɔːdkɑːst"
+      participle_ipa: "ˈbrɔːdkɑːst"
+  - slug: irregular-verb-burn
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "burn"
+      past: ["burned", "burnt"]
+      participle: ["burned", "burnt"]
+      translation_ru: "гореть"
+      base_ipa: "bɜːn"
+      past_ipa: "bɜːnd / bɜːnt"
+      participle_ipa: "bɜːnd / bɜːnt"
+  - slug: irregular-verb-burst
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "burst"
+      past: ["burst"]
+      participle: ["burst"]
+      translation_ru: "взрываться"
+      base_ipa: "bɜːst"
+      past_ipa: "bɜːst"
+      participle_ipa: "bɜːst"
+  - slug: irregular-verb-catch
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "catch"
+      past: ["caught"]
+      participle: ["caught"]
+      translation_ru: "ловить"
+      base_ipa: "kætʃ"
+      past_ipa: "kɔːt"
+      participle_ipa: "kɔːt"
+  - slug: irregular-verb-choose
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "choose"
+      past: ["chose"]
+      participle: ["chosen"]
+      translation_ru: "выбирать"
+      base_ipa: "tʃuːz"
+      past_ipa: "tʃəʊz"
+      participle_ipa: "ˈtʃəʊzn"
+  - slug: irregular-verb-cost
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "cost"
+      past: ["cost"]
+      participle: ["cost"]
+      translation_ru: "стоить"
+      base_ipa: "kɒst"
+      past_ipa: "kɒst"
+      participle_ipa: "kɒst"
+  - slug: irregular-verb-creep
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "creep"
+      past: ["crept"]
+      participle: ["crept"]
+      translation_ru: "ползти"
+      base_ipa: "kriːp"
+      past_ipa: "krɛpt"
+      participle_ipa: "krɛpt"
+  - slug: irregular-verb-deal
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "deal"
+      past: ["dealt"]
+      participle: ["dealt"]
+      translation_ru: "иметь дело"
+      base_ipa: "diːl"
+      past_ipa: "dɛlt"
+      participle_ipa: "dɛlt"
+  - slug: irregular-verb-dig
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "dig"
+      past: ["dug"]
+      participle: ["dug"]
+      translation_ru: "копать"
+      base_ipa: "dɪɡ"
+      past_ipa: "dʌɡ"
+      participle_ipa: "dʌɡ"
+  - slug: irregular-verb-dream
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "dream"
+      past: ["dreamed", "dreamt"]
+      participle: ["dreamed", "dreamt"]
+      translation_ru: "мечтать"
+      base_ipa: "driːm"
+      past_ipa: "driːmd / drɛmt"
+      participle_ipa: "driːmd / drɛmt"
+  - slug: irregular-verb-drink
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "drink"
+      past: ["drank"]
+      participle: ["drunk"]
+      translation_ru: "пить"
+      base_ipa: "drɪŋk"
+      past_ipa: "dræŋk"
+      participle_ipa: "drʌŋk"
+  - slug: irregular-verb-eat
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "eat"
+      past: ["ate"]
+      participle: ["eaten"]
+      translation_ru: "есть"
+      base_ipa: "iːt"
+      past_ipa: "et / eɪt"
+      participle_ipa: "ˈiːtn"
+  - slug: irregular-verb-feed
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "feed"
+      past: ["fed"]
+      participle: ["fed"]
+      translation_ru: "кормить"
+      base_ipa: "fiːd"
+      past_ipa: "fɛd"
+      participle_ipa: "fɛd"
+  - slug: irregular-verb-fight
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "fight"
+      past: ["fought"]
+      participle: ["fought"]
+      translation_ru: "бороться"
+      base_ipa: "faɪt"
+      past_ipa: "fɔːt"
+      participle_ipa: "fɔːt"
+  - slug: irregular-verb-fit
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "fit"
+      past: ["fit", "fitted"]
+      participle: ["fit", "fitted"]
+      translation_ru: "подходить"
+      base_ipa: "fɪt"
+      past_ipa: "fɪt / ˈfɪtɪd"
+      participle_ipa: "fɪt / ˈfɪtɪd"
+  - slug: irregular-verb-flee
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "flee"
+      past: ["fled"]
+      participle: ["fled"]
+      translation_ru: "убегать"
+      base_ipa: "fliː"
+      past_ipa: "flɛd"
+      participle_ipa: "flɛd"
+  - slug: irregular-verb-fly
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "fly"
+      past: ["flew"]
+      participle: ["flown"]
+      translation_ru: "летать"
+      base_ipa: "flaɪ"
+      past_ipa: "fluː"
+      participle_ipa: "fləʊn"
+  - slug: irregular-verb-forbid
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "forbid"
+      past: ["forbade"]
+      participle: ["forbidden"]
+      translation_ru: "запрещать"
+      base_ipa: "fəˈbɪd"
+      past_ipa: "fəˈbæd"
+      participle_ipa: "fəˈbɪdn"
+  - slug: irregular-verb-forget
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "forget"
+      past: ["forgot"]
+      participle: ["forgotten"]
+      translation_ru: "забывать"
+      base_ipa: "fəˈɡet"
+      past_ipa: "fəˈɡɒt"
+      participle_ipa: "fəˈɡɒtn"
+  - slug: irregular-verb-forgive
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "forgive"
+      past: ["forgave"]
+      participle: ["forgiven"]
+      translation_ru: "прощать"
+      base_ipa: "fəˈɡɪv"
+      past_ipa: "fəˈɡeɪv"
+      participle_ipa: "fəˈɡɪvn"
+  - slug: irregular-verb-freeze
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "freeze"
+      past: ["froze"]
+      participle: ["frozen"]
+      translation_ru: "замерзать"
+      base_ipa: "friːz"
+      past_ipa: "frəʊz"
+      participle_ipa: "ˈfrəʊzn"
+  - slug: irregular-verb-hang
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "hang"
+      past: ["hung"]
+      participle: ["hung"]
+      translation_ru: "вешать, висеть"
+      base_ipa: "hæŋ"
+      past_ipa: "hʌŋ"
+      participle_ipa: "hʌŋ"
+  - slug: irregular-verb-hide
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "hide"
+      past: ["hid"]
+      participle: ["hidden"]
+      translation_ru: "прятать"
+      base_ipa: "haɪd"
+      past_ipa: "hɪd"
+      participle_ipa: "ˈhɪdn"
+  - slug: irregular-verb-hit
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "hit"
+      past: ["hit"]
+      participle: ["hit"]
+      translation_ru: "ударять"
+      base_ipa: "hɪt"
+      past_ipa: "hɪt"
+      participle_ipa: "hɪt"
+  - slug: irregular-verb-hurt
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "hurt"
+      past: ["hurt"]
+      participle: ["hurt"]
+      translation_ru: "болеть, причинять боль"
+      base_ipa: "hɜːt"
+      past_ipa: "hɜːt"
+      participle_ipa: "hɜːt"
+  - slug: irregular-verb-kneel
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "kneel"
+      past: ["knelt", "kneeled"]
+      participle: ["knelt", "kneeled"]
+      translation_ru: "стоять на коленях"
+      base_ipa: "niːl"
+      past_ipa: "nɛlt / niːld"
+      participle_ipa: "nɛlt / niːld"
+  - slug: irregular-verb-lay
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "lay"
+      past: ["laid"]
+      participle: ["laid"]
+      translation_ru: "класть"
+      base_ipa: "leɪ"
+      past_ipa: "leɪd"
+      participle_ipa: "leɪd"
+  - slug: irregular-verb-lean
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "lean"
+      past: ["leant", "leaned"]
+      participle: ["leant", "leaned"]
+      translation_ru: "наклоняться"
+      base_ipa: "liːn"
+      past_ipa: "lɛnt / liːnd"
+      participle_ipa: "lɛnt / liːnd"
+  - slug: irregular-verb-leap
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "leap"
+      past: ["leapt", "leaped"]
+      participle: ["leapt", "leaped"]
+      translation_ru: "прыгать"
+      base_ipa: "liːp"
+      past_ipa: "lɛpt / liːpt"
+      participle_ipa: "lɛpt / liːpt"
+  - slug: irregular-verb-learn
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "learn"
+      past: ["learnt", "learned"]
+      participle: ["learnt", "learned"]
+      translation_ru: "учить(ся)"
+      base_ipa: "lɜːn"
+      past_ipa: "lɜːnt / lɜːnd"
+      participle_ipa: "lɜːnt / lɜːnd"
+  - slug: irregular-verb-lend
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "lend"
+      past: ["lent"]
+      participle: ["lent"]
+      translation_ru: "давать взаймы"
+      base_ipa: "lɛnd"
+      past_ipa: "lɛnt"
+      participle_ipa: "lɛnt"
+  - slug: irregular-verb-light
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "light"
+      past: ["lit", "lighted"]
+      participle: ["lit", "lighted"]
+      translation_ru: "освещать"
+      base_ipa: "laɪt"
+      past_ipa: "lɪt / ˈlaɪtɪd"
+      participle_ipa: "lɪt / ˈlaɪtɪd"
+  - slug: irregular-verb-put
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "put"
+      past: ["put"]
+      participle: ["put"]
+      translation_ru: "класть, ставить"
+      base_ipa: "pʊt"
+      past_ipa: "pʊt"
+      participle_ipa: "pʊt"
+  - slug: irregular-verb-ride
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "ride"
+      past: ["rode"]
+      participle: ["ridden"]
+      translation_ru: "ездить верхом"
+      base_ipa: "raɪd"
+      past_ipa: "rəʊd"
+      participle_ipa: "ˈrɪdn"
+  - slug: irregular-verb-ring
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "ring"
+      past: ["rang"]
+      participle: ["rung"]
+      translation_ru: "звонить"
+      base_ipa: "rɪŋ"
+      past_ipa: "ræŋ"
+      participle_ipa: "rʌŋ"
+  - slug: irregular-verb-sell
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "sell"
+      past: ["sold"]
+      participle: ["sold"]
+      translation_ru: "продавать"
+      base_ipa: "sɛl"
+      past_ipa: "səʊld"
+      participle_ipa: "səʊld"
+  - slug: irregular-verb-shake
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "shake"
+      past: ["shook"]
+      participle: ["shaken"]
+      translation_ru: "трясти"
+      base_ipa: "ʃeɪk"
+      past_ipa: "ʃʊk"
+      participle_ipa: "ˈʃeɪkən"
+  - slug: irregular-verb-shine
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "shine"
+      past: ["shone"]
+      participle: ["shone"]
+      translation_ru: "светить"
+      base_ipa: "ʃaɪn"
+      past_ipa: "ʃɒn"
+      participle_ipa: "ʃɒn"
+  - slug: irregular-verb-shoot
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "shoot"
+      past: ["shot"]
+      participle: ["shot"]
+      translation_ru: "стрелять"
+      base_ipa: "ʃuːt"
+      past_ipa: "ʃɒt"
+      participle_ipa: "ʃɒt"
+  - slug: irregular-verb-show
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "show"
+      past: ["showed"]
+      participle: ["shown", "showed"]
+      translation_ru: "показывать"
+      base_ipa: "ʃəʊ"
+      past_ipa: "ʃəʊd"
+      participle_ipa: "ʃəʊn / ʃəʊd"
+  - slug: irregular-verb-shrink
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "shrink"
+      past: ["shrank", "shrunk"]
+      participle: ["shrunk"]
+      translation_ru: "сокращать"
+      base_ipa: "ʃrɪŋk"
+      past_ipa: "ʃræŋk / ʃrʌŋk"
+      participle_ipa: "ʃrʌŋk"
+  - slug: irregular-verb-shut
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "shut"
+      past: ["shut"]
+      participle: ["shut"]
+      translation_ru: "закрывать"
+      base_ipa: "ʃʌt"
+      past_ipa: "ʃʌt"
+      participle_ipa: "ʃʌt"
+  - slug: irregular-verb-sing
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "sing"
+      past: ["sang"]
+      participle: ["sung"]
+      translation_ru: "петь"
+      base_ipa: "sɪŋ"
+      past_ipa: "sæŋ"
+      participle_ipa: "sʌŋ"
+  - slug: irregular-verb-sink
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "sink"
+      past: ["sank", "sunk"]
+      participle: ["sunk"]
+      translation_ru: "тонуть"
+      base_ipa: "sɪŋk"
+      past_ipa: "sæŋk / sʌŋk"
+      participle_ipa: "sʌŋk"
+  - slug: irregular-verb-sleep
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "sleep"
+      past: ["slept"]
+      participle: ["slept"]
+      translation_ru: "спать"
+      base_ipa: "sliːp"
+      past_ipa: "slɛpt"
+      participle_ipa: "slɛpt"
+  - slug: irregular-verb-slide
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "slide"
+      past: ["slid"]
+      participle: ["slid"]
+      translation_ru: "скользить"
+      base_ipa: "slaɪd"
+      past_ipa: "slɪd"
+      participle_ipa: "slɪd"
+  - slug: irregular-verb-spin
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "spin"
+      past: ["spun"]
+      participle: ["spun"]
+      translation_ru: "крутить"
+      base_ipa: "spɪn"
+      past_ipa: "spʌn"
+      participle_ipa: "spʌn"
+  - slug: irregular-verb-spit
+    level: A2
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "spit"
+      past: ["spat"]
+      participle: ["spat"]
+      translation_ru: "плевать"
+      base_ipa: "spɪt"
+      past_ipa: "spæt"
+      participle_ipa: "spæt"
+  - slug: irregular-verb-split
+    level: B1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "split"
+      past: ["split"]
+      participle: ["split"]
+      translation_ru: "разделять"
+      base_ipa: "splɪt"
+      past_ipa: "splɪt"
+      participle_ipa: "splɪt"
+  - slug: irregular-verb-spread
+    level: B1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "spread"
+      past: ["spread"]
+      participle: ["spread"]
+      translation_ru: "распространять"
+      base_ipa: "sprɛd"
+      past_ipa: "sprɛd"
+      participle_ipa: "sprɛd"
+  - slug: irregular-verb-spring
+    level: B1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "spring"
+      past: ["sprang", "sprung"]
+      participle: ["sprung"]
+      translation_ru: "прыгать"
+      base_ipa: "sprɪŋ"
+      past_ipa: "spræŋ / sprʌŋ"
+      participle_ipa: "sprʌŋ"
+  - slug: irregular-verb-steal
+    level: B1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "steal"
+      past: ["stole"]
+      participle: ["stolen"]
+      translation_ru: "красть"
+      base_ipa: "stiːl"
+      past_ipa: "stəʊl"
+      participle_ipa: "ˈstəʊlən"
+  - slug: irregular-verb-stick
+    level: B1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "stick"
+      past: ["stuck"]
+      participle: ["stuck"]
+      translation_ru: "приклеивать"
+      base_ipa: "stɪk"
+      past_ipa: "stʌk"
+      participle_ipa: "stʌk"
+  - slug: irregular-verb-sting
+    level: B1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "sting"
+      past: ["stung"]
+      participle: ["stung"]
+      translation_ru: "жалить"
+      base_ipa: "stɪŋ"
+      past_ipa: "stʌŋ"
+      participle_ipa: "stʌŋ"
+  - slug: irregular-verb-stink
+    level: B1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "stink"
+      past: ["stank", "stunk"]
+      participle: ["stunk"]
+      translation_ru: "вонять"
+      base_ipa: "stɪŋk"
+      past_ipa: "stæŋk / stʌŋk"
+      participle_ipa: "stʌŋk"
+  - slug: irregular-verb-strike
+    level: B1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "strike"
+      past: ["struck"]
+      participle: ["struck", "stricken"]
+      translation_ru: "ударять"
+      base_ipa: "straɪk"
+      past_ipa: "strʌk"
+      participle_ipa: "strʌk / ˈstrɪkən"
+  - slug: irregular-verb-swear
+    level: B1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "swear"
+      past: ["swore"]
+      participle: ["sworn"]
+      translation_ru: "клясться"
+      base_ipa: "sweər"
+      past_ipa: "swɔː"
+      participle_ipa: "swɔːn"
+  - slug: irregular-verb-sweep
+    level: B1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "sweep"
+      past: ["swept"]
+      participle: ["swept"]
+      translation_ru: "подметать"
+      base_ipa: "swiːp"
+      past_ipa: "swɛpt"
+      participle_ipa: "swɛpt"
+  - slug: irregular-verb-swell
+    level: B1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "swell"
+      past: ["swelled"]
+      participle: ["swollen", "swelled"]
+      translation_ru: "опухать"
+      base_ipa: "swɛl"
+      past_ipa: "swɛld"
+      participle_ipa: "ˈswəʊlən / swɛld"
+  - slug: irregular-verb-swim
+    level: B1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "swim"
+      past: ["swam"]
+      participle: ["swum"]
+      translation_ru: "плавать"
+      base_ipa: "swɪm"
+      past_ipa: "swæm"
+      participle_ipa: "swʌm"
+  - slug: irregular-verb-swing
+    level: B1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "swing"
+      past: ["swung"]
+      participle: ["swung"]
+      translation_ru: "качаться"
+      base_ipa: "swɪŋ"
+      past_ipa: "swʌŋ"
+      participle_ipa: "swʌŋ"
+  - slug: irregular-verb-teach
+    level: B1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "teach"
+      past: ["taught"]
+      participle: ["taught"]
+      translation_ru: "преподавать"
+      base_ipa: "tiːtʃ"
+      past_ipa: "tɔːt"
+      participle_ipa: "tɔːt"
+  - slug: irregular-verb-tear
+    level: B1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "tear"
+      past: ["tore"]
+      participle: ["torn"]
+      translation_ru: "рвать"
+      base_ipa: "teər"
+      past_ipa: "tɔː"
+      participle_ipa: "tɔːn"
+  - slug: irregular-verb-throw
+    level: B1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "throw"
+      past: ["threw"]
+      participle: ["thrown"]
+      translation_ru: "бросать"
+      base_ipa: "θrəʊ"
+      past_ipa: "θruː"
+      participle_ipa: "θrəʊn"
+  - slug: irregular-verb-wake
+    level: B1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "wake"
+      past: ["woke", "waked"]
+      participle: ["woken", "waked"]
+      translation_ru: "будить; просыпаться"
+      base_ipa: "weɪk"
+      past_ipa: "wəʊk / ˈweɪkt"
+      participle_ipa: "ˈwəʊkən / ˈweɪkt"
+  - slug: irregular-verb-weave
+    level: B1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "weave"
+      past: ["wove", "weaved"]
+      participle: ["woven", "weaved"]
+      translation_ru: "ткать"
+      base_ipa: "wiːv"
+      past_ipa: "wəʊv / wiːvd"
+      participle_ipa: "ˈwəʊvən / wiːvd"
+  - slug: irregular-verb-weep
+    level: B1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "weep"
+      past: ["wept"]
+      participle: ["wept"]
+      translation_ru: "плакать"
+      base_ipa: "wiːp"
+      past_ipa: "wɛpt"
+      participle_ipa: "wɛpt"
+  - slug: irregular-verb-win
+    level: B1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "win"
+      past: ["won"]
+      participle: ["won"]
+      translation_ru: "выигрывать"
+      base_ipa: "wɪn"
+      past_ipa: "wʌn"
+      participle_ipa: "wʌn"
+  - slug: irregular-verb-wind
+    level: B1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "wind"
+      past: ["wound"]
+      participle: ["wound"]
+      translation_ru: "заводить (часы); виться"
+      base_ipa: "waʊnd"
+      past_ipa: "waʊnd"
+      participle_ipa: "waʊnd"
+  - slug: irregular-verb-cling
+    level: B1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "cling"
+      past: ["clung"]
+      participle: ["clung"]
+      translation_ru: "цепляться"
+      base_ipa: "klɪŋ"
+      past_ipa: "klʌŋ"
+      participle_ipa: "klʌŋ"
+  - slug: irregular-verb-seek
+    level: B1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "seek"
+      past: ["sought"]
+      participle: ["sought"]
+      translation_ru: "искать"
+      base_ipa: "siːk"
+      past_ipa: "sɔːt"
+      participle_ipa: "sɔːt"
+  - slug: irregular-verb-smell
+    level: B1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "smell"
+      past: ["smelt"]
+      participle: ["smelt"]
+      translation_ru: "пахнуть, нюхать"
+      base_ipa: "smɛl"
+      past_ipa: "smɛlt"
+      participle_ipa: "smɛlt"
+  - slug: irregular-verb-spell
+    level: B1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "spell"
+      past: ["spelt", "spelled"]
+      participle: ["spelt", "spelled"]
+      translation_ru: "произносить или писать по буквам"
+      base_ipa: "spɛl"
+      past_ipa: "spɛlt / spɛld"
+      participle_ipa: "spɛlt / spɛld"
+  - slug: irregular-verb-spill
+    level: B1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "spill"
+      past: ["spilt", "spilled"]
+      participle: ["spilt", "spilled"]
+      translation_ru: "разлить"
+      base_ipa: "spɪl"
+      past_ipa: "spɪlt / spɪld"
+      participle_ipa: "spɪlt / spɪld"
+  - slug: irregular-verb-spoil
+    level: B1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: "spoil"
+      past: ["spoilt", "spoiled"]
+      participle: ["spoilt", "spoiled"]
+      translation_ru: "портить"
+      base_ipa: "spɔɪl"
+      past_ipa: "spɔɪlt / spɔɪld"
+      participle_ipa: "spɔɪlt / spɔɪld"

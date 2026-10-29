@@ -1,10 +1,20 @@
 # tg-bot-eng-teacher
 
 Telegram-бот для изучения английского языка: диалог с LLM, коррекция ошибок и
-детерминированные упражнения (неправильные глаголы, переводы, SRS).
+детерминированные упражнения.
 
-> Статус: инициализация проекта. Код ещё не реализован — см. план в
-> `.opencode/_backlog.md`.
+## Статус
+
+MVP-каркас работает:
+
+- онбординг: короткий placement-тест или ручной выбор уровня;
+- чат с LLM-персоной и expandable-коррекциями;
+- `/drill` — неправильные глаголы, mastery/streak, `/cancel`;
+- контент в YAML с импортом в SQLite, тегами, темами и вариантами;
+- coverage-отчёт и CI-валидация контента.
+
+Ещё не реализованы: отдельный режим `/correction`, `/vocab`/SRS, webhook,
+бэкапы и продуктовые метрики — см. локальный план в `.opencode/_backlog.md`.
 
 ## Стек
 
@@ -19,27 +29,50 @@ Telegram-бот для изучения английского языка: ди�
 
 ## Установка
 
+Требования: Python 3.12, [uv](https://docs.astral.sh/uv/).
+
 ```bash
-# [TODO: clarify with the user] — команды появятся после фазы 0
+uv sync --all-extras
 ```
 
 ## Настройка
 
 ```bash
 cp .env.example .env
-# заполнить BOT_TOKEN и LLM_API_KEY
+# заполнить BOT_TOKEN, LLM_API_KEY, LLM_MODEL_FAST, LLM_MODEL_SMART
+```
+
+## База и контент
+
+```bash
+uv run alembic upgrade head
+uv run python -m app.cli import-content content/topics
+```
+
+Импорт идемпотентен: повторный запуск не создаёт дублей. Для проверки без записи:
+
+```bash
+uv run python -m app.cli import-content content/topics --dry-run
+uv run python -m app.cli content-report
 ```
 
 ## Запуск
 
 ```bash
-# [TODO: clarify with the user] — появятся после фазы 0
+uv run python -m app
 ```
 
-## Тесты
+MVP работает в режиме polling — публичный URL не требуется.
+Команды бота: `/start`, `/help`, `/drill`, `/cancel`.
+
+## Тесты и проверки
 
 ```bash
-# [TODO: clarify with the user]
+uv run pytest
+uv run ruff check .
+uv run ruff format --check .
+uv run mypy src
+uv run python -m app.cli import-content content/topics --dry-run
 ```
 
 ## Документация
@@ -49,9 +82,12 @@ cp .env.example .env
 
 - `.opencode/AGENTS.md` — точка входа
 - `.opencode/_concepts.md` — архитектура
+- `.opencode/_authoring.md` — правила добавления контента
 - `.opencode/_setup.md` — локальная установка
 - `.opencode/_backlog.md` — план работ
 
 ## Лицензия
 
-[TODO: clarify with the user]
+Пока не выбрана. Учебный контент помечен `license: unknown`; аудит происхождения
+и условия для публичного релиза — в `.opencode/analysis/2026-10-29-license-audit.md`
+(B-028). До решения не распространяйте контент как открытый.

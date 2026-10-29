@@ -1,0 +1,70 @@
+topic:
+  slug: placement
+  title: "Placement test"
+  level: A1
+  description: "6 детерминированных вопросов для первичной оценки уровня"
+  tags: [purpose:placement]
+
+source: "Project placement test"
+license: "unknown"
+
+items:
+  - slug: placement-a1-be
+    level: A1
+    tags: [grammar:present-simple, purpose:placement]
+    payload:
+      kind: multiple_choice
+      question: "I ___ a student."
+      options: ["am", "is", "are"]
+      correct_index: 0
+      explanation_ru: "Present Simple, форма am для I."
+
+  - slug: placement-a2-past
+    level: A2
+    tags: [grammar:past-simple, purpose:placement]
+    payload:
+      kind: multiple_choice
+      question: "She ___ to the cinema yesterday."
+      options: ["go", "goes", "went"]
+      correct_index: 2
+      explanation_ru: "Past Simple: yesterday → went."
+
+  - slug: placement-b1-present-perfect
+    level: B1
+    tags: [grammar:present-perfect, purpose:placement]
+    payload:
+      kind: multiple_choice
+      question: "I ___ here since 2020."
+      options: ["live", "lived", "have lived"]
+      correct_index: 2
+      explanation_ru: "Present Perfect с since."
+
+  - slug: placement-b2-conditional
+    level: B2
+    tags: [grammar:conditionals, purpose:placement]
+    payload:
+      kind: multiple_choice
+      question: "If I ___ more time, I would travel."
+      options: ["have", "had", "would have"]
+      correct_index: 1
+      explanation_ru: "Second Conditional: if + Past Simple, would + infinitive."
+
+  - slug: placement-c1-phrasal-verb
+    level: C1
+    tags: [grammar:phrasal-verbs, purpose:placement]
+    payload:
+      kind: multiple_choice
+      question: "The proposal was turned ___ by the committee."
+      options: ["down", "off", "up"]
+      correct_index: 0
+      explanation_ru: "turn down — отклонить предложение."
+
+  - slug: placement-c2-inversion
+    level: C2
+    tags: [grammar:inversion, purpose:placement]
+    payload:
+      kind: multiple_choice
+      question: "Had I known, I ___ differently."
+      options: ["would act", "would have acted", "had acted"]
+      correct_index: 1
+      explanation_ru: "Third Conditional с инверсией: had I known → would have acted."

@@ -1,0 +1,64 @@
+topic:
+  slug: test-placement
+  title: "Test placement"
+  level: A1
+  description: "Bank-backed placement fixture"
+  tags: [purpose:placement]
+
+source: "Test fixture"
+license: "unknown"
+
+items:
+  - slug: test-placement-b1
+    level: B1
+    tags: [grammar:present-perfect, purpose:placement]
+    payload:
+      kind: multiple_choice
+      question: "BANK: I ___ here since 2020."
+      options: ["live", "lived", "have lived"]
+      correct_index: 2
+
+  - slug: test-placement-a1
+    level: A1
+    tags: [grammar:present-simple, purpose:placement]
+    payload:
+      kind: multiple_choice
+      question: "BANK: I ___ a student."
+      options: ["am", "is", "are"]
+      correct_index: 0
+
+  - slug: test-placement-c2
+    level: C2
+    tags: [grammar:inversion, purpose:placement]
+    payload:
+      kind: multiple_choice
+      question: "BANK: Had I known, I ___ differently."
+      options: ["would act", "would have acted", "had acted"]
+      correct_index: 1
+
+  - slug: test-placement-a2
+    level: A2
+    tags: [grammar:past-simple, purpose:placement]
+    payload:
+      kind: multiple_choice
+      question: "BANK: She ___ to the cinema yesterday."
+      options: ["go", "goes", "went"]
+      correct_index: 2
+
+  - slug: test-placement-c1
+    level: C1
+    tags: [grammar:phrasal-verbs, purpose:placement]
+    payload:
+      kind: multiple_choice
+      question: "BANK: The proposal was turned ___ by the committee."
+      options: ["down", "off", "up"]
+      correct_index: 0
+
+  - slug: test-placement-b2
+    level: B2
+    tags: [grammar:conditionals, purpose:placement]
+    payload:
+      kind: multiple_choice
+      question: "BANK: If I ___ more time, I would travel."
+      options: ["have", "had", "would have"]
+      correct_index: 1

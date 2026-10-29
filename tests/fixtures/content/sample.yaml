@@ -1,0 +1,60 @@
+topic:
+  slug: test-topic-a1
+  title: "Test topic A1"
+  level: A1
+  description: "Fixture for importer tests"
+  tags: [test]
+
+source: "Test fixture"
+license: "unknown"
+
+items:
+  - slug: test-irregular-go
+    level: A1
+    tags: [grammar:irregular-verbs]
+    payload:
+      kind: irregular_verb
+      base: go
+      past: [went]
+      participle: [gone]
+      translation_ru: идти
+      base_ipa: "ɡəʊ"
+      past_ipa: "wɛnt"
+      participle_ipa: "ɡɒn"
+
+  - slug: test-gap-present-simple
+    level: A1
+    tags: [grammar:present-simple]
+    payload:
+      kind: gap_fill
+      sentence: "She ___ to school every day."
+      answer: goes
+      accepted: ["goes"]
+      hint_ru: "Present Simple, 3-е лицо"
+
+  - slug: test-translation-cinema
+    level: A2
+    tags: [theme:cinema]
+    payload:
+      kind: translation_pair
+      prompt_ru: "Я вчера ходил в кино."
+      reference: "I went to the cinema yesterday."
+      accepted: ["I went to the cinema yesterday"]
+
+  - slug: test-word-order-cinema
+    level: A2
+    tags: [grammar:past-simple]
+    payload:
+      kind: word_order
+      words: ["I", "went", "to", "the", "cinema"]
+      answer: "I went to the cinema"
+
+  - slug: test-mc-since
+    level: B1
+    tags: [grammar:present-perfect]
+    payload:
+      kind: multiple_choice
+      question: "I ___ here since 2020."
+      options: ["live", "lived", "have lived"]
+      correct_index: 2
+      explanation_ru: "Present Perfect с since."

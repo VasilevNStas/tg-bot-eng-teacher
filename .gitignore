@@ -4,7 +4,6 @@ __pycache__/
 *.pyo
 .venv/
 venv/
-.python-version
 
 # Package manager / build
 .uv-cache/
