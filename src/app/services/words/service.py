@@ -48,7 +48,7 @@ class WordCardDirection(StrEnum):
 class WordQuestion:
     content_item_id: int
     term: str
-    translations_ru: tuple[str, ...]
+    translation_ru: str
     accepted_en: tuple[str, ...]
     transcription: str | None
     example_en: str | None
@@ -58,7 +58,7 @@ class WordQuestion:
     def prompt(self) -> str:
         if self.direction is WordDirection.EN_RU:
             return self.term
-        return " / ".join(self.translations_ru)
+        return self.translation_ru
 
 
 @dataclass(frozen=True, slots=True)
@@ -462,7 +462,7 @@ class WordCardService:
         return WordQuestion(
             content_item_id=content_item_id,
             term=payload.term,
-            translations_ru=tuple(payload.translations_ru),
+            translation_ru=payload.translation_ru,
             accepted_en=tuple(payload.accepted_en),
             transcription=payload.transcription,
             example_en=payload.example_en,
@@ -476,7 +476,7 @@ class WordCardService:
         answer: str,
     ) -> GradeResult:
         if direction is WordDirection.EN_RU:
-            variants = payload.accepted_ru or payload.translations_ru
+            variants = payload.accepted_ru or [payload.translation_ru]
             return grade_answer(answer, variants, fuzzy=False)
         return grade_answer(answer, (payload.term, *payload.accepted_en), fuzzy=True)
 

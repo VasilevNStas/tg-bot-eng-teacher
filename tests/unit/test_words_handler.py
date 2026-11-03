@@ -213,7 +213,7 @@ async def answer_for(database: Database, item_id: int) -> str:
     async with database.session() as session:
         item = await session.get(ContentItem, item_id)
     assert item is not None
-    return str(item.payload["translations_ru"][0])
+    return str(item.payload["translation_ru"])
 
 
 async def count(database: Database, model: type[object]) -> int:

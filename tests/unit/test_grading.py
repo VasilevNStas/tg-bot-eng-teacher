@@ -172,7 +172,7 @@ def test_vocabulary_uses_term_and_accepted_english() -> None:
     item = make_item(
         VocabularyPayload(
             term="abandon",
-            translations_ru=["оставить", "забросить"],
+            translation_ru="оставить, забросить",
             accepted_en=["to abandon"],
         )
     )

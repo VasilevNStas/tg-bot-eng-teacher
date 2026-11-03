@@ -36,4 +36,4 @@ jobs:
       - name: Validate content
         run: |
           uv run python -m app.cli import-content content/topics --dry-run
-          uv run python -m app.cli import-words content/vocabulary --dry-run
+          uv run python -m app.cli import-content content/vocabulary --dry-run

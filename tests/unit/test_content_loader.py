@@ -24,60 +24,48 @@ def valid_doc() -> dict[str, Any]:
         "items": [
             {
                 "slug": "test-irregular-go",
-                "payload": {
-                    "kind": "irregular_verb",
-                    "base": "go",
-                    "past": ["went"],
-                    "participle": ["gone"],
-                    "translation_ru": "идти",
-                    "base_ipa": "ɡəʊ",
-                },
+                "kind": "irregular_verb",
+                "base": "go",
+                "past": "went",
+                "participle": "gone",
+                "translation_ru": "идти",
+                "base_ipa": "ɡəʊ",
             },
             {
                 "slug": "test-gap-present-simple",
-                "payload": {
-                    "kind": "gap_fill",
-                    "sentence": "She .... to school.",
-                    "answer": "goes",
-                },
+                "kind": "gap_fill",
+                "sentence": "She .... to school.",
+                "answer": "goes",
             },
             {
                 "slug": "test-translation",
-                "payload": {
-                    "kind": "translation_pair",
-                    "prompt_ru": "Я в кино.",
-                    "reference": "I am at the cinema.",
-                },
+                "kind": "translation_pair",
+                "prompt_ru": "Я в кино.",
+                "reference": "I am at the cinema.",
             },
             {
                 "slug": "test-word-order",
-                "payload": {
-                    "kind": "word_order",
-                    "words": ["I", "went", "home"],
-                    "answer": "I went home",
-                },
+                "kind": "word_order",
+                "words": ["I", "went", "home"],
+                "answer": "I went home",
             },
             {
                 "slug": "test-mc",
-                "payload": {
-                    "kind": "multiple_choice",
-                    "question": "I .... here since 2020.",
-                    "options": ["live", "lived", "have lived"],
-                    "correct_index": 2,
-                    "level": "B1",
-                },
+                "kind": "multiple_choice",
+                "question": "I .... here since 2020.",
+                "options": ["live", "lived", "have lived"],
+                "correct_index": 2,
+                "level": "B1",
             },
             {
                 "slug": "test-vocabulary-abandon",
-                "payload": {
-                    "kind": "vocabulary",
-                    "term": "abandon",
-                    "translations_ru": ["оставить", "забросить"],
-                    "accepted_en": ["abandon"],
-                    "frequency": 812,
-                    "frequency_rank": 812,
-                    "transcription": "əˈbændən",
-                },
+                "kind": "vocabulary",
+                "term": "abandon",
+                "translation_ru": "оставить, забросить",
+                "accepted_en": ["abandon"],
+                "frequency": 812,
+                "frequency_rank": 812,
+                "transcription": "əˈbændən",
             },
         ],
     }
@@ -147,7 +135,7 @@ def test_loader_reports_bad_yaml(tmp_path: Path) -> None:
 
 def test_loader_reports_validation_error(tmp_path: Path) -> None:
     doc = valid_doc()
-    doc["items"][0]["payload"]["base"] = ""
+    doc["items"][0]["base"] = ""
     path = tmp_path / "bad.yaml"
     write_yaml(path, doc)
 
@@ -157,8 +145,8 @@ def test_loader_reports_validation_error(tmp_path: Path) -> None:
 
 def test_irregular_verb_keeps_variants_and_ipa() -> None:
     doc = valid_doc()
-    doc["items"][0]["payload"]["past"] = ["learned", "learnt"]
-    doc["items"][0]["payload"]["past_ipa"] = "lɜːnd / lɜːnt"
+    doc["items"][0]["past"] = ["learned", "learnt"]
+    doc["items"][0]["past_ipa"] = "lɜːnd / lɜːnt"
     content = ContentFile.model_validate(doc)
     payload = content.items[0].payload
 
@@ -168,7 +156,7 @@ def test_irregular_verb_keeps_variants_and_ipa() -> None:
 
 def test_irregular_verb_forms_must_be_unique() -> None:
     doc = valid_doc()
-    doc["items"][0]["payload"]["past"] = ["went", "Went"]
+    doc["items"][0]["past"] = ["went", "Went"]
 
     with pytest.raises(ValueError, match="unique"):
         ContentFile.model_validate(doc)
@@ -176,7 +164,7 @@ def test_irregular_verb_forms_must_be_unique() -> None:
 
 def test_gap_fill_requires_a_blank() -> None:
     doc = valid_doc()
-    doc["items"][1]["payload"]["sentence"] = "She goes to school."
+    doc["items"][1]["sentence"] = "She goes to school."
 
     with pytest.raises(ValueError, match="must contain"):
         ContentFile.model_validate(doc)
@@ -184,7 +172,7 @@ def test_gap_fill_requires_a_blank() -> None:
 
 def test_word_order_answer_must_use_the_same_words() -> None:
     doc = valid_doc()
-    doc["items"][3]["payload"]["answer"] = "I went"
+    doc["items"][3]["answer"] = "I went"
 
     with pytest.raises(ValueError, match="permutation"):
         ContentFile.model_validate(doc)
@@ -192,7 +180,7 @@ def test_word_order_answer_must_use_the_same_words() -> None:
 
 def test_multiple_choice_index_must_be_in_range() -> None:
     doc = valid_doc()
-    doc["items"][4]["payload"]["correct_index"] = 3
+    doc["items"][4]["correct_index"] = 3
 
     with pytest.raises(ValueError, match="out of range"):
         ContentFile.model_validate(doc)
@@ -206,7 +194,7 @@ def test_vocabulary_payload_is_parsed() -> None:
     assert isinstance(payload, VocabularyPayload)
     assert payload.kind is ContentKind.VOCABULARY
     assert payload.term == "abandon"
-    assert payload.translations_ru == ["оставить", "забросить"]
+    assert payload.translation_ru == "оставить, забросить"
     assert payload.accepted_en == ["abandon"]
     assert payload.frequency == 812
     assert payload.frequency_rank == 812
@@ -216,18 +204,18 @@ def test_vocabulary_payload_is_parsed() -> None:
 
 def test_vocabulary_term_is_stripped_and_required() -> None:
     doc = valid_doc()
-    doc["items"][5]["payload"]["term"] = "  abandon  "
+    doc["items"][5]["term"] = "  abandon  "
     content = ContentFile.model_validate(doc)
     assert content.items[5].payload.term == "abandon"
 
-    doc["items"][5]["payload"]["term"] = "   "
+    doc["items"][5]["term"] = "   "
     with pytest.raises(ValueError, match="non-empty"):
         ContentFile.model_validate(doc)
 
 
-def test_vocabulary_translations_must_be_unique() -> None:
+def test_vocabulary_accepted_variants_must_be_unique() -> None:
     doc = valid_doc()
-    doc["items"][5]["payload"]["translations_ru"] = ["оставить", "Оставить"]
+    doc["items"][5]["accepted_ru"] = ["оставить", "Оставить"]
 
     with pytest.raises(ValueError, match="unique"):
         ContentFile.model_validate(doc)
@@ -235,8 +223,8 @@ def test_vocabulary_translations_must_be_unique() -> None:
 
 def test_vocabulary_frequency_is_optional() -> None:
     doc = valid_doc()
-    doc["items"][5]["payload"].pop("frequency")
-    doc["items"][5]["payload"].pop("frequency_rank")
+    doc["items"][5].pop("frequency")
+    doc["items"][5].pop("frequency_rank")
     content = ContentFile.model_validate(doc)
 
     assert content.items[5].payload.frequency is None
@@ -281,3 +269,20 @@ def test_project_content_loads() -> None:
     ]
     assert verbs
     assert any(getattr(item.payload, "base_ipa", None) for item in verbs)
+
+
+def test_project_irregular_verbs_keep_full_ipa() -> None:
+    root = Path(__file__).resolve().parents[2]
+    loaded = load_content_path(root / "content" / "topics")
+    verbs = [
+        item
+        for _, content in loaded
+        if content.topic.slug == "irregular-verbs"
+        for item in content.items
+    ]
+
+    assert len(verbs) == 137
+    for item in verbs:
+        assert getattr(item.payload, "base_ipa", None), item.slug
+        assert getattr(item.payload, "past_ipa", None), item.slug
+        assert getattr(item.payload, "participle_ipa", None), item.slug

@@ -60,18 +60,39 @@ def test_cli_dry_run_does_not_touch_database(
     assert not db_path.exists()
 
 
-def test_cli_imports_word_bank(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def vocabulary_doc(entries: list[dict[str, object]]) -> dict[str, object]:
+    return {
+        "topic": {"slug": "test-words", "title": "Test words"},
+        "source": "test",
+        "license": "unknown",
+        "items": entries,
+    }
+
+
+def test_cli_imports_vocabulary(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     bank_path = tmp_path / "core_words_0001_0002.yaml"
     bank_path.write_text(
         yaml.safe_dump(
-            {
-                "source": "test",
-                "license": "unknown",
-                "words": [
-                    {"position": 1, "frequency": 100, "term": "be", "translation_ru": "быть"},
-                    {"position": 2, "frequency": 90, "term": "and", "translation_ru": "и"},
-                ],
-            },
+            vocabulary_doc(
+                [
+                    {
+                        "slug": "word-be",
+                        "kind": "vocabulary",
+                        "term": "be",
+                        "translation_ru": "быть",
+                        "frequency": 100,
+                        "frequency_rank": 1,
+                    },
+                    {
+                        "slug": "word-and",
+                        "kind": "vocabulary",
+                        "term": "and",
+                        "translation_ru": "и",
+                        "frequency": 90,
+                        "frequency_rank": 2,
+                    },
+                ]
+            ),
             allow_unicode=True,
         ),
         encoding="utf-8",
@@ -80,21 +101,32 @@ def test_cli_imports_word_bank(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) 
     asyncio.run(prepare_database(db_path))
     monkeypatch.setenv("DB_PATH", str(db_path))
 
-    assert main(["import-words", str(bank_path)]) == 0
+    assert main(["import-content", str(bank_path)]) == 0
     assert asyncio.run(item_count(db_path)) == 2
 
-    assert main(["import-words", str(bank_path)]) == 0
+    assert main(["import-content", str(bank_path)]) == 0
     assert asyncio.run(item_count(db_path)) == 2
 
 
-def test_cli_import_words_dry_run_does_not_touch_database(
+def test_cli_import_vocabulary_dry_run_does_not_touch_database(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     bank_path = tmp_path / "core_words_0001_0001.yaml"
     bank_path.write_text(
         yaml.safe_dump(
-            {"words": [{"position": 1, "frequency": 100, "term": "be", "translation_ru": "быть"}]},
+            vocabulary_doc(
+                [
+                    {
+                        "slug": "word-be",
+                        "kind": "vocabulary",
+                        "term": "be",
+                        "translation_ru": "быть",
+                        "frequency": 100,
+                        "frequency_rank": 1,
+                    }
+                ]
+            ),
             allow_unicode=True,
         ),
         encoding="utf-8",
@@ -102,7 +134,7 @@ def test_cli_import_words_dry_run_does_not_touch_database(
     db_path = tmp_path / "bot.db"
     monkeypatch.setenv("DB_PATH", str(db_path))
 
-    assert main(["import-words", "--dry-run", str(bank_path)]) == 0
+    assert main(["import-content", "--dry-run", str(bank_path)]) == 0
     assert not db_path.exists()
 
 
@@ -118,14 +150,26 @@ def test_cli_seed_imports_bundled_content(
     (topics / "sample.yaml").write_text(FIXTURE.read_text(encoding="utf-8"), encoding="utf-8")
     (vocabulary / "words.yaml").write_text(
         yaml.safe_dump(
-            {
-                "source": "test",
-                "license": "unknown",
-                "words": [
-                    {"position": 1, "frequency": 100, "term": "be", "translation_ru": "быть"},
-                    {"position": 2, "frequency": 90, "term": "and", "translation_ru": "и"},
-                ],
-            },
+            vocabulary_doc(
+                [
+                    {
+                        "slug": "word-be",
+                        "kind": "vocabulary",
+                        "term": "be",
+                        "translation_ru": "быть",
+                        "frequency": 100,
+                        "frequency_rank": 1,
+                    },
+                    {
+                        "slug": "word-and",
+                        "kind": "vocabulary",
+                        "term": "and",
+                        "translation_ru": "и",
+                        "frequency": 90,
+                        "frequency_rank": 2,
+                    },
+                ]
+            ),
             allow_unicode=True,
         ),
         encoding="utf-8",

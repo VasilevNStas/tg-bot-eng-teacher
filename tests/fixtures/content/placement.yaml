@@ -5,62 +5,56 @@ source: Test fixture
 license: unknown
 items:
 - slug: test-placement-b1
-  payload:
-    kind: multiple_choice
-    question: 'BANK: I .... here since 2020.'
-    options:
-    - live
-    - lived
-    - have lived
-    correct_index: 2
-    level: B1
+  kind: multiple_choice
+  question: 'BANK: I .... here since 2020.'
+  options:
+  - live
+  - lived
+  - have lived
+  correct_index: 2
+  level: B1
 - slug: test-placement-a1
-  payload:
-    kind: multiple_choice
-    question: 'BANK: I .... a student.'
-    options:
-    - am
-    - is
-    - are
-    correct_index: 0
-    level: A1
+  kind: multiple_choice
+  question: 'BANK: I .... a student.'
+  options:
+  - am
+  - is
+  - are
+  correct_index: 0
+  level: A1
 - slug: test-placement-c2
-  payload:
-    kind: multiple_choice
-    question: 'BANK: Had I known, I .... differently.'
-    options:
-    - would act
-    - would have acted
-    - had acted
-    correct_index: 1
-    level: C2
+  kind: multiple_choice
+  question: 'BANK: Had I known, I .... differently.'
+  options:
+  - would act
+  - would have acted
+  - had acted
+  correct_index: 1
+  level: C2
 - slug: test-placement-a2
-  payload:
-    kind: multiple_choice
-    question: 'BANK: She .... to the cinema yesterday.'
-    options:
-    - go
-    - goes
-    - went
-    correct_index: 2
-    level: A2
+  kind: multiple_choice
+  question: 'BANK: She .... to the cinema yesterday.'
+  options:
+  - go
+  - goes
+  - went
+  correct_index: 2
+  level: A2
 - slug: test-placement-c1
-  payload:
-    kind: multiple_choice
-    question: 'BANK: The proposal was turned .... by the committee.'
-    options:
-    - down
-    - 'off'
-    - up
-    correct_index: 0
-    level: C1
+  kind: multiple_choice
+  question: 'BANK: The proposal was turned .... by the committee.'
+  options:
+  - down
+  - 'off'
+  - up
+  correct_index: 0
+  level: C1
 - slug: test-placement-b2
-  payload:
-    kind: multiple_choice
-    question: 'BANK: If I .... more time, I would travel.'
-    options:
-    - have
-    - had
-    - would have
-    correct_index: 1
-    level: B2
+  kind: multiple_choice
+  question: 'BANK: If I .... more time, I would travel.'
+  options:
+  - have
+  - had
+  - would have
+  correct_index: 1
+  level: B2

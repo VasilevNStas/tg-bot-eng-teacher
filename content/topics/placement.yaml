@@ -5,68 +5,62 @@ source: Project placement test
 license: unknown
 items:
 - slug: placement-a1-be
-  payload:
-    kind: multiple_choice
-    question: I .... a student.
-    options:
-    - am
-    - is
-    - are
-    correct_index: 0
-    explanation_ru: Present Simple, форма am для I.
-    level: A1
+  kind: multiple_choice
+  question: I .... a student.
+  options:
+  - am
+  - is
+  - are
+  correct_index: 0
+  explanation_ru: Present Simple, форма am для I.
+  level: A1
 - slug: placement-a2-past
-  payload:
-    kind: multiple_choice
-    question: She .... to the cinema yesterday.
-    options:
-    - go
-    - goes
-    - went
-    correct_index: 2
-    explanation_ru: 'Past Simple: yesterday → went.'
-    level: A2
+  kind: multiple_choice
+  question: She .... to the cinema yesterday.
+  options:
+  - go
+  - goes
+  - went
+  correct_index: 2
+  explanation_ru: 'Past Simple: yesterday → went.'
+  level: A2
 - slug: placement-b1-present-perfect
-  payload:
-    kind: multiple_choice
-    question: I .... here since 2020.
-    options:
-    - live
-    - lived
-    - have lived
-    correct_index: 2
-    explanation_ru: Present Perfect с since.
-    level: B1
+  kind: multiple_choice
+  question: I .... here since 2020.
+  options:
+  - live
+  - lived
+  - have lived
+  correct_index: 2
+  explanation_ru: Present Perfect с since.
+  level: B1
 - slug: placement-b2-conditional
-  payload:
-    kind: multiple_choice
-    question: If I .... more time, I would travel.
-    options:
-    - have
-    - had
-    - would have
-    correct_index: 1
-    explanation_ru: 'Second Conditional: if + Past Simple, would + infinitive.'
-    level: B2
+  kind: multiple_choice
+  question: If I .... more time, I would travel.
+  options:
+  - have
+  - had
+  - would have
+  correct_index: 1
+  explanation_ru: 'Second Conditional: if + Past Simple, would + infinitive.'
+  level: B2
 - slug: placement-c1-phrasal-verb
-  payload:
-    kind: multiple_choice
-    question: The proposal was turned .... by the committee.
-    options:
-    - down
-    - 'off'
-    - up
-    correct_index: 0
-    explanation_ru: turn down — отклонить предложение.
-    level: C1
+  kind: multiple_choice
+  question: The proposal was turned .... by the committee.
+  options:
+  - down
+  - 'off'
+  - up
+  correct_index: 0
+  explanation_ru: turn down — отклонить предложение.
+  level: C1
 - slug: placement-c2-inversion
-  payload:
-    kind: multiple_choice
-    question: Had I known, I .... differently.
-    options:
-    - would act
-    - would have acted
-    - had acted
-    correct_index: 1
-    explanation_ru: 'Third Conditional с инверсией: had I known → would have acted.'
-    level: C2
+  kind: multiple_choice
+  question: Had I known, I .... differently.
+  options:
+  - would act
+  - would have acted
+  - had acted
+  correct_index: 1
+  explanation_ru: 'Third Conditional с инверсией: had I known → would have acted.'
+  level: C2

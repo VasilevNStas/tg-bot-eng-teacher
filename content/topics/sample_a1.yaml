@@ -1,47 +1,48 @@
 topic:
   slug: sample-a1
-  title: "Sample A1"
-
-source: "Original (project sample)"
-license: "unknown"
-
+  title: Sample A1
+source: Original (project sample)
+license: unknown
 items:
-  - slug: sample-irregular-go
-    payload:
-      kind: irregular_verb
-      base: go
-      past: [went]
-      participle: [gone]
-      translation_ru: идти
-      base_ipa: "ɡəʊ"
-      past_ipa: "wɛnt"
-      participle_ipa: "ɡɒn"
-
-  - slug: sample-gap-present-simple
-    payload:
-      kind: gap_fill
-      sentence: "She .... to school every day."
-      answer: goes
-      accepted: ["goes"]
-      hint_ru: "Present Simple, 3-е лицо"
-
-  - slug: sample-translation-cinema
-    payload:
-      kind: translation_pair
-      prompt_ru: "Я вчера ходил в кино."
-      reference: "I went to the cinema yesterday."
-      accepted: ["I went to the cinema yesterday"]
-
-  - slug: sample-word-order-cinema
-    payload:
-      kind: word_order
-      words: ["I", "went", "to", "the", "cinema"]
-      answer: "I went to the cinema"
-
-  - slug: sample-mc-since
-    payload:
-      kind: multiple_choice
-      question: "I .... here since 2020."
-      options: ["live", "lived", "have lived"]
-      correct_index: 2
-      explanation_ru: "Present Perfect с since."
+- slug: sample-irregular-go
+  kind: irregular_verb
+  base: go
+  past:
+  - went
+  participle:
+  - gone
+  translation_ru: идти
+  base_ipa: ɡəʊ
+  past_ipa: wɛnt
+  participle_ipa: ɡɒn
+- slug: sample-gap-present-simple
+  kind: gap_fill
+  sentence: She .... to school every day.
+  answer: goes
+  accepted:
+  - goes
+  hint_ru: Present Simple, 3-е лицо
+- slug: sample-translation-cinema
+  kind: translation_pair
+  prompt_ru: Я вчера ходил в кино.
+  reference: I went to the cinema yesterday.
+  accepted:
+  - I went to the cinema yesterday
+- slug: sample-word-order-cinema
+  kind: word_order
+  words:
+  - I
+  - went
+  - to
+  - the
+  - cinema
+  answer: I went to the cinema
+- slug: sample-mc-since
+  kind: multiple_choice
+  question: I .... here since 2020.
+  options:
+  - live
+  - lived
+  - have lived
+  correct_index: 2
+  explanation_ru: Present Perfect с since.

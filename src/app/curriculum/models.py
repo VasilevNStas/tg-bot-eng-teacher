@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections import Counter
-from typing import Annotated, Literal, Self
+from typing import Annotated, Any, Literal, Self
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
@@ -26,6 +26,13 @@ class IrregularVerbPayload(PayloadBase):
     base_ipa: str | None = None
     past_ipa: str | None = None
     participle_ipa: str | None = None
+
+    @field_validator("past", "participle", mode="before")
+    @classmethod
+    def check_forms_input(cls, forms: Any) -> Any:
+        if isinstance(forms, str):
+            return [forms]
+        return forms
 
     @model_validator(mode="after")
     def check_forms(self) -> Self:
@@ -91,7 +98,7 @@ class MultipleChoicePayload(PayloadBase):
 class VocabularyPayload(PayloadBase):
     kind: Literal[ContentKind.VOCABULARY] = ContentKind.VOCABULARY
     term: str = Field(min_length=1, max_length=128)
-    translations_ru: list[str] = Field(min_length=1, max_length=20)
+    translation_ru: str = Field(min_length=1, max_length=512)
     accepted_ru: list[str] = Field(default_factory=list, max_length=20)
     accepted_en: list[str] = Field(default_factory=list, max_length=20)
     frequency: int | None = Field(default=None, ge=0)
@@ -101,17 +108,17 @@ class VocabularyPayload(PayloadBase):
     notes_ru: str | None = Field(default=None, max_length=512)
     example_en: str | None = Field(default=None, max_length=512)
 
-    @field_validator("term")
+    @field_validator("term", "translation_ru")
     @classmethod
-    def check_term(cls, term: str) -> str:
-        term = term.strip()
-        if not term:
-            raise ValueError("term must be non-empty")
-        if "\n" in term or "\r" in term:
-            raise ValueError("term must be a single line")
-        return term
+    def check_line(cls, value: str) -> str:
+        value = value.strip()
+        if not value:
+            raise ValueError("must be non-empty")
+        if "\n" in value or "\r" in value:
+            raise ValueError("must be a single line")
+        return value
 
-    @field_validator("translations_ru", "accepted_ru", "accepted_en")
+    @field_validator("accepted_ru", "accepted_en")
     @classmethod
     def check_variants(cls, values: list[str]) -> list[str]:
         cleaned = [value.strip() for value in values]
@@ -135,6 +142,9 @@ ContentPayload = Annotated[
 ]
 
 
+_ITEM_FIELDS = frozenset({"slug", "payload", "source", "license", "active"})
+
+
 class ContentItemSpec(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -143,6 +153,37 @@ class ContentItemSpec(BaseModel):
     source: str | None = Field(default=None, max_length=256)
     license: str | None = Field(default=None, max_length=32)
     active: bool = True
+
+    @model_validator(mode="before")
+    @classmethod
+    def accept_flat_item(cls, data: Any) -> Any:
+        """Allow both flat YAML items and the internal ``payload`` form.
+
+        Flat form:
+
+            - slug: irregular-verb-be
+              kind: irregular_verb
+              base: be
+              past: was
+
+        Internal form (used when reconstructing items from the database):
+
+            - slug: irregular-verb-be
+              payload: {kind: irregular_verb, base: be, past: [was]}
+        """
+        if not isinstance(data, dict) or "payload" in data:
+            return data
+
+        data = dict(data)
+        kind = data.pop("kind", None)
+        if kind is None:
+            raise ValueError("'kind' is required")
+        payload: dict[str, Any] = {"kind": kind}
+        for key in list(data):
+            if key not in _ITEM_FIELDS:
+                payload[key] = data.pop(key)
+        data["payload"] = payload
+        return data
 
     @property
     def kind(self) -> ContentKind:

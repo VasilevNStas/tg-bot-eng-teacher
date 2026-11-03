@@ -84,7 +84,7 @@ async def test_import_vocabulary_payload(tmp_path: Path) -> None:
         assert item.payload["term"] == "care"
         assert item.payload["frequency"] == 9482
         assert item.payload["frequency_rank"] == 315
-        assert item.payload["translations_ru"] == ["забота", "беспокойство"]
+        assert item.payload["translation_ru"] == "забота, беспокойство"
 
     await database.dispose()
 
@@ -108,7 +108,7 @@ async def test_changed_item_is_updated(tmp_path: Path) -> None:
     await importer.import_file(load_content_file(FIXTURE))
 
     doc = fixture_doc()
-    doc["items"][0]["payload"]["translation_ru"] = "ходить"
+    doc["items"][0]["translation_ru"] = "ходить"
     modified = ContentFile.model_validate(doc)
 
     result = await importer.import_file(modified)

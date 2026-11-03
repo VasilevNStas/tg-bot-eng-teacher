@@ -32,6 +32,14 @@ class _ItemEntry:
     item: ContentItemSpec
 
 
+def _payload_data(item: ContentItemSpec) -> dict[str, object]:
+    return item.payload.model_dump(
+        mode="json",
+        exclude={"kind"},
+        exclude_defaults=True,
+    )
+
+
 class ContentImporter:
     def __init__(self, database: Database) -> None:
         self._database = database
@@ -132,7 +140,7 @@ class ContentImporter:
                     topic_id=topic_ids[entry.content.topic.slug],
                     is_active=item.active,
                     kind=item.kind,
-                    payload=item.payload.model_dump(mode="json"),
+                    payload=_payload_data(item),
                     source=item.source or entry.content.source,
                     license=item.license or entry.content.license,
                 )
@@ -150,7 +158,7 @@ class ContentImporter:
         topic_ids: dict[str, int],
     ) -> bool:
         item = entry.item
-        payload = item.payload.model_dump(mode="json")
+        payload = _payload_data(item)
         source = item.source or entry.content.source
         license_name = item.license or entry.content.license
         topic_id = topic_ids[entry.content.topic.slug]

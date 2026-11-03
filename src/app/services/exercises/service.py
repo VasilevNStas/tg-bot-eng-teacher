@@ -254,7 +254,7 @@ class ExerciseService:
         return ContentItemSpec.model_validate(
             {
                 "slug": item.slug,
-                "payload": item.payload,
+                "payload": {"kind": item.kind, **item.payload},
                 "source": item.source,
                 "license": item.license,
                 "active": item.is_active,

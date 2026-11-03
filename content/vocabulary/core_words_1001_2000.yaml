@@ -1,4991 +1,6994 @@
+topic:
+  slug: core-words-1001-2000
+  title: Core words 1001-2000
 source: 3000_words.html
 license: unknown
-words:
-- position: 1001
-  frequency: 2438
+items:
+- slug: word-funny
+  kind: vocabulary
   term: funny
   transcription: ˈfʌnɪ
   translation_ru: забавный
-- position: 1002
-  frequency: 2436
+  frequency: 2438
+  frequency_rank: 1001
+- slug: word-angry
+  kind: vocabulary
   term: angry
   transcription: ˈæŋgrɪ
   translation_ru: сердитый
-- position: 1003
-  frequency: 2433
+  frequency: 2436
+  frequency_rank: 1002
+- slug: word-exist
+  kind: vocabulary
   term: exist
   transcription: ɪgˈzɪst
   translation_ru: существовать
-- position: 1004
-  frequency: 2432
+  frequency: 2433
+  frequency_rank: 1003
+- slug: word-date
+  kind: vocabulary
   term: date
   transcription: deɪt
   translation_ru: дата
-- position: 1005
-  frequency: 2430
+  frequency: 2432
+  frequency_rank: 1004
+- slug: word-energy
+  kind: vocabulary
   term: energy
   transcription: ˈenəʤɪ
   translation_ru: энергия
-- position: 1006
   frequency: 2430
+  frequency_rank: 1005
+- slug: word-clothe
+  kind: vocabulary
   term: clothe
   transcription: kləʊð
   translation_ru: одевать
-- position: 1007
-  frequency: 2427
+  frequency: 2430
+  frequency_rank: 1006
+- slug: word-demand
+  kind: vocabulary
   term: demand
   transcription: dɪˈmɑːnd
   translation_ru: требовать
-- position: 1008
-  frequency: 2423
+  frequency: 2427
+  frequency_rank: 1007
+- slug: word-express
+  kind: vocabulary
   term: express
   transcription: ɪksˈpres
   translation_ru: выражать
-- position: 1009
-  frequency: 2417
+  frequency: 2423
+  frequency_rank: 1008
+- slug: word-straight
+  kind: vocabulary
   term: straight
   transcription: streɪt
   translation_ru: прямой
-- position: 1010
   frequency: 2417
+  frequency_rank: 1009
+- slug: word-sigh
+  kind: vocabulary
   term: sigh
   transcription: saɪ
   translation_ru: вздыхать
-- position: 1011
   frequency: 2417
+  frequency_rank: 1010
+- slug: word-web
+  kind: vocabulary
   term: web
   transcription: web
   translation_ru: сеть
-- position: 1012
-  frequency: 2414
+  frequency: 2417
+  frequency_rank: 1011
+- slug: word-magic
+  kind: vocabulary
   term: magic
   transcription: ˈmæʤɪk
   translation_ru: чудодейственный
-- position: 1013
-  frequency: 2412
+  frequency: 2414
+  frequency_rank: 1012
+- slug: word-flower
+  kind: vocabulary
   term: flower
   transcription: ˈflaʊə
   translation_ru: цветок
-- position: 1014
-  frequency: 2409
+  frequency: 2412
+  frequency_rank: 1013
+- slug: word-lips
+  kind: vocabulary
   term: lips
   transcription: lɪps
   translation_ru: губы
-- position: 1015
-  frequency: 2407
+  frequency: 2409
+  frequency_rank: 1014
+- slug: word-difference
+  kind: vocabulary
   term: difference
   transcription: ˈdɪfrəns
   translation_ru: разница
-- position: 1016
-  frequency: 2406
+  frequency: 2407
+  frequency_rank: 1015
+- slug: word-template
+  kind: vocabulary
   term: template
   transcription: ˈtemplɪt
   translation_ru: шаблон
-- position: 1017
-  frequency: 2405
+  frequency: 2406
+  frequency_rank: 1016
+- slug: word-star
+  kind: vocabulary
   term: star
   transcription: stɑː
   translation_ru: звезда
-- position: 1018
-  frequency: 2402
+  frequency: 2405
+  frequency_rank: 1017
+- slug: word-shoe
+  kind: vocabulary
   term: shoe
   transcription: ʃuː
   translation_ru: башмак
-- position: 1019
   frequency: 2402
+  frequency_rank: 1018
+- slug: word-behaviour
+  kind: vocabulary
   term: behaviour
   transcription: bɪˈheɪvɪə
   translation_ru: поведение
-- position: 1020
-  frequency: 2401
+  frequency: 2402
+  frequency_rank: 1019
+- slug: word-shock
+  kind: vocabulary
   term: shock
   transcription: ʃɒk
   translation_ru: шокировать
-- position: 1021
-  frequency: 2400
+  frequency: 2401
+  frequency_rank: 1020
+- slug: word-alarm
+  kind: vocabulary
   term: alarm
   transcription: əˈlɑːm
   translation_ru: встревожить
-- position: 1022
-  frequency: 2397
+  frequency: 2400
+  frequency_rank: 1021
+- slug: word-refuse
+  kind: vocabulary
   term: refuse
   transcription: ˈrefjuːs
   translation_ru: отказываться
-- position: 1023
-  frequency: 2385
+  frequency: 2397
+  frequency_rank: 1022
+- slug: word-length
+  kind: vocabulary
   term: length
   transcription: leŋθ
   translation_ru: длина
-- position: 1024
-  frequency: 2384
+  frequency: 2385
+  frequency_rank: 1023
+- slug: word-slowly
+  kind: vocabulary
   term: slowly
   transcription: ˈsləʊlɪ
   translation_ru: медленно
-- position: 1025
-  frequency: 2382
+  frequency: 2384
+  frequency_rank: 1024
+- slug: word-song
+  kind: vocabulary
   term: song
   transcription: sɒŋ
   translation_ru: песня
-- position: 1026
-  frequency: 2380
+  frequency: 2382
+  frequency_rank: 1025
+- slug: word-cave
+  kind: vocabulary
   term: cave
   transcription: keɪv
   translation_ru: пещера
-- position: 1027
-  frequency: 2373
+  frequency: 2380
+  frequency_rank: 1026
+- slug: word-middle
+  kind: vocabulary
   term: middle
   transcription: mɪdl
   translation_ru: средний
-- position: 1028
-  frequency: 2372
+  frequency: 2373
+  frequency_rank: 1027
+- slug: word-carriage
+  kind: vocabulary
   term: carriage
   transcription: ˈkærɪʤ
   translation_ru: коляска
-- position: 1029
-  frequency: 2370
+  frequency: 2372
+  frequency_rank: 1028
+- slug: word-emperor
+  kind: vocabulary
   term: emperor
   transcription: ˈempərə
   translation_ru: император
-- position: 1030
-  frequency: 2368
+  frequency: 2370
+  frequency_rank: 1029
+- slug: word-twenty
+  kind: vocabulary
   term: twenty
   transcription: ˈtwentɪ
   translation_ru: два десятка
-- position: 1031
   frequency: 2368
+  frequency_rank: 1030
+- slug: word-yesterday
+  kind: vocabulary
   term: yesterday
   transcription: ˈjestədɪ
   translation_ru: вчера
-- position: 1032
-  frequency: 2367
+  frequency: 2368
+  frequency_rank: 1031
+- slug: word-station
+  kind: vocabulary
   term: station
   transcription: steɪʃn
   translation_ru: станция
-- position: 1033
-  frequency: 2366
+  frequency: 2367
+  frequency_rank: 1032
+- slug: word-scream
+  kind: vocabulary
   term: scream
   transcription: skriːm
   translation_ru: кричать
-- position: 1034
   frequency: 2366
+  frequency_rank: 1033
+- slug: word-regard
+  kind: vocabulary
   term: regard
   transcription: rɪˈgɑːd
   translation_ru: рассматривать
-- position: 1035
-  frequency: 2365
+  frequency: 2366
+  frequency_rank: 1034
+- slug: word-joy
+  kind: vocabulary
   term: joy
   transcription: ʤɔɪ
   translation_ru: радоваться
-- position: 1036
-  frequency: 2364
+  frequency: 2365
+  frequency_rank: 1035
+- slug: word-cool
+  kind: vocabulary
   term: cool
   transcription: kuːl
   translation_ru: крутой
-- position: 1037
-  frequency: 2361
+  frequency: 2364
+  frequency_rank: 1036
+- slug: word-tooth
+  kind: vocabulary
   term: tooth
   transcription: tuːθ
   translation_ru: зуб
-- position: 1038
-  frequency: 2360
+  frequency: 2361
+  frequency_rank: 1037
+- slug: word-content
+  kind: vocabulary
   term: content
   translation_ru: содержание
-- position: 1039
   frequency: 2360
+  frequency_rank: 1038
+- slug: word-dim
+  kind: vocabulary
   term: dim
   transcription: dɪm
   translation_ru: тусклый
-- position: 1040
-  frequency: 2357
+  frequency: 2360
+  frequency_rank: 1039
+- slug: word-summer
+  kind: vocabulary
   term: summer
   transcription: ˈsʌmə
   translation_ru: лето
-- position: 1041
-  frequency: 2353
+  frequency: 2357
+  frequency_rank: 1040
+- slug: word-tire
+  kind: vocabulary
   term: tire
   transcription: ˈtaɪə
   translation_ru: уставать
-- position: 1042
   frequency: 2353
+  frequency_rank: 1041
+- slug: word-execute
+  kind: vocabulary
   term: execute
   transcription: ˈeksɪkjuːt
   translation_ru: выполнять
-- position: 1043
-  frequency: 2350
+  frequency: 2353
+  frequency_rank: 1042
+- slug: word-lovely
+  kind: vocabulary
   term: lovely
   transcription: ˈlʌvlɪ
   translation_ru: прекрасный
-- position: 1044
   frequency: 2350
+  frequency_rank: 1043
+- slug: word-loop
+  kind: vocabulary
   term: loop
   transcription: luːp
   translation_ru: петля
-- position: 1045
-  frequency: 2342
+  frequency: 2350
+  frequency_rank: 1044
+- slug: word-whatever
+  kind: vocabulary
   term: whatever
   transcription: wɒtˈevə
   translation_ru: что угодно
-- position: 1046
   frequency: 2342
+  frequency_rank: 1045
+- slug: word-bill
+  kind: vocabulary
   term: bill
   transcription: bɪl
   translation_ru: законопроект
-- position: 1047
-  frequency: 2336
+  frequency: 2342
+  frequency_rank: 1046
+- slug: word-shame
+  kind: vocabulary
   term: shame
   transcription: ʃeɪm
   translation_ru: позорить
-- position: 1048
-  frequency: 2332
+  frequency: 2336
+  frequency_rank: 1047
+- slug: word-immediately
+  kind: vocabulary
   term: immediately
   transcription: ɪˈmiːdɪətlɪ
   translation_ru: немедленно
-- position: 1049
-  frequency: 2331
+  frequency: 2332
+  frequency_rank: 1048
+- slug: word-settle
+  kind: vocabulary
   term: settle
   transcription: setl
   translation_ru: селиться
-- position: 1050
-  frequency: 2327
+  frequency: 2331
+  frequency_rank: 1049
+- slug: word-concern
+  kind: vocabulary
   term: concern
   transcription: kənˈsɜːn
   translation_ru: касаться
-- position: 1051
-  frequency: 2322
+  frequency: 2327
+  frequency_rank: 1050
+- slug: word-patient
+  kind: vocabulary
   term: patient
   transcription: ˈpeɪʃnt
   translation_ru: терпеливый
-- position: 1052
-  frequency: 2321
+  frequency: 2322
+  frequency_rank: 1051
+- slug: word-cook
+  kind: vocabulary
   term: cook
   transcription: kʊk
   translation_ru: готовить
-- position: 1053
-  frequency: 2318
+  frequency: 2321
+  frequency_rank: 1052
+- slug: word-goal
+  kind: vocabulary
   term: goal
   transcription: gəʊl
   translation_ru: цель
-- position: 1054
-  frequency: 2315
+  frequency: 2318
+  frequency_rank: 1053
+- slug: word-government
+  kind: vocabulary
   term: government
   transcription: ˈgʌv(ə)mənt
   translation_ru: государственное управление
-- position: 1055
   frequency: 2315
+  frequency_rank: 1054
+- slug: word-admit
+  kind: vocabulary
   term: admit
   transcription: ədˈmɪt
   translation_ru: признавать
-- position: 1056
-  frequency: 2303
+  frequency: 2315
+  frequency_rank: 1055
+- slug: word-suit
+  kind: vocabulary
   term: suit
   transcription: sjuːt
   translation_ru: подходить
-- position: 1057
-  frequency: 2300
+  frequency: 2303
+  frequency_rank: 1056
+- slug: word-plane
+  kind: vocabulary
   term: plane
   transcription: pleɪn
   translation_ru: самолет
-- position: 1058
-  frequency: 2298
+  frequency: 2300
+  frequency_rank: 1057
+- slug: word-assure
+  kind: vocabulary
   term: assure
   transcription: əˈʃʊə
   translation_ru: уверять
-- position: 1059
   frequency: 2298
+  frequency_rank: 1058
+- slug: word-beyond
+  kind: vocabulary
   term: beyond
   transcription: bɪˈjɒnd
   translation_ru: за
-- position: 1060
-  frequency: 2296
+  frequency: 2298
+  frequency_rank: 1059
+- slug: word-section
+  kind: vocabulary
   term: section
   transcription: sekʃn
   translation_ru: раздел
-- position: 1061
-  frequency: 2295
+  frequency: 2296
+  frequency_rank: 1060
+- slug: word-yard
+  kind: vocabulary
   term: yard
   transcription: jɑːd
   translation_ru: двор
-- position: 1062
-  frequency: 2294
+  frequency: 2295
+  frequency_rank: 1061
+- slug: word-soldier
+  kind: vocabulary
   term: soldier
   transcription: ˈsəʊlʤə
   translation_ru: солдат
-- position: 1063
-  frequency: 2292
+  frequency: 2294
+  frequency_rank: 1062
+- slug: word-knowledge
+  kind: vocabulary
   term: knowledge
   transcription: ˈnɒlɪʤ
   translation_ru: знание
-- position: 1064
-  frequency: 2291
+  frequency: 2292
+  frequency_rank: 1063
+- slug: word-nurse
+  kind: vocabulary
   term: nurse
   transcription: nɜːs
   translation_ru: кормить
-- position: 1065
   frequency: 2291
+  frequency_rank: 1064
+- slug: word-ought
+  kind: vocabulary
   term: ought
   transcription: ɔːt
   translation_ru: должен
-- position: 1066
-  frequency: 2285
+  frequency: 2291
+  frequency_rank: 1065
+- slug: word-ball
+  kind: vocabulary
   term: ball
   transcription: bɔːl
   translation_ru: мяч
-- position: 1067
-  frequency: 2284
+  frequency: 2285
+  frequency_rank: 1066
+- slug: word-parent
+  kind: vocabulary
   term: parent
   transcription: ˈpe(ə)rənt
   translation_ru: родитель
-- position: 1068
-  frequency: 2277
+  frequency: 2284
+  frequency_rank: 1067
+- slug: word-download
+  kind: vocabulary
   term: download
   transcription: ˈdaʊnləʊd
   translation_ru: загруженный
-- position: 1069
-  frequency: 2269
+  frequency: 2277
+  frequency_rank: 1068
+- slug: word-waste
+  kind: vocabulary
   term: waste
   transcription: weɪst
   translation_ru: отходы
-- position: 1070
-  frequency: 2264
+  frequency: 2269
+  frequency_rank: 1069
+- slug: word-wizard
+  kind: vocabulary
   term: wizard
   transcription: ˈwɪzəd
   translation_ru: волшебник
-- position: 1071
-  frequency: 2263
+  frequency: 2264
+  frequency_rank: 1070
+- slug: word-gaze
+  kind: vocabulary
   term: gaze
   transcription: geɪz
   translation_ru: пристальный взгляд
-- position: 1072
   frequency: 2263
+  frequency_rank: 1071
+- slug: word-occur
+  kind: vocabulary
   term: occur
   transcription: əˈkɜː
   translation_ru: происходить
-- position: 1073
   frequency: 2263
+  frequency_rank: 1072
+- slug: word-lean
+  kind: vocabulary
   term: lean
   transcription: liːn
   translation_ru: опираться
-- position: 1074
-  frequency: 2262
+  frequency: 2263
+  frequency_rank: 1073
+- slug: word-space
+  kind: vocabulary
   term: space
   transcription: speɪs
   translation_ru: пространство
-- position: 1075
-  frequency: 2257
+  frequency: 2262
+  frequency_rank: 1074
+- slug: word-board
+  kind: vocabulary
   term: board
   transcription: bɔːd
   translation_ru: доска
-- position: 1076
-  frequency: 2247
+  frequency: 2257
+  frequency_rank: 1075
+- slug: word-hmi
+  kind: vocabulary
   term: HMI
   transcription: mɪ
   translation_ru: интерфейс
-- position: 1077
-  frequency: 2244
+  frequency: 2247
+  frequency_rank: 1076
+- slug: word-roll
+  kind: vocabulary
   term: roll
   transcription: rəʊl
   translation_ru: свертывать
-- position: 1078
-  frequency: 2240
+  frequency: 2244
+  frequency_rank: 1077
+- slug: word-sail
+  kind: vocabulary
   term: sail
   transcription: seɪl
   translation_ru: парус
-- position: 1079
-  frequency: 2238
+  frequency: 2240
+  frequency_rank: 1078
+- slug: word-gate
+  kind: vocabulary
   term: gate
   transcription: geɪt
   translation_ru: вентиль
-- position: 1080
-  frequency: 2226
+  frequency: 2238
+  frequency_rank: 1079
+- slug: word-received
+  kind: vocabulary
   term: received
   transcription: rɪˈsiːvd
   translation_ru: полученный
-- position: 1081
-  frequency: 2218
+  frequency: 2226
+  frequency_rank: 1080
+- slug: word-lift
+  kind: vocabulary
   term: lift
   transcription: lɪft
   translation_ru: поднимать
-- position: 1082
-  frequency: 2212
+  frequency: 2218
+  frequency_rank: 1081
+- slug: word-contain
+  kind: vocabulary
   term: contain
   transcription: kənˈteɪn
   translation_ru: содержать
-- position: 1083
-  frequency: 2204
+  frequency: 2212
+  frequency_rank: 1082
+- slug: word-comfort
+  kind: vocabulary
   term: comfort
   transcription: ˈkʌmfət
   translation_ru: утешать
-- position: 1084
-  frequency: 2201
+  frequency: 2204
+  frequency_rank: 1083
+- slug: word-church
+  kind: vocabulary
   term: church
   transcription: ʧɜːʧ
   translation_ru: церковь
-- position: 1085
-  frequency: 2199
+  frequency: 2201
+  frequency_rank: 1084
+- slug: word-treat
+  kind: vocabulary
   term: treat
   transcription: triːt
   translation_ru: лечить
-- position: 1086
-  frequency: 2197
+  frequency: 2199
+  frequency_rank: 1085
+- slug: word-boss
+  kind: vocabulary
   term: boss
   transcription: bɒs
   translation_ru: босс
-- position: 1087
-  frequency: 2196
+  frequency: 2197
+  frequency_rank: 1086
+- slug: word-static
+  kind: vocabulary
   term: static
   transcription: ˈstætɪk
   translation_ru: статический
-- position: 1088
-  frequency: 2195
+  frequency: 2196
+  frequency_rank: 1087
+- slug: word-recognise
+  kind: vocabulary
   term: recognise
   transcription: ˈrekəgnaɪz
   translation_ru: узнавать
-- position: 1089
-  frequency: 2194
+  frequency: 2195
+  frequency_rank: 1088
+- slug: word-taste
+  kind: vocabulary
   term: taste
   transcription: teɪst
   translation_ru: пробовать
-- position: 1090
-  frequency: 2193
+  frequency: 2194
+  frequency_rank: 1089
+- slug: word-majesty
+  kind: vocabulary
   term: Majesty
   transcription: ˈmæʤɪstɪ
   translation_ru: величие
-- position: 1091
-  frequency: 2178
+  frequency: 2193
+  frequency_rank: 1090
+- slug: word-fresh
+  kind: vocabulary
   term: fresh
   transcription: freʃ
   translation_ru: новый
-- position: 1092
-  frequency: 2176
+  frequency: 2178
+  frequency_rank: 1091
+- slug: word-favour
+  kind: vocabulary
   term: favour
   transcription: ˈfeɪvə
   translation_ru: одолжение
-- position: 1093
-  frequency: 2170
+  frequency: 2176
+  frequency_rank: 1092
+- slug: word-amount
+  kind: vocabulary
   term: amount
   transcription: əˈmaʊnt
   translation_ru: равняться
-- position: 1094
-  frequency: 2169
+  frequency: 2170
+  frequency_rank: 1093
+- slug: word-direct
+  kind: vocabulary
   term: direct
   transcription: dɪˈrekt
   translation_ru: направлять
-- position: 1095
-  frequency: 2168
+  frequency: 2169
+  frequency_rank: 1094
+- slug: word-lock
+  kind: vocabulary
   term: lock
   transcription: lɒk
   translation_ru: запирать
-- position: 1096
-  frequency: 2167
+  frequency: 2168
+  frequency_rank: 1095
+- slug: word-duty
+  kind: vocabulary
   term: duty
   transcription: ˈdjuːtɪ
   translation_ru: обязанность
-- position: 1097
   frequency: 2167
+  frequency_rank: 1096
+- slug: word-further
+  kind: vocabulary
   term: further
   transcription: ˈfɜːðə
   translation_ru: способствовать
-- position: 1098
   frequency: 2167
+  frequency_rank: 1097
+- slug: word-therefore
+  kind: vocabulary
   term: therefore
   transcription: ˈðeəfɔː
   translation_ru: следовательно
-- position: 1099
   frequency: 2167
+  frequency_rank: 1098
+- slug: word-prefer
+  kind: vocabulary
   term: prefer
   transcription: prɪˈfɜː
   translation_ru: предпочитать
-- position: 1100
-  frequency: 2166
+  frequency: 2167
+  frequency_rank: 1099
+- slug: word-manager
+  kind: vocabulary
   term: manager
   transcription: ˈmænɪʤə
   translation_ru: менеджер
-- position: 1101
-  frequency: 2165
+  frequency: 2166
+  frequency_rank: 1100
+- slug: word-seven
+  kind: vocabulary
   term: seven
   transcription: sevn
   translation_ru: семь
-- position: 1102
-  frequency: 2163
+  frequency: 2165
+  frequency_rank: 1101
+- slug: word-mouse
+  kind: vocabulary
   term: mouse
   transcription: maʊs
   translation_ru: мышь
-- position: 1103
-  frequency: 2153
+  frequency: 2163
+  frequency_rank: 1102
+- slug: word-moon
+  kind: vocabulary
   term: moon
   transcription: muːn
   translation_ru: луна
-- position: 1104
   frequency: 2153
+  frequency_rank: 1103
+- slug: word-stranger
+  kind: vocabulary
   term: stranger
   transcription: ˈstreɪnʤə
   translation_ru: незнакомец
-- position: 1105
-  frequency: 2145
+  frequency: 2153
+  frequency_rank: 1104
+- slug: word-fortune
+  kind: vocabulary
   term: fortune
   transcription: ˈfɔːʧən
   translation_ru: разбогатеть
-- position: 1106
-  frequency: 2139
+  frequency: 2145
+  frequency_rank: 1105
+- slug: word-perform
+  kind: vocabulary
   term: perform
   transcription: pəˈfɔːm
   translation_ru: выполнять
-- position: 1107
-  frequency: 2137
+  frequency: 2139
+  frequency_rank: 1106
+- slug: word-instance
+  kind: vocabulary
   term: instance
   transcription: ˈɪnstəns
   translation_ru: пример
-- position: 1108
-  frequency: 2136
+  frequency: 2137
+  frequency_rank: 1107
+- slug: word-tomorrow
+  kind: vocabulary
   term: tomorrow
   transcription: təˈmɒrəʊ
   translation_ru: завтра
-- position: 1109
-  frequency: 2135
+  frequency: 2136
+  frequency_rank: 1108
+- slug: word-sharp
+  kind: vocabulary
   term: sharp
   transcription: ʃɑːp
   translation_ru: острый
-- position: 1110
-  frequency: 2131
+  frequency: 2135
+  frequency_rank: 1109
+- slug: word-earn
+  kind: vocabulary
   term: earn
   transcription: ɜːn
   translation_ru: зарабатывать
-- position: 1111
-  frequency: 2130
+  frequency: 2131
+  frequency_rank: 1110
+- slug: word-coach
+  kind: vocabulary
   term: coach
   translation_ru: тренер
-- position: 1112
-  frequency: 2129
+  frequency: 2130
+  frequency_rank: 1111
+- slug: word-default
+  kind: vocabulary
   term: default
   transcription: dɪˈfɔːlt
   translation_ru: неисполнение
-- position: 1113
-  frequency: 2128
+  frequency: 2129
+  frequency_rank: 1112
+- slug: word-spell
+  kind: vocabulary
   term: spell
   transcription: spel
   translation_ru: означать
-- position: 1114
-  frequency: 2122
+  frequency: 2128
+  frequency_rank: 1113
+- slug: word-range
+  kind: vocabulary
   term: range
   transcription: reɪnʤ
   translation_ru: выстраивать в ряд
-- position: 1115
-  frequency: 2114
+  frequency: 2122
+  frequency_rank: 1114
+- slug: word-image
+  kind: vocabulary
   term: image
   transcription: ˈɪmɪʤ
   translation_ru: изображение
-- position: 1116
   frequency: 2114
+  frequency_rank: 1115
+- slug: word-rob
+  kind: vocabulary
   term: rob
   transcription: rɒb
   translation_ru: грабить
-- position: 1117
-  frequency: 2106
+  frequency: 2114
+  frequency_rank: 1116
+- slug: word-roar
+  kind: vocabulary
   term: roar
   transcription: rɔː
   translation_ru: рычать
-- position: 1118
-  frequency: 2105
+  frequency: 2106
+  frequency_rank: 1117
+- slug: word-develop
+  kind: vocabulary
   term: develop
   transcription: dɪˈveləp
   translation_ru: развивать
-- position: 1119
-  frequency: 2095
+  frequency: 2105
+  frequency_rank: 1118
+- slug: word-echo
+  kind: vocabulary
   term: echo
   transcription: ˈekəʊ
   translation_ru: вторить
-- position: 1120
-  frequency: 2094
+  frequency: 2095
+  frequency_rank: 1119
+- slug: word-silent
+  kind: vocabulary
   term: silent
   transcription: ˈsaɪlənt
   translation_ru: тихий
-- position: 1121
-  frequency: 2090
+  frequency: 2094
+  frequency_rank: 1120
+- slug: word-pair
+  kind: vocabulary
   term: pair
   transcription: peə
   translation_ru: пара
-- position: 1122
-  frequency: 2088
+  frequency: 2090
+  frequency_rank: 1121
+- slug: word-science
+  kind: vocabulary
   term: science
   transcription: ˈsaɪəns
   translation_ru: наука
-- position: 1123
-  frequency: 2085
+  frequency: 2088
+  frequency_rank: 1122
+- slug: word-reading
+  kind: vocabulary
   term: reading
   transcription: ˈriːdɪŋ
   translation_ru: чтение
-- position: 1124
   frequency: 2085
+  frequency_rank: 1123
+- slug: word-prevent
+  kind: vocabulary
   term: prevent
   transcription: prɪˈvent
   translation_ru: предотвращать
-- position: 1125
-  frequency: 2083
+  frequency: 2085
+  frequency_rank: 1124
+- slug: word-pack
+  kind: vocabulary
   term: pack
   transcription: pæk
   translation_ru: упаковывать
-- position: 1126
-  frequency: 2081
+  frequency: 2083
+  frequency_rank: 1125
+- slug: word-mountain
+  kind: vocabulary
   term: mountain
   transcription: ˈmaʊntɪn
   translation_ru: гора
-- position: 1127
   frequency: 2081
+  frequency_rank: 1126
+- slug: word-pray
+  kind: vocabulary
   term: pray
   transcription: preɪ
   translation_ru: молиться
-- position: 1128
-  frequency: 2080
+  frequency: 2081
+  frequency_rank: 1127
+- slug: word-neither
+  kind: vocabulary
   term: neither
   transcription: ˈnaɪðə
   translation_ru: ни
-- position: 1129
-  frequency: 2079
+  frequency: 2080
+  frequency_rank: 1128
+- slug: word-gun
+  kind: vocabulary
   term: gun
   transcription: gʌn
   translation_ru: пушка
-- position: 1130
-  frequency: 2078
+  frequency: 2079
+  frequency_rank: 1129
+- slug: word-slow
+  kind: vocabulary
   term: slow
   transcription: sləʊ
   translation_ru: медленный
-- position: 1131
   frequency: 2078
+  frequency_rank: 1130
+- slug: word-package
+  kind: vocabulary
   term: package
   transcription: ˈpækɪʤ
   translation_ru: пакет
-- position: 1132
-  frequency: 2077
+  frequency: 2078
+  frequency_rank: 1131
+- slug: word-color
+  kind: vocabulary
   term: color
   transcription: ˈkʌlə
   translation_ru: цвет
-- position: 1133
-  frequency: 2076
+  frequency: 2077
+  frequency_rank: 1132
+- slug: word-bound
+  kind: vocabulary
   term: bound
   transcription: baʊnd
   translation_ru: прыгать
-- position: 1134
   frequency: 2076
+  frequency_rank: 1133
+- slug: word-steal
+  kind: vocabulary
   term: steal
   transcription: stiːl
   translation_ru: красть
-- position: 1135
   frequency: 2076
+  frequency_rank: 1134
+- slug: word-music
+  kind: vocabulary
   term: music
   transcription: ˈmjuːzɪk
   translation_ru: музыка
-- position: 1136
-  frequency: 2074
+  frequency: 2076
+  frequency_rank: 1135
+- slug: word-distance
+  kind: vocabulary
   term: distance
   transcription: ˈdɪstəns
   translation_ru: расстояние
-- position: 1137
-  frequency: 2065
+  frequency: 2074
+  frequency_rank: 1136
+- slug: word-double
+  kind: vocabulary
   term: double
   transcription: dʌbl
   translation_ru: вдвое
-- position: 1138
-  frequency: 2064
+  frequency: 2065
+  frequency_rank: 1137
+- slug: word-depend
+  kind: vocabulary
   term: depend
   transcription: dɪˈpend
   translation_ru: зависеть
-- position: 1139
-  frequency: 2062
+  frequency: 2064
+  frequency_rank: 1138
+- slug: word-snape
+  kind: vocabulary
   term: Snape
   transcription: sneɪp
   translation_ru: Снейп
-- position: 1140
   frequency: 2062
+  frequency_rank: 1139
+- slug: word-especially
+  kind: vocabulary
   term: especially
   transcription: ɪsˈpeʃəlɪ
   translation_ru: особенно
-- position: 1141
-  frequency: 2061
+  frequency: 2062
+  frequency_rank: 1140
+- slug: word-row
+  kind: vocabulary
   term: row
   transcription: rəʊ
   translation_ru: ряд
-- position: 1142
   frequency: 2061
+  frequency_rank: 1141
+- slug: word-somebody
+  kind: vocabulary
   term: somebody
   transcription: ˈsʌmbədɪ
   translation_ru: кто-то
-- position: 1143
   frequency: 2061
+  frequency_rank: 1142
+- slug: word-companion
+  kind: vocabulary
   term: companion
   transcription: kəmˈpænɪən
   translation_ru: компаньон
-- position: 1144
-  frequency: 2060
+  frequency: 2061
+  frequency_rank: 1143
+- slug: word-below
+  kind: vocabulary
   term: below
   transcription: bɪˈləʊ
   translation_ru: ниже
-- position: 1145
-  frequency: 2059
+  frequency: 2060
+  frequency_rank: 1144
+- slug: word-principle
+  kind: vocabulary
   term: principle
   transcription: ˈprɪnsɪp(ə)l
   translation_ru: принцип
-- position: 1146
-  frequency: 2057
+  frequency: 2059
+  frequency_rank: 1145
+- slug: word-sink
+  kind: vocabulary
   term: sink
   transcription: sɪŋk
   translation_ru: погружаться
-- position: 1147
-  frequency: 2056
+  frequency: 2057
+  frequency_rank: 1146
+- slug: word-murder
+  kind: vocabulary
   term: murder
   transcription: ˈmɜːdə
   translation_ru: убивать
-- position: 1148
   frequency: 2056
+  frequency_rank: 1147
+- slug: word-dollar
+  kind: vocabulary
   term: dollar
   transcription: ˈdɒlə
   translation_ru: доллар
-- position: 1149
-  frequency: 2051
+  frequency: 2056
+  frequency_rank: 1148
+- slug: word-brave
+  kind: vocabulary
   term: brave
   transcription: breɪv
   translation_ru: храбрый
-- position: 1150
-  frequency: 2050
+  frequency: 2051
+  frequency_rank: 1149
+- slug: word-finally
+  kind: vocabulary
   term: finally
   transcription: ˈfaɪnəlɪ
   translation_ru: наконец
-- position: 1151
-  frequency: 2045
+  frequency: 2050
+  frequency_rank: 1150
+- slug: word-although
+  kind: vocabulary
   term: although
   transcription: ɔːlˈðəʊ
   translation_ru: хотя
-- position: 1152
-  frequency: 2044
+  frequency: 2045
+  frequency_rank: 1151
+- slug: word-holding
+  kind: vocabulary
   term: holding
   transcription: ˈhəʊldɪŋ
   translation_ru: удерживание
-- position: 1153
-  frequency: 2041
+  frequency: 2044
+  frequency_rank: 1152
+- slug: word-bar
+  kind: vocabulary
   term: bar
   transcription: bɑː
   translation_ru: бар
-- position: 1154
-  frequency: 2038
+  frequency: 2041
+  frequency_rank: 1153
+- slug: word-camp
+  kind: vocabulary
   term: camp
   transcription: kæmp
   translation_ru: лагерь
-- position: 1155
-  frequency: 2037
+  frequency: 2038
+  frequency_rank: 1154
+- slug: word-huge
+  kind: vocabulary
   term: huge
   transcription: hjuːʤ
   translation_ru: огромный
-- position: 1156
-  frequency: 2035
+  frequency: 2037
+  frequency_rank: 1155
+- slug: word-machine
+  kind: vocabulary
   term: machine
   transcription: məˈʃiːn
   translation_ru: машина
-- position: 1157
-  frequency: 2029
+  frequency: 2035
+  frequency_rank: 1156
+- slug: word-cloud
+  kind: vocabulary
   term: cloud
   transcription: klaʊd
   translation_ru: облако
-- position: 1158
-  frequency: 2028
+  frequency: 2029
+  frequency_rank: 1157
+- slug: word-define
+  kind: vocabulary
   term: define
   transcription: dɪˈfaɪn
   translation_ru: определять
-- position: 1159
-  frequency: 2026
+  frequency: 2028
+  frequency_rank: 1158
+- slug: word-setting
+  kind: vocabulary
   term: setting
   transcription: ˈsetɪŋ
   translation_ru: схватывание
-- position: 1160
-  frequency: 2019
+  frequency: 2026
+  frequency_rank: 1159
+- slug: word-gain
+  kind: vocabulary
   term: gain
   transcription: geɪn
   translation_ru: получать
-- position: 1161
-  frequency: 2016
+  frequency: 2019
+  frequency_rank: 1160
+- slug: word-bend
+  kind: vocabulary
   term: bend
   transcription: bend
   translation_ru: гнуть
-- position: 1162
-  frequency: 2015
+  frequency: 2016
+  frequency_rank: 1161
+- slug: word-determine
+  kind: vocabulary
   term: determine
   transcription: dɪˈtɜːmɪn
   translation_ru: определять
-- position: 1163
-  frequency: 2014
+  frequency: 2015
+  frequency_rank: 1162
+- slug: word-flow
+  kind: vocabulary
   term: flow
   transcription: fləʊ
   translation_ru: поток
-- position: 1164
-  frequency: 2013
+  frequency: 2014
+  frequency_rank: 1163
+- slug: word-knock
+  kind: vocabulary
   term: knock
   transcription: nɒk
   translation_ru: стучать
-- position: 1165
-  frequency: 2012
+  frequency: 2013
+  frequency_rank: 1164
+- slug: word-worth
+  kind: vocabulary
   term: worth
   transcription: wɜːθ
   translation_ru: значимость
-- position: 1166
-  frequency: 2008
+  frequency: 2012
+  frequency_rank: 1165
+- slug: word-separate
+  kind: vocabulary
   term: separate
   translation_ru: разделять
-- position: 1167
-  frequency: 2007
+  frequency: 2008
+  frequency_rank: 1166
+- slug: word-slip
+  kind: vocabulary
   term: slip
   transcription: slɪp
   translation_ru: скользить
-- position: 1168
-  frequency: 2006
+  frequency: 2007
+  frequency_rank: 1167
+- slug: word-darkness
+  kind: vocabulary
   term: darkness
   transcription: ˈdɑːknɪs
   translation_ru: темнота
-- position: 1169
   frequency: 2006
+  frequency_rank: 1168
+- slug: word-hole
+  kind: vocabulary
   term: hole
   transcription: həʊl
   translation_ru: отверстие
-- position: 1170
-  frequency: 2004
+  frequency: 2006
+  frequency_rank: 1169
+- slug: word-suggest
+  kind: vocabulary
   term: suggest
   transcription: səˈʤest
   translation_ru: предлагать
-- position: 1171
-  frequency: 1994
+  frequency: 2004
+  frequency_rank: 1170
+- slug: word-cast
+  kind: vocabulary
   term: cast
   transcription: kɑːst
   translation_ru: бросать
-- position: 1172
-  frequency: 1990
+  frequency: 1994
+  frequency_rank: 1171
+- slug: word-knee
+  kind: vocabulary
   term: knee
   transcription: niː
   translation_ru: колено
-- position: 1173
-  frequency: 1987
+  frequency: 1990
+  frequency_rank: 1172
+- slug: word-occasion
+  kind: vocabulary
   term: occasion
   transcription: əˈkeɪʒən
   translation_ru: случай
-- position: 1174
-  frequency: 1985
+  frequency: 1987
+  frequency_rank: 1173
+- slug: word-oil
+  kind: vocabulary
   term: oil
   transcription: ɔɪl
   translation_ru: смазывать
-- position: 1175
-  frequency: 1979
+  frequency: 1985
+  frequency_rank: 1174
+- slug: word-susan
+  kind: vocabulary
   term: Susan
   transcription: suːzn
   translation_ru: Сьюзен
-- position: 1176
   frequency: 1979
+  frequency_rank: 1175
+- slug: word-tie
+  kind: vocabulary
   term: tie
   transcription: taɪ
   translation_ru: привязывать
-- position: 1177
-  frequency: 1978
+  frequency: 1979
+  frequency_rank: 1176
+- slug: word-remark
+  kind: vocabulary
   term: remark
   transcription: rɪˈmɑːk
   translation_ru: замечание
-- position: 1178
-  frequency: 1977
+  frequency: 1978
+  frequency_rank: 1177
+- slug: word-scene
+  kind: vocabulary
   term: scene
   transcription: siːn
   translation_ru: сцена
-- position: 1179
   frequency: 1977
+  frequency_rank: 1178
+- slug: word-plant
+  kind: vocabulary
   term: plant
   transcription: plɑːnt
   translation_ru: растение
-- position: 1180
-  frequency: 1975
+  frequency: 1977
+  frequency_rank: 1179
+- slug: word-puzzle
+  kind: vocabulary
   term: puzzle
   transcription: pʌzl
   translation_ru: озадачивать
-- position: 1181
-  frequency: 1974
+  frequency: 1975
+  frequency_rank: 1180
+- slug: word-correct
+  kind: vocabulary
   term: correct
   transcription: kəˈrekt
   translation_ru: правильный
-- position: 1182
-  frequency: 1971
+  frequency: 1974
+  frequency_rank: 1181
+- slug: word-wise
+  kind: vocabulary
   term: wise
   transcription: waɪz
   translation_ru: мудрый
-- position: 1183
-  frequency: 1967
+  frequency: 1971
+  frequency_rank: 1182
+- slug: word-frighten
+  kind: vocabulary
   term: frighten
   transcription: fraɪtn
   translation_ru: пугать
-- position: 1184
-  frequency: 1963
+  frequency: 1967
+  frequency_rank: 1183
+- slug: word-crouch
+  kind: vocabulary
   term: crouch
   translation_ru: скорчиться
-- position: 1185
-  frequency: 1962
+  frequency: 1963
+  frequency_rank: 1184
+- slug: word-communication
+  kind: vocabulary
   term: communication
   transcription: kəmjuːnɪˈkeɪʃn
   translation_ru: коммуникация
-- position: 1186
-  frequency: 1960
+  frequency: 1962
+  frequency_rank: 1185
+- slug: word-apply
+  kind: vocabulary
   term: apply
   transcription: əˈplaɪ
   translation_ru: применять
-- position: 1187
-  frequency: 1959
+  frequency: 1960
+  frequency_rank: 1186
+- slug: word-utter
+  kind: vocabulary
   term: utter
   transcription: ˈʌtə
   translation_ru: выговорить
-- position: 1188
   frequency: 1959
+  frequency_rank: 1187
+- slug: word-private
+  kind: vocabulary
   term: private
   transcription: ˈpraɪvɪt
   translation_ru: частный
-- position: 1189
-  frequency: 1957
+  frequency: 1959
+  frequency_rank: 1188
+- slug: word-swear
+  kind: vocabulary
   term: swear
   transcription: sweə
   translation_ru: клясться
-- position: 1190
-  frequency: 1954
+  frequency: 1957
+  frequency_rank: 1189
+- slug: word-throat
+  kind: vocabulary
   term: throat
   transcription: θrəʊt
   translation_ru: горло
-- position: 1191
-  frequency: 1952
+  frequency: 1954
+  frequency_rank: 1190
+- slug: word-strength
+  kind: vocabulary
   term: strength
   transcription: streŋθ
   translation_ru: сила
-- position: 1192
   frequency: 1952
+  frequency_rank: 1191
+- slug: word-property
+  kind: vocabulary
   term: property
   transcription: ˈprɒpətɪ
   translation_ru: собственность
-- position: 1193
-  frequency: 1949
+  frequency: 1952
+  frequency_rank: 1192
+- slug: word-actually
+  kind: vocabulary
   term: actually
   transcription: ˈækʧʊəlɪ
   translation_ru: на самом деле
-- position: 1194
-  frequency: 1947
+  frequency: 1949
+  frequency_rank: 1193
+- slug: word-wine
+  kind: vocabulary
   term: wine
   transcription: waɪn
   translation_ru: вино
-- position: 1195
-  frequency: 1946
+  frequency: 1947
+  frequency_rank: 1194
+- slug: word-speed
+  kind: vocabulary
   term: speed
   transcription: spiːd
   translation_ru: ускорять, способствовать
-- position: 1196
-  frequency: 1944
+  frequency: 1946
+  frequency_rank: 1195
+- slug: word-busy
+  kind: vocabulary
   term: busy
   transcription: ˈbɪzɪ
   translation_ru: занятой
-- position: 1197
-  frequency: 1943
+  frequency: 1944
+  frequency_rank: 1196
+- slug: word-blame
+  kind: vocabulary
   term: blame
   transcription: bleɪm
   translation_ru: вина
-- position: 1198
-  frequency: 1941
+  frequency: 1943
+  frequency_rank: 1197
+- slug: word-french
+  kind: vocabulary
   term: French
   transcription: frenʧ
   translation_ru: французский
-- position: 1199
   frequency: 1941
+  frequency_rank: 1198
+- slug: word-skin
+  kind: vocabulary
   term: skin
   transcription: skɪn
   translation_ru: мех
-- position: 1200
-  frequency: 1938
+  frequency: 1941
+  frequency_rank: 1199
+- slug: word-curtain
+  kind: vocabulary
   term: curtain
   transcription: kɜːtn
   translation_ru: занавес
-- position: 1201
-  frequency: 1936
+  frequency: 1938
+  frequency_rank: 1200
+- slug: word-issue
+  kind: vocabulary
   term: issue
   transcription: ˈɪʃuː
   translation_ru: выдавать
-- position: 1202
-  frequency: 1935
+  frequency: 1936
+  frequency_rank: 1201
+- slug: word-silly
+  kind: vocabulary
   term: silly
   transcription: ˈsɪlɪ
   translation_ru: глупый
-- position: 1203
-  frequency: 1932
+  frequency: 1935
+  frequency_rank: 1202
+- slug: word-excite
+  kind: vocabulary
   term: excite
   transcription: ɪkˈsaɪt
   translation_ru: возбуждать
-- position: 1204
-  frequency: 1924
+  frequency: 1932
+  frequency_rank: 1203
+- slug: word-hunt
+  kind: vocabulary
   term: hunt
   transcription: hʌnt
   translation_ru: охота
-- position: 1205
-  frequency: 1923
+  frequency: 1924
+  frequency_rank: 1204
+- slug: word-reckon
+  kind: vocabulary
   term: reckon
   transcription: ˈrekən
   translation_ru: рассчитывать
-- position: 1206
-  frequency: 1922
+  frequency: 1923
+  frequency_rank: 1205
+- slug: word-card
+  kind: vocabulary
   term: card
   transcription: kɑːd
   translation_ru: карта
-- position: 1207
   frequency: 1922
+  frequency_rank: 1206
+- slug: word-kitchen
+  kind: vocabulary
   term: kitchen
   transcription: ˈkɪʧɪn
   translation_ru: кухня
-- position: 1208
-  frequency: 1920
+  frequency: 1922
+  frequency_rank: 1207
+- slug: word-tonight
+  kind: vocabulary
   term: tonight
   transcription: təˈnaɪt
   translation_ru: сегодняшний вечер
-- position: 1209
   frequency: 1920
+  frequency_rank: 1208
+- slug: word-measure
+  kind: vocabulary
   term: measure
   transcription: ˈmeʒə
   translation_ru: измерять
-- position: 1210
-  frequency: 1918
+  frequency: 1920
+  frequency_rank: 1209
+- slug: word-knight
+  kind: vocabulary
   term: knight
   transcription: naɪt
   translation_ru: рыцарь
-- position: 1211
   frequency: 1918
+  frequency_rank: 1210
+- slug: word-gather
+  kind: vocabulary
   term: gather
   transcription: ˈgæðə
   translation_ru: собирать
-- position: 1212
-  frequency: 1914
+  frequency: 1918
+  frequency_rank: 1211
+- slug: word-welcome
+  kind: vocabulary
   term: welcome
   transcription: ˈwelkəm
   translation_ru: добро пожаловать
-- position: 1213
-  frequency: 1913
+  frequency: 1914
+  frequency_rank: 1212
+- slug: word-affair
+  kind: vocabulary
   term: affair
   transcription: əˈfeə
   translation_ru: дело
-- position: 1214
   frequency: 1913
+  frequency_rank: 1213
+- slug: word-yellow
+  kind: vocabulary
   term: yellow
   transcription: ˈjeləʊ
   translation_ru: желтый
-- position: 1215
-  frequency: 1911
+  frequency: 1913
+  frequency_rank: 1214
+- slug: word-track
+  kind: vocabulary
   term: track
   transcription: træk
   translation_ru: дорожка
-- position: 1216
   frequency: 1911
+  frequency_rank: 1215
+- slug: word-london
+  kind: vocabulary
   term: London
   transcription: ˈlʌndən
   translation_ru: Лондон
-- position: 1217
   frequency: 1911
+  frequency_rank: 1216
+- slug: word-struggle
+  kind: vocabulary
   term: struggle
   transcription: strʌgl
   translation_ru: бороться
-- position: 1218
-  frequency: 1910
+  frequency: 1911
+  frequency_rank: 1217
+- slug: word-re
+  kind: vocabulary
   term: re
   transcription: ~ɪ
   translation_ru: ре
-- position: 1219
-  frequency: 1908
+  frequency: 1910
+  frequency_rank: 1218
+- slug: word-climb
+  kind: vocabulary
   term: climb
   transcription: klaɪm
   translation_ru: взбираться
-- position: 1220
-  frequency: 1907
+  frequency: 1908
+  frequency_rank: 1219
+- slug: word-friendly
+  kind: vocabulary
   term: friendly
   transcription: ˈfrendlɪ
   translation_ru: дружелюбный
-- position: 1221
-  frequency: 1903
+  frequency: 1907
+  frequency_rank: 1220
+- slug: word-usual
+  kind: vocabulary
   term: usual
   transcription: ˈjuːʒʊəl
   translation_ru: обычный
-- position: 1222
-  frequency: 1902
+  frequency: 1903
+  frequency_rank: 1221
+- slug: word-security
+  kind: vocabulary
   term: security
   transcription: sɪˈkjʊərɪtɪ
   translation_ru: безопасность
-- position: 1223
-  frequency: 1889
+  frequency: 1902
+  frequency_rank: 1222
+- slug: word-beast
+  kind: vocabulary
   term: beast
   transcription: biːst
   translation_ru: зверь
-- position: 1224
   frequency: 1889
+  frequency_rank: 1223
+- slug: word-social
+  kind: vocabulary
   term: social
   transcription: ˈsəʊʃəl
   translation_ru: общественный
-- position: 1225
   frequency: 1889
+  frequency_rank: 1224
+- slug: word-faith
+  kind: vocabulary
   term: faith
   transcription: feɪθ
   translation_ru: вера
-- position: 1226
-  frequency: 1874
+  frequency: 1889
+  frequency_rank: 1225
+- slug: word-difficulty
+  kind: vocabulary
   term: difficulty
   transcription: ˈdɪfɪkəltɪ
   translation_ru: трудность
-- position: 1227
-  frequency: 1873
+  frequency: 1874
+  frequency_rank: 1226
+- slug: word-curse
+  kind: vocabulary
   term: curse
   transcription: kɜːs
   translation_ru: проклятие
-- position: 1228
   frequency: 1873
+  frequency_rank: 1227
+- slug: word-trade
+  kind: vocabulary
   term: trade
   transcription: treɪd
   translation_ru: торговать
-- position: 1229
-  frequency: 1872
+  frequency: 1873
+  frequency_rank: 1228
+- slug: word-stock
+  kind: vocabulary
   term: stock
   transcription: stɒk
   translation_ru: снабженный
-- position: 1230
-  frequency: 1870
+  frequency: 1872
+  frequency_rank: 1229
+- slug: word-query
+  kind: vocabulary
   term: query
   transcription: ˈkwɪərɪ
   translation_ru: запрос
-- position: 1231
-  frequency: 1869
+  frequency: 1870
+  frequency_rank: 1230
+- slug: word-lack
+  kind: vocabulary
   term: lack
   transcription: læk
   translation_ru: отсутствие
-- position: 1232
-  frequency: 1865
+  frequency: 1869
+  frequency_rank: 1231
+- slug: word-feature
+  kind: vocabulary
   term: feature
   transcription: ˈfiːʧə
   translation_ru: особенность
-- position: 1233
   frequency: 1865
+  frequency_rank: 1232
+- slug: word-shine
+  kind: vocabulary
   term: shine
   transcription: ʃaɪn
   translation_ru: сиять
-- position: 1234
   frequency: 1865
+  frequency_rank: 1233
+- slug: word-swim
+  kind: vocabulary
   term: swim
   transcription: swɪm
   translation_ru: плавать
-- position: 1235
-  frequency: 1864
+  frequency: 1865
+  frequency_rank: 1234
+- slug: word-flat
+  kind: vocabulary
   term: flat
   transcription: flæt
   translation_ru: лыска
-- position: 1236
-  frequency: 1859
+  frequency: 1864
+  frequency_rank: 1235
+- slug: word-api
+  kind: vocabulary
   term: API
   transcription: ˈæpɪ
   translation_ru: прикладной программный интерфейс
-- position: 1237
-  frequency: 1855
+  frequency: 1859
+  frequency_rank: 1236
+- slug: word-verb
+  kind: vocabulary
   term: verb
   transcription: vɜːb
   translation_ru: глагол
-- position: 1238
   frequency: 1855
+  frequency_rank: 1237
+- slug: word-george
+  kind: vocabulary
   term: George
   transcription: ʤɔːʤ
   translation_ru: Джордж
-- position: 1239
-  frequency: 1854
+  frequency: 1855
+  frequency_rank: 1238
+- slug: word-dragon
+  kind: vocabulary
   term: dragon
   transcription: ˈdrægən
   translation_ru: дракон
-- position: 1240
-  frequency: 1851
+  frequency: 1854
+  frequency_rank: 1239
+- slug: word-survey
+  kind: vocabulary
   term: survey
   transcription: ˈsɜːveɪ
   translation_ru: обследовать
-- position: 1241
   frequency: 1851
+  frequency_rank: 1240
+- slug: word-loss
+  kind: vocabulary
   term: loss
   transcription: lɒs
   translation_ru: потеря
-- position: 1242
-  frequency: 1850
+  frequency: 1851
+  frequency_rank: 1241
+- slug: word-loose
+  kind: vocabulary
   term: loose
   transcription: luːs
   translation_ru: свободный
-- position: 1243
-  frequency: 1849
+  frequency: 1850
+  frequency_rank: 1242
+- slug: word-weight
+  kind: vocabulary
   term: weight
   transcription: weɪt
   translation_ru: вес
-- position: 1244
-  frequency: 1848
+  frequency: 1849
+  frequency_rank: 1243
+- slug: word-degree
+  kind: vocabulary
   term: degree
   transcription: dɪˈgriː
   translation_ru: степень
-- position: 1245
   frequency: 1848
+  frequency_rank: 1244
+- slug: word-american
+  kind: vocabulary
   term: American
   transcription: əˈmerɪkən
   translation_ru: американский
-- position: 1246
-  frequency: 1847
+  frequency: 1848
+  frequency_rank: 1245
+- slug: word-grey
+  kind: vocabulary
   term: grey
   transcription: greɪ
   translation_ru: серо
-- position: 1247
   frequency: 1847
+  frequency_rank: 1246
+- slug: word-lower
+  kind: vocabulary
   term: lower
   transcription: ˈləʊə
   translation_ru: снижать
-- position: 1248
-  frequency: 1843
+  frequency: 1847
+  frequency_rank: 1247
+- slug: word-center
+  kind: vocabulary
   term: center
   transcription: ˈsentə
   translation_ru: центр
-- position: 1249
-  frequency: 1840
+  frequency: 1843
+  frequency_rank: 1248
+- slug: word-minister
+  kind: vocabulary
   term: Minister
   transcription: ˈmɪnɪstə
   translation_ru: министр
-- position: 1250
-  frequency: 1836
+  frequency: 1840
+  frequency_rank: 1249
+- slug: word-appearance
+  kind: vocabulary
   term: appearance
   transcription: əˈpɪərəns
   translation_ru: внешность
-- position: 1251
   frequency: 1836
+  frequency_rank: 1250
+- slug: word-besides
+  kind: vocabulary
   term: besides
   transcription: bɪˈsaɪdz
   translation_ru: кроме того
-- position: 1252
-  frequency: 1832
+  frequency: 1836
+  frequency_rank: 1251
+- slug: word-heat
+  kind: vocabulary
   term: heat
   transcription: hiːt
   translation_ru: потопить
-- position: 1253
   frequency: 1832
+  frequency_rank: 1252
+- slug: word-stupid
+  kind: vocabulary
   term: stupid
   transcription: ˈstjuːpɪd
   translation_ru: безмозглый
-- position: 1254
-  frequency: 1829
+  frequency: 1832
+  frequency_rank: 1253
+- slug: word-jim
+  kind: vocabulary
   term: Jim
   transcription: ʤɪm
   translation_ru: Джим
-- position: 1255
-  frequency: 1827
+  frequency: 1829
+  frequency_rank: 1254
+- slug: word-dr
+  kind: vocabulary
   term: Dr
   transcription: draɪv
   translation_ru: доктор
-- position: 1256
   frequency: 1827
+  frequency_rank: 1255
+- slug: word-grass
+  kind: vocabulary
   term: grass
   transcription: grɑːs
   translation_ru: трава
-- position: 1257
   frequency: 1827
+  frequency_rank: 1256
+- slug: word-warn
+  kind: vocabulary
   term: warn
   transcription: wɔːn
   translation_ru: предупреждать
-- position: 1258
-  frequency: 1826
+  frequency: 1827
+  frequency_rank: 1257
+- slug: word-relationship
+  kind: vocabulary
   term: relationship
   transcription: rɪˈleɪʃnʃɪp
   translation_ru: отношение
-- position: 1259
-  frequency: 1825
+  frequency: 1826
+  frequency_rank: 1258
+- slug: word-weak
+  kind: vocabulary
   term: weak
   transcription: wiːk
   translation_ru: слабый
-- position: 1260
-  frequency: 1823
+  frequency: 1825
+  frequency_rank: 1259
+- slug: word-pierre
+  kind: vocabulary
   term: Pierre
   transcription: pɪə
   translation_ru: Пьер
-- position: 1261
-  frequency: 1822
+  frequency: 1823
+  frequency_rank: 1260
+- slug: word-main
+  kind: vocabulary
   term: main
   transcription: meɪn
   translation_ru: главный
-- position: 1262
-  frequency: 1821
+  frequency: 1822
+  frequency_rank: 1261
+- slug: word-rough
+  kind: vocabulary
   term: rough
   transcription: rʌf
   translation_ru: грубый
-- position: 1263
-  frequency: 1809
+  frequency: 1821
+  frequency_rank: 1262
+- slug: word-speech
+  kind: vocabulary
   term: speech
   transcription: spiːʧ
   translation_ru: речь
-- position: 1264
-  frequency: 1808
+  frequency: 1809
+  frequency_rank: 1263
+- slug: word-operation
+  kind: vocabulary
   term: operation
   transcription: ɒpəˈreɪʃn
   translation_ru: операция
-- position: 1265
-  frequency: 1803
+  frequency: 1808
+  frequency_rank: 1264
+- slug: word-lamp
+  kind: vocabulary
   term: lamp
   transcription: læmp
   translation_ru: лампа
-- position: 1266
-  frequency: 1799
+  frequency: 1803
+  frequency_rank: 1265
+- slug: word-destroy
+  kind: vocabulary
   term: destroy
   transcription: dɪsˈtrɔɪ
   translation_ru: уничтожать
-- position: 1267
-  frequency: 1797
+  frequency: 1799
+  frequency_rank: 1266
+- slug: word-advantage
+  kind: vocabulary
   term: advantage
   transcription: ədˈvɑːntɪʤ
   translation_ru: преимущество
-- position: 1268
-  frequency: 1796
+  frequency: 1797
+  frequency_rank: 1267
+- slug: word-vast
+  kind: vocabulary
   term: vast
   transcription: vɑːst
   translation_ru: обширный
-- position: 1269
-  frequency: 1795
+  frequency: 1796
+  frequency_rank: 1268
+- slug: word-easily
+  kind: vocabulary
   term: easily
   transcription: ˈiːzɪlɪ
   translation_ru: легко
-- position: 1270
-  frequency: 1794
+  frequency: 1795
+  frequency_rank: 1269
+- slug: word-impossible
+  kind: vocabulary
   term: impossible
   transcription: ɪmˈpɒsəbl
   translation_ru: невозможный
-- position: 1271
-  frequency: 1793
+  frequency: 1794
+  frequency_rank: 1270
+- slug: word-plain
+  kind: vocabulary
   term: plain
   transcription: pleɪn
   translation_ru: простой
-- position: 1272
-  frequency: 1790
+  frequency: 1793
+  frequency_rank: 1271
+- slug: word-personal
+  kind: vocabulary
   term: personal
   transcription: ˈpɜːs(ə)nəl
   translation_ru: личный
-- position: 1273
-  frequency: 1786
+  frequency: 1790
+  frequency_rank: 1272
+- slug: word-thirty
+  kind: vocabulary
   term: thirty
   transcription: ˈθɜːtɪ
   translation_ru: тридцать
-- position: 1274
-  frequency: 1785
+  frequency: 1786
+  frequency_rank: 1273
+- slug: word-pace
+  kind: vocabulary
   term: pace
   transcription: peɪs
   translation_ru: темп
-- position: 1275
-  frequency: 1779
+  frequency: 1785
+  frequency_rank: 1274
+- slug: word-protect
+  kind: vocabulary
   term: protect
   transcription: prəˈtekt
   translation_ru: защищать
-- position: 1276
-  frequency: 1778
+  frequency: 1779
+  frequency_rank: 1275
+- slug: word-mad
+  kind: vocabulary
   term: mad
   transcription: mæd
   translation_ru: безумный
-- position: 1277
-  frequency: 1777
+  frequency: 1778
+  frequency_rank: 1276
+- slug: word-watching
+  kind: vocabulary
   term: watching
   transcription: ˈwɒʧɪŋ
   translation_ru: наблюдение
-- position: 1278
-  frequency: 1775
+  frequency: 1777
+  frequency_rank: 1277
+- slug: word-ghost
+  kind: vocabulary
   term: ghost
   transcription: gəʊst
   translation_ru: привидение
-- position: 1279
   frequency: 1775
+  frequency_rank: 1278
+- slug: word-perfect
+  kind: vocabulary
   term: perfect
   transcription: ˈpɜːfɪkt
   translation_ru: идеальный
-- position: 1280
   frequency: 1775
+  frequency_rank: 1279
+- slug: word-anna
+  kind: vocabulary
   term: Anna
   transcription: ˈænə
   translation_ru: Анна
-- position: 1281
-  frequency: 1772
+  frequency: 1775
+  frequency_rank: 1280
+- slug: word-conduct
+  kind: vocabulary
   term: conduct
   transcription: ˈkɔndʌkt
   translation_ru: провести
-- position: 1282
-  frequency: 1768
+  frequency: 1772
+  frequency_rank: 1281
+- slug: word-scale
+  kind: vocabulary
   term: scale
   transcription: skeɪl
   translation_ru: масштаб
-- position: 1283
   frequency: 1768
+  frequency_rank: 1282
+- slug: word-grave
+  kind: vocabulary
   term: grave
   transcription: greɪv
   translation_ru: могила
-- position: 1284
-  frequency: 1765
+  frequency: 1768
+  frequency_rank: 1283
+- slug: word-tip
+  kind: vocabulary
   term: tip
   transcription: tɪp
   translation_ru: кончик
-- position: 1285
   frequency: 1765
+  frequency_rank: 1284
+- slug: word-contact
+  kind: vocabulary
   term: contact
   transcription: ˈkɒntækt
   translation_ru: контакт
-- position: 1286
-  frequency: 1764
+  frequency: 1765
+  frequency_rank: 1285
+- slug: word-belong
+  kind: vocabulary
   term: belong
   transcription: bɪˈlɒŋ
   translation_ru: принадлежать
-- position: 1287
   frequency: 1764
+  frequency_rank: 1286
+- slug: word-blind
+  kind: vocabulary
   term: blind
   transcription: blaɪnd
   translation_ru: ослеплять
-- position: 1288
-  frequency: 1762
+  frequency: 1764
+  frequency_rank: 1287
+- slug: word-gentle
+  kind: vocabulary
   term: gentle
   transcription: ʤentl
   translation_ru: нежный
-- position: 1289
-  frequency: 1755
+  frequency: 1762
+  frequency_rank: 1288
+- slug: word-wet
+  kind: vocabulary
   term: wet
   transcription: wet
   translation_ru: намочить
-- position: 1290
   frequency: 1755
+  frequency_rank: 1289
+- slug: word-dialogue
+  kind: vocabulary
   term: dialogue
   transcription: ˈdaɪəlɒg
   translation_ru: диалог
-- position: 1291
-  frequency: 1753
+  frequency: 1755
+  frequency_rank: 1290
+- slug: word-narrow
+  kind: vocabulary
   term: narrow
   transcription: ˈnærəʊ
   translation_ru: узкий
-- position: 1292
   frequency: 1753
+  frequency_rank: 1291
+- slug: word-betty
+  kind: vocabulary
   term: Betty
   transcription: ˈbetɪ
   translation_ru: Бетти
-- position: 1293
-  frequency: 1749
+  frequency: 1753
+  frequency_rank: 1292
+- slug: word-fetch
+  kind: vocabulary
   term: fetch
   transcription: feʧ
   translation_ru: извлечь
-- position: 1294
-  frequency: 1748
+  frequency: 1749
+  frequency_rank: 1293
+- slug: word-devil
+  kind: vocabulary
   term: devil
   transcription: devl
   translation_ru: дьявол
-- position: 1295
   frequency: 1748
+  frequency_rank: 1294
+- slug: word-link
+  kind: vocabulary
   term: link
   transcription: lɪŋk
   translation_ru: ссылка
-- position: 1296
-  frequency: 1747
+  frequency: 1748
+  frequency_rank: 1295
+- slug: word-windows
+  kind: vocabulary
   term: Windows
   transcription: ˈwɪndəʊz
   translation_ru: Windows
-- position: 1297
   frequency: 1747
+  frequency_rank: 1296
+- slug: word-eight
+  kind: vocabulary
   term: eight
   transcription: eɪt
   translation_ru: восемь
-- position: 1298
-  frequency: 1742
+  frequency: 1747
+  frequency_rank: 1297
+- slug: word-basis
+  kind: vocabulary
   term: basis
   transcription: ˈbeɪsɪs
   translation_ru: основа
-- position: 1299
-  frequency: 1741
+  frequency: 1742
+  frequency_rank: 1298
+- slug: word-index
+  kind: vocabulary
   term: index
   transcription: ˈɪndeks
   translation_ru: оглавление
-- position: 1300
-  frequency: 1738
+  frequency: 1741
+  frequency_rank: 1299
+- slug: word-delay
+  kind: vocabulary
   term: delay
   transcription: dɪˈleɪ
   translation_ru: откладывать
-- position: 1301
-  frequency: 1736
+  frequency: 1738
+  frequency_rank: 1300
+- slug: word-joke
+  kind: vocabulary
   term: joke
   transcription: ʤəʊk
   translation_ru: шутка
-- position: 1302
-  frequency: 1735
+  frequency: 1736
+  frequency_rank: 1301
+- slug: word-martin
+  kind: vocabulary
   term: Martin
   transcription: ˈmɑːtɪn
   translation_ru: Мартин
-- position: 1303
-  frequency: 1734
+  frequency: 1735
+  frequency_rank: 1302
+- slug: word-useful
+  kind: vocabulary
   term: useful
   transcription: ˈjuːsf(ə)l
   translation_ru: полезный
-- position: 1304
-  frequency: 1732
+  frequency: 1734
+  frequency_rank: 1303
+- slug: word-equal
+  kind: vocabulary
   term: equal
   transcription: ˈiːkwəl
   translation_ru: равняться
-- position: 1305
-  frequency: 1723
+  frequency: 1732
+  frequency_rank: 1304
+- slug: word-claim
+  kind: vocabulary
   term: claim
   transcription: kleɪm
   translation_ru: претензия
-- position: 1306
-  frequency: 1719
+  frequency: 1723
+  frequency_rank: 1305
+- slug: word-utmost
+  kind: vocabulary
   term: utmost
   transcription: ˈʌtməʊst
   translation_ru: предельный
-- position: 1307
-  frequency: 1717
+  frequency: 1719
+  frequency_rank: 1306
+- slug: word-quarter
+  kind: vocabulary
   term: quarter
   transcription: ˈkwɔːtə
   translation_ru: четвертина
-- position: 1308
-  frequency: 1716
+  frequency: 1717
+  frequency_rank: 1307
+- slug: word-period
+  kind: vocabulary
   term: period
   transcription: ˈpɪərɪəd
   translation_ru: период
-- position: 1309
   frequency: 1716
+  frequency_rank: 1308
+- slug: word-russian
+  kind: vocabulary
   term: Russian
   transcription: rʌʃn
   translation_ru: русский
-- position: 1310
-  frequency: 1715
+  frequency: 1716
+  frequency_rank: 1309
+- slug: word-top
+  kind: vocabulary
   term: top
   transcription: tɒp
   translation_ru: топ
-- position: 1311
-  frequency: 1713
+  frequency: 1715
+  frequency_rank: 1310
+- slug: word-driver
+  kind: vocabulary
   term: driver
   transcription: ˈdraɪvə
   translation_ru: водитель
-- position: 1312
-  frequency: 1711
+  frequency: 1713
+  frequency_rank: 1311
+- slug: word-tiny
+  kind: vocabulary
   term: tiny
   transcription: ˈtaɪnɪ
   translation_ru: крошечный
-- position: 1313
-  frequency: 1709
+  frequency: 1711
+  frequency_rank: 1312
+- slug: word-www
+  kind: vocabulary
   term: www
   transcription: ww
   translation_ru: Всемирная паутина
-- position: 1314
-  frequency: 1708
+  frequency: 1709
+  frequency_rank: 1313
+- slug: word-century
+  kind: vocabulary
   term: century
   transcription: ˈsenʧərɪ
   translation_ru: век
-- position: 1315
   frequency: 1708
+  frequency_rank: 1314
+- slug: word-achieve
+  kind: vocabulary
   term: achieve
   transcription: əˈʧiːv
   translation_ru: достигать
-- position: 1316
-  frequency: 1707
+  frequency: 1708
+  frequency_rank: 1315
+- slug: word-st
+  kind: vocabulary
   term: st
   transcription: striːt
   translation_ru: святой
-- position: 1317
-  frequency: 1706
+  frequency: 1707
+  frequency_rank: 1316
+- slug: word-client
+  kind: vocabulary
   term: client
   transcription: ˈklaɪənt
   translation_ru: клиент
-- position: 1318
   frequency: 1706
+  frequency_rank: 1317
+- slug: word-terror
+  kind: vocabulary
   term: terror
   transcription: ˈterə
   translation_ru: террор
-- position: 1319
-  frequency: 1705
+  frequency: 1706
+  frequency_rank: 1318
+- slug: word-tremble
+  kind: vocabulary
   term: tremble
   transcription: trembl
   translation_ru: дрожать
-- position: 1320
-  frequency: 1704
+  frequency: 1705
+  frequency_rank: 1319
+- slug: word-grace
+  kind: vocabulary
   term: grace
   transcription: greɪs
   translation_ru: привлекательность
-- position: 1321
   frequency: 1704
+  frequency_rank: 1320
+- slug: word-handsome
+  kind: vocabulary
   term: handsome
   transcription: ˈhænsəm
   translation_ru: красивый
-- position: 1322
-  frequency: 1703
+  frequency: 1704
+  frequency_rank: 1321
+- slug: word-wonderful
+  kind: vocabulary
   term: wonderful
   transcription: ˈwʌndəf(ə)l
   translation_ru: прекрасный
-- position: 1323
-  frequency: 1702
+  frequency: 1703
+  frequency_rank: 1322
+- slug: word-jane
+  kind: vocabulary
   term: Jane
   transcription: ʤeɪn
   translation_ru: Джейн
-- position: 1324
-  frequency: 1701
+  frequency: 1702
+  frequency_rank: 1323
+- slug: word-mode
+  kind: vocabulary
   term: mode
   transcription: məʊd
   translation_ru: режим
-- position: 1325
   frequency: 1701
+  frequency_rank: 1324
+- slug: word-mc
+  kind: vocabulary
   term: MC
   transcription: mɪk
   translation_ru: ведущий
-- position: 1326
-  frequency: 1700
+  frequency: 1701
+  frequency_rank: 1325
+- slug: word-factor
+  kind: vocabulary
   term: factor
   transcription: ˈfæktə
   translation_ru: множитель
-- position: 1327
-  frequency: 1698
+  frequency: 1700
+  frequency_rank: 1326
+- slug: word-int
+  kind: vocabulary
   term: int
   transcription: ɪnt
   translation_ru: int
-- position: 1328
   frequency: 1698
+  frequency_rank: 1327
+- slug: word-prisoner
+  kind: vocabulary
   term: prisoner
   transcription: ˈprɪznə
   translation_ru: заключенный
-- position: 1329
-  frequency: 1696
+  frequency: 1698
+  frequency_rank: 1328
+- slug: word-darling
+  kind: vocabulary
   term: darling
   transcription: ˈdɑːlɪŋ
   translation_ru: любимец
-- position: 1330
   frequency: 1696
+  frequency_rank: 1329
+- slug: word-venture
+  kind: vocabulary
   term: venture
   transcription: ˈvenʧə
   translation_ru: отважиться
-- position: 1331
   frequency: 1696
+  frequency_rank: 1330
+- slug: word-visitor
+  kind: vocabulary
   term: visitor
   transcription: ˈvɪzɪtə
   translation_ru: посетитель
-- position: 1332
   frequency: 1696
+  frequency_rank: 1331
+- slug: word-happiness
+  kind: vocabulary
   term: happiness
   transcription: ˈhæpɪnɪs
   translation_ru: счастье
-- position: 1333
-  frequency: 1689
+  frequency: 1696
+  frequency_rank: 1332
+- slug: word-culture
+  kind: vocabulary
   term: culture
   transcription: ˈkʌlʧə
   translation_ru: культура
-- position: 1334
-  frequency: 1687
+  frequency: 1689
+  frequency_rank: 1333
+- slug: word-remove
+  kind: vocabulary
   term: remove
   transcription: rɪˈmuːv
   translation_ru: удалить
-- position: 1335
-  frequency: 1685
+  frequency: 1687
+  frequency_rank: 1334
+- slug: word-slight
+  kind: vocabulary
   term: slight
   transcription: slaɪt
   translation_ru: незначительный
-- position: 1336
   frequency: 1685
+  frequency_rank: 1335
+- slug: word-evidence
+  kind: vocabulary
   term: evidence
   transcription: ˈevɪdəns
   translation_ru: доказательства
-- position: 1337
-  frequency: 1681
+  frequency: 1685
+  frequency_rank: 1336
+- slug: word-philip
+  kind: vocabulary
   term: Philip
   transcription: ˈfɪlɪp
   translation_ru: Филипп
-- position: 1338
-  frequency: 1677
+  frequency: 1681
+  frequency_rank: 1337
+- slug: word-minimal
+  kind: vocabulary
   term: minimal
   transcription: ˈmɪnɪml
   translation_ru: минимальный
-- position: 1339
   frequency: 1677
+  frequency_rank: 1338
+- slug: word-wound
+  kind: vocabulary
   term: wound
   transcription: wuːnd
   translation_ru: ранить
-- position: 1340
   frequency: 1677
+  frequency_rank: 1339
+- slug: word-wing
+  kind: vocabulary
   term: wing
   transcription: wɪŋ
   translation_ru: крыло
-- position: 1341
-  frequency: 1675
+  frequency: 1677
+  frequency_rank: 1340
+- slug: word-asleep
+  kind: vocabulary
   term: asleep
   transcription: əˈsliːp
   translation_ru: спящий
-- position: 1342
-  frequency: 1674
+  frequency: 1675
+  frequency_rank: 1341
+- slug: word-skill
+  kind: vocabulary
   term: skill
   transcription: skɪl
   translation_ru: навык
-- position: 1343
   frequency: 1674
+  frequency_rank: 1342
+- slug: word-edge
+  kind: vocabulary
   term: edge
   transcription: eʤ
   translation_ru: край
-- position: 1344
-  frequency: 1673
+  frequency: 1674
+  frequency_rank: 1343
+- slug: word-o-clock
+  kind: vocabulary
   term: o'clock
   translation_ru: час
-- position: 1345
-  frequency: 1669
+  frequency: 1673
+  frequency_rank: 1344
+- slug: word-perfectly
+  kind: vocabulary
   term: perfectly
   transcription: ˈpɜːfɪktlɪ
   translation_ru: идеально
-- position: 1346
-  frequency: 1659
+  frequency: 1669
+  frequency_rank: 1345
+- slug: word-disappear
+  kind: vocabulary
   term: disappear
   transcription: dɪsəˈpɪə
   translation_ru: исчезнуть
-- position: 1347
-  frequency: 1658
+  frequency: 1659
+  frequency_rank: 1346
+- slug: word-seize
+  kind: vocabulary
   term: seize
   transcription: siːz
   translation_ru: схватить
-- position: 1348
   frequency: 1658
+  frequency_rank: 1347
+- slug: word-button
+  kind: vocabulary
   term: button
   transcription: bʌtn
   translation_ru: кнопка
-- position: 1349
-  frequency: 1657
+  frequency: 1658
+  frequency_rank: 1348
+- slug: word-natural
+  kind: vocabulary
   term: natural
   transcription: ˈnæʧrəl
   translation_ru: естественный
-- position: 1350
-  frequency: 1655
+  frequency: 1657
+  frequency_rank: 1349
+- slug: word-aim
+  kind: vocabulary
   term: aim
   transcription: eɪm
   translation_ru: целиться
-- position: 1351
-  frequency: 1654
+  frequency: 1655
+  frequency_rank: 1350
+- slug: word-flood
+  kind: vocabulary
   term: flood
   transcription: flʌd
   translation_ru: затопить
-- position: 1352
   frequency: 1654
+  frequency_rank: 1351
+- slug: word-flame
+  kind: vocabulary
   term: flame
   transcription: fleɪm
   translation_ru: вспыхнуть
-- position: 1353
-  frequency: 1653
+  frequency: 1654
+  frequency_rank: 1352
+- slug: word-progress
+  kind: vocabulary
   term: progress
   transcription: ˈprəʊgres
   translation_ru: прогресс
-- position: 1354
   frequency: 1653
+  frequency_rank: 1353
+- slug: word-darcy
+  kind: vocabulary
   term: Darcy
   transcription: ˈdɑːsi
   translation_ru: Дарси
-- position: 1355
-  frequency: 1651
+  frequency: 1653
+  frequency_rank: 1354
+- slug: word-industry
+  kind: vocabulary
   term: industry
   transcription: ˈɪndəstrɪ
   translation_ru: промышленность
-- position: 1356
-  frequency: 1648
+  frequency: 1651
+  frequency_rank: 1355
+- slug: word-attend
+  kind: vocabulary
   term: attend
   transcription: əˈtend
   translation_ru: посещать
-- position: 1357
-  frequency: 1647
+  frequency: 1648
+  frequency_rank: 1356
+- slug: word-flash
+  kind: vocabulary
   term: flash
   transcription: flæʃ
   translation_ru: вспышка
-- position: 1358
-  frequency: 1645
+  frequency: 1647
+  frequency_rank: 1357
+- slug: word-belt
+  kind: vocabulary
   term: belt
   transcription: belt
   translation_ru: подпоясывать
-- position: 1359
   frequency: 1645
+  frequency_rank: 1358
+- slug: word-ability
+  kind: vocabulary
   term: ability
   transcription: əˈbɪlɪtɪ
   translation_ru: способность
-- position: 1360
-  frequency: 1643
+  frequency: 1645
+  frequency_rank: 1359
+- slug: word-iron
+  kind: vocabulary
   term: iron
   transcription: ˈaɪən
   translation_ru: железо
-- position: 1361
-  frequency: 1640
+  frequency: 1643
+  frequency_rank: 1360
+- slug: word-apartment
+  kind: vocabulary
   term: apartment
   transcription: əˈpɑːtmənt
   translation_ru: квартирный
-- position: 1362
-  frequency: 1638
+  frequency: 1640
+  frequency_rank: 1361
+- slug: word-hook
+  kind: vocabulary
   term: hook
   transcription: hʊk
   translation_ru: подцепить
-- position: 1363
   frequency: 1638
+  frequency_rank: 1362
+- slug: word-area
+  kind: vocabulary
   term: area
   transcription: ˈe(ə)rɪə
   translation_ru: сфера деятельности
-- position: 1364
-  frequency: 1637
+  frequency: 1638
+  frequency_rank: 1363
+- slug: word-framework
+  kind: vocabulary
   term: framework
   transcription: ˈfreɪmwɜːk
   translation_ru: рамки
-- position: 1365
-  frequency: 1635
+  frequency: 1637
+  frequency_rank: 1364
+- slug: word-police
+  kind: vocabulary
   term: police
   transcription: pəˈliːs
   translation_ru: полиция
-- position: 1366
-  frequency: 1633
+  frequency: 1635
+  frequency_rank: 1365
+- slug: word-mary
+  kind: vocabulary
   term: Mary
   transcription: ˈmeərɪ
   translation_ru: Мэри
-- position: 1367
-  frequency: 1632
+  frequency: 1633
+  frequency_rank: 1366
+- slug: word-feed
+  kind: vocabulary
   term: feed
   transcription: fiːd
   translation_ru: кормить
-- position: 1368
-  frequency: 1629
+  frequency: 1632
+  frequency_rank: 1367
+- slug: word-network
+  kind: vocabulary
   term: network
   transcription: ˈnetwɜːk
   translation_ru: сеть
-- position: 1369
-  frequency: 1625
+  frequency: 1629
+  frequency_rank: 1368
+- slug: word-interface
+  kind: vocabulary
   term: interface
   transcription: ˈɪntəfeɪs
   translation_ru: интерфейс
-- position: 1370
   frequency: 1625
+  frequency_rank: 1369
+- slug: word-sake
+  kind: vocabulary
   term: sake
   transcription: seɪk
   translation_ru: сакэ
-- position: 1371
-  frequency: 1623
+  frequency: 1625
+  frequency_rank: 1370
+- slug: word-benefit
+  kind: vocabulary
   term: benefit
   transcription: ˈbenɪfɪt
   translation_ru: выгода
-- position: 1372
-  frequency: 1622
+  frequency: 1623
+  frequency_rank: 1371
+- slug: word-bottom
+  kind: vocabulary
   term: bottom
   transcription: ˈbɒtəm
   translation_ru: дно
-- position: 1373
   frequency: 1622
+  frequency_rank: 1372
+- slug: word-fell
+  kind: vocabulary
   term: fell
   transcription: fel
   translation_ru: попасть
-- position: 1374
   frequency: 1622
+  frequency_rank: 1373
+- slug: word-trigger
+  kind: vocabulary
   term: trigger
   transcription: ˈtrɪgə
   translation_ru: курок
-- position: 1375
-  frequency: 1617
+  frequency: 1622
+  frequency_rank: 1374
+- slug: word-chamber
+  kind: vocabulary
   term: chamber
   transcription: ˈʧeɪmbə
   translation_ru: камера
-- position: 1376
-  frequency: 1616
+  frequency: 1617
+  frequency_rank: 1375
+- slug: word-special
+  kind: vocabulary
   term: special
   transcription: ˈspeʃəl
   translation_ru: специальный
-- position: 1377
-  frequency: 1612
+  frequency: 1616
+  frequency_rank: 1376
+- slug: word-succeed
+  kind: vocabulary
   term: succeed
   transcription: səkˈsiːd
   translation_ru: преуспевать
-- position: 1378
-  frequency: 1610
+  frequency: 1612
+  frequency_rank: 1377
+- slug: word-ahead
+  kind: vocabulary
   term: ahead
   transcription: əˈhed
   translation_ru: впереди
-- position: 1379
   frequency: 1610
+  frequency_rank: 1378
+- slug: word-supply
+  kind: vocabulary
   term: supply
   transcription: səˈplaɪ
   translation_ru: поставлять
-- position: 1380
-  frequency: 1609
+  frequency: 1610
+  frequency_rank: 1379
+- slug: word-style
+  kind: vocabulary
   term: style
   transcription: staɪl
   translation_ru: стиль
-- position: 1381
-  frequency: 1608
+  frequency: 1609
+  frequency_rank: 1380
+- slug: word-option
+  kind: vocabulary
   term: option
   transcription: ɒpʃn
   translation_ru: вариант
-- position: 1382
-  frequency: 1606
+  frequency: 1608
+  frequency_rank: 1381
+- slug: word-anybody
+  kind: vocabulary
   term: anybody
   transcription: ˈenɪbɒdɪ
   translation_ru: никто
-- position: 1383
-  frequency: 1603
+  frequency: 1606
+  frequency_rank: 1382
+- slug: word-current
+  kind: vocabulary
   term: current
   transcription: ˈkʌrənt
   translation_ru: ходячий
-- position: 1384
   frequency: 1603
+  frequency_rank: 1383
+- slug: word-states
+  kind: vocabulary
   term: States
   transcription: steɪts
   translation_ru: государственный
-- position: 1385
-  frequency: 1600
+  frequency: 1603
+  frequency_rank: 1384
+- slug: word-pattern
+  kind: vocabulary
   term: pattern
   transcription: ˈpætn
   translation_ru: шаблон
-- position: 1386
-  frequency: 1599
+  frequency: 1600
+  frequency_rank: 1385
+- slug: word-seed
+  kind: vocabulary
   term: seed
   transcription: siːd
   translation_ru: семя
-- position: 1387
-  frequency: 1598
+  frequency: 1599
+  frequency_rank: 1386
+- slug: word-author
+  kind: vocabulary
   term: author
   transcription: ˈɔːθə
   translation_ru: автор
-- position: 1388
   frequency: 1598
+  frequency_rank: 1387
+- slug: word-merely
+  kind: vocabulary
   term: merely
   transcription: ˈmɪəlɪ
   translation_ru: просто
-- position: 1389
-  frequency: 1595
+  frequency: 1598
+  frequency_rank: 1388
+- slug: word-club
+  kind: vocabulary
   term: club
   transcription: klʌb
   translation_ru: клуб
-- position: 1390
-  frequency: 1592
+  frequency: 1595
+  frequency_rank: 1389
+- slug: word-brown
+  kind: vocabulary
   term: brown
   transcription: braʊn
   translation_ru: коричневый
-- position: 1391
-  frequency: 1591
+  frequency: 1592
+  frequency_rank: 1390
+- slug: word-building
+  kind: vocabulary
   term: building
   transcription: ˈbɪldɪŋ
   translation_ru: строительные объекты
-- position: 1392
   frequency: 1591
+  frequency_rank: 1391
+- slug: word-notes
+  kind: vocabulary
   term: notes
   transcription: nəʊts
   translation_ru: Примечания
-- position: 1393
-  frequency: 1590
+  frequency: 1591
+  frequency_rank: 1392
+- slug: word-youth
+  kind: vocabulary
   term: youth
   transcription: jʊθ
   translation_ru: молодежь
-- position: 1394
   frequency: 1590
+  frequency_rank: 1393
+- slug: word-fault
+  kind: vocabulary
   term: fault
   transcription: fɔːlt
   translation_ru: ошибка
-- position: 1395
   frequency: 1590
+  frequency_rank: 1394
+- slug: word-hello
+  kind: vocabulary
   term: hello
   transcription: həˈləʊ
   translation_ru: привет
-- position: 1396
-  frequency: 1588
+  frequency: 1590
+  frequency_rank: 1395
+- slug: word-sudden
+  kind: vocabulary
   term: sudden
   transcription: sʌdn
   translation_ru: внезапный
-- position: 1397
-  frequency: 1585
+  frequency: 1588
+  frequency_rank: 1396
+- slug: word-lad
+  kind: vocabulary
   term: lad
   transcription: læd
   translation_ru: парень
-- position: 1398
   frequency: 1585
+  frequency_rank: 1397
+- slug: word-experiment
+  kind: vocabulary
   term: experiment
   transcription: ɪksˈperɪmənt
   translation_ru: эксперимент
-- position: 1399
   frequency: 1585
+  frequency_rank: 1398
+- slug: word-base
+  kind: vocabulary
   term: base
   transcription: beɪs
   translation_ru: плацдарм
-- position: 1400
-  frequency: 1584
+  frequency: 1585
+  frequency_rank: 1399
+- slug: word-plenty
+  kind: vocabulary
   term: plenty
   transcription: ˈplentɪ
   translation_ru: множество
-- position: 1401
-  frequency: 1583
+  frequency: 1584
+  frequency_rank: 1400
+- slug: word-malfoy
+  kind: vocabulary
   term: Malfoy
   transcription: mælˈfɔɪ
   translation_ru: Малфой
-- position: 1402
-  frequency: 1579
+  frequency: 1583
+  frequency_rank: 1401
+- slug: word-england
+  kind: vocabulary
   term: England
   transcription: ˈɪŋglənd
   translation_ru: Англия
-- position: 1403
   frequency: 1579
+  frequency_rank: 1402
+- slug: word-napoleon
+  kind: vocabulary
   term: Napoleon
   transcription: nəˈpəʊljən
   translation_ru: Наполеон
-- position: 1404
-  frequency: 1576
+  frequency: 1579
+  frequency_rank: 1403
+- slug: word-material
+  kind: vocabulary
   term: material
   transcription: məˈtɪərɪəl
   translation_ru: материал
-- position: 1405
   frequency: 1576
+  frequency_rank: 1404
+- slug: word-diary
+  kind: vocabulary
   term: diary
   transcription: ˈdaɪərɪ
   translation_ru: дневник
-- position: 1406
-  frequency: 1574
+  frequency: 1576
+  frequency_rank: 1405
+- slug: word-argument
+  kind: vocabulary
   term: argument
   transcription: ˈɑːgjʊmənt
   translation_ru: аргумент
-- position: 1407
-  frequency: 1573
+  frequency: 1574
+  frequency_rank: 1406
+- slug: word-clever
+  kind: vocabulary
   term: clever
   transcription: ˈklevə
   translation_ru: умный
-- position: 1408
-  frequency: 1572
+  frequency: 1573
+  frequency_rank: 1407
+- slug: word-pretend
+  kind: vocabulary
   term: pretend
   transcription: prɪˈtend
   translation_ru: притворяться
-- position: 1409
   frequency: 1572
+  frequency_rank: 1408
+- slug: word-beard
+  kind: vocabulary
   term: beard
   transcription: bɪəd
   translation_ru: борода
-- position: 1410
-  frequency: 1571
+  frequency: 1572
+  frequency_rank: 1409
+- slug: word-host
+  kind: vocabulary
   term: host
   transcription: həʊst
   translation_ru: хозяин
-- position: 1411
   frequency: 1571
+  frequency_rank: 1410
+- slug: word-guest
+  kind: vocabulary
   term: guest
   transcription: gest
   translation_ru: гость
-- position: 1412
-  frequency: 1570
+  frequency: 1571
+  frequency_rank: 1411
+- slug: word-ruin
+  kind: vocabulary
   term: ruin
   transcription: ˈruːɪn
   translation_ru: разрушать
-- position: 1413
-  frequency: 1569
+  frequency: 1570
+  frequency_rank: 1412
+- slug: word-stir
+  kind: vocabulary
   term: stir
   transcription: stɜː
   translation_ru: мешать
-- position: 1414
   frequency: 1569
+  frequency_rank: 1413
+- slug: word-alice
+  kind: vocabulary
   term: Alice
   transcription: ˈælɪs
   translation_ru: алиса
-- position: 1415
   frequency: 1569
+  frequency_rank: 1414
+- slug: word-document
+  kind: vocabulary
   term: document
   transcription: ˈdɒkjʊmənt
   translation_ru: документ
-- position: 1416
-  frequency: 1566
+  frequency: 1569
+  frequency_rank: 1415
+- slug: word-nigger
+  kind: vocabulary
   term: nigger
   transcription: ˈnɪgə
   translation_ru: негр
-- position: 1417
-  frequency: 1562
+  frequency: 1566
+  frequency_rank: 1416
+- slug: word-alive
+  kind: vocabulary
   term: alive
   transcription: əˈlaɪv
   translation_ru: живой
-- position: 1418
-  frequency: 1561
+  frequency: 1562
+  frequency_rank: 1417
+- slug: word-passage
+  kind: vocabulary
   term: passage
   transcription: ˈpæsɪʤ
   translation_ru: проход
-- position: 1419
-  frequency: 1560
+  frequency: 1561
+  frequency_rank: 1418
+- slug: word-quietly
+  kind: vocabulary
   term: quietly
   transcription: ˈkwaɪətlɪ
   translation_ru: тихо
-- position: 1420
-  frequency: 1559
+  frequency: 1560
+  frequency_rank: 1419
+- slug: word-accord
+  kind: vocabulary
   term: accord
   transcription: əˈkɔːd
   translation_ru: соответствовать
-- position: 1421
-  frequency: 1557
+  frequency: 1559
+  frequency_rank: 1420
+- slug: word-tongue
+  kind: vocabulary
   term: tongue
   transcription: tʌŋ
   translation_ru: язык
-- position: 1422
-  frequency: 1556
+  frequency: 1557
+  frequency_rank: 1421
+- slug: word-block
+  kind: vocabulary
   term: block
   transcription: blɒk
   translation_ru: блок
-- position: 1423
-  frequency: 1552
+  frequency: 1556
+  frequency_rank: 1422
+- slug: word-movie
+  kind: vocabulary
   term: movie
   transcription: ˈmuːvɪ
   translation_ru: кино
-- position: 1424
-  frequency: 1551
+  frequency: 1552
+  frequency_rank: 1423
+- slug: word-satisfy
+  kind: vocabulary
   term: satisfy
   transcription: ˈsætɪsfaɪ
   translation_ru: удовлетворять
-- position: 1425
-  frequency: 1549
+  frequency: 1551
+  frequency_rank: 1424
+- slug: word-evil
+  kind: vocabulary
   term: evil
   transcription: iːvl
   translation_ru: зло
-- position: 1426
   frequency: 1549
+  frequency_rank: 1425
+- slug: word-bedroom
+  kind: vocabulary
   term: bedroom
   transcription: ˈbedrum
   translation_ru: спальня
-- position: 1427
-  frequency: 1548
+  frequency: 1549
+  frequency_rank: 1426
+- slug: word-paint
+  kind: vocabulary
   term: paint
   transcription: peɪnt
   translation_ru: красить
-- position: 1428
-  frequency: 1546
+  frequency: 1548
+  frequency_rank: 1427
+- slug: word-egg
+  kind: vocabulary
   term: egg
   transcription: eg
   translation_ru: яйцо
-- position: 1429
-  frequency: 1544
+  frequency: 1546
+  frequency_rank: 1428
+- slug: word-marriage
+  kind: vocabulary
   term: marriage
   transcription: ˈmærɪʤ
   translation_ru: брак
-- position: 1430
   frequency: 1544
+  frequency_rank: 1429
+- slug: word-lunch
+  kind: vocabulary
   term: lunch
   transcription: lʌnʧ
   translation_ru: обедать
-- position: 1431
-  frequency: 1540
+  frequency: 1544
+  frequency_rank: 1430
+- slug: word-don
+  kind: vocabulary
   term: don
   transcription: dɒn
   translation_ru: дон
-- position: 1432
   frequency: 1540
+  frequency_rank: 1431
+- slug: word-leap
+  kind: vocabulary
   term: leap
   transcription: liːp
   translation_ru: прыгать
-- position: 1433
   frequency: 1540
+  frequency_rank: 1432
+- slug: word-van
+  kind: vocabulary
   term: van
   transcription: væn
   translation_ru: ван
-- position: 1434
-  frequency: 1539
+  frequency: 1540
+  frequency_rank: 1433
+- slug: word-absolutely
+  kind: vocabulary
   term: absolutely
   transcription: ˈæbsəluːtlɪ
   translation_ru: абсолютно
-- position: 1435
-  frequency: 1534
+  frequency: 1539
+  frequency_rank: 1434
+- slug: word-shit
+  kind: vocabulary
   term: shit
   transcription: ʃɪt
   translation_ru: дерьмо
-- position: 1436
-  frequency: 1533
+  frequency: 1534
+  frequency_rank: 1435
+- slug: word-queer
+  kind: vocabulary
   term: queer
   transcription: kwɪə
   translation_ru: подозрительный
-- position: 1437
   frequency: 1533
+  frequency_rank: 1436
+- slug: word-trace
+  kind: vocabulary
   term: trace
   transcription: treɪs
   translation_ru: проследить
-- position: 1438
-  frequency: 1531
+  frequency: 1533
+  frequency_rank: 1437
+- slug: word-henry
+  kind: vocabulary
   term: Henry
   transcription: ˈhenrɪ
   translation_ru: Генри
-- position: 1439
-  frequency: 1530
+  frequency: 1531
+  frequency_rank: 1438
+- slug: word-assume
+  kind: vocabulary
   term: assume
   transcription: əˈsjuːm
   translation_ru: предполагать
-- position: 1440
   frequency: 1530
+  frequency_rank: 1439
+- slug: word-treasure
+  kind: vocabulary
   term: treasure
   transcription: ˈtreʒə
   translation_ru: сокровище
-- position: 1441
-  frequency: 1528
+  frequency: 1530
+  frequency_rank: 1440
+- slug: word-fun
+  kind: vocabulary
   term: fun
   transcription: fʌn
   translation_ru: веселье
-- position: 1442
-  frequency: 1525
+  frequency: 1528
+  frequency_rank: 1441
+- slug: word-connect
+  kind: vocabulary
   term: connect
   transcription: kəˈnekt
   translation_ru: связываться
-- position: 1443
-  frequency: 1524
+  frequency: 1525
+  frequency_rank: 1442
+- slug: word-resource
+  kind: vocabulary
   term: resource
   translation_ru: ресурс
-- position: 1444
   frequency: 1524
+  frequency_rank: 1443
+- slug: word-wash
+  kind: vocabulary
   term: wash
   transcription: wɒʃ
   translation_ru: мыть
-- position: 1445
-  frequency: 1523
+  frequency: 1524
+  frequency_rank: 1444
+- slug: word-chain
+  kind: vocabulary
   term: chain
   transcription: ʧeɪn
   translation_ru: цепь
-- position: 1446
-  frequency: 1522
+  frequency: 1523
+  frequency_rank: 1445
+- slug: word-segment
+  kind: vocabulary
   term: segment
   transcription: ˈsegmənt
   translation_ru: сегментация
-- position: 1447
-  frequency: 1521
+  frequency: 1522
+  frequency_rank: 1446
+- slug: word-statement
+  kind: vocabulary
   term: statement
   transcription: ˈsteɪtmənt
   translation_ru: заявление
-- position: 1448
   frequency: 1521
+  frequency_rank: 1447
+- slug: word-reduce
+  kind: vocabulary
   term: reduce
   transcription: rɪˈdjuːs
   translation_ru: уменьшить
-- position: 1449
-  frequency: 1520
+  frequency: 1521
+  frequency_rank: 1448
+- slug: word-impression
+  kind: vocabulary
   term: impression
   transcription: ɪmˈpreʃn
   translation_ru: впечатление
-- position: 1450
   frequency: 1520
+  frequency_rank: 1449
+- slug: word-nine
+  kind: vocabulary
   term: nine
   transcription: naɪn
   translation_ru: девятка
-- position: 1451
   frequency: 1520
+  frequency_rank: 1450
+- slug: word-affect
+  kind: vocabulary
   term: affect
   transcription: ˈæfekt
   translation_ru: влиять
-- position: 1452
-  frequency: 1519
+  frequency: 1520
+  frequency_rank: 1451
+- slug: word-levin
+  kind: vocabulary
   term: Levin
   transcription: ˈlevɪn
   translation_ru: Левин
-- position: 1453
   frequency: 1519
+  frequency_rank: 1452
+- slug: word-anyway
+  kind: vocabulary
   term: anyway
   transcription: ˈenɪweɪ
   translation_ru: в любом случае
-- position: 1454
-  frequency: 1518
+  frequency: 1519
+  frequency_rank: 1453
+- slug: word-mass
+  kind: vocabulary
   term: mass
   transcription: mæs
   translation_ru: массовость
-- position: 1455
   frequency: 1518
+  frequency_rank: 1454
+- slug: word-float
+  kind: vocabulary
   term: float
   transcription: fləʊt
   translation_ru: плыть
-- position: 1456
-  frequency: 1517
+  frequency: 1518
+  frequency_rank: 1455
+- slug: word-challenge
+  kind: vocabulary
   term: challenge
   transcription: ˈʧælɪnʤ
   translation_ru: вызов
-- position: 1457
-  frequency: 1516
+  frequency: 1517
+  frequency_rank: 1456
+- slug: word-york
+  kind: vocabulary
   term: York
   transcription: jɔːk
   translation_ru: Йорк
-- position: 1458
-  frequency: 1514
+  frequency: 1516
+  frequency_rank: 1457
+- slug: word-cheek
+  kind: vocabulary
   term: cheek
   transcription: ʧiːk
   translation_ru: щека
-- position: 1459
   frequency: 1514
+  frequency_rank: 1458
+- slug: word-research
+  kind: vocabulary
   term: research
   transcription: rɪˈsɜːʧ
   translation_ru: исследовать
-- position: 1460
-  frequency: 1510
+  frequency: 1514
+  frequency_rank: 1459
+- slug: word-proud
+  kind: vocabulary
   term: proud
   transcription: praʊd
   translation_ru: гордый
-- position: 1461
-  frequency: 1508
+  frequency: 1510
+  frequency_rank: 1460
+- slug: word-emotion
+  kind: vocabulary
   term: emotion
   transcription: ɪˈməʊʃn
   translation_ru: эмоция
-- position: 1462
-  frequency: 1507
+  frequency: 1508
+  frequency_rank: 1461
+- slug: word-peasant
+  kind: vocabulary
   term: peasant
   transcription: ˈpezənt
   translation_ru: крестьянин
-- position: 1463
-  frequency: 1506
+  frequency: 1507
+  frequency_rank: 1462
+- slug: word-somewhere
+  kind: vocabulary
   term: somewhere
   transcription: ˈsʌmweə
   translation_ru: где-то
-- position: 1464
-  frequency: 1502
+  frequency: 1506
+  frequency_rank: 1463
+- slug: word-tower
+  kind: vocabulary
   term: tower
   transcription: ˈtaʊə
   translation_ru: возвышаться
-- position: 1465
   frequency: 1502
+  frequency_rank: 1464
+- slug: word-health
+  kind: vocabulary
   term: health
   transcription: helθ
   translation_ru: здоровье
-- position: 1466
   frequency: 1502
+  frequency_rank: 1465
+- slug: word-item
+  kind: vocabulary
   term: item
   transcription: ˈaɪtəm
   translation_ru: пункт
-- position: 1467
-  frequency: 1501
+  frequency: 1502
+  frequency_rank: 1466
+- slug: word-frame
+  kind: vocabulary
   term: frame
   transcription: freɪm
   translation_ru: рамка
-- position: 1468
-  frequency: 1498
+  frequency: 1501
+  frequency_rank: 1467
+- slug: word-apis
+  kind: vocabulary
   term: APIs
   transcription: ˈeɪpɪs
   translation_ru: Апис
-- position: 1469
-  frequency: 1497
+  frequency: 1498
+  frequency_rank: 1468
+- slug: word-environment
+  kind: vocabulary
   term: environment
   transcription: ɪnˈvaɪərənmənt
   translation_ru: окружающая среда
-- position: 1470
-  frequency: 1492
+  frequency: 1497
+  frequency_rank: 1469
+- slug: word-sick
+  kind: vocabulary
   term: sick
   transcription: sɪk
   translation_ru: больной
-- position: 1471
-  frequency: 1489
+  frequency: 1492
+  frequency_rank: 1470
+- slug: word-nod
+  kind: vocabulary
   term: nod
   transcription: nɒd
   translation_ru: кивать
-- position: 1472
-  frequency: 1485
+  frequency: 1489
+  frequency_rank: 1471
+- slug: word-agreement
+  kind: vocabulary
   term: agreement
   transcription: əˈgriːmənt
   translation_ru: соглашение
-- position: 1473
-  frequency: 1484
+  frequency: 1485
+  frequency_rank: 1472
+- slug: word-average
+  kind: vocabulary
   term: average
   transcription: ˈævərɪʤ
   translation_ru: обычный
-- position: 1474
-  frequency: 1479
+  frequency: 1484
+  frequency_rank: 1473
+- slug: word-broad
+  kind: vocabulary
   term: broad
   transcription: brɔːd
   translation_ru: широкий
-- position: 1475
-  frequency: 1477
+  frequency: 1479
+  frequency_rank: 1474
+- slug: word-convince
+  kind: vocabulary
   term: convince
   transcription: kənˈvɪns
   translation_ru: убеждать
-- position: 1476
-  frequency: 1476
+  frequency: 1477
+  frequency_rank: 1475
+- slug: word-browser
+  kind: vocabulary
   term: browser
   transcription: ˈbraʊzə
   translation_ru: браузер
-- position: 1477
-  frequency: 1474
+  frequency: 1476
+  frequency_rank: 1476
+- slug: word-square
+  kind: vocabulary
   term: square
   transcription: skweə
   translation_ru: площадь
-- position: 1478
-  frequency: 1470
+  frequency: 1474
+  frequency_rank: 1477
+- slug: word-lodge
+  kind: vocabulary
   term: lodge
   transcription: lɒʤ
   translation_ru: подавать
-- position: 1479
   frequency: 1470
+  frequency_rank: 1478
+- slug: word-development
+  kind: vocabulary
   term: development
   transcription: dɪˈveləpmənt
   translation_ru: развитие
-- position: 1480
-  frequency: 1468
+  frequency: 1470
+  frequency_rank: 1479
+- slug: word-completely
+  kind: vocabulary
   term: completely
   transcription: kəmˈpliːtlɪ
   translation_ru: полностью
-- position: 1481
   frequency: 1468
+  frequency_rank: 1480
+- slug: word-madame
+  kind: vocabulary
   term: Madame
   transcription: məˈdɑːm
   translation_ru: мадам
-- position: 1482
-  frequency: 1467
+  frequency: 1468
+  frequency_rank: 1481
+- slug: word-arrange
+  kind: vocabulary
   term: arrange
   transcription: əˈreɪnʤ
   translation_ru: организовать
-- position: 1483
-  frequency: 1465
+  frequency: 1467
+  frequency_rank: 1482
+- slug: word-review
+  kind: vocabulary
   term: review
   transcription: rɪˈvjuː
   translation_ru: обзор
-- position: 1484
-  frequency: 1463
+  frequency: 1465
+  frequency_rank: 1483
+- slug: word-doing
+  kind: vocabulary
   term: doing
   transcription: ˈduɪŋ
   translation_ru: выполнение
-- position: 1485
-  frequency: 1461
+  frequency: 1463
+  frequency_rank: 1484
+- slug: word-education
+  kind: vocabulary
   term: education
   transcription: edjʊˈkeɪʃn
   translation_ru: образование
-- position: 1486
-  frequency: 1457
+  frequency: 1461
+  frequency_rank: 1485
+- slug: word-em
+  kind: vocabulary
   term: em
   transcription: em
   translation_ru: электромагнитный
-- position: 1487
-  frequency: 1455
+  frequency: 1457
+  frequency_rank: 1486
+- slug: word-mine
+  kind: vocabulary
   term: mine
   transcription: maɪn
   translation_ru: залежь
-- position: 1488
-  frequency: 1453
+  frequency: 1455
+  frequency_rank: 1487
+- slug: word-confess
+  kind: vocabulary
   term: confess
   transcription: kənˈfes
   translation_ru: исповедоваться
-- position: 1489
-  frequency: 1451
+  frequency: 1453
+  frequency_rank: 1488
+- slug: word-owl
+  kind: vocabulary
   term: owl
   transcription: aʊl
   translation_ru: сова
-- position: 1490
-  frequency: 1449
+  frequency: 1451
+  frequency_rank: 1489
+- slug: word-horror
+  kind: vocabulary
   term: horror
   transcription: ˈhɒrə
   translation_ru: ужас
-- position: 1491
-  frequency: 1448
+  frequency: 1449
+  frequency_rank: 1490
+- slug: word-storm
+  kind: vocabulary
   term: storm
   transcription: stɔːm
   translation_ru: буря
-- position: 1492
-  frequency: 1445
+  frequency: 1448
+  frequency_rank: 1491
+- slug: word-musk
+  kind: vocabulary
   term: musk
   transcription: mʌsk
   translation_ru: мускус
-- position: 1493
   frequency: 1445
+  frequency_rank: 1492
+- slug: word-farm
+  kind: vocabulary
   term: farm
   transcription: fɑːm
   translation_ru: обрабатывать
-- position: 1494
-  frequency: 1444
+  frequency: 1445
+  frequency_rank: 1493
+- slug: word-channel
+  kind: vocabulary
   term: channel
   transcription: ʧænl
   translation_ru: канал
-- position: 1495
-  frequency: 1443
+  frequency: 1444
+  frequency_rank: 1494
+- slug: word-opposite
+  kind: vocabulary
   term: opposite
   transcription: ˈɒpəzɪt
   translation_ru: противоположный
-- position: 1496
-  frequency: 1439
+  frequency: 1443
+  frequency_rank: 1495
+- slug: word-sum
+  kind: vocabulary
   term: sum
   transcription: sʌm
   translation_ru: суммировать
-- position: 1497
   frequency: 1439
+  frequency_rank: 1496
+- slug: word-elizabeth
+  kind: vocabulary
   term: Elizabeth
   transcription: ɪˈlɪzəbəθ
   translation_ru: Элизабет
-- position: 1498
-  frequency: 1435
+  frequency: 1439
+  frequency_rank: 1497
+- slug: word-twice
+  kind: vocabulary
   term: twice
   transcription: twaɪs
   translation_ru: дважды
-- position: 1499
-  frequency: 1434
+  frequency: 1435
+  frequency_rank: 1498
+- slug: word-asking
+  kind: vocabulary
   term: asking
   transcription: ˈɑːskɪŋ
   translation_ru: просьба
-- position: 1500
   frequency: 1434
+  frequency_rank: 1499
+- slug: word-desert
+  kind: vocabulary
   term: desert
   transcription: ˈdezət
   translation_ru: покидать
-- position: 1501
-  frequency: 1433
+  frequency: 1434
+  frequency_rank: 1500
+- slug: word-unless
+  kind: vocabulary
   term: unless
   transcription: ənˈles
   translation_ru: если не
-- position: 1502
-  frequency: 1431
+  frequency: 1433
+  frequency_rank: 1501
+- slug: word-article
+  kind: vocabulary
   term: article
   transcription: ˈɑːtɪkl
   translation_ru: статья
-- position: 1503
   frequency: 1431
+  frequency_rank: 1502
+- slug: word-configure
+  kind: vocabulary
   term: configure
   transcription: kənˈfɪgə
   translation_ru: задать
-- position: 1504
-  frequency: 1428
+  frequency: 1431
+  frequency_rank: 1503
+- slug: word-instrument
+  kind: vocabulary
   term: instrument
   transcription: ˈɪnstrəmənt
   translation_ru: инструмент
-- position: 1505
-  frequency: 1427
+  frequency: 1428
+  frequency_rank: 1504
+- slug: word-swallow
+  kind: vocabulary
   term: swallow
   transcription: ˈswɒləʊ
   translation_ru: глотать
-- position: 1506
-  frequency: 1421
+  frequency: 1427
+  frequency_rank: 1505
+- slug: word-ourselves
+  kind: vocabulary
   term: ourselves
   transcription: aʊəˈselvz
   translation_ru: сами
-- position: 1507
-  frequency: 1419
+  frequency: 1421
+  frequency_rank: 1506
+- slug: word-pan
+  kind: vocabulary
   term: pan
   transcription: pæn
   translation_ru: посуда
-- position: 1508
   frequency: 1419
+  frequency_rank: 1507
+- slug: word-branch
+  kind: vocabulary
   term: branch
   transcription: brɑːnʧ
   translation_ru: ветка
-- position: 1509
-  frequency: 1415
+  frequency: 1419
+  frequency_rank: 1508
+- slug: word-similar
+  kind: vocabulary
   term: similar
   transcription: ˈsɪm(ə)lə
   translation_ru: схожий
-- position: 1510
-  frequency: 1414
+  frequency: 1415
+  frequency_rank: 1509
+- slug: word-aid
+  kind: vocabulary
   term: aid
   transcription: eɪd
   translation_ru: помощь
-- position: 1511
-  frequency: 1412
+  frequency: 1414
+  frequency_rank: 1510
+- slug: word-understanding
+  kind: vocabulary
   term: understanding
   transcription: ʌndəˈstændɪŋ
   translation_ru: понимание
-- position: 1512
-  frequency: 1411
+  frequency: 1412
+  frequency_rank: 1511
+- slug: word-harm
+  kind: vocabulary
   term: harm
   transcription: hɑːm
   translation_ru: вред
-- position: 1513
   frequency: 1411
+  frequency_rank: 1512
+- slug: word-yell
+  kind: vocabulary
   term: yell
   transcription: jel
   translation_ru: кричать
-- position: 1514
-  frequency: 1407
+  frequency: 1411
+  frequency_rank: 1513
+- slug: word-video
+  kind: vocabulary
   term: video
   transcription: ˈvɪdɪəʊ
   translation_ru: видео
-- position: 1515
-  frequency: 1406
+  frequency: 1407
+  frequency_rank: 1514
+- slug: word-conceal
+  kind: vocabulary
   term: conceal
   transcription: kənˈsiːl
   translation_ru: скрывать
-- position: 1516
-  frequency: 1405
+  frequency: 1406
+  frequency_rank: 1515
+- slug: word-hotel
+  kind: vocabulary
   term: hotel
   transcription: həʊˈtel
   translation_ru: отель
-- position: 1517
-  frequency: 1403
+  frequency: 1405
+  frequency_rank: 1516
+- slug: word-sentence
+  kind: vocabulary
   term: sentence
   transcription: ˈsentəns
   translation_ru: предложение
-- position: 1518
-  frequency: 1402
+  frequency: 1403
+  frequency_rank: 1517
+- slug: word-tool
+  kind: vocabulary
   term: tool
   transcription: tuːl
   translation_ru: инструмент
-- position: 1519
   frequency: 1402
+  frequency_rank: 1518
+- slug: word-standard
+  kind: vocabulary
   term: standard
   transcription: ˈstændəd
   translation_ru: стандарт
-- position: 1520
-  frequency: 1401
+  frequency: 1402
+  frequency_rank: 1519
+- slug: word-mirror
+  kind: vocabulary
   term: mirror
   transcription: ˈmɪrə
   translation_ru: зеркало
-- position: 1521
-  frequency: 1398
+  frequency: 1401
+  frequency_rank: 1520
+- slug: word-serious
+  kind: vocabulary
   term: serious
   transcription: ˈsɪərɪəs
   translation_ru: серьезный
-- position: 1522
-  frequency: 1397
+  frequency: 1398
+  frequency_rank: 1521
+- slug: word-constant
+  kind: vocabulary
   term: constant
   transcription: ˈkɒnstənt
   translation_ru: постоянный
-- position: 1523
-  frequency: 1396
+  frequency: 1397
+  frequency_rank: 1522
+- slug: word-regret
+  kind: vocabulary
   term: regret
   transcription: rɪˈgret
   translation_ru: сожаление
-- position: 1524
   frequency: 1396
+  frequency_rank: 1523
+- slug: word-dozen
+  kind: vocabulary
   term: dozen
   transcription: dʌzn
   translation_ru: дюжина
-- position: 1525
-  frequency: 1393
+  frequency: 1396
+  frequency_rank: 1524
+- slug: word-intend
+  kind: vocabulary
   term: intend
   transcription: ɪnˈtend
   translation_ru: намереваться
-- position: 1526
   frequency: 1393
+  frequency_rank: 1525
+- slug: word-stage
+  kind: vocabulary
   term: stage
   transcription: steɪʤ
   translation_ru: этап
-- position: 1527
-  frequency: 1389
+  frequency: 1393
+  frequency_rank: 1526
+- slug: word-self
+  kind: vocabulary
   term: self
   transcription: self
   translation_ru: сам
-- position: 1528
-  frequency: 1386
+  frequency: 1389
+  frequency_rank: 1527
+- slug: word-candle
+  kind: vocabulary
   term: candle
   transcription: kændl
   translation_ru: свеча
-- position: 1529
-  frequency: 1382
+  frequency: 1386
+  frequency_rank: 1528
+- slug: word-remind
+  kind: vocabulary
   term: remind
   transcription: ˈrɪmaɪnd
   translation_ru: напоминать
-- position: 1530
   frequency: 1382
+  frequency_rank: 1529
+- slug: word-career
+  kind: vocabulary
   term: career
   transcription: kəˈrɪə
   translation_ru: карьера
-- position: 1531
-  frequency: 1381
+  frequency: 1382
+  frequency_rank: 1530
+- slug: word-examine
+  kind: vocabulary
   term: examine
   transcription: ɪgˈzæmɪn
   translation_ru: исследовать
-- position: 1532
   frequency: 1381
+  frequency_rank: 1531
+- slug: word-possess
+  kind: vocabulary
   term: possess
   transcription: pəˈzes
   translation_ru: обладать
-- position: 1533
-  frequency: 1378
+  frequency: 1381
+  frequency_rank: 1532
+- slug: word-activity
+  kind: vocabulary
   term: activity
   transcription: ækˈtɪvɪtɪ
   translation_ru: деятельность
-- position: 1534
-  frequency: 1377
+  frequency: 1378
+  frequency_rank: 1533
+- slug: word-credit
+  kind: vocabulary
   term: credit
   transcription: ˈkredɪt
   translation_ru: кредит
-- position: 1535
-  frequency: 1371
+  frequency: 1377
+  frequency_rank: 1534
+- slug: word-fox
+  kind: vocabulary
   term: fox
   transcription: fɒks
   translation_ru: лиса
-- position: 1536
-  frequency: 1370
+  frequency: 1371
+  frequency_rank: 1535
+- slug: word-ford
+  kind: vocabulary
   term: Ford
   transcription: fɔːd
   translation_ru: переходить вброд
-- position: 1537
   frequency: 1370
+  frequency_rank: 1536
+- slug: word-exclaim
+  kind: vocabulary
   term: exclaim
   transcription: ɪksˈkleɪm
   translation_ru: восклицать
-- position: 1538
-  frequency: 1367
+  frequency: 1370
+  frequency_rank: 1537
+- slug: word-department
+  kind: vocabulary
   term: department
   transcription: dɪˈpɑːtmənt
   translation_ru: отдел
-- position: 1539
-  frequency: 1366
+  frequency: 1367
+  frequency_rank: 1538
+- slug: word-chest
+  kind: vocabulary
   term: chest
   transcription: ʧest
   translation_ru: грудь
-- position: 1540
-  frequency: 1364
+  frequency: 1366
+  frequency_rank: 1539
+- slug: word-obtain
+  kind: vocabulary
   term: obtain
   transcription: əbˈteɪn
   translation_ru: получать
-- position: 1541
-  frequency: 1362
+  frequency: 1364
+  frequency_rank: 1540
+- slug: word-united
+  kind: vocabulary
   term: United
   transcription: ˈjʊˈnaɪtɪd
   translation_ru: объединенный
-- position: 1542
-  frequency: 1361
+  frequency: 1362
+  frequency_rank: 1541
+- slug: word-afterwards
+  kind: vocabulary
   term: afterwards
   transcription: ˈɑːftəwədz
   translation_ru: впоследствии
-- position: 1543
-  frequency: 1360
+  frequency: 1361
+  frequency_rank: 1542
+- slug: word-context
+  kind: vocabulary
   term: context
   transcription: ˈkɒntekst
   translation_ru: контекст
-- position: 1544
-  frequency: 1358
+  frequency: 1360
+  frequency_rank: 1543
+- slug: word-stair
+  kind: vocabulary
   term: stair
   transcription: steə
   translation_ru: ступенька
-- position: 1545
-  frequency: 1354
+  frequency: 1358
+  frequency_rank: 1544
+- slug: word-cousin
+  kind: vocabulary
   term: cousin
   transcription: kʌzn
   translation_ru: двоюродный брат
-- position: 1546
-  frequency: 1353
+  frequency: 1354
+  frequency_rank: 1545
+- slug: word-quality
+  kind: vocabulary
   term: quality
   transcription: ˈkwɒlɪtɪ
   translation_ru: качество
-- position: 1547
   frequency: 1353
+  frequency_rank: 1546
+- slug: word-ass
+  kind: vocabulary
   term: ass
   transcription: æs
   translation_ru: ослиный
-- position: 1548
-  frequency: 1352
+  frequency: 1353
+  frequency_rank: 1547
+- slug: word-tent
+  kind: vocabulary
   term: tent
   transcription: tent
   translation_ru: палатка
-- position: 1549
   frequency: 1352
+  frequency_rank: 1548
+- slug: word-trial
+  kind: vocabulary
   term: trial
   transcription: ˈtraɪəl
   translation_ru: испытание
-- position: 1550
-  frequency: 1350
+  frequency: 1352
+  frequency_rank: 1549
+- slug: word-cmt
+  kind: vocabulary
   term: CMT
   transcription: mt
   translation_ru: КРТ
-- position: 1551
   frequency: 1350
+  frequency_rank: 1550
+- slug: word-modern
+  kind: vocabulary
   term: modern
   transcription: mɒdn
   translation_ru: современный
-- position: 1552
   frequency: 1350
+  frequency_rank: 1551
+- slug: word-drag
+  kind: vocabulary
   term: drag
   transcription: dræg
   translation_ru: тащить
-- position: 1553
-  frequency: 1349
+  frequency: 1350
+  frequency_rank: 1552
+- slug: word-forth
+  kind: vocabulary
   term: forth
   transcription: fɔːθ
   translation_ru: вперед
-- position: 1554
-  frequency: 1343
+  frequency: 1349
+  frequency_rank: 1553
+- slug: word-scar
+  kind: vocabulary
   term: scar
   transcription: skɑː
   translation_ru: шрам
-- position: 1555
-  frequency: 1341
+  frequency: 1343
+  frequency_rank: 1554
+- slug: word-exchange
+  kind: vocabulary
   term: exchange
   transcription: ɪksˈʧeɪnʤ
   translation_ru: обмен
-- position: 1556
-  frequency: 1334
+  frequency: 1341
+  frequency_rank: 1555
+- slug: word-misery
+  kind: vocabulary
   term: misery
   transcription: ˈmɪzərɪ
   translation_ru: нищета
-- position: 1557
-  frequency: 1333
+  frequency: 1334
+  frequency_rank: 1556
+- slug: word-indicate
+  kind: vocabulary
   term: indicate
   transcription: ˈɪndɪkeɪt
   translation_ru: указывать
-- position: 1558
-  frequency: 1332
+  frequency: 1333
+  frequency_rank: 1557
+- slug: word-rage
+  kind: vocabulary
   term: rage
   transcription: reɪʤ
   translation_ru: ярость
-- position: 1559
   frequency: 1332
+  frequency_rank: 1558
+- slug: word-directly
+  kind: vocabulary
   term: directly
   transcription: dɪˈrektlɪ
   translation_ru: непосредственно
-- position: 1560
-  frequency: 1331
+  frequency: 1332
+  frequency_rank: 1559
+- slug: word-journal
+  kind: vocabulary
   term: journal
   transcription: ʤɜːnl
   translation_ru: журнал
-- position: 1561
-  frequency: 1330
+  frequency: 1331
+  frequency_rank: 1560
+- slug: word-crack
+  kind: vocabulary
   term: crack
   transcription: kræk
   translation_ru: трескаться
-- position: 1562
-  frequency: 1328
+  frequency: 1330
+  frequency_rank: 1561
+- slug: word-software
+  kind: vocabulary
   term: software
   transcription: ˈsɒftweə
   translation_ru: программное обеспечение
-- position: 1563
   frequency: 1328
+  frequency_rank: 1562
+- slug: word-engineer
+  kind: vocabulary
   term: engineer
   transcription: enʤɪˈnɪə
   translation_ru: инженер
-- position: 1564
   frequency: 1328
+  frequency_rank: 1563
+- slug: word-apple
+  kind: vocabulary
   term: apple
   transcription: æpl
   translation_ru: яблоко
-- position: 1565
   frequency: 1328
+  frequency_rank: 1564
+- slug: word-pound
+  kind: vocabulary
   term: pound
   transcription: paʊnd
   translation_ru: колотить
-- position: 1566
-  frequency: 1327
+  frequency: 1328
+  frequency_rank: 1565
+- slug: word-purchase
+  kind: vocabulary
   term: purchase
   transcription: ˈpɜːʧɪs
   translation_ru: покупка
-- position: 1567
-  frequency: 1325
+  frequency: 1327
+  frequency_rank: 1566
+- slug: word-crime
+  kind: vocabulary
   term: crime
   transcription: kraɪm
   translation_ru: преступление
-- position: 1568
-  frequency: 1324
+  frequency: 1325
+  frequency_rank: 1567
+- slug: word-particularly
+  kind: vocabulary
   term: particularly
   transcription: pəˈtɪkjʊləlɪ
   translation_ru: в частности
-- position: 1569
-  frequency: 1321
+  frequency: 1324
+  frequency_rank: 1568
+- slug: word-computer
+  kind: vocabulary
   term: computer
   transcription: kəmˈpjuːtə
   translation_ru: компьютер
-- position: 1570
-  frequency: 1320
+  frequency: 1321
+  frequency_rank: 1569
+- slug: word-trip
+  kind: vocabulary
   term: trip
   transcription: trɪp
   translation_ru: споткнуться
-- position: 1571
   frequency: 1320
+  frequency_rank: 1570
+- slug: word-park
+  kind: vocabulary
   term: park
   transcription: pɑːk
   translation_ru: припарковать
-- position: 1572
-  frequency: 1319
+  frequency: 1320
+  frequency_rank: 1571
+- slug: word-ice
+  kind: vocabulary
   term: ice
   transcription: aɪs
   translation_ru: лед
-- position: 1573
   frequency: 1319
+  frequency_rank: 1572
+- slug: word-pool
+  kind: vocabulary
   term: pool
   transcription: puːl
   translation_ru: бассейн
-- position: 1574
-  frequency: 1317
+  frequency: 1319
+  frequency_rank: 1573
+- slug: word-circumstance
+  kind: vocabulary
   term: circumstance
   transcription: ˈsɜːkəmstæns
   translation_ru: условие
-- position: 1575
-  frequency: 1316
+  frequency: 1317
+  frequency_rank: 1574
+- slug: word-shift
+  kind: vocabulary
   term: shift
   transcription: ʃɪft
   translation_ru: дежурство
-- position: 1576
-  frequency: 1315
+  frequency: 1316
+  frequency_rank: 1575
+- slug: word-carefully
+  kind: vocabulary
   term: carefully
   transcription: ˈkeəf(ə)lɪ
   translation_ru: внимательно
-- position: 1577
-  frequency: 1314
+  frequency: 1315
+  frequency_rank: 1576
+- slug: word-luck
+  kind: vocabulary
   term: luck
   transcription: lʌk
   translation_ru: удача
-- position: 1578
-  frequency: 1313
+  frequency: 1314
+  frequency_rank: 1577
+- slug: word-habits
+  kind: vocabulary
   term: habits
   transcription: ˈhæbɪts
   translation_ru: замашки
-- position: 1579
   frequency: 1313
+  frequency_rank: 1578
+- slug: word-final
+  kind: vocabulary
   term: final
   transcription: faɪnl
   translation_ru: финал
-- position: 1580
-  frequency: 1312
+  frequency: 1313
+  frequency_rank: 1579
+- slug: word-triumph
+  kind: vocabulary
   term: triumph
   transcription: ˈtraɪəmf
   translation_ru: триумф
-- position: 1581
-  frequency: 1310
+  frequency: 1312
+  frequency_rank: 1580
+- slug: word-advice
+  kind: vocabulary
   term: advice
   transcription: ədˈvaɪs
   translation_ru: консультация
-- position: 1582
-  frequency: 1309
+  frequency: 1310
+  frequency_rank: 1581
+- slug: word-various
+  kind: vocabulary
   term: various
   transcription: ˈve(ə)rɪəs
   translation_ru: различный
-- position: 1583
-  frequency: 1308
+  frequency: 1309
+  frequency_rank: 1582
+- slug: word-reality
+  kind: vocabulary
   term: reality
   transcription: rɪˈælɪtɪ
   translation_ru: реальность
-- position: 1584
-  frequency: 1307
+  frequency: 1308
+  frequency_rank: 1583
+- slug: word-hospital
+  kind: vocabulary
   term: hospital
   transcription: ˈhɒspɪtl
   translation_ru: больница
-- position: 1585
   frequency: 1307
+  frequency_rank: 1584
+- slug: word-atmosphere
+  kind: vocabulary
   term: atmosphere
   transcription: ˈætməsfɪə
   translation_ru: атмосфера
-- position: 1586
-  frequency: 1306
+  frequency: 1307
+  frequency_rank: 1585
+- slug: word-represent
+  kind: vocabulary
   term: represent
   transcription: reprɪˈzent
   translation_ru: представлять
-- position: 1587
-  frequency: 1304
+  frequency: 1306
+  frequency_rank: 1586
+- slug: word-clearly
+  kind: vocabulary
   term: clearly
   transcription: ˈklɪəlɪ
   translation_ru: ясно
-- position: 1588
-  frequency: 1303
+  frequency: 1304
+  frequency_rank: 1587
+- slug: word-bat
+  kind: vocabulary
   term: bat
   transcription: bæt
   translation_ru: летучая мышь
-- position: 1589
-  frequency: 1301
+  frequency: 1303
+  frequency_rank: 1588
+- slug: word-breathe
+  kind: vocabulary
   term: breathe
   transcription: briːð
   translation_ru: дышать
-- position: 1590
   frequency: 1301
+  frequency_rank: 1589
+- slug: word-forehead
+  kind: vocabulary
   term: forehead
   transcription: ˈfɒrɪd
   translation_ru: лоб
-- position: 1591
   frequency: 1301
+  frequency_rank: 1590
+- slug: word-respond
+  kind: vocabulary
   term: respond
   transcription: rɪsˈpɒnd
   translation_ru: откликнуться
-- position: 1592
-  frequency: 1300
+  frequency: 1301
+  frequency_rank: 1591
+- slug: word-corridor
+  kind: vocabulary
   term: corridor
   transcription: ˈkɒrɪdɔː
   translation_ru: коридор
-- position: 1593
   frequency: 1300
+  frequency_rank: 1592
+- slug: word-local
+  kind: vocabulary
   term: local
   transcription: ˈləʊkəl
   translation_ru: местный
-- position: 1594
   frequency: 1300
+  frequency_rank: 1593
+- slug: word-peace
+  kind: vocabulary
   term: peace
   transcription: piːs
   translation_ru: мир
-- position: 1595
-  frequency: 1298
+  frequency: 1300
+  frequency_rank: 1594
+- slug: word-romance
+  kind: vocabulary
   term: romance
   transcription: rəʊˈmæns
   translation_ru: романтика
-- position: 1596
-  frequency: 1293
+  frequency: 1298
+  frequency_rank: 1595
+- slug: word-recommend
+  kind: vocabulary
   term: recommend
   transcription: rekəˈmend
   translation_ru: рекомендовать
-- position: 1597
   frequency: 1293
+  frequency_rank: 1596
+- slug: word-planet
+  kind: vocabulary
   term: planet
   transcription: ˈplænɪt
   translation_ru: планета
-- position: 1598
-  frequency: 1292
+  frequency: 1293
+  frequency_rank: 1597
+- slug: word-clock
+  kind: vocabulary
   term: clock
   transcription: klɒk
   translation_ru: часы
-- position: 1599
   frequency: 1292
+  frequency_rank: 1598
+- slug: word-transfer
+  kind: vocabulary
   term: transfer
   transcription: ˈtrænsfɜː
   translation_ru: перемещение
-- position: 1600
-  frequency: 1290
+  frequency: 1292
+  frequency_rank: 1599
+- slug: word-hogwarts
+  kind: vocabulary
   term: Hogwarts
   transcription: ˈhɒɡwɔːts
   translation_ru: Хогвартс
-- position: 1601
-  frequency: 1289
+  frequency: 1290
+  frequency_rank: 1600
+- slug: word-engage
+  kind: vocabulary
   term: engage
   transcription: ɪnˈgeɪʤ
   translation_ru: вовлекать
-- position: 1602
-  frequency: 1288
+  frequency: 1289
+  frequency_rank: 1601
+- slug: word-sugar
+  kind: vocabulary
   term: sugar
   transcription: ˈʃʊgə
   translation_ru: сахар
-- position: 1603
-  frequency: 1286
+  frequency: 1288
+  frequency_rank: 1602
+- slug: word-leader
+  kind: vocabulary
   term: leader
   transcription: ˈliːdə
   translation_ru: лидер
-- position: 1604
-  frequency: 1285
+  frequency: 1286
+  frequency_rank: 1603
+- slug: word-east
+  kind: vocabulary
   term: East
   transcription: iːst
   translation_ru: Восток
-- position: 1605
-  frequency: 1284
+  frequency: 1285
+  frequency_rank: 1604
+- slug: word-generation
+  kind: vocabulary
   term: generation
   transcription: ʤenəˈreɪʃn
   translation_ru: поколение
-- position: 1606
   frequency: 1284
+  frequency_rank: 1605
+- slug: word-involve
+  kind: vocabulary
   term: involve
   transcription: ɪnˈvɒlv
   translation_ru: вовлекать
-- position: 1607
-  frequency: 1283
+  frequency: 1284
+  frequency_rank: 1606
+- slug: word-partner
+  kind: vocabulary
   term: partner
   transcription: ˈpɑːtnə
   translation_ru: партнер
-- position: 1608
   frequency: 1283
+  frequency_rank: 1607
+- slug: word-voldemort
+  kind: vocabulary
   term: Voldemort
   transcription: vəʊldəˈmɔːt
   translation_ru: Волдеморт
-- position: 1609
   frequency: 1283
+  frequency_rank: 1608
+- slug: word-anger
+  kind: vocabulary
   term: anger
   transcription: ˈæŋgə
   translation_ru: злить
-- position: 1610
   frequency: 1283
+  frequency_rank: 1609
+- slug: word-jack
+  kind: vocabulary
   term: jack
   transcription: ʤæk
   translation_ru: поднимать домкратом
-- position: 1611
-  frequency: 1282
+  frequency: 1283
+  frequency_rank: 1610
+- slug: word-hell
+  kind: vocabulary
   term: hell
   transcription: hel
   translation_ru: ад
-- position: 1612
-  frequency: 1281
+  frequency: 1282
+  frequency_rank: 1611
+- slug: word-presence
+  kind: vocabulary
   term: presence
   transcription: prezns
   translation_ru: присутствие
-- position: 1613
-  frequency: 1279
+  frequency: 1281
+  frequency_rank: 1612
+- slug: word-pink
+  kind: vocabulary
   term: pink
   transcription: pɪŋk
   translation_ru: розовый
-- position: 1614
   frequency: 1279
+  frequency_rank: 1613
+- slug: word-hungry
+  kind: vocabulary
   term: hungry
   transcription: ˈhʌŋgrɪ
   translation_ru: голодный
-- position: 1615
-  frequency: 1278
+  frequency: 1279
+  frequency_rank: 1614
+- slug: word-interrupt
+  kind: vocabulary
   term: interrupt
   transcription: ɪntəˈrʌpt
   translation_ru: прерывать
-- position: 1616
   frequency: 1278
+  frequency_rank: 1615
+- slug: word-beneath
+  kind: vocabulary
   term: beneath
   transcription: bɪˈniːθ
   translation_ru: под
-- position: 1617
   frequency: 1278
+  frequency_rank: 1616
+- slug: word-pirate
+  kind: vocabulary
   term: pirate
   transcription: ˈpaɪ(ə)rət
   translation_ru: пират
-- position: 1618
-  frequency: 1277
+  frequency: 1278
+  frequency_rank: 1617
+- slug: word-golden
+  kind: vocabulary
   term: golden
   transcription: ˈgəʊldən
   translation_ru: золотой
-- position: 1619
   frequency: 1277
+  frequency_rank: 1618
+- slug: word-acquaintance
+  kind: vocabulary
   term: acquaintance
   transcription: əˈkweɪntəns
   translation_ru: знакомство
-- position: 1620
-  frequency: 1276
+  frequency: 1277
+  frequency_rank: 1619
+- slug: word-bone
+  kind: vocabulary
   term: bone
   transcription: bəʊn
   translation_ru: кость
-- position: 1621
-  frequency: 1275
+  frequency: 1276
+  frequency_rank: 1620
+- slug: word-wardrobe
+  kind: vocabulary
   term: wardrobe
   transcription: ˈwɔːdrəʊb
   translation_ru: гардероб
-- position: 1622
-  frequency: 1274
+  frequency: 1275
+  frequency_rank: 1621
+- slug: word-gasp
+  kind: vocabulary
   term: gasp
   transcription: gɑːsp
   translation_ru: дышать с трудом
-- position: 1623
-  frequency: 1270
+  frequency: 1274
+  frequency_rank: 1622
+- slug: word-bless
+  kind: vocabulary
   term: bless
   transcription: bles
   translation_ru: благословить
-- position: 1624
   frequency: 1270
+  frequency_rank: 1623
+- slug: word-jungle
+  kind: vocabulary
   term: jungle
   transcription: ʤʌŋgl
   translation_ru: джунгли
-- position: 1625
-  frequency: 1269
+  frequency: 1270
+  frequency_rank: 1624
+- slug: word-strain
+  kind: vocabulary
   term: strain
   transcription: streɪn
   translation_ru: напряжение
-- position: 1626
   frequency: 1269
+  frequency_rank: 1625
+- slug: word-awful
+  kind: vocabulary
   term: awful
   transcription: ˈɔːf(ə)l
   translation_ru: ужасный
-- position: 1627
-  frequency: 1263
+  frequency: 1269
+  frequency_rank: 1626
+- slug: word-stati
+  kind: vocabulary
   term: stati
   translation_ru: стати
-- position: 1628
   frequency: 1263
+  frequency_rank: 1627
+- slug: word-desk
+  kind: vocabulary
   term: Desk
   transcription: desk
   translation_ru: рабочий стол
-- position: 1629
-  frequency: 1260
+  frequency: 1263
+  frequency_rank: 1628
+- slug: word-trick
+  kind: vocabulary
   term: trick
   transcription: trɪk
   translation_ru: уловка
-- position: 1630
   frequency: 1260
+  frequency_rank: 1629
+- slug: word-temper
+  kind: vocabulary
   term: temper
   transcription: ˈtempə
   translation_ru: характер
-- position: 1631
   frequency: 1260
+  frequency_rank: 1630
+- slug: word-writer
+  kind: vocabulary
   term: writer
   transcription: ˈraɪtə
   translation_ru: писатель
-- position: 1632
   frequency: 1260
+  frequency_rank: 1631
+- slug: word-mutter
+  kind: vocabulary
   term: mutter
   transcription: ˈmʌtə
   translation_ru: бормотать
-- position: 1633
-  frequency: 1259
+  frequency: 1260
+  frequency_rank: 1632
+- slug: word-smooth
+  kind: vocabulary
   term: smooth
   transcription: smuːð
   translation_ru: разглаживать
-- position: 1634
   frequency: 1259
+  frequency_rank: 1633
+- slug: word-foundation
+  kind: vocabulary
   term: foundation
   transcription: faʊnˈdeɪʃn
   translation_ru: основа
-- position: 1635
-  frequency: 1258
+  frequency: 1259
+  frequency_rank: 1634
+- slug: word-ancient
+  kind: vocabulary
   term: ancient
   transcription: ˈeɪnʃnt
   translation_ru: древний
-- position: 1636
-  frequency: 1256
+  frequency: 1258
+  frequency_rank: 1635
+- slug: word-pardon
+  kind: vocabulary
   term: pardon
   transcription: pɑːdn
   translation_ru: прощение
-- position: 1637
   frequency: 1256
+  frequency_rank: 1636
+- slug: word-inquire
+  kind: vocabulary
   term: inquire
   transcription: ɪnˈkwaɪə
   translation_ru: спрашивать
-- position: 1638
-  frequency: 1254
+  frequency: 1256
+  frequency_rank: 1637
+- slug: word-faun
+  kind: vocabulary
   term: faun
   transcription: fɔːn
   translation_ru: фавн
-- position: 1639
-  frequency: 1253
+  frequency: 1254
+  frequency_rank: 1638
+- slug: word-university
+  kind: vocabulary
   term: University
   transcription: juːnɪˈvɜːsɪtɪ
   translation_ru: университет
-- position: 1640
-  frequency: 1252
+  frequency: 1253
+  frequency_rank: 1639
+- slug: word-south
+  kind: vocabulary
   term: South
   transcription: saʊθ
   translation_ru: юг
-- position: 1641
-  frequency: 1251
+  frequency: 1252
+  frequency_rank: 1640
+- slug: word-horrible
+  kind: vocabulary
   term: horrible
   transcription: ˈhɒrəbl
   translation_ru: ужасный
-- position: 1642
-  frequency: 1250
+  frequency: 1251
+  frequency_rank: 1641
+- slug: word-gift
+  kind: vocabulary
   term: gift
   transcription: gɪft
   translation_ru: подарок
-- position: 1643
   frequency: 1250
+  frequency_rank: 1642
+- slug: word-spare
+  kind: vocabulary
   term: spare
   transcription: speə
   translation_ru: запасной
-- position: 1644
-  frequency: 1249
+  frequency: 1250
+  frequency_rank: 1643
+- slug: word-confirm
+  kind: vocabulary
   term: confirm
   transcription: kənˈfɜːm
   translation_ru: подтверждать
-- position: 1645
   frequency: 1249
+  frequency_rank: 1644
+- slug: word-factory
+  kind: vocabulary
   term: factory
   transcription: ˈfæktərɪ
   translation_ru: завод
-- position: 1646
-  frequency: 1248
+  frequency: 1249
+  frequency_rank: 1645
+- slug: word-onto
+  kind: vocabulary
   term: onto
   transcription: ˈɔntʊ
   translation_ru: на
-- position: 1647
-  frequency: 1246
+  frequency: 1248
+  frequency_rank: 1646
+- slug: word-invite
+  kind: vocabulary
   term: invite
   transcription: ɪnˈvaɪt
   translation_ru: приглашать
-- position: 1648
-  frequency: 1245
+  frequency: 1246
+  frequency_rank: 1647
+- slug: word-monsieur
+  kind: vocabulary
   term: Monsieur
   transcription: məˈsjɜː
   translation_ru: месье
-- position: 1649
-  frequency: 1244
+  frequency: 1245
+  frequency_rank: 1648
+- slug: word-category
+  kind: vocabulary
   term: category
   transcription: ˈkætɪgərɪ
   translation_ru: категория
-- position: 1650
-  frequency: 1243
+  frequency: 1244
+  frequency_rank: 1649
+- slug: word-ok
+  kind: vocabulary
   term: OK
   transcription: əʊˈkeɪ
   translation_ru: ОК
-- position: 1651
-  frequency: 1242
+  frequency: 1243
+  frequency_rank: 1650
+- slug: word-slightly
+  kind: vocabulary
   term: slightly
   transcription: ˈslaɪtlɪ
   translation_ru: слегка
-- position: 1652
-  frequency: 1241
+  frequency: 1242
+  frequency_rank: 1651
+- slug: word-load
+  kind: vocabulary
   term: load
   transcription: ləʊd
   translation_ru: загружать
-- position: 1653
-  frequency: 1240
+  frequency: 1241
+  frequency_rank: 1652
+- slug: word-excellent
+  kind: vocabulary
   term: excellent
   transcription: ˈeksələnt
   translation_ru: отличный
-- position: 1654
-  frequency: 1239
+  frequency: 1240
+  frequency_rank: 1653
+- slug: word-email
+  kind: vocabulary
   term: email
   transcription: ɪˈmeɪl
   translation_ru: написать
-- position: 1655
   frequency: 1239
+  frequency_rank: 1654
+- slug: word-fifty
+  kind: vocabulary
   term: fifty
   transcription: ˈfɪftɪ
   translation_ru: пятьдесят человек
-- position: 1656
-  frequency: 1237
+  frequency: 1239
+  frequency_rank: 1655
+- slug: word-smart
+  kind: vocabulary
   term: smart
   transcription: smɑːt
   translation_ru: умный
-- position: 1657
-  frequency: 1236
+  frequency: 1237
+  frequency_rank: 1656
+- slug: word-christmas
+  kind: vocabulary
   term: Christmas
   transcription: ˈkrɪsməs
   translation_ru: Рождество
-- position: 1658
-  frequency: 1235
+  frequency: 1236
+  frequency_rank: 1657
+- slug: word-favourite
+  kind: vocabulary
   term: favourite
   transcription: ˈfeɪvərɪt
   translation_ru: любимый
-- position: 1659
-  frequency: 1234
+  frequency: 1235
+  frequency_rank: 1658
+- slug: word-secure
+  kind: vocabulary
   term: secure
   transcription: sɪˈkjʊə
   translation_ru: безопасный
-- position: 1660
-  frequency: 1233
+  frequency: 1234
+  frequency_rank: 1659
+- slug: word-maintain
+  kind: vocabulary
   term: maintain
   transcription: meɪnˈteɪn
   translation_ru: поддерживать
-- position: 1661
-  frequency: 1232
+  frequency: 1233
+  frequency_rank: 1660
+- slug: word-specify
+  kind: vocabulary
   term: specify
   transcription: ˈspesɪfaɪ
   translation_ru: указывать
-- position: 1662
-  frequency: 1231
+  frequency: 1232
+  frequency_rank: 1661
+- slug: word-accident
+  kind: vocabulary
   term: accident
   transcription: ˈæksɪdənt
   translation_ru: несчастный случай
-- position: 1663
   frequency: 1231
+  frequency_rank: 1662
+- slug: word-purple
+  kind: vocabulary
   term: purple
   transcription: pɜːpl
   translation_ru: фиолетовый
-- position: 1664
   frequency: 1231
+  frequency_rank: 1663
+- slug: word-phrase
+  kind: vocabulary
   term: phrase
   transcription: freɪz
   translation_ru: формулировать
-- position: 1665
-  frequency: 1230
+  frequency: 1231
+  frequency_rank: 1664
+- slug: word-relate
+  kind: vocabulary
   term: relate
   transcription: rɪˈleɪt
   translation_ru: относиться
-- position: 1666
   frequency: 1230
+  frequency_rank: 1665
+- slug: word-powerful
+  kind: vocabulary
   term: powerful
   transcription: ˈpaʊəf(ə)l
   translation_ru: богатырский
-- position: 1667
-  frequency: 1229
+  frequency: 1230
+  frequency_rank: 1666
+- slug: word-stress
+  kind: vocabulary
   term: stress
   transcription: stres
   translation_ru: стресс
-- position: 1668
-  frequency: 1228
+  frequency: 1229
+  frequency_rank: 1667
+- slug: word-due
+  kind: vocabulary
   term: due
   transcription: djuː
   translation_ru: надлежащий
-- position: 1669
   frequency: 1228
+  frequency_rank: 1668
+- slug: word-score
+  kind: vocabulary
   term: score
   transcription: skɔː
   translation_ru: счет
-- position: 1670
-  frequency: 1227
+  frequency: 1228
+  frequency_rank: 1669
+- slug: word-aware
+  kind: vocabulary
   term: aware
   transcription: əˈweə
   translation_ru: осведомленный
-- position: 1671
   frequency: 1227
+  frequency_rank: 1670
+- slug: word-fred
+  kind: vocabulary
   term: Fred
   transcription: fred
   translation_ru: Фред
-- position: 1672
-  frequency: 1226
+  frequency: 1227
+  frequency_rank: 1671
+- slug: word-mount
+  kind: vocabulary
   term: mount
   transcription: maʊnt
   translation_ru: монтировать
-- position: 1673
   frequency: 1226
+  frequency_rank: 1672
+- slug: word-roof
+  kind: vocabulary
   term: roof
   transcription: ruːf
   translation_ru: сводовый
-- position: 1674
-  frequency: 1225
+  frequency: 1226
+  frequency_rank: 1673
+- slug: word-customer
+  kind: vocabulary
   term: customer
   transcription: ˈkʌstəmə
   translation_ru: покупатель
-- position: 1675
-  frequency: 1224
+  frequency: 1225
+  frequency_rank: 1674
+- slug: word-crash
+  kind: vocabulary
   term: crash
   transcription: kræʃ
   translation_ru: авария
-- position: 1676
-  frequency: 1223
+  frequency: 1224
+  frequency_rank: 1675
+- slug: word-elephant
+  kind: vocabulary
   term: elephant
   transcription: ˈelɪfənt
   translation_ru: слон
-- position: 1677
-  frequency: 1221
+  frequency: 1223
+  frequency_rank: 1676
+- slug: word-cheer
+  kind: vocabulary
   term: cheer
   transcription: ʧɪə
   translation_ru: ободрить
-- position: 1678
-  frequency: 1220
+  frequency: 1221
+  frequency_rank: 1677
+- slug: word-declare
+  kind: vocabulary
   term: declare
   transcription: dɪˈkleə
   translation_ru: объявлять
-- position: 1679
-  frequency: 1219
+  frequency: 1220
+  frequency_rank: 1678
+- slug: word-murmur
+  kind: vocabulary
   term: murmur
   transcription: ˈmɜːmə
   translation_ru: ропот
-- position: 1680
   frequency: 1219
+  frequency_rank: 1679
+- slug: word-successful
+  kind: vocabulary
   term: successful
   transcription: səkˈsesf(ə)l
   translation_ru: успешный
-- position: 1681
-  frequency: 1216
+  frequency: 1219
+  frequency_rank: 1680
+- slug: word-solve
+  kind: vocabulary
   term: solve
   transcription: sɒlv
   translation_ru: решать
-- position: 1682
   frequency: 1216
+  frequency_rank: 1681
+- slug: word-bore
+  kind: vocabulary
   term: bore
   transcription: bɔː
   translation_ru: бурить
-- position: 1683
   frequency: 1216
+  frequency_rank: 1682
+- slug: word-bag
+  kind: vocabulary
   term: bag
   transcription: bæg
   translation_ru: сумка
-- position: 1684
-  frequency: 1213
+  frequency: 1216
+  frequency_rank: 1683
+- slug: word-explanation
+  kind: vocabulary
   term: explanation
   transcription: ekspləˈneɪʃn
   translation_ru: объяснение
-- position: 1685
-  frequency: 1212
+  frequency: 1213
+  frequency_rank: 1684
+- slug: word-counsel
+  kind: vocabulary
   term: counsel
   transcription: ˈkaʊnsəl
   translation_ru: наставлять
-- position: 1686
   frequency: 1212
+  frequency_rank: 1685
+- slug: word-pieces
+  kind: vocabulary
   term: pieces
   translation_ru: обрезки
-- position: 1687
   frequency: 1212
+  frequency_rank: 1686
+- slug: word-communicate
+  kind: vocabulary
   term: communicate
   transcription: kəˈmjuːnɪkeɪt
   translation_ru: общаться
-- position: 1688
-  frequency: 1211
+  frequency: 1212
+  frequency_rank: 1687
+- slug: word-connexion
+  kind: vocabulary
   term: connexion
   transcription: kəˈnekʃn
   translation_ru: связь
-- position: 1689
-  frequency: 1210
+  frequency: 1211
+  frequency_rank: 1688
+- slug: word-adam
+  kind: vocabulary
   term: Adam
   transcription: ˈædəm
   translation_ru: Адам
-- position: 1690
   frequency: 1210
+  frequency_rank: 1689
+- slug: word-comment
+  kind: vocabulary
   term: comment
   transcription: ˈkɒment
   translation_ru: комментарий
-- position: 1691
-  frequency: 1209
+  frequency: 1210
+  frequency_rank: 1690
+- slug: word-imagination
+  kind: vocabulary
   term: imagination
   transcription: ɪmæʤɪˈneɪʃn
   translation_ru: воображение
-- position: 1692
-  frequency: 1208
+  frequency: 1209
+  frequency_rank: 1691
+- slug: word-afford
+  kind: vocabulary
   term: afford
   transcription: əˈfɔːd
   translation_ru: позволить себе
-- position: 1693
-  frequency: 1207
+  frequency: 1208
+  frequency_rank: 1692
+- slug: word-arise
+  kind: vocabulary
   term: arise
   transcription: əˈraɪz
   translation_ru: возникать
-- position: 1694
   frequency: 1207
+  frequency_rank: 1693
+- slug: word-bother
+  kind: vocabulary
   term: bother
   transcription: ˈbɒðə
   translation_ru: беспокоить
-- position: 1695
-  frequency: 1205
+  frequency: 1207
+  frequency_rank: 1694
+- slug: word-dull
+  kind: vocabulary
   term: dull
   transcription: dʌl
   translation_ru: скучный
-- position: 1696
   frequency: 1205
+  frequency_rank: 1695
+- slug: word-telephone
+  kind: vocabulary
   term: telephone
   transcription: ˈtelɪfəʊn
   translation_ru: телефонная связь
-- position: 1697
-  frequency: 1204
+  frequency: 1205
+  frequency_rank: 1696
+- slug: word-professional
+  kind: vocabulary
   term: professional
   transcription: prəˈfeʃnəl
   translation_ru: профессиональный
-- position: 1698
   frequency: 1204
+  frequency_rank: 1697
+- slug: word-band
+  kind: vocabulary
   term: band
   transcription: bænd
   translation_ru: группа
-- position: 1699
   frequency: 1204
+  frequency_rank: 1698
+- slug: word-ward
+  kind: vocabulary
   term: ward
   transcription: wɔːd
   translation_ru: палата
-- position: 1700
-  frequency: 1203
+  frequency: 1204
+  frequency_rank: 1699
+- slug: word-version
+  kind: vocabulary
   term: version
   transcription: vɜːʃn
   translation_ru: версия
-- position: 1701
-  frequency: 1202
+  frequency: 1203
+  frequency_rank: 1700
+- slug: word-failure
+  kind: vocabulary
   term: failure
   transcription: ˈfeɪljə
   translation_ru: неудача
-- position: 1702
-  frequency: 1201
+  frequency: 1202
+  frequency_rank: 1701
+- slug: word-rita
+  kind: vocabulary
   term: Rita
   transcription: ˈriːtə
   translation_ru: Рита
-- position: 1703
   frequency: 1201
+  frequency_rank: 1702
+- slug: word-pile
+  kind: vocabulary
   term: pile
   transcription: paɪl
   translation_ru: складывать
-- position: 1704
   frequency: 1201
+  frequency_rank: 1703
+- slug: word-bid
+  kind: vocabulary
   term: bid
   transcription: bɪd
   translation_ru: прощаться, предлагать цену
-- position: 1705
-  frequency: 1200
+  frequency: 1201
+  frequency_rank: 1704
+- slug: word-whistle
+  kind: vocabulary
   term: whistle
   transcription: wɪsl
   translation_ru: свистеть
-- position: 1706
   frequency: 1200
+  frequency_rank: 1705
+- slug: word-tend
+  kind: vocabulary
   term: tend
   transcription: tend
   translation_ru: иметь тенденцию
-- position: 1707
-  frequency: 1199
+  frequency: 1200
+  frequency_rank: 1706
+- slug: word-shudder
+  kind: vocabulary
   term: shudder
   transcription: ˈʃʌdə
   translation_ru: содрогаться
-- position: 1708
-  frequency: 1198
+  frequency: 1199
+  frequency_rank: 1707
+- slug: word-meal
+  kind: vocabulary
   term: meal
   transcription: miːl
   translation_ru: еда
-- position: 1709
   frequency: 1198
+  frequency_rank: 1708
+- slug: word-beggar
+  kind: vocabulary
   term: beggar
   transcription: ˈbegə
   translation_ru: попрошайка
-- position: 1710
-  frequency: 1197
+  frequency: 1198
+  frequency_rank: 1709
+- slug: word-aside
+  kind: vocabulary
   term: aside
   transcription: əˈsaɪd
   translation_ru: в сторону
-- position: 1711
-  frequency: 1196
+  frequency: 1197
+  frequency_rank: 1710
+- slug: word-fashion
+  kind: vocabulary
   term: fashion
   transcription: fæʃn
   translation_ru: мода
-- position: 1712
-  frequency: 1195
+  frequency: 1196
+  frequency_rank: 1711
+- slug: word-available
+  kind: vocabulary
   term: available
   transcription: əˈveɪləbl
   translation_ru: доступный
-- position: 1713
   frequency: 1195
+  frequency_rank: 1712
+- slug: word-bet
+  kind: vocabulary
   term: bet
   transcription: bet
   translation_ru: ставка
-- position: 1714
-  frequency: 1194
+  frequency: 1195
+  frequency_rank: 1713
+- slug: word-evidently
+  kind: vocabulary
   term: evidently
   transcription: ˈevɪdəntlɪ
   translation_ru: очевидно
-- position: 1715
-  frequency: 1193
+  frequency: 1194
+  frequency_rank: 1714
+- slug: word-print
+  kind: vocabulary
   term: print
   transcription: prɪnt
   translation_ru: печатать
-- position: 1716
   frequency: 1193
+  frequency_rank: 1715
+- slug: word-switch
+  kind: vocabulary
   term: switch
   transcription: swɪʧ
   translation_ru: переключатель
-- position: 1717
   frequency: 1193
+  frequency_rank: 1716
+- slug: word-cliff
+  kind: vocabulary
   term: cliff
   transcription: klɪf
   translation_ru: утес
-- position: 1718
-  frequency: 1191
+  frequency: 1193
+  frequency_rank: 1717
+- slug: word-cart
+  kind: vocabulary
   term: cart
   transcription: kɑːt
   translation_ru: корзина
-- position: 1719
-  frequency: 1190
+  frequency: 1191
+  frequency_rank: 1718
+- slug: word-series
+  kind: vocabulary
   term: series
   transcription: ˈsɪəriːz
   translation_ru: серия
-- position: 1720
-  frequency: 1189
+  frequency: 1190
+  frequency_rank: 1719
+- slug: word-dine
+  kind: vocabulary
   term: dine
   transcription: daɪn
   translation_ru: обедать
-- position: 1721
-  frequency: 1188
+  frequency: 1189
+  frequency_rank: 1720
+- slug: word-labour
+  kind: vocabulary
   term: labour
   transcription: ˈleɪbə
   translation_ru: труд
-- position: 1722
-  frequency: 1185
+  frequency: 1188
+  frequency_rank: 1721
+- slug: word-bush
+  kind: vocabulary
   term: Bush
   transcription: bʊʃ
   translation_ru: Буш
-- position: 1723
-  frequency: 1183
+  frequency: 1185
+  frequency_rank: 1722
+- slug: word-lake
+  kind: vocabulary
   term: lake
   transcription: leɪk
   translation_ru: озеро
-- position: 1724
-  frequency: 1181
+  frequency: 1183
+  frequency_rank: 1723
+- slug: word-clerk
+  kind: vocabulary
   term: clerk
   transcription: klɑːk
   translation_ru: чиновник
-- position: 1725
-  frequency: 1180
+  frequency: 1181
+  frequency_rank: 1724
+- slug: word-daisy
+  kind: vocabulary
   term: daisy
   transcription: ˈdeɪzɪ
   translation_ru: маргаритка
-- position: 1726
   frequency: 1180
+  frequency_rank: 1725
+- slug: word-profit
+  kind: vocabulary
   term: profit
   transcription: ˈprɒfɪt
   translation_ru: прибыль
-- position: 1727
   frequency: 1180
+  frequency_rank: 1726
+- slug: word-identify
+  kind: vocabulary
   term: identify
   transcription: aɪˈdentɪfaɪ
   translation_ru: идентифицировать
-- position: 1728
-  frequency: 1178
+  frequency: 1180
+  frequency_rank: 1727
+- slug: word-mix
+  kind: vocabulary
   term: mix
   transcription: mɪks
   translation_ru: смешивать
-- position: 1729
-  frequency: 1176
+  frequency: 1178
+  frequency_rank: 1728
+- slug: word-array
+  kind: vocabulary
   term: array
   transcription: əˈreɪ
   translation_ru: выстраивать
-- position: 1730
-  frequency: 1173
+  frequency: 1176
+  frequency_rank: 1729
+- slug: word-ensure
+  kind: vocabulary
   term: ensure
   transcription: ɪnˈʃʊə
   translation_ru: гарантировать
-- position: 1731
   frequency: 1173
+  frequency_rank: 1730
+- slug: word-json
+  kind: vocabulary
   term: JSON
   transcription: ʤsən
   translation_ru: формат JSON
-- position: 1732
-  frequency: 1172
+  frequency: 1173
+  frequency_rank: 1731
+- slug: word-owner
+  kind: vocabulary
   term: owner
   transcription: ˈəʊnə
   translation_ru: владелец
-- position: 1733
-  frequency: 1171
+  frequency: 1172
+  frequency_rank: 1732
+- slug: word-motion
+  kind: vocabulary
   term: motion
   transcription: məʊʃn
   translation_ru: движение
-- position: 1734
   frequency: 1171
+  frequency_rank: 1733
+- slug: word-authority
+  kind: vocabulary
   term: authority
   transcription: ɔːˈθɒrɪtɪ
   translation_ru: авторитет
-- position: 1735
   frequency: 1171
+  frequency_rank: 1734
+- slug: word-witness
+  kind: vocabulary
   term: witness
   translation_ru: свидетель
-- position: 1736
-  frequency: 1170
+  frequency: 1171
+  frequency_rank: 1735
+- slug: word-politics
+  kind: vocabulary
   term: politics
   transcription: ˈpɒlɪtɪks
   translation_ru: политика
-- position: 1737
   frequency: 1170
+  frequency_rank: 1736
+- slug: word-cease
+  kind: vocabulary
   term: cease
   transcription: siːs
   translation_ru: переставать
-- position: 1738
-  frequency: 1169
+  frequency: 1170
+  frequency_rank: 1737
+- slug: word-entrance
+  kind: vocabulary
   term: entrance
   transcription: ˈentrəns
   translation_ru: вход
-- position: 1739
   frequency: 1169
+  frequency_rank: 1738
+- slug: word-compare
+  kind: vocabulary
   term: compare
   transcription: kəmˈpeə
   translation_ru: сравнивать
-- position: 1740
-  frequency: 1168
+  frequency: 1169
+  frequency_rank: 1739
+- slug: word-monte
+  kind: vocabulary
   term: Monte
   transcription: ˈmɒntɪ
   translation_ru: Монте
-- position: 1741
   frequency: 1168
+  frequency_rank: 1740
+- slug: word-previous
+  kind: vocabulary
   term: previous
   transcription: ˈpriːvɪəs
   translation_ru: предыдущий
-- position: 1742
   frequency: 1168
+  frequency_rank: 1741
+- slug: word-twelve
+  kind: vocabulary
   term: twelve
   transcription: twelv
   translation_ru: двенадцать
-- position: 1743
   frequency: 1168
+  frequency_rank: 1742
+- slug: word-collect
+  kind: vocabulary
   term: collect
   transcription: kəˈlekt
   translation_ru: собирать
-- position: 1744
-  frequency: 1167
+  frequency: 1168
+  frequency_rank: 1743
+- slug: word-political
+  kind: vocabulary
   term: political
   transcription: pəˈlɪtɪkəl
   translation_ru: политический
-- position: 1745
-  frequency: 1166
+  frequency: 1167
+  frequency_rank: 1744
+- slug: word-ease
+  kind: vocabulary
   term: ease
   transcription: iːz
   translation_ru: легкость
-- position: 1746
-  frequency: 1164
+  frequency: 1166
+  frequency_rank: 1745
+- slug: word-deliver
+  kind: vocabulary
   term: deliver
   transcription: dɪˈlɪvə
   translation_ru: доставлять
-- position: 1747
-  frequency: 1163
+  frequency: 1164
+  frequency_rank: 1746
+- slug: word-dictionary
+  kind: vocabulary
   term: dictionary
   transcription: ˈdɪkʃn(ə)rɪ
   translation_ru: словарь
-- position: 1748
-  frequency: 1162
+  frequency: 1163
+  frequency_rank: 1747
+- slug: word-sport
+  kind: vocabulary
   term: sport
   transcription: spɔːt
   translation_ru: спорт
-- position: 1749
-  frequency: 1160
+  frequency: 1162
+  frequency_rank: 1748
+- slug: word-password
+  kind: vocabulary
   term: password
   transcription: ˈpɑːswɜːd
   translation_ru: пароль
-- position: 1750
-  frequency: 1159
+  frequency: 1160
+  frequency_rank: 1749
+- slug: word-tale
+  kind: vocabulary
   term: tale
   transcription: teɪl
   translation_ru: повествование
-- position: 1751
   frequency: 1159
+  frequency_rank: 1750
+- slug: word-technology
+  kind: vocabulary
   term: technology
   transcription: tekˈnɒləʤɪ
   translation_ru: технология
-- position: 1752
-  frequency: 1158
+  frequency: 1159
+  frequency_rank: 1751
+- slug: word-dangerous
+  kind: vocabulary
   term: dangerous
   transcription: ˈdeɪnʤərəs
   translation_ru: опасный
-- position: 1753
   frequency: 1158
+  frequency_rank: 1752
+- slug: word-daily
+  kind: vocabulary
   term: daily
   transcription: ˈdeɪlɪ
   translation_ru: ежедневный
-- position: 1754
   frequency: 1158
+  frequency_rank: 1753
+- slug: word-falling
+  kind: vocabulary
   term: falling
   transcription: ˈfɔːlɪŋ
   translation_ru: понижение
-- position: 1755
   frequency: 1158
+  frequency_rank: 1754
+- slug: word-judgement
+  kind: vocabulary
   term: judgement
   transcription: ˈʤʌʤmənt
   translation_ru: суждение
-- position: 1756
   frequency: 1158
+  frequency_rank: 1755
+- slug: word-screen
+  kind: vocabulary
   term: screen
   transcription: skriːn
   translation_ru: экран
-- position: 1757
   frequency: 1158
+  frequency_rank: 1756
+- slug: word-colonel
+  kind: vocabulary
   term: colonel
   transcription: kɜːnl
   translation_ru: полковник
-- position: 1758
   frequency: 1158
+  frequency_rank: 1757
+- slug: word-encourage
+  kind: vocabulary
   term: encourage
   transcription: ɪnˈkʌrɪʤ
   translation_ru: поощрять
-- position: 1759
-  frequency: 1156
+  frequency: 1158
+  frequency_rank: 1758
+- slug: word-mere
+  kind: vocabulary
   term: mere
   transcription: mɪə
   translation_ru: простой
-- position: 1760
   frequency: 1156
+  frequency_rank: 1759
+- slug: word-holy
+  kind: vocabulary
   term: holy
   transcription: ˈhəʊlɪ
   translation_ru: святой
-- position: 1761
-  frequency: 1155
+  frequency: 1156
+  frequency_rank: 1760
+- slug: word-merry
+  kind: vocabulary
   term: merry
   transcription: ˈmerɪ
   translation_ru: черешня
-- position: 1762
-  frequency: 1154
+  frequency: 1155
+  frequency_rank: 1761
+- slug: word-natasha
+  kind: vocabulary
   term: Natasha
   transcription: neɪtʃ
   translation_ru: Наташа
-- position: 1763
-  frequency: 1152
+  frequency: 1154
+  frequency_rank: 1762
+- slug: word-palace
+  kind: vocabulary
   term: palace
   transcription: ˈpælɪs
   translation_ru: дворец
-- position: 1764
   frequency: 1152
+  frequency_rank: 1763
+- slug: word-rescue
+  kind: vocabulary
   term: rescue
   transcription: ˈreskjuː
   translation_ru: спасение
-- position: 1765
   frequency: 1152
+  frequency_rank: 1764
+- slug: word-capital
+  kind: vocabulary
   term: capital
   transcription: ˈkæpɪtl
   translation_ru: столица
-- position: 1766
-  frequency: 1151
+  frequency: 1152
+  frequency_rank: 1765
+- slug: word-bread
+  kind: vocabulary
   term: bread
   transcription: bred
   translation_ru: хлеб
-- position: 1767
-  frequency: 1150
+  frequency: 1151
+  frequency_rank: 1766
+- slug: word-cent
+  kind: vocabulary
   term: cent
   transcription: sent
   translation_ru: цент
-- position: 1768
   frequency: 1150
+  frequency_rank: 1767
+- slug: word-shear
+  kind: vocabulary
   term: shear
   transcription: ʃɪə
   translation_ru: стричь
-- position: 1769
   frequency: 1150
+  frequency_rank: 1768
+- slug: word-dread
+  kind: vocabulary
   term: dread
   transcription: dred
   translation_ru: страшиться
-- position: 1770
-  frequency: 1148
+  frequency: 1150
+  frequency_rank: 1769
+- slug: word-proceed
+  kind: vocabulary
   term: proceed
   transcription: prəˈsiːd
   translation_ru: продолжить
-- position: 1771
   frequency: 1148
+  frequency_rank: 1770
+- slug: word-surely
+  kind: vocabulary
   term: surely
   transcription: ˈʃʊəlɪ
   translation_ru: конечно
-- position: 1772
-  frequency: 1147
+  frequency: 1148
+  frequency_rank: 1771
+- slug: word-entirely
+  kind: vocabulary
   term: entirely
   transcription: ɪnˈtaɪəlɪ
   translation_ru: полностью
-- position: 1773
-  frequency: 1146
+  frequency: 1147
+  frequency_rank: 1772
+- slug: word-holmes
+  kind: vocabulary
   term: Holmes
   transcription: həʊmz
   translation_ru: Холмс
-- position: 1774
   frequency: 1146
+  frequency_rank: 1773
+- slug: word-diana
+  kind: vocabulary
   term: Diana
   transcription: daɪˈænə
   translation_ru: Диана
-- position: 1775
   frequency: 1146
+  frequency_rank: 1774
+- slug: word-permit
+  kind: vocabulary
   term: permit
   transcription: ˈpɜːmɪt
   translation_ru: разрешать
-- position: 1776
   frequency: 1146
+  frequency_rank: 1775
+- slug: word-schedule
+  kind: vocabulary
   term: schedule
   transcription: ˈʃedjuːl
   translation_ru: график
-- position: 1777
-  frequency: 1145
+  frequency: 1146
+  frequency_rank: 1776
+- slug: word-fling
+  kind: vocabulary
   term: fling
   transcription: flɪŋ
   translation_ru: швырять
-- position: 1778
-  frequency: 1144
+  frequency: 1145
+  frequency_rank: 1777
+- slug: word-vanish
+  kind: vocabulary
   term: vanish
   transcription: ˈvænɪʃ
   translation_ru: пропадать
-- position: 1779
   frequency: 1144
+  frequency_rank: 1778
+- slug: word-scare
+  kind: vocabulary
   term: scare
   transcription: skeə
   translation_ru: пугать
-- position: 1780
-  frequency: 1143
+  frequency: 1144
+  frequency_rank: 1779
+- slug: word-famous
+  kind: vocabulary
   term: famous
   transcription: ˈfeɪməs
   translation_ru: известный
-- position: 1781
-  frequency: 1142
+  frequency: 1143
+  frequency_rank: 1780
+- slug: word-trunk
+  kind: vocabulary
   term: trunk
   transcription: trʌŋk
   translation_ru: багажник
-- position: 1782
-  frequency: 1141
+  frequency: 1142
+  frequency_rank: 1781
+- slug: word-char
+  kind: vocabulary
   term: char
   transcription: ʧɑː
   translation_ru: обгорелый
-- position: 1783
   frequency: 1141
+  frequency_rank: 1782
+- slug: word-insist
+  kind: vocabulary
   term: insist
   transcription: ɪnˈsɪst
   translation_ru: настаивать
-- position: 1784
-  frequency: 1140
+  frequency: 1141
+  frequency_rank: 1783
+- slug: word-kevin
+  kind: vocabulary
   term: Kevin
   transcription: ˈkevɪn
   translation_ru: Кевин
-- position: 1785
   frequency: 1140
+  frequency_rank: 1784
+- slug: word-better
+  kind: vocabulary
   term: better
   transcription: ˈbetə
   translation_ru: улучшать
-- position: 1786
-  frequency: 1139
+  frequency: 1140
+  frequency_rank: 1785
+- slug: word-inform
+  kind: vocabulary
   term: inform
   transcription: ɪnˈfɔːm
   translation_ru: сообщать
-- position: 1787
   frequency: 1139
+  frequency_rank: 1786
+- slug: word-rope
+  kind: vocabulary
   term: rope
   transcription: rəʊp
   translation_ru: веревка
-- position: 1788
-  frequency: 1137
+  frequency: 1139
+  frequency_rank: 1787
+- slug: word-boot
+  kind: vocabulary
   term: boot
   transcription: buːt
   translation_ru: ботинок
-- position: 1789
   frequency: 1137
+  frequency_rank: 1788
+- slug: word-consequence
+  kind: vocabulary
   term: consequence
   transcription: ˈkɒnsɪkwəns
   translation_ru: последствие
-- position: 1790
   frequency: 1137
+  frequency_rank: 1789
+- slug: word-dreadful
+  kind: vocabulary
   term: dreadful
   transcription: ˈdredf(ə)l
   translation_ru: ужасный
-- position: 1791
-  frequency: 1136
+  frequency: 1137
+  frequency_rank: 1790
+- slug: word-reflect
+  kind: vocabulary
   term: reflect
   transcription: rɪˈflekt
   translation_ru: отражать
-- position: 1792
-  frequency: 1135
+  frequency: 1136
+  frequency_rank: 1791
+- slug: word-pride
+  kind: vocabulary
   term: pride
   transcription: praɪd
   translation_ru: гордость
-- position: 1793
   frequency: 1135
+  frequency_rank: 1792
+- slug: word-north
+  kind: vocabulary
   term: North
   transcription: nɔːθ
   translation_ru: северный
-- position: 1794
-  frequency: 1134
+  frequency: 1135
+  frequency_rank: 1793
+- slug: word-restore
+  kind: vocabulary
   term: restore
   transcription: rɪsˈtɔː
   translation_ru: восстановить
-- position: 1795
-  frequency: 1133
+  frequency: 1134
+  frequency_rank: 1794
+- slug: word-feast
+  kind: vocabulary
   term: feast
   transcription: fiːst
   translation_ru: пировать
-- position: 1796
-  frequency: 1132
+  frequency: 1133
+  frequency_rank: 1795
+- slug: word-balance
+  kind: vocabulary
   term: balance
   transcription: ˈbæləns
   translation_ru: баланс
-- position: 1797
-  frequency: 1131
+  frequency: 1132
+  frequency_rank: 1796
+- slug: word-effective
+  kind: vocabulary
   term: effective
   transcription: ɪˈfektɪv
   translation_ru: эффективный
-- position: 1798
-  frequency: 1130
+  frequency: 1131
+  frequency_rank: 1797
+- slug: word-deny
+  kind: vocabulary
   term: deny
   transcription: dɪˈnaɪ
   translation_ru: отрицать
-- position: 1799
-  frequency: 1129
+  frequency: 1130
+  frequency_rank: 1798
+- slug: word-priest
+  kind: vocabulary
   term: priest
   transcription: priːst
   translation_ru: священник
-- position: 1800
   frequency: 1129
+  frequency_rank: 1799
+- slug: word-matthew
+  kind: vocabulary
   term: Matthew
   transcription: ˈmæθjuː
   translation_ru: Мэтью
-- position: 1801
   frequency: 1129
+  frequency_rank: 1800
+- slug: word-sheet
+  kind: vocabulary
   term: sheet
   transcription: ʃiːt
   translation_ru: лист
-- position: 1802
-  frequency: 1128
+  frequency: 1129
+  frequency_rank: 1801
+- slug: word-obey
+  kind: vocabulary
   term: obey
   transcription: əˈbeɪ
   translation_ru: подчиняться
-- position: 1803
   frequency: 1128
+  frequency_rank: 1802
+- slug: word-stern
+  kind: vocabulary
   term: stern
   transcription: stɜːn
   translation_ru: корма
-- position: 1804
   frequency: 1128
+  frequency_rank: 1803
+- slug: word-stride
+  kind: vocabulary
   term: stride
   transcription: straɪd
   translation_ru: шагать
-- position: 1805
   frequency: 1128
+  frequency_rank: 1804
+- slug: word-howl
+  kind: vocabulary
   term: howl
   transcription: haʊl
   translation_ru: выть
-- position: 1806
   frequency: 1128
+  frequency_rank: 1805
+- slug: word-studio
+  kind: vocabulary
   term: studio
   transcription: ˈstjuːdɪəʊ
   translation_ru: студия
-- position: 1807
   frequency: 1128
+  frequency_rank: 1806
+- slug: word-dorian
+  kind: vocabulary
   term: Dorian
   transcription: ˈdɔːrɪən
   translation_ru: дорийцы
-- position: 1808
-  frequency: 1127
+  frequency: 1128
+  frequency_rank: 1807
+- slug: word-newspaper
+  kind: vocabulary
   term: newspaper
   transcription: ˈnjuːspeɪpə
   translation_ru: газета
-- position: 1809
-  frequency: 1125
+  frequency: 1127
+  frequency_rank: 1808
+- slug: word-childhood
+  kind: vocabulary
   term: childhood
   transcription: ˈʧaɪldhʊd
   translation_ru: детство
-- position: 1810
   frequency: 1125
+  frequency_rank: 1809
+- slug: word-extremely
+  kind: vocabulary
   term: extremely
   transcription: ɪksˈtriːmlɪ
   translation_ru: чрезвычайно
-- position: 1811
   frequency: 1125
+  frequency_rank: 1810
+- slug: word-supper
+  kind: vocabulary
   term: supper
   transcription: ˈsʌpə
   translation_ru: ужин
-- position: 1812
-  frequency: 1124
+  frequency: 1125
+  frequency_rank: 1811
+- slug: word-creep
+  kind: vocabulary
   term: creep
   transcription: kriːp
   translation_ru: ползать
-- position: 1813
   frequency: 1124
+  frequency_rank: 1812
+- slug: word-sob
+  kind: vocabulary
   term: sob
   transcription: sɒb
   translation_ru: всхлипывать
-- position: 1814
-  frequency: 1122
+  frequency: 1124
+  frequency_rank: 1813
+- slug: word-curious
+  kind: vocabulary
   term: curious
   transcription: ˈkjʊərɪəs
   translation_ru: любопытный
-- position: 1815
   frequency: 1122
+  frequency_rank: 1814
+- slug: word-specific
+  kind: vocabulary
   term: specific
   transcription: spɪˈsɪfɪk
   translation_ru: специфический
-- position: 1816
-  frequency: 1121
+  frequency: 1122
+  frequency_rank: 1815
+- slug: word-label
+  kind: vocabulary
   term: label
   transcription: leɪbl
   translation_ru: этикетка
-- position: 1817
-  frequency: 1120
+  frequency: 1121
+  frequency_rank: 1816
+- slug: word-smith
+  kind: vocabulary
   term: Smith
   transcription: smɪθ
   translation_ru: кузнечный
-- position: 1818
   frequency: 1120
+  frequency_rank: 1817
+- slug: word-meat
+  kind: vocabulary
   term: meat
   transcription: miːt
   translation_ru: мясо
-- position: 1819
-  frequency: 1118
+  frequency: 1120
+  frequency_rank: 1818
+- slug: word-gesture
+  kind: vocabulary
   term: gesture
   transcription: ˈʤesʧə
   translation_ru: жест
-- position: 1820
   frequency: 1118
+  frequency_rank: 1819
+- slug: word-render
+  kind: vocabulary
   term: render
   transcription: ˈrendə
   translation_ru: оказывать
-- position: 1821
-  frequency: 1115
+  frequency: 1118
+  frequency_rank: 1820
+- slug: word-employee
+  kind: vocabulary
   term: employee
   transcription: emplɔɪˈiː
   translation_ru: работник
-- position: 1822
   frequency: 1115
+  frequency_rank: 1821
+- slug: word-attitude
+  kind: vocabulary
   term: attitude
   transcription: ˈætɪtjuːd
   translation_ru: отношение
-- position: 1823
-  frequency: 1111
+  frequency: 1115
+  frequency_rank: 1822
+- slug: word-pipe
+  kind: vocabulary
   term: pipe
   transcription: paɪp
   translation_ru: труба
-- position: 1824
-  frequency: 1110
+  frequency: 1111
+  frequency_rank: 1823
+- slug: word-owe
+  kind: vocabulary
   term: owe
   transcription: əʊ
   translation_ru: быть должным
-- position: 1825
-  frequency: 1109
+  frequency: 1110
+  frequency_rank: 1824
+- slug: word-intention
+  kind: vocabulary
   term: intention
   transcription: ɪnˈtenʃn
   translation_ru: намерение
-- position: 1826
-  frequency: 1108
+  frequency: 1109
+  frequency_rank: 1825
+- slug: word-presently
+  kind: vocabulary
   term: presently
   transcription: ˈprezntlɪ
   translation_ru: в настоящее время
-- position: 1827
   frequency: 1108
+  frequency_rank: 1826
+- slug: word-vision
+  kind: vocabulary
   term: vision
   transcription: ˈvɪʒən
   translation_ru: видение
-- position: 1828
-  frequency: 1107
+  frequency: 1108
+  frequency_rank: 1827
+- slug: word-albus
+  kind: vocabulary
   term: Albus
   transcription: ˈælbəs
   translation_ru: Альбус
-- position: 1829
   frequency: 1107
+  frequency_rank: 1828
+- slug: word-oxford
+  kind: vocabulary
   term: Oxford
   transcription: ˈɒksfəd
   translation_ru: Оксфорд
-- position: 1830
   frequency: 1107
+  frequency_rank: 1829
+- slug: word-connection
+  kind: vocabulary
   term: connection
   transcription: kəˈnekʃn
   translation_ru: соединение
-- position: 1831
-  frequency: 1105
+  frequency: 1107
+  frequency_rank: 1830
+- slug: word-kick
+  kind: vocabulary
   term: kick
   transcription: kɪk
   translation_ru: пинать
-- position: 1832
   frequency: 1105
+  frequency_rank: 1831
+- slug: word-perceive
+  kind: vocabulary
   term: perceive
   transcription: pəˈsiːv
   translation_ru: воспринимать
-- position: 1833
-  frequency: 1104
+  frequency: 1105
+  frequency_rank: 1832
+- slug: word-sorrow
+  kind: vocabulary
   term: sorrow
   transcription: ˈsɒrəʊ
   translation_ru: печаль
-- position: 1834
-  frequency: 1103
+  frequency: 1104
+  frequency_rank: 1833
+- slug: word-march
+  kind: vocabulary
   term: March
   transcription: mɑːʧ
   translation_ru: идти
-- position: 1835
   frequency: 1103
+  frequency_rank: 1834
+- slug: word-retreat
+  kind: vocabulary
   term: retreat
   transcription: rɪˈtriːt
   translation_ru: отступление
-- position: 1836
-  frequency: 1100
+  frequency: 1103
+  frequency_rank: 1835
+- slug: word-false
+  kind: vocabulary
   term: 'false'
   transcription: fɔːls
   translation_ru: ложный
-- position: 1837
-  frequency: 1099
+  frequency: 1100
+  frequency_rank: 1836
+- slug: word-are
+  kind: vocabulary
   term: are
   transcription: ɑː
   translation_ru: АР
-- position: 1838
-  frequency: 1097
+  frequency: 1099
+  frequency_rank: 1837
+- slug: word-yield
+  kind: vocabulary
   term: yield
   transcription: jiːld
   translation_ru: уступать
-- position: 1839
-  frequency: 1094
+  frequency: 1097
+  frequency_rank: 1838
+- slug: word-swing
+  kind: vocabulary
   term: swing
   transcription: swɪŋ
   translation_ru: качать
-- position: 1840
-  frequency: 1093
+  frequency: 1094
+  frequency_rank: 1839
+- slug: word-surface
+  kind: vocabulary
   term: surface
   transcription: ˈsɜːfɪs
   translation_ru: поверхность
-- position: 1841
-  frequency: 1092
+  frequency: 1093
+  frequency_rank: 1840
+- slug: word-uh
+  kind: vocabulary
   term: uh
   transcription: ʌ
   translation_ru: ух
-- position: 1842
   frequency: 1092
+  frequency_rank: 1841
+- slug: word-interview
+  kind: vocabulary
   term: interview
   transcription: ˈɪntəvjuː
   translation_ru: интервью
-- position: 1843
   frequency: 1092
+  frequency_rank: 1842
+- slug: word-russia
+  kind: vocabulary
   term: Russia
   transcription: ˈrʌʃə
   translation_ru: Россия
-- position: 1844
   frequency: 1092
+  frequency_rank: 1843
+- slug: word-sirius
+  kind: vocabulary
   term: Sirius
   transcription: ˈsɪrɪəs
   translation_ru: Сириус
-- position: 1845
-  frequency: 1091
+  frequency: 1092
+  frequency_rank: 1844
+- slug: word-ignore
+  kind: vocabulary
   term: ignore
   transcription: ɪgˈnɔː
   translation_ru: игнорировать
-- position: 1846
-  frequency: 1089
+  frequency: 1091
+  frequency_rank: 1845
+- slug: word-shot
+  kind: vocabulary
   term: shot
   transcription: ʃɒt
   translation_ru: выстрел
-- position: 1847
   frequency: 1089
+  frequency_rank: 1846
+- slug: word-commander
+  kind: vocabulary
   term: commander
   transcription: kəˈmɑːndə
   translation_ru: командир
-- position: 1848
-  frequency: 1088
+  frequency: 1089
+  frequency_rank: 1847
+- slug: word-overcome
+  kind: vocabulary
   term: overcome
   transcription: əʊvəˈkʌm
   translation_ru: преодолеть
-- position: 1849
   frequency: 1088
+  frequency_rank: 1848
+- slug: word-weather
+  kind: vocabulary
   term: weather
   transcription: ˈweðə
   translation_ru: погода
-- position: 1850
-  frequency: 1085
+  frequency: 1088
+  frequency_rank: 1849
+- slug: word-convert
+  kind: vocabulary
   term: convert
   transcription: ˈkɒnvɜːt
   translation_ru: преобразовать
-- position: 1851
   frequency: 1085
+  frequency_rank: 1850
+- slug: word-survive
+  kind: vocabulary
   term: survive
   transcription: səˈvaɪv
   translation_ru: выжить
-- position: 1852
-  frequency: 1084
+  frequency: 1085
+  frequency_rank: 1851
+- slug: word-sand
+  kind: vocabulary
   term: sand
   transcription: sænd
   translation_ru: песок
-- position: 1853
-  frequency: 1083
+  frequency: 1084
+  frequency_rank: 1852
+- slug: word-neville
+  kind: vocabulary
   term: Neville
   transcription: nevl
   translation_ru: Невилл
-- position: 1854
   frequency: 1083
+  frequency_rank: 1853
+- slug: word-lucky
+  kind: vocabulary
   term: lucky
   transcription: ˈlʌkɪ
   translation_ru: удачливый
-- position: 1855
   frequency: 1083
+  frequency_rank: 1854
+- slug: word-tax
+  kind: vocabulary
   term: tax
   transcription: tæks
   translation_ru: облагать налогом
-- position: 1856
-  frequency: 1082
+  frequency: 1083
+  frequency_rank: 1855
+- slug: word-ape
+  kind: vocabulary
   term: ape
   transcription: eɪp
   translation_ru: обезьянничать
-- position: 1857
-  frequency: 1079
+  frequency: 1082
+  frequency_rank: 1856
+- slug: word-relation
+  kind: vocabulary
   term: relation
   transcription: rɪˈleɪʃn
   translation_ru: отношение
-- position: 1858
-  frequency: 1076
+  frequency: 1079
+  frequency_rank: 1857
+- slug: word-proof
+  kind: vocabulary
   term: proof
   transcription: pruːf
   translation_ru: непроницаемый
-- position: 1859
-  frequency: 1075
+  frequency: 1076
+  frequency_rank: 1858
+- slug: word-genius
+  kind: vocabulary
   term: genius
   transcription: ˈʤiːnɪəs
   translation_ru: гений
-- position: 1860
   frequency: 1075
+  frequency_rank: 1859
+- slug: word-refer
+  kind: vocabulary
   term: refer
   transcription: rɪˈfɜː
   translation_ru: относиться
-- position: 1861
   frequency: 1075
+  frequency_rank: 1860
+- slug: word-argue
+  kind: vocabulary
   term: argue
   transcription: ˈɑːgjuː
   translation_ru: спорить
-- position: 1862
-  frequency: 1074
+  frequency: 1075
+  frequency_rank: 1861
+- slug: word-visual
+  kind: vocabulary
   term: visual
   transcription: ˈvɪʒʊəl
   translation_ru: визуальный
-- position: 1863
-  frequency: 1073
+  frequency: 1074
+  frequency_rank: 1862
+- slug: word-college
+  kind: vocabulary
   term: college
   transcription: ˈkɒlɪʤ
   translation_ru: колледж
-- position: 1864
-  frequency: 1072
+  frequency: 1073
+  frequency_rank: 1863
+- slug: word-damn
+  kind: vocabulary
   term: damn
   transcription: dæm
   translation_ru: черт
-- position: 1865
   frequency: 1072
+  frequency_rank: 1864
+- slug: word-pour
+  kind: vocabulary
   term: pour
   transcription: pɔː
   translation_ru: наливать
-- position: 1866
-  frequency: 1071
+  frequency: 1072
+  frequency_rank: 1865
+- slug: word-height
+  kind: vocabulary
   term: height
   transcription: haɪt
   translation_ru: высота
-- position: 1867
-  frequency: 1070
+  frequency: 1071
+  frequency_rank: 1866
+- slug: word-performance
+  kind: vocabulary
   term: performance
   transcription: pəˈfɔːməns
   translation_ru: представление
-- position: 1868
-  frequency: 1068
+  frequency: 1070
+  frequency_rank: 1867
+- slug: word-portrait
+  kind: vocabulary
   term: portrait
   transcription: ˈpɔːtrɪt
   translation_ru: портрет
-- position: 1869
   frequency: 1068
+  frequency_rank: 1868
+- slug: word-german
+  kind: vocabulary
   term: German
   transcription: ˈʤɜːmən
   translation_ru: немецкий
-- position: 1870
-  frequency: 1066
+  frequency: 1068
+  frequency_rank: 1869
+- slug: word-role
+  kind: vocabulary
   term: role
   transcription: rəʊl
   translation_ru: роль
-- position: 1871
-  frequency: 1065
+  frequency: 1066
+  frequency_rank: 1870
+- slug: word-careful
+  kind: vocabulary
   term: careful
   transcription: ˈkeəf(ə)l
   translation_ru: осторожный
-- position: 1872
-  frequency: 1062
+  frequency: 1065
+  frequency_rank: 1871
+- slug: word-contract
+  kind: vocabulary
   term: contract
   transcription: ˈkɒntrækt
   translation_ru: сокращаться
-- position: 1873
   frequency: 1062
+  frequency_rank: 1872
+- slug: word-shirt
+  kind: vocabulary
   term: shirt
   transcription: ʃɜːt
   translation_ru: рубашка
-- position: 1874
-  frequency: 1061
+  frequency: 1062
+  frequency_rank: 1873
+- slug: word-ha
+  kind: vocabulary
   term: ha
   transcription: hɑː
   translation_ru: ха
-- position: 1875
   frequency: 1061
+  frequency_rank: 1874
+- slug: word-weep
+  kind: vocabulary
   term: weep
   transcription: wiːp
   translation_ru: плакать
-- position: 1876
-  frequency: 1057
+  frequency: 1061
+  frequency_rank: 1875
+- slug: word-robe
+  kind: vocabulary
   term: robe
   transcription: rəʊb
   translation_ru: халат
-- position: 1877
-  frequency: 1056
+  frequency: 1057
+  frequency_rank: 1876
+- slug: word-accomplish
+  kind: vocabulary
   term: accomplish
   transcription: əˈkʌmplɪʃ
   translation_ru: выполнять
-- position: 1878
-  frequency: 1054
+  frequency: 1056
+  frequency_rank: 1877
+- slug: word-countenance
+  kind: vocabulary
   term: countenance
   transcription: ˈkaʊntɪnəns
   translation_ru: лицо
-- position: 1879
-  frequency: 1053
+  frequency: 1054
+  frequency_rank: 1878
+- slug: word-softly
+  kind: vocabulary
   term: softly
   transcription: ˈsɒftlɪ
   translation_ru: мягко
-- position: 1880
   frequency: 1053
+  frequency_rank: 1879
+- slug: word-generally
+  kind: vocabulary
   term: generally
   transcription: ˈʤenərəlɪ
   translation_ru: обычно
-- position: 1881
   frequency: 1053
+  frequency_rank: 1880
+- slug: word-import
+  kind: vocabulary
   term: import
   transcription: ˈɪmpɔːt
   translation_ru: импортировать
-- position: 1882
-  frequency: 1052
+  frequency: 1053
+  frequency_rank: 1881
+- slug: word-telegram
+  kind: vocabulary
   term: telegram
   transcription: ˈtelɪgræm
   translation_ru: телеграмма
-- position: 1883
   frequency: 1052
+  frequency_rank: 1882
+- slug: word-sweep
+  kind: vocabulary
   term: sweep
   transcription: swiːp
   translation_ru: подметать
-- position: 1884
   frequency: 1052
+  frequency_rank: 1883
+- slug: word-operate
+  kind: vocabulary
   term: operate
   transcription: ˈɒpəreɪt
   translation_ru: работать
-- position: 1885
   frequency: 1052
+  frequency_rank: 1884
+- slug: word-associate
+  kind: vocabulary
   term: associate
   translation_ru: связывать
-- position: 1886
-  frequency: 1051
+  frequency: 1052
+  frequency_rank: 1885
+- slug: word-release
+  kind: vocabulary
   term: release
   transcription: rɪˈliːs
   translation_ru: освобождать
-- position: 1887
   frequency: 1051
+  frequency_rank: 1886
+- slug: word-west
+  kind: vocabulary
   term: West
   transcription: west
   translation_ru: запад
-- position: 1888
-  frequency: 1050
+  frequency: 1051
+  frequency_rank: 1887
+- slug: word-apart
+  kind: vocabulary
   term: apart
   transcription: əˈpɑːt
   translation_ru: отдельно
-- position: 1889
   frequency: 1050
+  frequency_rank: 1888
+- slug: word-bury
+  kind: vocabulary
   term: bury
   transcription: ˈberɪ
   translation_ru: закапывать
-- position: 1890
   frequency: 1050
+  frequency_rank: 1889
+- slug: word-spite
+  kind: vocabulary
   term: spite
   transcription: spaɪt
   translation_ru: злоба
-- position: 1891
-  frequency: 1049
+  frequency: 1050
+  frequency_rank: 1890
+- slug: word-cell
+  kind: vocabulary
   term: cell
   transcription: sel
   translation_ru: ячейка
-- position: 1892
-  frequency: 1047
+  frequency: 1049
+  frequency_rank: 1891
+- slug: word-fate
+  kind: vocabulary
   term: fate
   transcription: feɪt
   translation_ru: судьба
-- position: 1893
   frequency: 1047
+  frequency_rank: 1892
+- slug: word-thread
+  kind: vocabulary
   term: thread
   transcription: θred
   translation_ru: нить
-- position: 1894
-  frequency: 1046
+  frequency: 1047
+  frequency_rank: 1893
+- slug: word-possibility
+  kind: vocabulary
   term: possibility
   transcription: pɒsəˈbɪlɪtɪ
   translation_ru: возможность
-- position: 1895
   frequency: 1046
+  frequency_rank: 1894
+- slug: word-freedom
+  kind: vocabulary
   term: freedom
   transcription: ˈfriːdəm
   translation_ru: свобода
-- position: 1896
-  frequency: 1044
+  frequency: 1046
+  frequency_rank: 1895
+- slug: word-wendy
+  kind: vocabulary
   term: Wendy
   transcription: ˈwendɪ
   translation_ru: Венди
-- position: 1897
-  frequency: 1043
+  frequency: 1044
+  frequency_rank: 1896
+- slug: word-horn
+  kind: vocabulary
   term: horn
   transcription: hɔːn
   translation_ru: рог
-- position: 1898
-  frequency: 1041
+  frequency: 1043
+  frequency_rank: 1897
+- slug: word-proper
+  kind: vocabulary
   term: proper
   transcription: ˈprɒpə
   translation_ru: правильный
-- position: 1899
-  frequency: 1040
+  frequency: 1041
+  frequency_rank: 1898
+- slug: word-inch
+  kind: vocabulary
   term: inch
   transcription: ɪnʧ
   translation_ru: дюйм
-- position: 1900
-  frequency: 1039
+  frequency: 1040
+  frequency_rank: 1899
+- slug: word-glow
+  kind: vocabulary
   term: glow
   transcription: gləʊ
   translation_ru: светиться
-- position: 1901
-  frequency: 1038
+  frequency: 1039
+  frequency_rank: 1900
+- slug: word-curiosity
+  kind: vocabulary
   term: curiosity
   transcription: kjʊərɪˈɒsɪtɪ
   translation_ru: любопытство
-- position: 1902
   frequency: 1038
+  frequency_rank: 1901
+- slug: word-tion
+  kind: vocabulary
   term: tion
   transcription: ˈtɪən
   translation_ru: процесс
-- position: 1903
   frequency: 1038
+  frequency_rank: 1902
+- slug: word-folder
+  kind: vocabulary
   term: folder
   transcription: ˈfəʊldə
   translation_ru: папка
-- position: 1904
-  frequency: 1036
+  frequency: 1038
+  frequency_rank: 1903
+- slug: word-seal
+  kind: vocabulary
   term: seal
   transcription: siːl
   translation_ru: запечатывать
-- position: 1905
   frequency: 1036
+  frequency_rank: 1904
+- slug: word-season
+  kind: vocabulary
   term: season
   transcription: siːzn
   translation_ru: сезон
-- position: 1906
-  frequency: 1035
+  frequency: 1036
+  frequency_rank: 1905
+- slug: word-platform
+  kind: vocabulary
   term: platform
   transcription: ˈplætfɔːm
   translation_ru: платформа
-- position: 1907
-  frequency: 1032
+  frequency: 1035
+  frequency_rank: 1906
+- slug: word-distribute
+  kind: vocabulary
   term: distribute
   transcription: dɪsˈtrɪbjut
   translation_ru: распространять
-- position: 1908
   frequency: 1032
+  frequency_rank: 1907
+- slug: word-former
+  kind: vocabulary
   term: former
   transcription: ˈfɔːmə
   translation_ru: бывший
-- position: 1909
   frequency: 1032
+  frequency_rank: 1908
+- slug: word-suspect
+  kind: vocabulary
   term: suspect
   translation_ru: подозревать
-- position: 1910
-  frequency: 1030
+  frequency: 1032
+  frequency_rank: 1909
+- slug: word-sailor
+  kind: vocabulary
   term: sailor
   transcription: ˈseɪlə
   translation_ru: моряк
-- position: 1911
   frequency: 1030
+  frequency_rank: 1910
+- slug: word-mistress
+  kind: vocabulary
   term: mistress
   transcription: ˈmɪstrɪs
   translation_ru: хозяйка
-- position: 1912
   frequency: 1030
+  frequency_rank: 1911
+- slug: word-mate
+  kind: vocabulary
   term: mate
   transcription: meɪt
   translation_ru: приятель
-- position: 1913
-  frequency: 1029
+  frequency: 1030
+  frequency_rank: 1912
+- slug: word-confidence
+  kind: vocabulary
   term: confidence
   transcription: ˈkɒnfɪdəns
   translation_ru: уверенность
-- position: 1914
   frequency: 1029
+  frequency_rank: 1913
+- slug: word-propose
+  kind: vocabulary
   term: propose
   transcription: prəˈpəʊz
   translation_ru: предлагать
-- position: 1915
   frequency: 1029
+  frequency_rank: 1914
+- slug: word-convey
+  kind: vocabulary
   term: convey
   transcription: kənˈveɪ
   translation_ru: передавать
-- position: 1916
-  frequency: 1028
+  frequency: 1029
+  frequency_rank: 1915
+- slug: word-grant
+  kind: vocabulary
   term: grant
   transcription: grɑːnt
   translation_ru: предоставлять
-- position: 1917
   frequency: 1028
+  frequency_rank: 1916
+- slug: word-engine
+  kind: vocabulary
   term: engine
   transcription: ˈenʤɪn
   translation_ru: двигатель
-- position: 1918
-  frequency: 1027
+  frequency: 1028
+  frequency_rank: 1917
+- slug: word-somehow
+  kind: vocabulary
   term: somehow
   transcription: ˈsʌmhaʊ
   translation_ru: как-то
-- position: 1919
   frequency: 1027
+  frequency_rank: 1918
+- slug: word-acquire
+  kind: vocabulary
   term: acquire
   transcription: əˈkwaɪə
   translation_ru: приобретать
-- position: 1920
-  frequency: 1025
+  frequency: 1027
+  frequency_rank: 1919
+- slug: word-arthur
+  kind: vocabulary
   term: Arthur
   transcription: ˈɑːθə
   translation_ru: Артур
-- position: 1921
-  frequency: 1024
+  frequency: 1025
+  frequency_rank: 1920
+- slug: word-reader
+  kind: vocabulary
   term: reader
   transcription: ˈriːdə
   translation_ru: читатель
-- position: 1922
-  frequency: 1023
+  frequency: 1024
+  frequency_rank: 1921
+- slug: word-nation
+  kind: vocabulary
   term: nation
   transcription: neɪʃn
   translation_ru: нация
-- position: 1923
-  frequency: 1019
+  frequency: 1023
+  frequency_rank: 1922
+- slug: word-apparently
+  kind: vocabulary
   term: apparently
   transcription: əˈpærəntlɪ
   translation_ru: вероятно
-- position: 1924
   frequency: 1019
+  frequency_rank: 1923
+- slug: word-highly
+  kind: vocabulary
   term: highly
   transcription: ˈhaɪlɪ
   translation_ru: высоко
-- position: 1925
   frequency: 1019
+  frequency_rank: 1924
+- slug: word-en
+  kind: vocabulary
   term: en
   transcription: en
   translation_ru: эн
-- position: 1926
-  frequency: 1018
+  frequency: 1019
+  frequency_rank: 1925
+- slug: word-rub
+  kind: vocabulary
   term: rub
   transcription: rʌb
   translation_ru: тереть
-- position: 1927
-  frequency: 1015
+  frequency: 1018
+  frequency_rank: 1926
+- slug: word-mighty
+  kind: vocabulary
   term: mighty
   transcription: ˈmaɪtɪ
   translation_ru: могущественный
-- position: 1928
-  frequency: 1014
+  frequency: 1015
+  frequency_rank: 1927
+- slug: word-update
+  kind: vocabulary
   term: update
   transcription: ʌpˈdeɪt
   translation_ru: обновлять
-- position: 1929
   frequency: 1014
+  frequency_rank: 1928
+- slug: word-banker
+  kind: vocabulary
   term: banker
   transcription: ˈbæŋkə
   translation_ru: банкир
-- position: 1930
   frequency: 1014
+  frequency_rank: 1929
+- slug: word-deserve
+  kind: vocabulary
   term: deserve
   transcription: dɪˈzɜːv
   translation_ru: заслуживать
-- position: 1931
-  frequency: 1013
+  frequency: 1014
+  frequency_rank: 1930
+- slug: word-jill
+  kind: vocabulary
   term: Jill
   transcription: ʤɪl
   translation_ru: Джилл
-- position: 1932
-  frequency: 1012
+  frequency: 1013
+  frequency_rank: 1931
+- slug: word-rising
+  kind: vocabulary
   term: rising
   transcription: ˈraɪzɪŋ
   translation_ru: повышение
-- position: 1933
-  frequency: 1011
+  frequency: 1012
+  frequency_rank: 1932
+- slug: word-reverse
+  kind: vocabulary
   term: reverse
   transcription: rɪˈvɜːs
   translation_ru: реверсировать
-- position: 1934
   frequency: 1011
+  frequency_rank: 1933
+- slug: word-milk
+  kind: vocabulary
   term: milk
   transcription: mɪlk
   translation_ru: доить
-- position: 1935
   frequency: 1011
+  frequency_rank: 1934
+- slug: word-carrying
+  kind: vocabulary
   term: carrying
   transcription: ˈkærɪɪŋ
   translation_ru: перевозка
-- position: 1936
   frequency: 1011
+  frequency_rank: 1935
+- slug: word-dismiss
+  kind: vocabulary
   term: dismiss
   transcription: dɪsˈmɪs
   translation_ru: отклонять
-- position: 1937
   frequency: 1011
+  frequency_rank: 1936
+- slug: word-merchant
+  kind: vocabulary
   term: merchant
   transcription: ˈmɜːʧənt
   translation_ru: торговец
-- position: 1938
-  frequency: 1010
+  frequency: 1011
+  frequency_rank: 1937
+- slug: word-groan
+  kind: vocabulary
   term: groan
   translation_ru: стонать
-- position: 1939
-  frequency: 1009
+  frequency: 1010
+  frequency_rank: 1938
+- slug: word-staircase
+  kind: vocabulary
   term: staircase
   transcription: ˈsteəkeɪs
   translation_ru: лестница
-- position: 1940
-  frequency: 1008
+  frequency: 1009
+  frequency_rank: 1939
+- slug: word-porter
+  kind: vocabulary
   term: porter
   transcription: ˈpɔːtə
   translation_ru: носильщик
-- position: 1941
-  frequency: 1007
+  frequency: 1008
+  frequency_rank: 1940
+- slug: word-sale
+  kind: vocabulary
   term: sale
   transcription: seɪl
   translation_ru: продажа
-- position: 1942
-  frequency: 1006
+  frequency: 1007
+  frequency_rank: 1941
+- slug: word-joe
+  kind: vocabulary
   term: Joe
   transcription: ʤəʊ
   translation_ru: Джо
-- position: 1943
-  frequency: 1004
+  frequency: 1006
+  frequency_rank: 1942
+- slug: word-colony
+  kind: vocabulary
   term: colony
   transcription: ˈkɒlənɪ
   translation_ru: колония
-- position: 1944
   frequency: 1004
+  frequency_rank: 1943
+- slug: word-stroke
+  kind: vocabulary
   term: stroke
   transcription: strəʊk
   translation_ru: удар
-- position: 1945
-  frequency: 1000
+  frequency: 1004
+  frequency_rank: 1944
+- slug: word-conclusion
+  kind: vocabulary
   term: conclusion
   transcription: kənˈkluːʒən
   translation_ru: заключение
-- position: 1946
-  frequency: 999
+  frequency: 1000
+  frequency_rank: 1945
+- slug: word-divide
+  kind: vocabulary
   term: divide
   transcription: dɪˈvaɪd
   translation_ru: делить
-- position: 1947
   frequency: 999
+  frequency_rank: 1946
+- slug: word-strategy
+  kind: vocabulary
   term: strategy
   transcription: ˈstrætɪʤɪ
   translation_ru: стратегия
-- position: 1948
-  frequency: 998
+  frequency: 999
+  frequency_rank: 1947
+- slug: word-quit
+  kind: vocabulary
   term: quit
   transcription: kwɪt
   translation_ru: выходить
-- position: 1949
-  frequency: 997
+  frequency: 998
+  frequency_rank: 1948
+- slug: word-ray
+  kind: vocabulary
   term: ray
   transcription: reɪ
   translation_ru: скат
-- position: 1950
-  frequency: 996
+  frequency: 997
+  frequency_rank: 1949
+- slug: word-flight
+  kind: vocabulary
   term: flight
   transcription: flaɪt
   translation_ru: полет
-- position: 1951
-  frequency: 993
+  frequency: 996
+  frequency_rank: 1950
+- slug: word-courage
+  kind: vocabulary
   term: courage
   transcription: ˈkʌrɪʤ
   translation_ru: мужество
-- position: 1952
-  frequency: 992
+  frequency: 993
+  frequency_rank: 1951
+- slug: word-western
+  kind: vocabulary
   term: Western
   transcription: ˈwestən
   translation_ru: западный
-- position: 1953
-  frequency: 991
+  frequency: 992
+  frequency_rank: 1952
+- slug: word-slide
+  kind: vocabulary
   term: slide
   transcription: slaɪd
   translation_ru: скользить
-- position: 1954
   frequency: 991
+  frequency_rank: 1953
+- slug: word-text
+  kind: vocabulary
   term: text
   transcription: tekst
   translation_ru: текст
-- position: 1955
-  frequency: 989
+  frequency: 991
+  frequency_rank: 1954
+- slug: word-mystery
+  kind: vocabulary
   term: mystery
   transcription: ˈmɪstərɪ
   translation_ru: тайна
-- position: 1956
   frequency: 989
+  frequency_rank: 1955
+- slug: word-snap
+  kind: vocabulary
   term: snap
   transcription: snæp
   translation_ru: щелкать
-- position: 1957
   frequency: 989
+  frequency_rank: 1956
+- slug: word-breast
+  kind: vocabulary
   term: breast
   transcription: brest
   translation_ru: грудь
-- position: 1958
-  frequency: 986
+  frequency: 989
+  frequency_rank: 1957
+- slug: word-footman
+  kind: vocabulary
   term: footman
   transcription: ˈfʊtmən
   translation_ru: лакей
-- position: 1959
-  frequency: 985
+  frequency: 986
+  frequency_rank: 1958
+- slug: word-ginny
+  kind: vocabulary
   term: Ginny
   transcription: ˈʤɪnɪ
   translation_ru: Джинни
-- position: 1960
   frequency: 985
+  frequency_rank: 1959
+- slug: word-disturb
+  kind: vocabulary
   term: disturb
   transcription: dɪsˈtɜːb
   translation_ru: возмущать
-- position: 1961
-  frequency: 984
+  frequency: 985
+  frequency_rank: 1960
+- slug: word-familiar
+  kind: vocabulary
   term: familiar
   transcription: fəˈmɪlɪə
   translation_ru: знакомый
-- position: 1962
-  frequency: 983
+  frequency: 984
+  frequency_rank: 1961
+- slug: word-laughter
+  kind: vocabulary
   term: laughter
   transcription: ˈlɑːftə
   translation_ru: смех
-- position: 1963
   frequency: 983
+  frequency_rank: 1962
+- slug: word-frown
+  kind: vocabulary
   term: frown
   transcription: fraʊn
   translation_ru: нахмуриться
-- position: 1964
-  frequency: 981
+  frequency: 983
+  frequency_rank: 1963
+- slug: word-custom
+  kind: vocabulary
   term: custom
   transcription: ˈkʌstəm
   translation_ru: традиция
-- position: 1965
-  frequency: 980
+  frequency: 981
+  frequency_rank: 1964
+- slug: word-delete
+  kind: vocabulary
   term: delete
   transcription: dɪˈliːt
   translation_ru: удалить
-- position: 1966
-  frequency: 979
+  frequency: 980
+  frequency_rank: 1965
+- slug: word-variable
+  kind: vocabulary
   term: variable
   transcription: ˈve(ə)rɪəb(ə)l
   translation_ru: переменная
-- position: 1967
-  frequency: 978
+  frequency: 979
+  frequency_rank: 1966
+- slug: word-behave
+  kind: vocabulary
   term: behave
   transcription: bɪˈheɪv
   translation_ru: вести себя
-- position: 1968
-  frequency: 977
+  frequency: 978
+  frequency_rank: 1967
+- slug: word-native
+  kind: vocabulary
   term: native
   transcription: ˈneɪtɪv
   translation_ru: родной
-- position: 1969
   frequency: 977
+  frequency_rank: 1968
+- slug: word-anxious
+  kind: vocabulary
   term: anxious
   transcription: ˈæŋkʃəs
   translation_ru: озабоченный
-- position: 1970
   frequency: 977
+  frequency_rank: 1969
+- slug: word-layer
+  kind: vocabulary
   term: layer
   transcription: ˈleɪə
   translation_ru: слой
-- position: 1971
   frequency: 977
+  frequency_rank: 1970
+- slug: word-per
+  kind: vocabulary
   term: per
   transcription: pɜː
   translation_ru: по
-- position: 1972
   frequency: 977
+  frequency_rank: 1971
+- slug: word-quarrel
+  kind: vocabulary
   term: quarrel
   transcription: ˈkwɒrəl
   translation_ru: ссориться
-- position: 1973
-  frequency: 976
+  frequency: 977
+  frequency_rank: 1972
+- slug: word-belief
+  kind: vocabulary
   term: belief
   transcription: bɪˈliːf
   translation_ru: вера
-- position: 1974
-  frequency: 975
+  frequency: 976
+  frequency_rank: 1973
+- slug: word-sacrifice
+  kind: vocabulary
   term: sacrifice
   transcription: ˈsækrɪfaɪs
   translation_ru: жертвовать
-- position: 1975
   frequency: 975
+  frequency_rank: 1974
+- slug: word-neighbouring
+  kind: vocabulary
   term: neighbouring
   transcription: ˈneɪbərɪŋ
   translation_ru: соседний
-- position: 1976
   frequency: 975
+  frequency_rank: 1975
+- slug: word-amaze
+  kind: vocabulary
   term: amaze
   transcription: əˈmeɪz
   translation_ru: поражать
-- position: 1977
   frequency: 975
+  frequency_rank: 1976
+- slug: word-artist
+  kind: vocabulary
   term: artist
   transcription: ˈɑːtɪst
   translation_ru: художник
-- position: 1978
-  frequency: 974
+  frequency: 975
+  frequency_rank: 1977
+- slug: word-tab
+  kind: vocabulary
   term: tab
   transcription: tæb
   translation_ru: вкладка
-- position: 1979
   frequency: 974
+  frequency_rank: 1978
+- slug: word-signal
+  kind: vocabulary
   term: signal
   transcription: sɪgnl
   translation_ru: сигнал
-- position: 1980
   frequency: 974
+  frequency_rank: 1979
+- slug: word-title
+  kind: vocabulary
   term: title
   transcription: taɪtl
   translation_ru: заглавие
-- position: 1981
-  frequency: 973
+  frequency: 974
+  frequency_rank: 1980
+- slug: word-weapon
+  kind: vocabulary
   term: weapon
   transcription: ˈwepən
   translation_ru: оружие
-- position: 1982
   frequency: 973
+  frequency_rank: 1981
+- slug: word-bark
+  kind: vocabulary
   term: bark
   transcription: bɑːk
   translation_ru: лаять
-- position: 1983
   frequency: 973
+  frequency_rank: 1982
+- slug: word-monster
+  kind: vocabulary
   term: monster
   transcription: ˈmɒnstə
   translation_ru: монстр
-- position: 1984
-  frequency: 972
+  frequency: 973
+  frequency_rank: 1983
+- slug: word-recipe
+  kind: vocabulary
   term: recipe
   transcription: ˈresɪpɪ
   translation_ru: рецепт
-- position: 1985
   frequency: 972
+  frequency_rank: 1984
+- slug: word-endure
+  kind: vocabulary
   term: endure
   transcription: ɪnˈdjʊə
   translation_ru: терпеть
-- position: 1986
-  frequency: 971
+  frequency: 972
+  frequency_rank: 1985
+- slug: word-shrug
+  kind: vocabulary
   term: shrug
   transcription: ʃrʌg
   translation_ru: пожимать
-- position: 1987
   frequency: 971
+  frequency_rank: 1986
+- slug: word-praise
+  kind: vocabulary
   term: praise
   transcription: preɪz
   translation_ru: хвалить
-- position: 1988
   frequency: 971
+  frequency_rank: 1987
+- slug: word-automatically
+  kind: vocabulary
   term: automatically
   transcription: ɔːtəˈmætɪklɪ
   translation_ru: автоматически
-- position: 1989
-  frequency: 968
+  frequency: 971
+  frequency_rank: 1988
+- slug: word-jonathan
+  kind: vocabulary
   term: Jonathan
   transcription: ˈʤɒnəθən
   translation_ru: Джонатан
-- position: 1990
-  frequency: 967
+  frequency: 968
+  frequency_rank: 1989
+- slug: word-admire
+  kind: vocabulary
   term: admire
   transcription: ədˈmaɪə
   translation_ru: восхищаться
-- position: 1991
-  frequency: 966
+  frequency: 967
+  frequency_rank: 1990
+- slug: word-entire
+  kind: vocabulary
   term: entire
   transcription: ɪnˈtaɪə
   translation_ru: весь
-- position: 1992
-  frequency: 965
+  frequency: 966
+  frequency_rank: 1991
+- slug: word-proposal
+  kind: vocabulary
   term: proposal
   transcription: prəˈpəʊzəl
   translation_ru: предложение
-- position: 1993
-  frequency: 963
+  frequency: 965
+  frequency_rank: 1992
+- slug: word-duke
+  kind: vocabulary
   term: Duke
   transcription: djuːk
   translation_ru: герцог
-- position: 1994
-  frequency: 962
+  frequency: 963
+  frequency_rank: 1993
+- slug: word-weary
+  kind: vocabulary
   term: weary
   transcription: ˈwɪərɪ
   translation_ru: утомленный
-- position: 1995
   frequency: 962
+  frequency_rank: 1994
+- slug: word-dursley
+  kind: vocabulary
   term: Dursley
   transcription: ˈdɜːzlɪ
   translation_ru: Десли
-- position: 1996
   frequency: 962
+  frequency_rank: 1995
+- slug: word-crow
+  kind: vocabulary
   term: crow
   transcription: krəʊ
   translation_ru: кукарекать
-- position: 1997
-  frequency: 961
+  frequency: 962
+  frequency_rank: 1996
+- slug: word-vague
+  kind: vocabulary
   term: vague
   transcription: veɪg
   translation_ru: неопределенный
-- position: 1998
-  frequency: 960
+  frequency: 961
+  frequency_rank: 1997
+- slug: word-component
+  kind: vocabulary
   term: component
   transcription: kəmˈpəʊnənt
   translation_ru: компонент
-- position: 1999
   frequency: 960
+  frequency_rank: 1998
+- slug: word-crew
+  kind: vocabulary
   term: crew
   transcription: kruː
   translation_ru: экипаж
-- position: 2000
-  frequency: 959
+  frequency: 960
+  frequency_rank: 1999
+- slug: word-reveal
+  kind: vocabulary
   term: reveal
   transcription: rɪˈviːl
   translation_ru: раскрыть
+  frequency: 959
+  frequency_rank: 2000

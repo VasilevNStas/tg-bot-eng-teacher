@@ -125,7 +125,7 @@ def _duplicates(items: Iterable[ContentItem]) -> tuple[DuplicateGroup, ...]:
         spec = ContentItemSpec.model_validate(
             {
                 "slug": item.slug,
-                "payload": item.payload,
+                "payload": {"kind": item.kind, **item.payload},
             }
         )
         groups[_signature(spec)].append(item.slug)

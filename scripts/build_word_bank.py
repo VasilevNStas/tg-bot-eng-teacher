@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Build minimal vocabulary bank YAML files from the parsed HTML word list."""
+"""Build unified vocabulary YAML files from the parsed HTML word list."""
 
 from __future__ import annotations
 
 import argparse
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -14,6 +15,12 @@ DEFAULT_INPUT = Path("content/private/vocabulary/3000_words.json")
 DEFAULT_OUTPUT = Path("content/vocabulary")
 DEFAULT_SOURCE = "3000_words.html"
 DEFAULT_LICENSE = "unknown"
+_SLUG_CLEAN = re.compile(r"[^a-z0-9]+")
+
+
+def slugify_term(term: str) -> str:
+    slug = _SLUG_CLEAN.sub("-", term.casefold()).strip("-")
+    return slug or "word"
 
 
 def build_entries(source: dict[str, Any]) -> list[dict[str, Any]]:
@@ -42,18 +49,32 @@ def build_entries(source: dict[str, Any]) -> list[dict[str, Any]]:
         seen_positions.add(position)
 
         entry: dict[str, Any] = {
-            "position": position,
-            "frequency": frequency,
+            "kind": "vocabulary",
             "term": term,
         }
         transcription = item.get("transcription")
         if transcription:
             entry["transcription"] = str(transcription).strip()
         entry["translation_ru"] = translation
+        entry["frequency"] = frequency
+        entry["frequency_rank"] = position
         entries.append(entry)
 
-    entries.sort(key=lambda entry: entry["position"])
+    entries.sort(key=lambda entry: entry["frequency_rank"])
     return entries
+
+
+def assign_slugs(entries: list[dict[str, Any]]) -> None:
+    used: set[str] = set()
+    for index, entry in enumerate(entries):
+        base = f"word-{slugify_term(str(entry['term']))}"
+        slug = base
+        suffix = 2
+        while slug in used:
+            slug = f"{base}-{suffix}"
+            suffix += 1
+        used.add(slug)
+        entries[index] = {"slug": slug, **entry}
 
 
 def split_blocks(entries: list[dict[str, Any]], block_size: int) -> list[list[dict[str, Any]]]:
@@ -69,13 +90,18 @@ def write_block(
     source: str,
     license_name: str,
 ) -> Path:
-    first = entries[0]["position"]
-    last = entries[-1]["position"]
-    output = output_dir / f"core_words_{first:04d}_{last:04d}.yaml"
+    first = entries[0]["frequency_rank"]
+    last = entries[-1]["frequency_rank"]
+    topic_slug = f"core-words-{first:04d}-{last:04d}"
+    output = output_dir / f"{topic_slug.replace('-', '_')}.yaml"
     payload = {
+        "topic": {
+            "slug": topic_slug,
+            "title": f"Core words {first:04d}-{last:04d}",
+        },
         "source": source,
         "license": license_name,
-        "words": entries,
+        "items": entries,
     }
     output.write_text(
         yaml.safe_dump(payload, allow_unicode=True, sort_keys=False, width=1000),
@@ -95,6 +121,7 @@ def main() -> int:
 
     source = json.loads(args.input.read_text(encoding="utf-8"))
     entries = build_entries(source)
+    assign_slugs(entries)
     blocks = split_blocks(entries, args.block_size)
 
     args.output_dir.mkdir(parents=True, exist_ok=True)

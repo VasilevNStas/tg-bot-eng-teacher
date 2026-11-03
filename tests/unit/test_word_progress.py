@@ -41,7 +41,7 @@ async def seed(database: Database) -> tuple[int, int, int]:
             payload={
                 "kind": "vocabulary",
                 "term": "one",
-                "translations_ru": ["один"],
+                "translation_ru": "один",
                 "frequency": 100,
                 "frequency_rank": 1,
             },

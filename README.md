@@ -57,9 +57,9 @@ cp .env.example .env
 
 Контент разделён на два слоя:
 
-- `content/topics/` — обычные упражнения (глаголы, gap-fill, placement);
-- `content/vocabulary/` — минимальный банк слов (частота, слово, транскрипция,
-  перевод), который компилируется в те же `content_items`.
+- `content/topics/` — упражнения (глаголы, gap-fill, placement);
+- `content/vocabulary/` — банк слов (частота, слово, транскрипция, перевод)
+  в том же формате `topic` + `items`.
 
 ```bash
 uv run alembic upgrade head
@@ -71,7 +71,7 @@ uv run python -m app.cli seed
 
 ```bash
 uv run python -m app.cli import-content content/topics
-uv run python -m app.cli import-words content/vocabulary
+uv run python -m app.cli import-content content/vocabulary
 ```
 
 Для проверки без записи:

@@ -71,7 +71,7 @@ def _questions_data(card: WordCardSession) -> list[dict[str, Any]]:
             "direction": question.direction.value,
             "prompt": question.prompt,
             "term": question.term,
-            "translations": list(question.translations_ru),
+            "translations": [question.translation_ru],
             "transcription": question.transcription,
         }
         for question in card.questions
