@@ -10,7 +10,7 @@ import yaml
 from app.curriculum.errors import ContentLoadError
 from app.curriculum.loader import load_content_file, load_content_path
 from app.curriculum.models import ContentFile, VocabularyPayload
-from app.db.enums import ContentKind
+from app.db.enums import CEFRLevel, ContentKind
 
 
 def valid_doc() -> dict[str, Any]:
@@ -18,16 +18,12 @@ def valid_doc() -> dict[str, Any]:
         "topic": {
             "slug": "test-topic",
             "title": "Test topic",
-            "level": "A1",
-            "description": "Fixture",
-            "tags": ["test"],
         },
         "source": "Test",
         "license": "unknown",
         "items": [
             {
                 "slug": "test-irregular-go",
-                "level": "A1",
                 "payload": {
                     "kind": "irregular_verb",
                     "base": "go",
@@ -39,16 +35,14 @@ def valid_doc() -> dict[str, Any]:
             },
             {
                 "slug": "test-gap-present-simple",
-                "level": "A1",
                 "payload": {
                     "kind": "gap_fill",
-                    "sentence": "She ___ to school.",
+                    "sentence": "She .... to school.",
                     "answer": "goes",
                 },
             },
             {
                 "slug": "test-translation",
-                "level": "A2",
                 "payload": {
                     "kind": "translation_pair",
                     "prompt_ru": "Я в кино.",
@@ -57,7 +51,6 @@ def valid_doc() -> dict[str, Any]:
             },
             {
                 "slug": "test-word-order",
-                "level": "A2",
                 "payload": {
                     "kind": "word_order",
                     "words": ["I", "went", "home"],
@@ -66,18 +59,16 @@ def valid_doc() -> dict[str, Any]:
             },
             {
                 "slug": "test-mc",
-                "level": "B1",
                 "payload": {
                     "kind": "multiple_choice",
-                    "question": "I ___ here since 2020.",
+                    "question": "I .... here since 2020.",
                     "options": ["live", "lived", "have lived"],
                     "correct_index": 2,
+                    "level": "B1",
                 },
             },
             {
                 "slug": "test-vocabulary-abandon",
-                "level": "B1",
-                "tags": ["purpose:vocabulary"],
                 "payload": {
                     "kind": "vocabulary",
                     "term": "abandon",
@@ -119,30 +110,10 @@ def test_loader_reads_yaml(tmp_path: Path) -> None:
     assert len(content.items) == 6
 
 
-def test_item_topics_are_parsed() -> None:
-    doc = valid_doc()
-    doc["items"][0]["topics"] = ["test-topic", "other-topic"]
+def test_multiple_choice_level_is_parsed() -> None:
+    content = ContentFile.model_validate(valid_doc())
 
-    content = ContentFile.model_validate(doc)
-
-    assert content.items[0].topics == ["test-topic", "other-topic"]
-
-
-def test_item_variant_of_is_parsed() -> None:
-    doc = valid_doc()
-    doc["items"][0]["variant_of"] = "test-irregular-go"
-
-    content = ContentFile.model_validate(doc)
-
-    assert content.items[0].variant_of == "test-irregular-go"
-
-
-def test_item_variant_of_slug_is_validated() -> None:
-    doc = valid_doc()
-    doc["items"][0]["variant_of"] = "Bad Slug"
-
-    with pytest.raises(ValueError, match="variant_of"):
-        ContentFile.model_validate(doc)
+    assert content.items[4].payload.level is CEFRLevel.B1
 
 
 def test_empty_topic_file_is_allowed() -> None:
@@ -152,54 +123,6 @@ def test_empty_topic_file_is_allowed() -> None:
     content = ContentFile.model_validate(doc)
 
     assert content.items == []
-
-
-def test_item_topics_must_not_be_empty() -> None:
-    doc = valid_doc()
-    doc["items"][0]["topics"] = []
-
-    with pytest.raises(ValueError, match="must not be empty"):
-        ContentFile.model_validate(doc)
-
-
-def test_item_topics_must_be_unique() -> None:
-    doc = valid_doc()
-    doc["items"][0]["topics"] = ["test-topic", "test-topic"]
-
-    with pytest.raises(ValueError, match="unique"):
-        ContentFile.model_validate(doc)
-
-
-def test_item_topic_slug_is_validated() -> None:
-    doc = valid_doc()
-    doc["items"][0]["topics"] = ["Bad Slug"]
-
-    with pytest.raises(ValueError, match="invalid topic slug"):
-        ContentFile.model_validate(doc)
-
-
-def test_directory_resolves_item_topics_across_files(tmp_path: Path) -> None:
-    first = valid_doc()
-    first["items"][0]["topics"] = ["test-topic", "other-topic"]
-    second = valid_doc()
-    second["topic"]["slug"] = "other-topic"
-    second["items"] = []
-
-    write_yaml(tmp_path / "a.yaml", first)
-    write_yaml(tmp_path / "b.yaml", second)
-
-    loaded = load_content_path(tmp_path)
-
-    assert {content.topic.slug for _, content in loaded} == {"test-topic", "other-topic"}
-
-
-def test_unknown_item_topic_is_rejected(tmp_path: Path) -> None:
-    doc = valid_doc()
-    doc["items"][0]["topics"] = ["missing-topic"]
-    write_yaml(tmp_path / "a.yaml", doc)
-
-    with pytest.raises(ContentLoadError, match="unknown topic"):
-        load_content_path(tmp_path)
 
 
 def test_duplicate_topic_definitions_are_rejected(tmp_path: Path) -> None:
@@ -243,39 +166,6 @@ def test_irregular_verb_keeps_variants_and_ipa() -> None:
     assert getattr(payload, "past_ipa", None) == "lɜːnd / lɜːnt"
 
 
-def test_item_tags_are_parsed() -> None:
-    doc = valid_doc()
-    doc["items"][0]["tags"] = ["grammar:past-simple", "theme:travel"]
-
-    content = ContentFile.model_validate(doc)
-
-    assert content.items[0].tags == ["grammar:past-simple", "theme:travel"]
-
-
-def test_unknown_tag_namespace_is_rejected() -> None:
-    doc = valid_doc()
-    doc["items"][0]["tags"] = ["food:travel"]
-
-    with pytest.raises(ValueError, match="namespace"):
-        ContentFile.model_validate(doc)
-
-
-def test_invalid_tag_format_is_rejected() -> None:
-    doc = valid_doc()
-    doc["items"][0]["tags"] = ["Past Simple"]
-
-    with pytest.raises(ValueError, match="invalid tag"):
-        ContentFile.model_validate(doc)
-
-
-def test_duplicate_item_tags_are_rejected() -> None:
-    doc = valid_doc()
-    doc["items"][0]["tags"] = ["theme:travel", "theme:travel"]
-
-    with pytest.raises(ValueError, match="unique"):
-        ContentFile.model_validate(doc)
-
-
 def test_irregular_verb_forms_must_be_unique() -> None:
     doc = valid_doc()
     doc["items"][0]["payload"]["past"] = ["went", "Went"]
@@ -288,7 +178,7 @@ def test_gap_fill_requires_a_blank() -> None:
     doc = valid_doc()
     doc["items"][1]["payload"]["sentence"] = "She goes to school."
 
-    with pytest.raises(ValueError, match="___"):
+    with pytest.raises(ValueError, match="must contain"):
         ContentFile.model_validate(doc)
 
 
@@ -390,5 +280,4 @@ def test_project_content_loads() -> None:
         for item in content.items
     ]
     assert verbs
-    assert all("grammar:irregular-verbs" in item.tags for item in verbs)
     assert any(getattr(item.payload, "base_ipa", None) for item in verbs)

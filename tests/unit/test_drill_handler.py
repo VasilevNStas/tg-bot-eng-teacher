@@ -21,7 +21,7 @@ from app.curriculum.loader import load_content_file
 from app.db.base import Base
 from app.db.database import Database
 from app.db.enums import CEFRLevel, ExerciseState, Verdict
-from app.db.models import ExerciseAttempt, ExerciseSession, User, UserProgress
+from app.db.models import ExerciseAttempt, ExerciseSession, User
 from app.db.repositories.users import UserRepository
 from app.llm.port import LLMResponse
 from app.services.conversation.service import ConversationService
@@ -199,9 +199,6 @@ async def test_drill_full_round_saves_attempt_and_finishes(tmp_path: Path) -> No
         exercise_session = await db_session.get(ExerciseSession, attempt.session_id)
         assert exercise_session is not None
         assert exercise_session.state is ExerciseState.FINISHED
-        progress = await db_session.scalar(select(UserProgress))
-        assert progress is not None
-        assert progress.mastery == 0.2
 
     await bot.session.close()
     await database.dispose()
@@ -222,9 +219,6 @@ async def test_drill_typo_shows_partial_feedback(tmp_path: Path) -> None:
         attempt = await db_session.scalar(select(ExerciseAttempt))
         assert attempt is not None
         assert attempt.verdict is Verdict.PARTIAL
-        progress = await db_session.scalar(select(UserProgress))
-        assert progress is not None
-        assert progress.mastery == 0.1
 
     await bot.session.close()
     await database.dispose()

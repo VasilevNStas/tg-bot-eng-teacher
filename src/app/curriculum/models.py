@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import re
 from collections import Counter
 from typing import Annotated, Literal, Self
 
@@ -11,8 +10,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 from app.db.enums import CEFRLevel, ContentKind
 
 SLUG_PATTERN = r"^[a-z0-9][a-z0-9-]{2,127}$"
-TAG_PATTERN = re.compile(r"^[a-z][a-z0-9]*(?:-[a-z0-9]+)*:[a-z0-9]+(?:-[a-z0-9]+)*$")
-TAG_NAMESPACES = frozenset({"grammar", "function", "theme", "skill", "exam", "purpose"})
+BLANK_MARKER = "...."
 
 
 class PayloadBase(BaseModel):
@@ -48,8 +46,8 @@ class GapFillPayload(PayloadBase):
 
     @model_validator(mode="after")
     def check_blank(self) -> Self:
-        if "___" not in self.sentence:
-            raise ValueError("sentence must contain '___'")
+        if BLANK_MARKER not in self.sentence:
+            raise ValueError(f"sentence must contain '{BLANK_MARKER}'")
         return self
 
 
@@ -78,6 +76,7 @@ class MultipleChoicePayload(PayloadBase):
     question: str = Field(min_length=1)
     options: list[str] = Field(min_length=2)
     correct_index: int = Field(ge=0)
+    level: CEFRLevel | None = None
     explanation_ru: str | None = None
 
     @model_validator(mode="after")
@@ -93,6 +92,7 @@ class VocabularyPayload(PayloadBase):
     kind: Literal[ContentKind.VOCABULARY] = ContentKind.VOCABULARY
     term: str = Field(min_length=1, max_length=128)
     translations_ru: list[str] = Field(min_length=1, max_length=20)
+    accepted_ru: list[str] = Field(default_factory=list, max_length=20)
     accepted_en: list[str] = Field(default_factory=list, max_length=20)
     frequency: int | None = Field(default=None, ge=0)
     frequency_rank: int | None = Field(default=None, ge=1)
@@ -111,7 +111,7 @@ class VocabularyPayload(PayloadBase):
             raise ValueError("term must be a single line")
         return term
 
-    @field_validator("translations_ru", "accepted_en")
+    @field_validator("translations_ru", "accepted_ru", "accepted_en")
     @classmethod
     def check_variants(cls, values: list[str]) -> list[str]:
         cleaned = [value.strip() for value in values]
@@ -139,43 +139,10 @@ class ContentItemSpec(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     slug: str = Field(pattern=SLUG_PATTERN, max_length=128)
-    level: CEFRLevel
-    topics: list[str] | None = Field(default=None, max_length=20)
-    tags: list[str] = Field(default_factory=list, max_length=20)
-    variant_of: str | None = Field(default=None, pattern=SLUG_PATTERN, max_length=128)
     payload: ContentPayload
     source: str | None = Field(default=None, max_length=256)
     license: str | None = Field(default=None, max_length=32)
     active: bool = True
-
-    @field_validator("topics")
-    @classmethod
-    def check_topics(cls, topics: list[str] | None) -> list[str] | None:
-        if topics is None:
-            return None
-        if not topics:
-            raise ValueError("topics must not be empty")
-        if len(topics) != len(set(topics)):
-            raise ValueError("topics must be unique")
-        for topic_slug in topics:
-            if re.fullmatch(SLUG_PATTERN, topic_slug) is None:
-                raise ValueError(f"invalid topic slug '{topic_slug}'")
-        return topics
-
-    @field_validator("tags")
-    @classmethod
-    def check_tags(cls, tags: list[str]) -> list[str]:
-        if len(tags) != len(set(tags)):
-            raise ValueError("tags must be unique")
-        for tag in tags:
-            if len(tag) > 64:
-                raise ValueError(f"tag '{tag}' is longer than 64 characters")
-            if TAG_PATTERN.fullmatch(tag) is None:
-                raise ValueError(f"invalid tag '{tag}': expected namespace:value")
-            namespace = tag.split(":", 1)[0]
-            if namespace not in TAG_NAMESPACES:
-                raise ValueError(f"unknown tag namespace '{namespace}'")
-        return tags
 
     @property
     def kind(self) -> ContentKind:
@@ -187,9 +154,6 @@ class TopicSpec(BaseModel):
 
     slug: str = Field(pattern=SLUG_PATTERN, max_length=64)
     title: str = Field(min_length=1, max_length=128)
-    level: CEFRLevel
-    description: str | None = None
-    tags: list[str] = Field(default_factory=list)
 
 
 class ContentFile(BaseModel):

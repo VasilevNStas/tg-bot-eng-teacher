@@ -289,10 +289,6 @@ class ConversationService:
             conversation_id=conversation_id,
             role=MessageRole.ASSISTANT,
             content=payload.reply,
-            model=response.model,
-            prompt_version=prompt_version,
-            input_tokens=response.input_tokens,
-            output_tokens=response.output_tokens,
         )
 
         async with self._database.session() as session:

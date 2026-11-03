@@ -16,7 +16,6 @@ from app.db.models import (
     ExerciseAttempt,
     ExerciseSession,
     User,
-    UserProgress,
 )
 from app.db.repositories.users import UserRepository
 from app.services.exercises.errors import DrillSessionError, DrillUnavailable
@@ -79,7 +78,6 @@ async def test_start_session_selects_items_and_alternates_forms(tmp_path: Path) 
             await db_session.scalars(select(ContentItem).where(ContentItem.id.in_(item_ids)))
         )
         assert len(items) == 3
-        assert all(item.level is CEFRLevel.A2 for item in items)
         exercise_session = await db_session.get(ExerciseSession, session.session_id)
         assert exercise_session is not None
         assert exercise_session.state is ExerciseState.ACTIVE
@@ -87,7 +85,7 @@ async def test_start_session_selects_items_and_alternates_forms(tmp_path: Path) 
     await database.dispose()
 
 
-async def test_start_session_falls_back_to_other_levels(tmp_path: Path) -> None:
+async def test_start_session_selects_items_regardless_of_user_level(tmp_path: Path) -> None:
     database = await make_database(tmp_path)
     await seed_bank(database)
     user = await make_user(database, level=CEFRLevel.C2)
@@ -118,7 +116,7 @@ async def test_start_session_abandons_previous_active_session(tmp_path: Path) ->
     await database.dispose()
 
 
-async def test_submit_correct_and_incorrect_updates_progress(tmp_path: Path) -> None:
+async def test_submit_correct_and_incorrect_records_attempts(tmp_path: Path) -> None:
     database = await make_database(tmp_path)
     await seed_bank(database)
     user = await make_user(database)
@@ -144,11 +142,7 @@ async def test_submit_correct_and_incorrect_updates_progress(tmp_path: Path) -> 
     )
 
     assert correct.result.verdict is Verdict.CORRECT
-    assert correct.mastery == 0.2
-    assert correct.streak == 1
     assert incorrect.result.verdict is Verdict.INCORRECT
-    assert incorrect.mastery == 0.16
-    assert incorrect.streak == 0
     assert await count(database, ExerciseAttempt) == 2
 
     async with database.session() as db_session:
@@ -158,10 +152,6 @@ async def test_submit_correct_and_incorrect_updates_progress(tmp_path: Path) -> 
         assert attempt is not None
         assert attempt.answer == first.forms[0]
         assert attempt.latency_ms == 123
-
-        progress = await db_session.scalar(select(UserProgress))
-        assert progress is not None
-        assert progress.mastery == pytest.approx(0.16)
 
     stats = await service.finish_session(
         user,
@@ -198,8 +188,6 @@ async def test_submit_typo_is_partial(tmp_path: Path) -> None:
 
     assert result.result.verdict is Verdict.PARTIAL
     assert result.result.is_typo
-    assert result.mastery == 0.1
-    assert result.streak == 0
 
     await database.dispose()
 

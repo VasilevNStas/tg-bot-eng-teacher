@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import contextlib
+import json
 from collections.abc import AsyncIterator
 from pathlib import Path
 from typing import Any
@@ -20,6 +21,10 @@ from sqlalchemy.ext.asyncio import (
 from app.core.logging import get_logger
 
 logger = get_logger(__name__)
+
+
+def _json_serializer(value: Any) -> str:
+    return json.dumps(value, ensure_ascii=False)
 
 
 def _set_sqlite_pragmas(dbapi_connection: Any, _record: Any) -> None:
@@ -57,6 +62,7 @@ class Database:
         if self._engine is not None:
             raise RuntimeError("Database is already initialized")
 
+        engine_kwargs.setdefault("json_serializer", _json_serializer)
         engine = create_async_engine(url, **engine_kwargs)
         if engine.url.get_backend_name() == "sqlite":
             event.listen(engine.sync_engine, "connect", _set_sqlite_pragmas)

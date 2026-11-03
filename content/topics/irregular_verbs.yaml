@@ -1,17 +1,12 @@
 topic:
   slug: irregular-verbs
   title: "Неправильные глаголы"
-  level: A2
-  description: "Неправильные глаголы: формы, перевод и транскрипция"
-  tags: [verbs, irregular]
 
 source: "Project educational materials (irregular verb tables)"
 license: "unknown"
 
 items:
   - slug: irregular-verb-be
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "be"
@@ -22,8 +17,6 @@ items:
       past_ipa: "wɒz / wɜː"
       participle_ipa: "biːn"
   - slug: irregular-verb-have
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "have"
@@ -34,8 +27,6 @@ items:
       past_ipa: "hæd"
       participle_ipa: "hæd"
   - slug: irregular-verb-do
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "do"
@@ -46,8 +37,6 @@ items:
       past_ipa: "dɪd"
       participle_ipa: "dʌn"
   - slug: irregular-verb-say
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "say"
@@ -58,8 +47,6 @@ items:
       past_ipa: "sɛd"
       participle_ipa: "sɛd"
   - slug: irregular-verb-go
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "go"
@@ -70,8 +57,6 @@ items:
       past_ipa: "wɛnt"
       participle_ipa: "ɡɒn"
   - slug: irregular-verb-get
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "get"
@@ -82,8 +67,6 @@ items:
       past_ipa: "ɡɒt"
       participle_ipa: "ɡɒt / ˈɡɒtn"
   - slug: irregular-verb-make
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "make"
@@ -94,8 +77,6 @@ items:
       past_ipa: "meɪd"
       participle_ipa: "meɪd"
   - slug: irregular-verb-know
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "know"
@@ -106,8 +87,6 @@ items:
       past_ipa: "njuː"
       participle_ipa: "nəʊn"
   - slug: irregular-verb-think
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "think"
@@ -118,8 +97,6 @@ items:
       past_ipa: "θɔːt"
       participle_ipa: "θɔːt"
   - slug: irregular-verb-take
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "take"
@@ -130,8 +107,6 @@ items:
       past_ipa: "tʊk"
       participle_ipa: "ˈteɪkən"
   - slug: irregular-verb-see
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "see"
@@ -142,8 +117,6 @@ items:
       past_ipa: "sɔː"
       participle_ipa: "siːn"
   - slug: irregular-verb-come
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "come"
@@ -154,8 +127,6 @@ items:
       past_ipa: "keɪm"
       participle_ipa: "kʌm"
   - slug: irregular-verb-give
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "give"
@@ -166,8 +137,6 @@ items:
       past_ipa: "ɡeɪv"
       participle_ipa: "ˈɡɪvn"
   - slug: irregular-verb-find
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "find"
@@ -178,8 +147,6 @@ items:
       past_ipa: "faʊnd"
       participle_ipa: "faʊnd"
   - slug: irregular-verb-tell
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "tell"
@@ -190,8 +157,6 @@ items:
       past_ipa: "təʊld"
       participle_ipa: "təʊld"
   - slug: irregular-verb-become
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "become"
@@ -202,8 +167,6 @@ items:
       past_ipa: "bɪˈkeɪm"
       participle_ipa: "bɪˈkʌm"
   - slug: irregular-verb-leave
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "leave"
@@ -214,8 +177,6 @@ items:
       past_ipa: "lɛft"
       participle_ipa: "lɛft"
   - slug: irregular-verb-feel
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "feel"
@@ -226,8 +187,6 @@ items:
       past_ipa: "fɛlt"
       participle_ipa: "fɛlt"
   - slug: irregular-verb-bring
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "bring"
@@ -238,8 +197,6 @@ items:
       past_ipa: "brɔːt"
       participle_ipa: "brɔːt"
   - slug: irregular-verb-begin
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "begin"
@@ -250,8 +207,6 @@ items:
       past_ipa: "bɪˈɡæn"
       participle_ipa: "bɪˈɡʌn"
   - slug: irregular-verb-keep
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "keep"
@@ -262,8 +217,6 @@ items:
       past_ipa: "kɛpt"
       participle_ipa: "kɛpt"
   - slug: irregular-verb-hold
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "hold"
@@ -274,8 +227,6 @@ items:
       past_ipa: "hɛld"
       participle_ipa: "hɛld"
   - slug: irregular-verb-write
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "write"
@@ -286,8 +237,6 @@ items:
       past_ipa: "rəʊt"
       participle_ipa: "ˈrɪtn"
   - slug: irregular-verb-stand
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "stand"
@@ -298,8 +247,6 @@ items:
       past_ipa: "stʊd"
       participle_ipa: "stʊd"
   - slug: irregular-verb-hear
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "hear"
@@ -310,8 +257,6 @@ items:
       past_ipa: "hɜːd"
       participle_ipa: "hɜːd"
   - slug: irregular-verb-let
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "let"
@@ -322,8 +267,6 @@ items:
       past_ipa: "lɛt"
       participle_ipa: "lɛt"
   - slug: irregular-verb-mean
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "mean"
@@ -334,8 +277,6 @@ items:
       past_ipa: "mɛnt"
       participle_ipa: "mɛnt"
   - slug: irregular-verb-set
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "set"
@@ -346,8 +287,6 @@ items:
       past_ipa: "sɛt"
       participle_ipa: "sɛt"
   - slug: irregular-verb-meet
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "meet"
@@ -358,8 +297,6 @@ items:
       past_ipa: "mɛt"
       participle_ipa: "mɛt"
   - slug: irregular-verb-run
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "run"
@@ -370,8 +307,6 @@ items:
       past_ipa: "ræn"
       participle_ipa: "rʌn"
   - slug: irregular-verb-pay
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "pay"
@@ -382,8 +317,6 @@ items:
       past_ipa: "peɪd"
       participle_ipa: "peɪd"
   - slug: irregular-verb-sit
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "sit"
@@ -394,8 +327,6 @@ items:
       past_ipa: "sæt"
       participle_ipa: "sæt"
   - slug: irregular-verb-speak
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "speak"
@@ -406,8 +337,6 @@ items:
       past_ipa: "spəʊk"
       participle_ipa: "ˈspəʊkən"
   - slug: irregular-verb-lie
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "lie"
@@ -418,8 +347,6 @@ items:
       past_ipa: "leɪ"
       participle_ipa: "leɪn"
   - slug: irregular-verb-lead
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "lead"
@@ -430,8 +357,6 @@ items:
       past_ipa: "lɛd"
       participle_ipa: "lɛd"
   - slug: irregular-verb-read
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "read"
@@ -442,8 +367,6 @@ items:
       past_ipa: "rɛd"
       participle_ipa: "rɛd"
   - slug: irregular-verb-grow
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "grow"
@@ -454,8 +377,6 @@ items:
       past_ipa: "ɡruː"
       participle_ipa: "ɡrəʊn"
   - slug: irregular-verb-lose
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "lose"
@@ -466,8 +387,6 @@ items:
       past_ipa: "lɒst"
       participle_ipa: "lɒst"
   - slug: irregular-verb-fall
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "fall"
@@ -478,8 +397,6 @@ items:
       past_ipa: "fɛl"
       participle_ipa: "ˈfɔːlən"
   - slug: irregular-verb-send
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "send"
@@ -490,8 +407,6 @@ items:
       past_ipa: "sɛnt"
       participle_ipa: "sɛnt"
   - slug: irregular-verb-build
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "build"
@@ -502,8 +417,6 @@ items:
       past_ipa: "bɪlt"
       participle_ipa: "bɪlt"
   - slug: irregular-verb-understand
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "understand"
@@ -514,8 +427,6 @@ items:
       past_ipa: "ˌʌndəˈstʊd"
       participle_ipa: "ˌʌndəˈstʊd"
   - slug: irregular-verb-draw
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "draw"
@@ -526,8 +437,6 @@ items:
       past_ipa: "druː"
       participle_ipa: "drɔːn"
   - slug: irregular-verb-break
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "break"
@@ -538,8 +447,6 @@ items:
       past_ipa: "brəʊk"
       participle_ipa: "ˈbrəʊkən"
   - slug: irregular-verb-spend
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "spend"
@@ -550,8 +457,6 @@ items:
       past_ipa: "spɛnt"
       participle_ipa: "spɛnt"
   - slug: irregular-verb-cut
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "cut"
@@ -562,8 +467,6 @@ items:
       past_ipa: "kʌt"
       participle_ipa: "kʌt"
   - slug: irregular-verb-rise
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "rise"
@@ -574,8 +477,6 @@ items:
       past_ipa: "rəʊz"
       participle_ipa: "ˈrɪzn"
   - slug: irregular-verb-drive
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "drive"
@@ -586,8 +487,6 @@ items:
       past_ipa: "drəʊv"
       participle_ipa: "ˈdrɪvn"
   - slug: irregular-verb-buy
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "buy"
@@ -598,8 +497,6 @@ items:
       past_ipa: "bɔːt"
       participle_ipa: "bɔːt"
   - slug: irregular-verb-wear
-    level: A1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "wear"
@@ -610,8 +507,6 @@ items:
       past_ipa: "wɔː"
       participle_ipa: "wɔːn"
   - slug: irregular-verb-arise
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "arise"
@@ -622,8 +517,6 @@ items:
       past_ipa: "əˈrəʊz"
       participle_ipa: "əˈrɪzən"
   - slug: irregular-verb-awake
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "awake"
@@ -634,8 +527,6 @@ items:
       past_ipa: "əˈwəʊk"
       participle_ipa: "əˈwəʊkən"
   - slug: irregular-verb-bear
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "bear"
@@ -646,8 +537,6 @@ items:
       past_ipa: "bɔːr"
       participle_ipa: "bɔːrn"
   - slug: irregular-verb-beat
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "beat"
@@ -658,8 +547,6 @@ items:
       past_ipa: "biːt"
       participle_ipa: "ˈbiːtn"
   - slug: irregular-verb-bend
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "bend"
@@ -670,8 +557,6 @@ items:
       past_ipa: "bɛnt"
       participle_ipa: "bɛnt"
   - slug: irregular-verb-bet
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "bet"
@@ -682,8 +567,6 @@ items:
       past_ipa: "bɛt"
       participle_ipa: "bɛt"
   - slug: irregular-verb-bid
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "bid"
@@ -694,8 +577,6 @@ items:
       past_ipa: "bæd / bɪd"
       participle_ipa: "ˈbɪdn / bɪd"
   - slug: irregular-verb-bind
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "bind"
@@ -706,8 +587,6 @@ items:
       past_ipa: "baʊnd"
       participle_ipa: "baʊnd"
   - slug: irregular-verb-bite
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "bite"
@@ -718,8 +597,6 @@ items:
       past_ipa: "bɪt"
       participle_ipa: "ˈbɪtn"
   - slug: irregular-verb-bleed
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "bleed"
@@ -730,8 +607,6 @@ items:
       past_ipa: "blɛd"
       participle_ipa: "blɛd"
   - slug: irregular-verb-blow
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "blow"
@@ -742,8 +617,6 @@ items:
       past_ipa: "bluː"
       participle_ipa: "bləʊn"
   - slug: irregular-verb-breed
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "breed"
@@ -754,8 +627,6 @@ items:
       past_ipa: "brɛd"
       participle_ipa: "brɛd"
   - slug: irregular-verb-broadcast
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "broadcast"
@@ -766,8 +637,6 @@ items:
       past_ipa: "ˈbrɔːdkɑːst"
       participle_ipa: "ˈbrɔːdkɑːst"
   - slug: irregular-verb-burn
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "burn"
@@ -778,8 +647,6 @@ items:
       past_ipa: "bɜːnd / bɜːnt"
       participle_ipa: "bɜːnd / bɜːnt"
   - slug: irregular-verb-burst
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "burst"
@@ -790,8 +657,6 @@ items:
       past_ipa: "bɜːst"
       participle_ipa: "bɜːst"
   - slug: irregular-verb-catch
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "catch"
@@ -802,8 +667,6 @@ items:
       past_ipa: "kɔːt"
       participle_ipa: "kɔːt"
   - slug: irregular-verb-choose
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "choose"
@@ -814,8 +677,6 @@ items:
       past_ipa: "tʃəʊz"
       participle_ipa: "ˈtʃəʊzn"
   - slug: irregular-verb-cost
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "cost"
@@ -826,8 +687,6 @@ items:
       past_ipa: "kɒst"
       participle_ipa: "kɒst"
   - slug: irregular-verb-creep
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "creep"
@@ -838,8 +697,6 @@ items:
       past_ipa: "krɛpt"
       participle_ipa: "krɛpt"
   - slug: irregular-verb-deal
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "deal"
@@ -850,8 +707,6 @@ items:
       past_ipa: "dɛlt"
       participle_ipa: "dɛlt"
   - slug: irregular-verb-dig
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "dig"
@@ -862,8 +717,6 @@ items:
       past_ipa: "dʌɡ"
       participle_ipa: "dʌɡ"
   - slug: irregular-verb-dream
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "dream"
@@ -874,8 +727,6 @@ items:
       past_ipa: "driːmd / drɛmt"
       participle_ipa: "driːmd / drɛmt"
   - slug: irregular-verb-drink
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "drink"
@@ -886,8 +737,6 @@ items:
       past_ipa: "dræŋk"
       participle_ipa: "drʌŋk"
   - slug: irregular-verb-eat
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "eat"
@@ -898,8 +747,6 @@ items:
       past_ipa: "et / eɪt"
       participle_ipa: "ˈiːtn"
   - slug: irregular-verb-feed
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "feed"
@@ -910,8 +757,6 @@ items:
       past_ipa: "fɛd"
       participle_ipa: "fɛd"
   - slug: irregular-verb-fight
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "fight"
@@ -922,8 +767,6 @@ items:
       past_ipa: "fɔːt"
       participle_ipa: "fɔːt"
   - slug: irregular-verb-fit
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "fit"
@@ -934,8 +777,6 @@ items:
       past_ipa: "fɪt / ˈfɪtɪd"
       participle_ipa: "fɪt / ˈfɪtɪd"
   - slug: irregular-verb-flee
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "flee"
@@ -946,8 +787,6 @@ items:
       past_ipa: "flɛd"
       participle_ipa: "flɛd"
   - slug: irregular-verb-fly
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "fly"
@@ -958,8 +797,6 @@ items:
       past_ipa: "fluː"
       participle_ipa: "fləʊn"
   - slug: irregular-verb-forbid
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "forbid"
@@ -970,8 +807,6 @@ items:
       past_ipa: "fəˈbæd"
       participle_ipa: "fəˈbɪdn"
   - slug: irregular-verb-forget
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "forget"
@@ -982,8 +817,6 @@ items:
       past_ipa: "fəˈɡɒt"
       participle_ipa: "fəˈɡɒtn"
   - slug: irregular-verb-forgive
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "forgive"
@@ -994,8 +827,6 @@ items:
       past_ipa: "fəˈɡeɪv"
       participle_ipa: "fəˈɡɪvn"
   - slug: irregular-verb-freeze
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "freeze"
@@ -1006,8 +837,6 @@ items:
       past_ipa: "frəʊz"
       participle_ipa: "ˈfrəʊzn"
   - slug: irregular-verb-hang
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "hang"
@@ -1018,8 +847,6 @@ items:
       past_ipa: "hʌŋ"
       participle_ipa: "hʌŋ"
   - slug: irregular-verb-hide
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "hide"
@@ -1030,8 +857,6 @@ items:
       past_ipa: "hɪd"
       participle_ipa: "ˈhɪdn"
   - slug: irregular-verb-hit
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "hit"
@@ -1042,8 +867,6 @@ items:
       past_ipa: "hɪt"
       participle_ipa: "hɪt"
   - slug: irregular-verb-hurt
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "hurt"
@@ -1054,8 +877,6 @@ items:
       past_ipa: "hɜːt"
       participle_ipa: "hɜːt"
   - slug: irregular-verb-kneel
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "kneel"
@@ -1066,8 +887,6 @@ items:
       past_ipa: "nɛlt / niːld"
       participle_ipa: "nɛlt / niːld"
   - slug: irregular-verb-lay
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "lay"
@@ -1078,8 +897,6 @@ items:
       past_ipa: "leɪd"
       participle_ipa: "leɪd"
   - slug: irregular-verb-lean
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "lean"
@@ -1090,8 +907,6 @@ items:
       past_ipa: "lɛnt / liːnd"
       participle_ipa: "lɛnt / liːnd"
   - slug: irregular-verb-leap
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "leap"
@@ -1102,8 +917,6 @@ items:
       past_ipa: "lɛpt / liːpt"
       participle_ipa: "lɛpt / liːpt"
   - slug: irregular-verb-learn
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "learn"
@@ -1114,8 +927,6 @@ items:
       past_ipa: "lɜːnt / lɜːnd"
       participle_ipa: "lɜːnt / lɜːnd"
   - slug: irregular-verb-lend
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "lend"
@@ -1126,8 +937,6 @@ items:
       past_ipa: "lɛnt"
       participle_ipa: "lɛnt"
   - slug: irregular-verb-light
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "light"
@@ -1138,8 +947,6 @@ items:
       past_ipa: "lɪt / ˈlaɪtɪd"
       participle_ipa: "lɪt / ˈlaɪtɪd"
   - slug: irregular-verb-put
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "put"
@@ -1150,8 +957,6 @@ items:
       past_ipa: "pʊt"
       participle_ipa: "pʊt"
   - slug: irregular-verb-ride
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "ride"
@@ -1162,8 +967,6 @@ items:
       past_ipa: "rəʊd"
       participle_ipa: "ˈrɪdn"
   - slug: irregular-verb-ring
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "ring"
@@ -1174,8 +977,6 @@ items:
       past_ipa: "ræŋ"
       participle_ipa: "rʌŋ"
   - slug: irregular-verb-sell
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "sell"
@@ -1186,8 +987,6 @@ items:
       past_ipa: "səʊld"
       participle_ipa: "səʊld"
   - slug: irregular-verb-shake
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "shake"
@@ -1198,8 +997,6 @@ items:
       past_ipa: "ʃʊk"
       participle_ipa: "ˈʃeɪkən"
   - slug: irregular-verb-shine
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "shine"
@@ -1210,8 +1007,6 @@ items:
       past_ipa: "ʃɒn"
       participle_ipa: "ʃɒn"
   - slug: irregular-verb-shoot
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "shoot"
@@ -1222,8 +1017,6 @@ items:
       past_ipa: "ʃɒt"
       participle_ipa: "ʃɒt"
   - slug: irregular-verb-show
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "show"
@@ -1234,8 +1027,6 @@ items:
       past_ipa: "ʃəʊd"
       participle_ipa: "ʃəʊn / ʃəʊd"
   - slug: irregular-verb-shrink
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "shrink"
@@ -1246,8 +1037,6 @@ items:
       past_ipa: "ʃræŋk / ʃrʌŋk"
       participle_ipa: "ʃrʌŋk"
   - slug: irregular-verb-shut
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "shut"
@@ -1258,8 +1047,6 @@ items:
       past_ipa: "ʃʌt"
       participle_ipa: "ʃʌt"
   - slug: irregular-verb-sing
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "sing"
@@ -1270,8 +1057,6 @@ items:
       past_ipa: "sæŋ"
       participle_ipa: "sʌŋ"
   - slug: irregular-verb-sink
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "sink"
@@ -1282,8 +1067,6 @@ items:
       past_ipa: "sæŋk / sʌŋk"
       participle_ipa: "sʌŋk"
   - slug: irregular-verb-sleep
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "sleep"
@@ -1294,8 +1077,6 @@ items:
       past_ipa: "slɛpt"
       participle_ipa: "slɛpt"
   - slug: irregular-verb-slide
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "slide"
@@ -1306,8 +1087,6 @@ items:
       past_ipa: "slɪd"
       participle_ipa: "slɪd"
   - slug: irregular-verb-spin
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "spin"
@@ -1318,8 +1097,6 @@ items:
       past_ipa: "spʌn"
       participle_ipa: "spʌn"
   - slug: irregular-verb-spit
-    level: A2
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "spit"
@@ -1330,8 +1107,6 @@ items:
       past_ipa: "spæt"
       participle_ipa: "spæt"
   - slug: irregular-verb-split
-    level: B1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "split"
@@ -1342,8 +1117,6 @@ items:
       past_ipa: "splɪt"
       participle_ipa: "splɪt"
   - slug: irregular-verb-spread
-    level: B1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "spread"
@@ -1354,8 +1127,6 @@ items:
       past_ipa: "sprɛd"
       participle_ipa: "sprɛd"
   - slug: irregular-verb-spring
-    level: B1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "spring"
@@ -1366,8 +1137,6 @@ items:
       past_ipa: "spræŋ / sprʌŋ"
       participle_ipa: "sprʌŋ"
   - slug: irregular-verb-steal
-    level: B1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "steal"
@@ -1378,8 +1147,6 @@ items:
       past_ipa: "stəʊl"
       participle_ipa: "ˈstəʊlən"
   - slug: irregular-verb-stick
-    level: B1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "stick"
@@ -1390,8 +1157,6 @@ items:
       past_ipa: "stʌk"
       participle_ipa: "stʌk"
   - slug: irregular-verb-sting
-    level: B1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "sting"
@@ -1402,8 +1167,6 @@ items:
       past_ipa: "stʌŋ"
       participle_ipa: "stʌŋ"
   - slug: irregular-verb-stink
-    level: B1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "stink"
@@ -1414,8 +1177,6 @@ items:
       past_ipa: "stæŋk / stʌŋk"
       participle_ipa: "stʌŋk"
   - slug: irregular-verb-strike
-    level: B1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "strike"
@@ -1426,8 +1187,6 @@ items:
       past_ipa: "strʌk"
       participle_ipa: "strʌk / ˈstrɪkən"
   - slug: irregular-verb-swear
-    level: B1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "swear"
@@ -1438,8 +1197,6 @@ items:
       past_ipa: "swɔː"
       participle_ipa: "swɔːn"
   - slug: irregular-verb-sweep
-    level: B1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "sweep"
@@ -1450,8 +1207,6 @@ items:
       past_ipa: "swɛpt"
       participle_ipa: "swɛpt"
   - slug: irregular-verb-swell
-    level: B1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "swell"
@@ -1462,8 +1217,6 @@ items:
       past_ipa: "swɛld"
       participle_ipa: "ˈswəʊlən / swɛld"
   - slug: irregular-verb-swim
-    level: B1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "swim"
@@ -1474,8 +1227,6 @@ items:
       past_ipa: "swæm"
       participle_ipa: "swʌm"
   - slug: irregular-verb-swing
-    level: B1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "swing"
@@ -1486,8 +1237,6 @@ items:
       past_ipa: "swʌŋ"
       participle_ipa: "swʌŋ"
   - slug: irregular-verb-teach
-    level: B1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "teach"
@@ -1498,8 +1247,6 @@ items:
       past_ipa: "tɔːt"
       participle_ipa: "tɔːt"
   - slug: irregular-verb-tear
-    level: B1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "tear"
@@ -1510,8 +1257,6 @@ items:
       past_ipa: "tɔː"
       participle_ipa: "tɔːn"
   - slug: irregular-verb-throw
-    level: B1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "throw"
@@ -1522,8 +1267,6 @@ items:
       past_ipa: "θruː"
       participle_ipa: "θrəʊn"
   - slug: irregular-verb-wake
-    level: B1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "wake"
@@ -1534,8 +1277,6 @@ items:
       past_ipa: "wəʊk / ˈweɪkt"
       participle_ipa: "ˈwəʊkən / ˈweɪkt"
   - slug: irregular-verb-weave
-    level: B1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "weave"
@@ -1546,8 +1287,6 @@ items:
       past_ipa: "wəʊv / wiːvd"
       participle_ipa: "ˈwəʊvən / wiːvd"
   - slug: irregular-verb-weep
-    level: B1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "weep"
@@ -1558,8 +1297,6 @@ items:
       past_ipa: "wɛpt"
       participle_ipa: "wɛpt"
   - slug: irregular-verb-win
-    level: B1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "win"
@@ -1570,8 +1307,6 @@ items:
       past_ipa: "wʌn"
       participle_ipa: "wʌn"
   - slug: irregular-verb-wind
-    level: B1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "wind"
@@ -1582,8 +1317,6 @@ items:
       past_ipa: "waʊnd"
       participle_ipa: "waʊnd"
   - slug: irregular-verb-cling
-    level: B1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "cling"
@@ -1594,8 +1327,6 @@ items:
       past_ipa: "klʌŋ"
       participle_ipa: "klʌŋ"
   - slug: irregular-verb-seek
-    level: B1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "seek"
@@ -1606,8 +1337,6 @@ items:
       past_ipa: "sɔːt"
       participle_ipa: "sɔːt"
   - slug: irregular-verb-smell
-    level: B1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "smell"
@@ -1618,8 +1347,6 @@ items:
       past_ipa: "smɛlt"
       participle_ipa: "smɛlt"
   - slug: irregular-verb-spell
-    level: B1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "spell"
@@ -1630,8 +1357,6 @@ items:
       past_ipa: "spɛlt / spɛld"
       participle_ipa: "spɛlt / spɛld"
   - slug: irregular-verb-spill
-    level: B1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "spill"
@@ -1642,8 +1367,6 @@ items:
       past_ipa: "spɪlt / spɪld"
       participle_ipa: "spɪlt / spɪld"
   - slug: irregular-verb-spoil
-    level: B1
-    tags: [grammar:irregular-verbs]
     payload:
       kind: irregular_verb
       base: "spoil"

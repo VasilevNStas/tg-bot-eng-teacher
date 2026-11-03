@@ -8,7 +8,7 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.enums import Checker, ExerciseSessionKind, ExerciseState, Verdict, WordDirection
-from app.db.models import ExerciseAttempt, ExerciseSession, UserProgress
+from app.db.models import ExerciseAttempt, ExerciseSession
 from app.db.repository import BaseRepository
 
 
@@ -116,26 +116,3 @@ class ExerciseRepository(BaseRepository[ExerciseSession]):
             .order_by(ExerciseAttempt.content_item_id)
         )
         return tuple(int(item_id) for item_id in rows.scalars())
-
-
-class ProgressRepository(BaseRepository[UserProgress]):
-    def __init__(self, session: AsyncSession) -> None:
-        super().__init__(session, UserProgress)
-
-    async def get_or_create(self, user_id: int, topic_id: int) -> UserProgress:
-        progress = await self._session.scalar(
-            select(UserProgress).where(
-                UserProgress.user_id == user_id,
-                UserProgress.topic_id == topic_id,
-            )
-        )
-        if progress is None:
-            progress = UserProgress(
-                user_id=user_id,
-                topic_id=topic_id,
-                mastery=0.0,
-                streak=0,
-            )
-            self._session.add(progress)
-            await self._session.flush()
-        return progress

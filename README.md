@@ -21,6 +21,7 @@ MVP-каркас работает:
 - retention диалогов 90 дней + `prune-history`;
 - DB-backed напоминания с quiet hours и DST-safe переносом;
 - контент в YAML с импортом в SQLite, тегами, темами и вариантами;
+- банк слов: 2992 частотных слова в `content/vocabulary/`, без CEFR на этом этапе;
 - coverage-отчёт и CI-валидация контента.
 
 Ещё не реализованы: webhook, бэкапы и голос — см. локальный план в
@@ -54,17 +55,34 @@ cp .env.example .env
 
 ## База и контент
 
+Контент разделён на два слоя:
+
+- `content/topics/` — обычные упражнения (глаголы, gap-fill, placement);
+- `content/vocabulary/` — минимальный банк слов (частота, слово, транскрипция,
+  перевод), который компилируется в те же `content_items`.
+
 ```bash
 uv run alembic upgrade head
-uv run python -m app.cli import-content content/topics
+uv run python -m app.cli seed
 ```
 
-Импорт идемпотентен: повторный запуск не создаёт дублей. Для проверки без записи:
+`seed` импортирует оба слоя и идемпотентен: повторный запуск не создаёт дублей.
+Точечные команды остаются доступны:
 
 ```bash
-uv run python -m app.cli import-content content/topics --dry-run
+uv run python -m app.cli import-content content/topics
+uv run python -m app.cli import-words content/vocabulary
+```
+
+Для проверки без записи:
+
+```bash
+uv run python -m app.cli seed --dry-run
 uv run python -m app.cli content-report
 ```
+
+Бот читает только SQLite; YAML — источник истины для git-ревью. Подробнее о
+пайплайне — в `.opencode/_content_pipeline.md`.
 
 Retention диалогов по умолчанию 90 дней (`HISTORY_RETENTION_DAYS`, 0 = off),
 применяется при старте и вручную:
@@ -94,7 +112,6 @@ MVP работает в режиме polling — публичный URL не т�
 install -d -o 10001 -g 10001 data   # локально; на VDS — см. DEPLOY.md
 cp .env.example .env                # заполнить BOT_TOKEN и LLM_*
 docker compose build
-docker compose run --rm bot python -m app.cli import-content content/topics
 docker compose up -d
 docker compose logs -f bot
 ```

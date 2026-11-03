@@ -14,7 +14,7 @@ from app.curriculum.models import (
     VocabularyPayload,
     WordOrderPayload,
 )
-from app.db.enums import CEFRLevel, Checker, Verdict
+from app.db.enums import Checker, Verdict
 from app.grading.distance import edit_distance
 from app.grading.grader import (
     accepted_answers,
@@ -31,7 +31,6 @@ def make_item(payload: object, *, slug: str = "test-item") -> ContentItemSpec:
     return ContentItemSpec.model_validate(
         {
             "slug": slug,
-            "level": CEFRLevel.A2,
             "payload": payload,
         }
     )
@@ -148,7 +147,7 @@ def test_irregular_verb_forms_and_variants() -> None:
 def test_gap_fill_uses_answer_and_accepted() -> None:
     item = make_item(
         GapFillPayload(
-            sentence="She ___ to school.",
+            sentence="She .... to school.",
             answer="goes",
             accepted=["goes"],
         )
@@ -197,7 +196,7 @@ def test_word_order_uses_expected_sentence() -> None:
 
 def test_multiple_choice_by_text_and_index() -> None:
     payload = MultipleChoicePayload(
-        question="I ___ here since 2020.",
+        question="I .... here since 2020.",
         options=["live", "lived", "have lived"],
         correct_index=2,
     )

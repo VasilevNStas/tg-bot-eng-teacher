@@ -53,12 +53,6 @@ def load_content_path(path: Path) -> list[tuple[Path, ContentFile]]:
                 )
             seen[item.slug] = file_path
 
-            for topic_slug in item.topics or ():
-                if topic_slug not in topics:
-                    raise ContentLoadError(
-                        f"item '{item.slug}' references unknown topic '{topic_slug}'"
-                    )
-
     return loaded
 
 

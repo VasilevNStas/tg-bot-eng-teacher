@@ -6,11 +6,11 @@ from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from enum import StrEnum
 
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.database import Database
-from app.db.models import SrsReview, Vocabulary
+from app.db.models import Vocabulary
 
 
 class ReviewGrade(StrEnum):
@@ -44,15 +44,14 @@ class SrsService:
     ) -> list[ReviewCard]:
         at = now or datetime.now(UTC)
         async with self._database.session() as session:
-            await self._ensure_reviews(session, user_id, at)
-            rows = await session.execute(
-                select(Vocabulary, SrsReview)
-                .join(SrsReview, SrsReview.vocabulary_id == Vocabulary.id)
+            await self._ensure_due(session, user_id, at)
+            rows = await session.scalars(
+                select(Vocabulary)
                 .where(
                     Vocabulary.user_id == user_id,
-                    SrsReview.due_at <= at,
+                    Vocabulary.due_at <= at,
                 )
-                .order_by(SrsReview.due_at, SrsReview.id)
+                .order_by(Vocabulary.due_at, Vocabulary.id)
                 .limit(limit)
             )
             return [
@@ -62,7 +61,7 @@ class SrsService:
                     translation=word.translation,
                     context=word.context,
                 )
-                for word, _review in rows
+                for word in rows
             ]
 
     async def review(
@@ -76,42 +75,35 @@ class SrsService:
         at = now or datetime.now(UTC)
         async with self._database.session() as session:
             row = await session.scalar(
-                select(SrsReview)
-                .join(Vocabulary, Vocabulary.id == SrsReview.vocabulary_id)
-                .where(
+                select(Vocabulary).where(
                     Vocabulary.id == vocabulary_id,
                     Vocabulary.user_id == user_id,
                 )
             )
             if row is None:
                 raise ReviewNotFound(vocabulary_id)
+            if row.due_at is None:
+                row.due_at = at
             schedule(row, grade, at)
             return row.due_at
 
     @staticmethod
-    async def _ensure_reviews(
+    async def _ensure_due(
         session: AsyncSession,
         user_id: int,
         now: datetime,
     ) -> None:
-        missing = await session.scalars(
-            select(Vocabulary.id)
-            .outerjoin(SrsReview, SrsReview.vocabulary_id == Vocabulary.id)
+        await session.execute(
+            update(Vocabulary)
             .where(
                 Vocabulary.user_id == user_id,
-                SrsReview.id.is_(None),
+                Vocabulary.due_at.is_(None),
             )
+            .values(due_at=now)
         )
-        for vocabulary_id in missing:
-            session.add(
-                SrsReview(
-                    vocabulary_id=vocabulary_id,
-                    due_at=now,
-                )
-            )
 
 
-def schedule(review: SrsReview, grade: ReviewGrade, now: datetime) -> None:
+def schedule(review: Vocabulary, grade: ReviewGrade, now: datetime) -> None:
     """Apply a simplified SM-2 step in place."""
     review.last_reviewed_at = now
     if grade is ReviewGrade.AGAIN:

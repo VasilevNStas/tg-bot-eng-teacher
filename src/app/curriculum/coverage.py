@@ -10,23 +10,18 @@ from sqlalchemy import func, select
 
 from app.curriculum.models import ContentItemSpec
 from app.db.database import Database
-from app.db.enums import CEFRLevel, ContentKind
-from app.db.models import ContentItem, ContentItemTag, Topic, TopicItem
+from app.db.enums import ContentKind
+from app.db.models import ContentItem, Topic
 from app.grading.normalize import normalize_answer
+
+LICENSE_PREVIEW_LIMIT = 30
 
 
 @dataclass(frozen=True)
 class CoverageCell:
     topic_slug: str
     topic_title: str
-    level: CEFRLevel
     kind: ContentKind
-    count: int
-
-
-@dataclass(frozen=True)
-class TagCount:
-    tag: str
     count: int
 
 
@@ -40,12 +35,9 @@ class DuplicateGroup:
 class ContentCoverage:
     active_items: int
     topics: int
-    memberships: int
-    uncollected: tuple[str, ...]
     empty_topics: tuple[str, ...]
     license_unknown: tuple[str, ...]
     cells: tuple[CoverageCell, ...]
-    tags: tuple[TagCount, ...]
     duplicates: tuple[DuplicateGroup, ...]
 
     def as_dict(self) -> dict[str, object]:
@@ -67,29 +59,11 @@ class CoverageService:
                 or 0
             )
             topics = int(await session.scalar(select(func.count()).select_from(Topic)) or 0)
-            memberships = int(
-                await session.scalar(select(func.count()).select_from(TopicItem)) or 0
-            )
-
-            uncollected = tuple(
-                await session.scalars(
-                    select(ContentItem.slug)
-                    .outerjoin(
-                        TopicItem,
-                        TopicItem.content_item_id == ContentItem.id,
-                    )
-                    .where(
-                        ContentItem.is_active.is_(True),
-                        TopicItem.content_item_id.is_(None),
-                    )
-                    .order_by(ContentItem.slug)
-                )
-            )
             empty_topics = tuple(
                 await session.scalars(
                     select(Topic.slug)
-                    .outerjoin(TopicItem, TopicItem.topic_id == Topic.id)
-                    .where(TopicItem.topic_id.is_(None))
+                    .outerjoin(ContentItem, ContentItem.topic_id == Topic.id)
+                    .where(ContentItem.id.is_(None))
                     .order_by(Topic.slug)
                 )
             )
@@ -108,36 +82,24 @@ class CoverageService:
                 select(
                     Topic.slug,
                     Topic.title,
-                    ContentItem.level,
                     ContentItem.kind,
                     func.count(ContentItem.id),
                 )
                 .select_from(Topic)
-                .join(TopicItem, TopicItem.topic_id == Topic.id)
-                .join(ContentItem, ContentItem.id == TopicItem.content_item_id)
+                .join(ContentItem, ContentItem.topic_id == Topic.id)
                 .where(ContentItem.is_active.is_(True))
-                .group_by(Topic.slug, Topic.title, ContentItem.level, ContentItem.kind)
-                .order_by(Topic.slug, ContentItem.level, ContentItem.kind)
+                .group_by(Topic.slug, Topic.title, ContentItem.kind)
+                .order_by(Topic.slug, ContentItem.kind)
             )
             cells = tuple(
                 CoverageCell(
                     topic_slug=topic_slug,
                     topic_title=topic_title,
-                    level=level,
                     kind=kind,
                     count=int(count),
                 )
-                for topic_slug, topic_title, level, kind, count in rows
+                for topic_slug, topic_title, kind, count in rows
             )
-
-            tag_rows = await session.execute(
-                select(ContentItemTag.tag, func.count(ContentItemTag.content_item_id))
-                .join(ContentItem, ContentItem.id == ContentItemTag.content_item_id)
-                .where(ContentItem.is_active.is_(True))
-                .group_by(ContentItemTag.tag)
-                .order_by(ContentItemTag.tag)
-            )
-            tags = tuple(TagCount(tag=tag, count=int(count)) for tag, count in tag_rows)
 
             items = tuple(
                 await session.scalars(
@@ -150,12 +112,9 @@ class CoverageService:
         return ContentCoverage(
             active_items=active_items,
             topics=topics,
-            memberships=memberships,
-            uncollected=uncollected,
             empty_topics=empty_topics,
             license_unknown=license_unknown,
             cells=cells,
-            tags=tags,
             duplicates=_duplicates(items),
         )
 
@@ -166,7 +125,6 @@ def _duplicates(items: Iterable[ContentItem]) -> tuple[DuplicateGroup, ...]:
         spec = ContentItemSpec.model_validate(
             {
                 "slug": item.slug,
-                "level": item.level,
                 "payload": item.payload,
             }
         )
@@ -221,28 +179,17 @@ def format_coverage(report: ContentCoverage) -> str:
         "Content coverage",
         f"active items: {report.active_items}",
         f"topics: {report.topics}",
-        f"memberships: {report.memberships}",
-        f"uncollected items: {len(report.uncollected)}",
         f"license unknown: {len(report.license_unknown)}",
         "",
-        "Topic | level | kind | count",
+        "Topic | kind | count",
     ]
     if report.cells:
-        lines.extend(
-            f"{cell.topic_slug} | {cell.level} | {cell.kind} | {cell.count}"
-            for cell in report.cells
-        )
+        lines.extend(f"{cell.topic_slug} | {cell.kind} | {cell.count}" for cell in report.cells)
     else:
         lines.append("(no items)")
 
     if report.empty_topics:
         lines.extend(["", "Topics without items:", *report.empty_topics])
-
-    lines.extend(["", "Tags"])
-    if report.tags:
-        lines.extend(f"{tag.tag} | {tag.count}" for tag in report.tags)
-    else:
-        lines.append("(none)")
 
     lines.extend(["", "Duplicates"])
     if report.duplicates:
@@ -250,9 +197,11 @@ def format_coverage(report: ContentCoverage) -> str:
     else:
         lines.append("(none)")
 
-    if report.uncollected:
-        lines.extend(["", "Uncollected items:", *report.uncollected])
     if report.license_unknown:
-        lines.extend(["", "Items with unknown license:", *report.license_unknown])
+        preview = report.license_unknown[:LICENSE_PREVIEW_LIMIT]
+        lines.extend(["", "Items with unknown license:", *preview])
+        hidden = len(report.license_unknown) - len(preview)
+        if hidden > 0:
+            lines.append(f"... and {hidden} more")
 
     return "\n".join(lines)

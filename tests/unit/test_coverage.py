@@ -9,8 +9,8 @@ from app.curriculum.importer import ContentImporter
 from app.curriculum.loader import load_content_file
 from app.db.base import Base
 from app.db.database import Database
-from app.db.enums import CEFRLevel, ContentKind
-from app.db.models import ContentItem, ContentItemTag, Topic
+from app.db.enums import ContentKind
+from app.db.models import ContentItem, Topic
 
 FIXTURE = Path(__file__).resolve().parents[1] / "fixtures" / "content" / "sample.yaml"
 VOCAB_FIXTURE = Path(__file__).resolve().parents[1] / "fixtures" / "content" / "vocabulary.yaml"
@@ -25,45 +25,33 @@ async def make_database(tmp_path: Path) -> Database:
     return database
 
 
-async def test_coverage_reports_matrix_tags_uncollected_and_duplicates(
+async def test_coverage_reports_matrix_empty_topics_and_duplicates(
     tmp_path: Path,
 ) -> None:
     database = await make_database(tmp_path)
 
     async with database.session() as session:
-        session.add(
-            Topic(
-                slug="empty-topic",
-                title="Empty topic",
-                level=CEFRLevel.A1,
-                tags=[],
-            )
-        )
+        session.add(Topic(slug="empty-topic", title="Empty topic"))
         source = await session.scalar(
             select(ContentItem).where(ContentItem.slug == "test-gap-present-simple")
         )
         assert source is not None
         duplicate = ContentItem(
             slug="test-gap-present-simple-copy",
-            version=1,
+            topic_id=source.topic_id,
             is_active=True,
             kind=ContentKind.GAP_FILL,
-            level=CEFRLevel.A1,
             payload=dict(source.payload),
             source=source.source,
             license="cc0",
         )
         session.add(duplicate)
         await session.flush()
-        session.add(ContentItemTag(content_item_id=duplicate.id, tag="theme:cinema"))
-        await session.flush()
 
     report = await CoverageService(database).build()
 
     assert report.active_items == 6
     assert report.topics == 2
-    assert report.memberships == 5
-    assert report.uncollected == ("test-gap-present-simple-copy",)
     assert report.empty_topics == ("empty-topic",)
     assert report.license_unknown == (
         "test-gap-present-simple",
@@ -74,12 +62,10 @@ async def test_coverage_reports_matrix_tags_uncollected_and_duplicates(
     )
     assert any(
         cell.topic_slug == "test-topic-a1"
-        and cell.level == CEFRLevel.A1
         and cell.kind == ContentKind.IRREGULAR_VERB
         and cell.count == 1
         for cell in report.cells
     )
-    assert any(tag.tag == "theme:cinema" and tag.count == 2 for tag in report.tags)
     assert len(report.duplicates) == 1
     duplicate_group = report.duplicates[0]
     assert duplicate_group.signature.startswith("gap_fill |")
@@ -90,9 +76,8 @@ async def test_coverage_reports_matrix_tags_uncollected_and_duplicates(
 
     text = format_coverage(report)
     assert "Content coverage" in text
-    assert "test-topic-a1 | A1 | irregular_verb | 1" in text
+    assert "test-topic-a1 | irregular_verb | 1" in text
     assert "Topics without items:\nempty-topic" in text
-    assert "theme:cinema | 2" in text
     assert "test-gap-present-simple, test-gap-present-simple-copy" in text
     assert "Items with unknown license:" in text
 

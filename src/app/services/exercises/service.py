@@ -14,7 +14,7 @@ from app.db.database import Database
 from app.db.enums import ContentKind, ExerciseSessionKind, ExerciseState, Verdict
 from app.db.models import ContentItem, ExerciseSession, User
 from app.db.repositories.content import ContentRepository
-from app.db.repositories.exercises import ExerciseRepository, ProgressRepository
+from app.db.repositories.exercises import ExerciseRepository
 from app.grading.grader import GradeResult, IrregularForm, grade_item
 from app.services.exercises.errors import DrillSessionError, DrillUnavailable
 
@@ -54,8 +54,6 @@ class DrillSession:
 class DrillAttemptResult:
     result: GradeResult
     question: DrillQuestion
-    mastery: float
-    streak: int
 
 
 @dataclass(frozen=True, slots=True)
@@ -104,18 +102,9 @@ class ExerciseService:
                 SelectionCriteria(
                     topic_slug=self._topic_slug,
                     kind=ContentKind.IRREGULAR_VERB,
-                    level=user.level,
                     limit=self._session_size,
                 )
             )
-            if not selected:
-                selected = await selector.select(
-                    SelectionCriteria(
-                        topic_slug=self._topic_slug,
-                        kind=ContentKind.IRREGULAR_VERB,
-                        limit=self._session_size,
-                    )
-                )
             if not selected:
                 raise DrillUnavailable(f"topic '{self._topic_slug}' has no active items")
 
@@ -190,27 +179,10 @@ class ExerciseService:
 
             if exercise_session.topic_id is None:
                 raise DrillSessionError(f"session {session_id} has no topic")
-            progress = await ProgressRepository(session).get_or_create(
-                user.id,
-                exercise_session.topic_id,
-            )
-            score = {
-                Verdict.CORRECT: 1.0,
-                Verdict.PARTIAL: 0.5,
-                Verdict.INCORRECT: 0.0,
-            }[result.verdict]
-            progress.mastery = round(
-                min(1.0, max(0.0, 0.8 * progress.mastery + 0.2 * score)),
-                4,
-            )
-            progress.streak = progress.streak + 1 if result.verdict is Verdict.CORRECT else 0
-            progress.last_seen_at = datetime.now(UTC)
 
         return DrillAttemptResult(
             result=result,
             question=question,
-            mastery=progress.mastery,
-            streak=progress.streak,
         )
 
     async def cancel_active(self, user: User) -> SessionStats | None:
@@ -282,7 +254,6 @@ class ExerciseService:
         return ContentItemSpec.model_validate(
             {
                 "slug": item.slug,
-                "level": item.level,
                 "payload": item.payload,
                 "source": item.source,
                 "license": item.license,

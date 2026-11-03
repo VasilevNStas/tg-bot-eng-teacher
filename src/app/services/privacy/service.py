@@ -13,7 +13,6 @@ from app.db.database import Database
 from app.db.models import (
     Conversation,
     Correction,
-    Event,
     ExerciseAttempt,
     ExerciseSession,
     Reminder,
@@ -34,7 +33,6 @@ class DeletionSummary:
     attempts: int
     reminders: int
     usage: int
-    events: int
 
 
 class PrivacyService:
@@ -55,7 +53,6 @@ class PrivacyService:
 
             summary = await self._summary(session, user.id)
             await session.execute(delete(UsageLedger).where(UsageLedger.user_id == user.id))
-            await session.execute(delete(Event).where(Event.user_id == user.id))
             await session.delete(user)
             return summary
 
@@ -121,10 +118,6 @@ class PrivacyService:
             session,
             select(func.count()).select_from(UsageLedger).where(UsageLedger.user_id == user_id),
         )
-        events = await _count(
-            session,
-            select(func.count()).select_from(Event).where(Event.user_id == user_id),
-        )
         return DeletionSummary(
             conversations=conversations,
             messages=messages,
@@ -134,7 +127,6 @@ class PrivacyService:
             attempts=attempts,
             reminders=reminders,
             usage=usage,
-            events=events,
         )
 
 

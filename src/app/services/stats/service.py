@@ -16,9 +16,7 @@ from app.db.models import (
     ExerciseAttempt,
     ExerciseSession,
     Message,
-    SrsReview,
     Topic,
-    UserProgress,
     Vocabulary,
     WordProgress,
 )
@@ -170,23 +168,21 @@ class StatsService:
                 await session.scalar(
                     select(func.count(Vocabulary.id))
                     .select_from(Vocabulary)
-                    .outerjoin(SrsReview, SrsReview.vocabulary_id == Vocabulary.id)
                     .where(
                         Vocabulary.user_id == user_id,
-                        or_(SrsReview.id.is_(None), SrsReview.due_at <= at),
+                        or_(Vocabulary.due_at.is_(None), Vocabulary.due_at <= at),
                     )
                 )
                 or 0
             )
 
             weak_word_rows = await session.execute(
-                select(Vocabulary.term, SrsReview.lapses, SrsReview.ease)
-                .join(SrsReview, SrsReview.vocabulary_id == Vocabulary.id)
+                select(Vocabulary.term, Vocabulary.lapses, Vocabulary.ease)
                 .where(
                     Vocabulary.user_id == user_id,
-                    SrsReview.lapses > 0,
+                    Vocabulary.lapses > 0,
                 )
-                .order_by(SrsReview.lapses.desc(), SrsReview.ease, Vocabulary.term)
+                .order_by(Vocabulary.lapses.desc(), Vocabulary.ease, Vocabulary.term)
                 .limit(3)
             )
             weak_words = tuple(
@@ -210,7 +206,9 @@ class StatsService:
 
             progress_streak = int(
                 await session.scalar(
-                    select(func.max(UserProgress.streak)).where(UserProgress.user_id == user_id)
+                    select(func.max(WordProgress.best_streak)).where(
+                        WordProgress.user_id == user_id
+                    )
                 )
                 or 0
             )

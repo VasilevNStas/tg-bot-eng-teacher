@@ -1,17 +1,12 @@
 topic:
   slug: test-vocabulary
   title: "Test vocabulary"
-  level: A2
-  description: "Vocabulary payload fixture"
-  tags: [purpose:vocabulary]
 
 source: "Test fixture"
 license: "unknown"
 
 items:
   - slug: test-vocabulary-abandon
-    level: B1
-    tags: [purpose:vocabulary]
     payload:
       kind: vocabulary
       term: abandon
@@ -22,8 +17,6 @@ items:
       transcription: "əˈbændən"
 
   - slug: test-vocabulary-abandon-alt
-    level: B1
-    tags: [purpose:vocabulary]
     payload:
       kind: vocabulary
       term: abandon
@@ -32,8 +25,6 @@ items:
       frequency_rank: 812
 
   - slug: test-vocabulary-care
-    level: A2
-    tags: [purpose:vocabulary]
     payload:
       kind: vocabulary
       term: care

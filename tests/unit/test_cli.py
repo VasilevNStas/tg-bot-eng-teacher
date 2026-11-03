@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 
 import pytest
+import yaml
 from sqlalchemy import func, select
 
 from app.cli import main
@@ -59,6 +60,89 @@ def test_cli_dry_run_does_not_touch_database(
     assert not db_path.exists()
 
 
+def test_cli_imports_word_bank(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    bank_path = tmp_path / "core_words_0001_0002.yaml"
+    bank_path.write_text(
+        yaml.safe_dump(
+            {
+                "source": "test",
+                "license": "unknown",
+                "words": [
+                    {"position": 1, "frequency": 100, "term": "be", "translation_ru": "быть"},
+                    {"position": 2, "frequency": 90, "term": "and", "translation_ru": "и"},
+                ],
+            },
+            allow_unicode=True,
+        ),
+        encoding="utf-8",
+    )
+    db_path = tmp_path / "bot.db"
+    asyncio.run(prepare_database(db_path))
+    monkeypatch.setenv("DB_PATH", str(db_path))
+
+    assert main(["import-words", str(bank_path)]) == 0
+    assert asyncio.run(item_count(db_path)) == 2
+
+    assert main(["import-words", str(bank_path)]) == 0
+    assert asyncio.run(item_count(db_path)) == 2
+
+
+def test_cli_import_words_dry_run_does_not_touch_database(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    bank_path = tmp_path / "core_words_0001_0001.yaml"
+    bank_path.write_text(
+        yaml.safe_dump(
+            {"words": [{"position": 1, "frequency": 100, "term": "be", "translation_ru": "быть"}]},
+            allow_unicode=True,
+        ),
+        encoding="utf-8",
+    )
+    db_path = tmp_path / "bot.db"
+    monkeypatch.setenv("DB_PATH", str(db_path))
+
+    assert main(["import-words", "--dry-run", str(bank_path)]) == 0
+    assert not db_path.exists()
+
+
+def test_cli_seed_imports_bundled_content(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    content = tmp_path / "content"
+    topics = content / "topics"
+    vocabulary = content / "vocabulary"
+    topics.mkdir(parents=True)
+    vocabulary.mkdir()
+    (topics / "sample.yaml").write_text(FIXTURE.read_text(encoding="utf-8"), encoding="utf-8")
+    (vocabulary / "words.yaml").write_text(
+        yaml.safe_dump(
+            {
+                "source": "test",
+                "license": "unknown",
+                "words": [
+                    {"position": 1, "frequency": 100, "term": "be", "translation_ru": "быть"},
+                    {"position": 2, "frequency": 90, "term": "and", "translation_ru": "и"},
+                ],
+            },
+            allow_unicode=True,
+        ),
+        encoding="utf-8",
+    )
+
+    db_path = tmp_path / "bot.db"
+    asyncio.run(prepare_database(db_path))
+    monkeypatch.setenv("DB_PATH", str(db_path))
+    monkeypatch.setenv("CONTENT_DIR", str(content))
+
+    assert main(["seed"]) == 0
+    assert asyncio.run(item_count(db_path)) == 7
+
+    assert main(["seed"]) == 0
+    assert asyncio.run(item_count(db_path)) == 7
+
+
 def test_cli_returns_error_for_invalid_file(
     tmp_path: Path,
     capsys: pytest.CaptureFixture[str],
@@ -85,7 +169,7 @@ def test_cli_content_report(
     assert main(["content-report"]) == 0
     output = capsys.readouterr().out
     assert "Content coverage" in output
-    assert "test-topic-a1 | A1 | irregular_verb | 1" in output
+    assert "test-topic-a1 | irregular_verb | 1" in output
     assert "license unknown: 5" in output
 
     assert main(["content-report", "--json"]) == 0
@@ -94,7 +178,6 @@ def test_cli_content_report(
     assert captured.out.lstrip().startswith("{"), repr(captured.out[:120])
     payload = json.loads(captured.out)
     assert payload["active_items"] == 5
-    assert payload["memberships"] == 5
     assert payload["duplicates"] == []
 
 

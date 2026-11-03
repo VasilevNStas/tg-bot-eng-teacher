@@ -320,9 +320,7 @@ class WordCardService:
         restrict: Sequence[int] | None = None,
     ) -> list[_Candidate]:
         content_repo = ContentRepository(session)
-        items = await content_repo.list_active(kind=ContentKind.VOCABULARY, level=user.level)
-        if len(items) < size:
-            items = await content_repo.list_active(kind=ContentKind.VOCABULARY)
+        items = await content_repo.list_active(kind=ContentKind.VOCABULARY)
 
         payloads = {item.id: VocabularyPayload.model_validate(item.payload) for item in items}
         items = [item for item in items if not payloads[item.id].function_word]
@@ -478,7 +476,8 @@ class WordCardService:
         answer: str,
     ) -> GradeResult:
         if direction is WordDirection.EN_RU:
-            return grade_answer(answer, payload.translations_ru, fuzzy=False)
+            variants = payload.accepted_ru or payload.translations_ru
+            return grade_answer(answer, variants, fuzzy=False)
         return grade_answer(answer, (payload.term, *payload.accepted_en), fuzzy=True)
 
     async def _restore(

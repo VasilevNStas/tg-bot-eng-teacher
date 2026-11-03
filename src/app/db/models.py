@@ -4,10 +4,8 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 from decimal import Decimal
-from typing import Any
 
 from sqlalchemy import (
-    JSON,
     BigInteger,
     DateTime,
     ForeignKey,
@@ -92,10 +90,6 @@ class Message(Base):
     role: Mapped[MessageRole] = mapped_column(nullable=False)
     message_type: Mapped[MessageType] = mapped_column(default=MessageType.TEXT, nullable=False)
     content: Mapped[text]
-    input_tokens: Mapped[int] = mapped_column(default=0, nullable=False)
-    output_tokens: Mapped[int] = mapped_column(default=0, nullable=False)
-    model: Mapped[str | None] = mapped_column(String(128))
-    prompt_version: Mapped[str | None] = mapped_column(String(64))
     update_id: Mapped[int | None] = mapped_column(BigInteger, index=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=_now, nullable=False
@@ -117,9 +111,6 @@ class Topic(TimestampMixin, Base):
     id: Mapped[int_pk]
     slug: Mapped[str_64] = mapped_column(unique=True, index=True)
     title: Mapped[str_128]
-    level: Mapped[CEFRLevel] = mapped_column(nullable=False)
-    description: Mapped[str | None] = mapped_column(Text)
-    tags: Mapped[list[str]] = mapped_column(JSON, default=list, nullable=False)
 
 
 class ContentItem(TimestampMixin, Base):
@@ -127,40 +118,14 @@ class ContentItem(TimestampMixin, Base):
 
     id: Mapped[int_pk]
     slug: Mapped[str] = mapped_column(String(128), unique=True, index=True, nullable=False)
-    variant_of_id: Mapped[int | None] = mapped_column(
-        ForeignKey("content_items.id", ondelete="SET NULL"), index=True
+    topic_id: Mapped[int] = mapped_column(
+        ForeignKey("topics.id", ondelete="CASCADE"), index=True, nullable=False
     )
-    version: Mapped[int] = mapped_column(default=1, nullable=False)
     is_active: Mapped[bool_default_true]
     kind: Mapped[ContentKind] = mapped_column(nullable=False)
-    level: Mapped[CEFRLevel] = mapped_column(nullable=False)
     payload: Mapped[json_dict_not_null]
     source: Mapped[str | None] = mapped_column(String(256))
     license: Mapped[str] = mapped_column(String(32), default="unknown", nullable=False)
-
-
-class TopicItem(Base):
-    __tablename__ = "topic_items"
-
-    topic_id: Mapped[int] = mapped_column(
-        ForeignKey("topics.id", ondelete="CASCADE"), primary_key=True
-    )
-    content_item_id: Mapped[int] = mapped_column(
-        ForeignKey("content_items.id", ondelete="CASCADE"),
-        primary_key=True,
-        index=True,
-    )
-    position: Mapped[int] = mapped_column(default=0, nullable=False)
-
-
-class ContentItemTag(Base):
-    __tablename__ = "content_item_tags"
-
-    content_item_id: Mapped[int] = mapped_column(
-        ForeignKey("content_items.id", ondelete="CASCADE"),
-        primary_key=True,
-    )
-    tag: Mapped[str] = mapped_column(String(64), primary_key=True, index=True)
 
 
 class ExerciseSession(TimestampMixin, Base):
@@ -219,22 +184,6 @@ class Correction(CreatedAtMixin, Base):
     explanation: Mapped[text]
 
 
-class UserProgress(TimestampMixin, Base):
-    __tablename__ = "user_progress"
-    __table_args__ = (UniqueConstraint("user_id", "topic_id", name="uq_user_progress_user_topic"),)
-
-    id: Mapped[int_pk]
-    user_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"), index=True, nullable=False
-    )
-    topic_id: Mapped[int] = mapped_column(
-        ForeignKey("topics.id", ondelete="CASCADE"), index=True, nullable=False
-    )
-    mastery: Mapped[float] = mapped_column(default=0.0, nullable=False)
-    streak: Mapped[int] = mapped_column(default=0, nullable=False)
-    last_seen_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
-
-
 class Vocabulary(TimestampMixin, Base):
     __tablename__ = "vocabulary"
     __table_args__ = (UniqueConstraint("user_id", "term", name="uq_vocabulary_user_term"),)
@@ -249,19 +198,7 @@ class Vocabulary(TimestampMixin, Base):
     source_message_id: Mapped[int | None] = mapped_column(
         ForeignKey("messages.id", ondelete="SET NULL"), index=True
     )
-
-
-class SrsReview(TimestampMixin, Base):
-    __tablename__ = "srs_reviews"
-
-    id: Mapped[int_pk]
-    vocabulary_id: Mapped[int] = mapped_column(
-        ForeignKey("vocabulary.id", ondelete="CASCADE"),
-        unique=True,
-        index=True,
-        nullable=False,
-    )
-    due_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True, nullable=False)
+    due_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), index=True)
     interval_days: Mapped[int] = mapped_column(default=0, nullable=False)
     ease: Mapped[float] = mapped_column(default=2.5, nullable=False)
     reps: Mapped[int] = mapped_column(default=0, nullable=False)
@@ -324,14 +261,3 @@ class Reminder(TimestampMixin, Base):
     kind: Mapped[ReminderKind] = mapped_column(nullable=False)
     payload: Mapped[json_dict_not_null]
     sent_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
-
-
-class Event(CreatedAtMixin, Base):
-    __tablename__ = "events"
-
-    id: Mapped[int_pk]
-    user_id: Mapped[int | None] = mapped_column(
-        ForeignKey("users.id", ondelete="SET NULL"), index=True
-    )
-    kind: Mapped[str_64] = mapped_column(index=True)
-    payload: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict, nullable=False)

@@ -1,8 +1,8 @@
-"""initial schema
+"""initial schema v2
 
-Revision ID: c40c840acafb
+Revision ID: e6a7f27920e7
 Revises:
-Create Date: 2026-10-29 00:15:04.034540
+Create Date: 2026-11-03 16:38:09.152714
 """
 
 from __future__ import annotations
@@ -12,7 +12,7 @@ from collections.abc import Sequence
 import sqlalchemy as sa
 from alembic import op
 
-revision: str = "c40c840acafb"
+revision: str = "e6a7f27920e7"
 down_revision: str | None = None
 branch_labels: str | Sequence[str] | None = None
 depends_on: str | Sequence[str] | None = None
@@ -31,11 +31,6 @@ def upgrade() -> None:
         sa.Column("id", sa.Integer(), autoincrement=True, nullable=False),
         sa.Column("slug", sa.String(length=64), nullable=False),
         sa.Column("title", sa.String(length=128), nullable=False),
-        sa.Column(
-            "level", sa.Enum("A1", "A2", "B1", "B2", "C1", "C2", name="cefrlevel"), nullable=False
-        ),
-        sa.Column("description", sa.Text(), nullable=True),
-        sa.Column("tags", sa.JSON(), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.PrimaryKeyConstraint("id", name=op.f("pk_topics")),
@@ -53,6 +48,8 @@ def upgrade() -> None:
             "level", sa.Enum("A1", "A2", "B1", "B2", "C1", "C2", name="cefrlevel"), nullable=False
         ),
         sa.Column("timezone", sa.String(length=64), nullable=False),
+        sa.Column("quiet_hours_start", sa.String(length=5), nullable=True),
+        sa.Column("quiet_hours_end", sa.String(length=5), nullable=True),
         sa.Column("onboarding_state", sa.String(length=32), nullable=False),
         sa.Column("profile", sa.JSON(), nullable=False),
         sa.Column("last_seen_at", sa.DateTime(timezone=True), nullable=True),
@@ -66,9 +63,8 @@ def upgrade() -> None:
     op.create_table(
         "content_items",
         sa.Column("id", sa.Integer(), autoincrement=True, nullable=False),
-        sa.Column("topic_id", sa.Integer(), nullable=False),
         sa.Column("slug", sa.String(length=128), nullable=False),
-        sa.Column("version", sa.Integer(), nullable=False),
+        sa.Column("topic_id", sa.Integer(), nullable=False),
         sa.Column("is_active", sa.Boolean(), nullable=False),
         sa.Column(
             "kind",
@@ -78,12 +74,10 @@ def upgrade() -> None:
                 "TRANSLATION_PAIR",
                 "WORD_ORDER",
                 "MULTIPLE_CHOICE",
+                "VOCABULARY",
                 name="contentkind",
             ),
             nullable=False,
-        ),
-        sa.Column(
-            "level", sa.Enum("A1", "A2", "B1", "B2", "C1", "C2", name="cefrlevel"), nullable=False
         ),
         sa.Column("payload", sa.JSON(), nullable=False),
         sa.Column("source", sa.String(length=256), nullable=True),
@@ -129,26 +123,16 @@ def upgrade() -> None:
         batch_op.create_index(batch_op.f("ix_conversations_user_id"), ["user_id"], unique=False)
 
     op.create_table(
-        "events",
-        sa.Column("id", sa.Integer(), autoincrement=True, nullable=False),
-        sa.Column("user_id", sa.Integer(), nullable=True),
-        sa.Column("kind", sa.String(length=64), nullable=False),
-        sa.Column("payload", sa.JSON(), nullable=False),
-        sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
-        sa.ForeignKeyConstraint(
-            ["user_id"], ["users.id"], name=op.f("fk_events_user_id_users"), ondelete="SET NULL"
-        ),
-        sa.PrimaryKeyConstraint("id", name=op.f("pk_events")),
-    )
-    with op.batch_alter_table("events", schema=None) as batch_op:
-        batch_op.create_index(batch_op.f("ix_events_kind"), ["kind"], unique=False)
-        batch_op.create_index(batch_op.f("ix_events_user_id"), ["user_id"], unique=False)
-
-    op.create_table(
         "exercise_sessions",
         sa.Column("id", sa.Integer(), autoincrement=True, nullable=False),
         sa.Column("user_id", sa.Integer(), nullable=False),
         sa.Column("topic_id", sa.Integer(), nullable=True),
+        sa.Column(
+            "kind",
+            sa.Enum("DRILL", "WORDS", name="exercisesessionkind", native_enum=False, length=32),
+            nullable=False,
+        ),
+        sa.Column("meta", sa.JSON(), nullable=False),
         sa.Column(
             "state",
             sa.Enum("ACTIVE", "FINISHED", "ABANDONED", name="exercisestate"),
@@ -198,35 +182,6 @@ def upgrade() -> None:
         batch_op.create_index(batch_op.f("ix_reminders_user_id"), ["user_id"], unique=False)
 
     op.create_table(
-        "user_progress",
-        sa.Column("id", sa.Integer(), autoincrement=True, nullable=False),
-        sa.Column("user_id", sa.Integer(), nullable=False),
-        sa.Column("topic_id", sa.Integer(), nullable=False),
-        sa.Column("mastery", sa.Double(), nullable=False),
-        sa.Column("streak", sa.Integer(), nullable=False),
-        sa.Column("last_seen_at", sa.DateTime(timezone=True), nullable=True),
-        sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
-        sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
-        sa.ForeignKeyConstraint(
-            ["topic_id"],
-            ["topics.id"],
-            name=op.f("fk_user_progress_topic_id_topics"),
-            ondelete="CASCADE",
-        ),
-        sa.ForeignKeyConstraint(
-            ["user_id"],
-            ["users.id"],
-            name=op.f("fk_user_progress_user_id_users"),
-            ondelete="CASCADE",
-        ),
-        sa.PrimaryKeyConstraint("id", name=op.f("pk_user_progress")),
-        sa.UniqueConstraint("user_id", "topic_id", name="uq_user_progress_user_topic"),
-    )
-    with op.batch_alter_table("user_progress", schema=None) as batch_op:
-        batch_op.create_index(batch_op.f("ix_user_progress_topic_id"), ["topic_id"], unique=False)
-        batch_op.create_index(batch_op.f("ix_user_progress_user_id"), ["user_id"], unique=False)
-
-    op.create_table(
         "exercise_attempts",
         sa.Column("id", sa.Integer(), autoincrement=True, nullable=False),
         sa.Column("user_id", sa.Integer(), nullable=False),
@@ -237,6 +192,11 @@ def upgrade() -> None:
             "verdict", sa.Enum("CORRECT", "PARTIAL", "INCORRECT", name="verdict"), nullable=False
         ),
         sa.Column("checker", sa.Enum("CODE", "LLM", name="checker"), nullable=False),
+        sa.Column(
+            "direction",
+            sa.Enum("EN_RU", "RU_EN", name="worddirection", native_enum=False, length=32),
+            nullable=True,
+        ),
         sa.Column("latency_ms", sa.Integer(), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.ForeignKeyConstraint(
@@ -279,10 +239,6 @@ def upgrade() -> None:
             "message_type", sa.Enum("TEXT", "VOICE", "IMAGE", name="messagetype"), nullable=False
         ),
         sa.Column("content", sa.Text(), nullable=False),
-        sa.Column("input_tokens", sa.Integer(), nullable=False),
-        sa.Column("output_tokens", sa.Integer(), nullable=False),
-        sa.Column("model", sa.String(length=128), nullable=True),
-        sa.Column("prompt_version", sa.String(length=64), nullable=True),
         sa.Column("update_id", sa.BigInteger(), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.ForeignKeyConstraint(
@@ -332,6 +288,47 @@ def upgrade() -> None:
         batch_op.create_index(batch_op.f("ix_usage_ledger_user_id"), ["user_id"], unique=False)
 
     op.create_table(
+        "word_progress",
+        sa.Column("id", sa.Integer(), autoincrement=True, nullable=False),
+        sa.Column("user_id", sa.Integer(), nullable=False),
+        sa.Column("content_item_id", sa.Integer(), nullable=False),
+        sa.Column("shown_count", sa.Integer(), nullable=False),
+        sa.Column("attempt_count", sa.Integer(), nullable=False),
+        sa.Column("correct_count", sa.Integer(), nullable=False),
+        sa.Column("partial_count", sa.Integer(), nullable=False),
+        sa.Column("wrong_count", sa.Integer(), nullable=False),
+        sa.Column("streak", sa.Integer(), nullable=False),
+        sa.Column("best_streak", sa.Integer(), nullable=False),
+        sa.Column("last_shown_at", sa.DateTime(timezone=True), nullable=True),
+        sa.Column("last_attempted_at", sa.DateTime(timezone=True), nullable=True),
+        sa.Column("next_due_at", sa.DateTime(timezone=True), nullable=True),
+        sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
+        sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
+        sa.ForeignKeyConstraint(
+            ["content_item_id"],
+            ["content_items.id"],
+            name=op.f("fk_word_progress_content_item_id_content_items"),
+            ondelete="CASCADE",
+        ),
+        sa.ForeignKeyConstraint(
+            ["user_id"],
+            ["users.id"],
+            name=op.f("fk_word_progress_user_id_users"),
+            ondelete="CASCADE",
+        ),
+        sa.PrimaryKeyConstraint("id", name=op.f("pk_word_progress")),
+        sa.UniqueConstraint("user_id", "content_item_id", name="uq_word_progress_user_item"),
+    )
+    with op.batch_alter_table("word_progress", schema=None) as batch_op:
+        batch_op.create_index(
+            batch_op.f("ix_word_progress_content_item_id"), ["content_item_id"], unique=False
+        )
+        batch_op.create_index(
+            "ix_word_progress_user_due_at", ["user_id", "next_due_at"], unique=False
+        )
+        batch_op.create_index(batch_op.f("ix_word_progress_user_id"), ["user_id"], unique=False)
+
+    op.create_table(
         "corrections",
         sa.Column("id", sa.Integer(), autoincrement=True, nullable=False),
         sa.Column("message_id", sa.Integer(), nullable=False),
@@ -373,6 +370,12 @@ def upgrade() -> None:
         sa.Column("translation", sa.String(length=256), nullable=False),
         sa.Column("context", sa.Text(), nullable=True),
         sa.Column("source_message_id", sa.Integer(), nullable=True),
+        sa.Column("due_at", sa.DateTime(timezone=True), nullable=True),
+        sa.Column("interval_days", sa.Integer(), nullable=False),
+        sa.Column("ease", sa.Double(), nullable=False),
+        sa.Column("reps", sa.Integer(), nullable=False),
+        sa.Column("lapses", sa.Integer(), nullable=False),
+        sa.Column("last_reviewed_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.ForeignKeyConstraint(
@@ -388,50 +391,21 @@ def upgrade() -> None:
         sa.UniqueConstraint("user_id", "term", name="uq_vocabulary_user_term"),
     )
     with op.batch_alter_table("vocabulary", schema=None) as batch_op:
+        batch_op.create_index(batch_op.f("ix_vocabulary_due_at"), ["due_at"], unique=False)
         batch_op.create_index(
             batch_op.f("ix_vocabulary_source_message_id"), ["source_message_id"], unique=False
         )
         batch_op.create_index(batch_op.f("ix_vocabulary_user_id"), ["user_id"], unique=False)
-
-    op.create_table(
-        "srs_reviews",
-        sa.Column("id", sa.Integer(), autoincrement=True, nullable=False),
-        sa.Column("vocabulary_id", sa.Integer(), nullable=False),
-        sa.Column("due_at", sa.DateTime(timezone=True), nullable=False),
-        sa.Column("interval_days", sa.Integer(), nullable=False),
-        sa.Column("ease", sa.Double(), nullable=False),
-        sa.Column("reps", sa.Integer(), nullable=False),
-        sa.Column("lapses", sa.Integer(), nullable=False),
-        sa.Column("last_reviewed_at", sa.DateTime(timezone=True), nullable=True),
-        sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
-        sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
-        sa.ForeignKeyConstraint(
-            ["vocabulary_id"],
-            ["vocabulary.id"],
-            name=op.f("fk_srs_reviews_vocabulary_id_vocabulary"),
-            ondelete="CASCADE",
-        ),
-        sa.PrimaryKeyConstraint("id", name=op.f("pk_srs_reviews")),
-    )
-    with op.batch_alter_table("srs_reviews", schema=None) as batch_op:
-        batch_op.create_index(batch_op.f("ix_srs_reviews_due_at"), ["due_at"], unique=False)
-        batch_op.create_index(
-            batch_op.f("ix_srs_reviews_vocabulary_id"), ["vocabulary_id"], unique=True
-        )
 
     # ### end Alembic commands ###
 
 
 def downgrade() -> None:
     # ### commands auto generated by Alembic - please adjust! ###
-    with op.batch_alter_table("srs_reviews", schema=None) as batch_op:
-        batch_op.drop_index(batch_op.f("ix_srs_reviews_vocabulary_id"))
-        batch_op.drop_index(batch_op.f("ix_srs_reviews_due_at"))
-
-    op.drop_table("srs_reviews")
     with op.batch_alter_table("vocabulary", schema=None) as batch_op:
         batch_op.drop_index(batch_op.f("ix_vocabulary_user_id"))
         batch_op.drop_index(batch_op.f("ix_vocabulary_source_message_id"))
+        batch_op.drop_index(batch_op.f("ix_vocabulary_due_at"))
 
     op.drop_table("vocabulary")
     with op.batch_alter_table("corrections", schema=None) as batch_op:
@@ -439,6 +413,12 @@ def downgrade() -> None:
         batch_op.drop_index(batch_op.f("ix_corrections_category"))
 
     op.drop_table("corrections")
+    with op.batch_alter_table("word_progress", schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f("ix_word_progress_user_id"))
+        batch_op.drop_index("ix_word_progress_user_due_at")
+        batch_op.drop_index(batch_op.f("ix_word_progress_content_item_id"))
+
+    op.drop_table("word_progress")
     with op.batch_alter_table("usage_ledger", schema=None) as batch_op:
         batch_op.drop_index(batch_op.f("ix_usage_ledger_user_id"))
         batch_op.drop_index(batch_op.f("ix_usage_ledger_conversation_id"))
@@ -455,11 +435,6 @@ def downgrade() -> None:
         batch_op.drop_index(batch_op.f("ix_exercise_attempts_content_item_id"))
 
     op.drop_table("exercise_attempts")
-    with op.batch_alter_table("user_progress", schema=None) as batch_op:
-        batch_op.drop_index(batch_op.f("ix_user_progress_user_id"))
-        batch_op.drop_index(batch_op.f("ix_user_progress_topic_id"))
-
-    op.drop_table("user_progress")
     with op.batch_alter_table("reminders", schema=None) as batch_op:
         batch_op.drop_index(batch_op.f("ix_reminders_user_id"))
         batch_op.drop_index(batch_op.f("ix_reminders_due_at"))
@@ -470,11 +445,6 @@ def downgrade() -> None:
         batch_op.drop_index(batch_op.f("ix_exercise_sessions_topic_id"))
 
     op.drop_table("exercise_sessions")
-    with op.batch_alter_table("events", schema=None) as batch_op:
-        batch_op.drop_index(batch_op.f("ix_events_user_id"))
-        batch_op.drop_index(batch_op.f("ix_events_kind"))
-
-    op.drop_table("events")
     with op.batch_alter_table("conversations", schema=None) as batch_op:
         batch_op.drop_index(batch_op.f("ix_conversations_user_id"))
 

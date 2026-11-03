@@ -15,6 +15,7 @@ from app.curriculum.coverage import CoverageService, format_coverage
 from app.curriculum.errors import ContentError
 from app.curriculum.importer import ContentImporter
 from app.curriculum.loader import load_content_path
+from app.curriculum.word_bank import load_word_bank_path
 from app.db.database import Database
 from app.services.privacy.service import PrivacyService
 
@@ -44,6 +45,52 @@ async def import_content(path: Path, *, dry_run: bool) -> int:
     finally:
         await database.dispose()
     return 0
+
+
+async def import_words(path: Path, *, dry_run: bool) -> int:
+    loaded = load_word_bank_path(path)
+
+    if dry_run:
+        for file_path, content in loaded:
+            print(
+                f"{file_path}: topic={content.topic.slug} "
+                f"words={len(content.items)} (validated, not imported)"
+            )
+        return 0
+
+    db_path = Path(os.environ.get("DB_PATH", "./data/bot.db"))
+    database = Database()
+    database.init(db_path)
+    try:
+        importer = ContentImporter(database)
+        results = await importer.import_files([content for _, content in loaded])
+        for (file_path, _), result in zip(loaded, results, strict=True):
+            print(
+                f"{file_path}: created={result.created} "
+                f"updated={result.updated} skipped={result.skipped}"
+            )
+    finally:
+        await database.dispose()
+    return 0
+
+
+async def seed(*, dry_run: bool) -> int:
+    """Import every bundled content file. Safe to run on each start."""
+    base = Path(os.environ.get("CONTENT_DIR", "content"))
+    topics = base / "topics"
+    vocabulary = base / "vocabulary"
+
+    if not topics.is_dir():
+        print(f"error: content directory not found: {topics}", file=sys.stderr)
+        return 1
+    if not vocabulary.is_dir():
+        print(f"error: content directory not found: {vocabulary}", file=sys.stderr)
+        return 1
+
+    result = await import_content(topics, dry_run=dry_run)
+    if result != 0:
+        return result
+    return await import_words(vocabulary, dry_run=dry_run)
 
 
 async def content_report(*, as_json: bool) -> int:
@@ -89,6 +136,27 @@ def main(argv: Sequence[str] | None = None) -> int:
         help="Validate only, do not write to the database",
     )
 
+    words_parser = subparsers.add_parser(
+        "import-words",
+        help="Validate and import minimal vocabulary bank files",
+    )
+    words_parser.add_argument("path", type=Path, help="YAML file or directory")
+    words_parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Validate only, do not write to the database",
+    )
+
+    seed_parser = subparsers.add_parser(
+        "seed",
+        help="Import bundled topics and vocabulary (idempotent)",
+    )
+    seed_parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Validate only, do not write to the database",
+    )
+
     report_parser = subparsers.add_parser(
         "content-report",
         help="Show content coverage, tags, duplicates and license gaps",
@@ -120,6 +188,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         if args.command == "import-content":
             return asyncio.run(import_content(args.path, dry_run=args.dry_run))
+        if args.command == "import-words":
+            return asyncio.run(import_words(args.path, dry_run=args.dry_run))
+        if args.command == "seed":
+            return asyncio.run(seed(dry_run=args.dry_run))
         if args.command == "content-report":
             return asyncio.run(content_report(as_json=args.json))
         if args.command == "prune-history":
