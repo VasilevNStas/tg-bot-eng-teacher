@@ -45,6 +45,8 @@ def make_database(path: Path, marker: str = "initial") -> None:
         connection.execute("INSERT INTO alembic_version VALUES ('test-revision')")
         connection.execute("CREATE TABLE marker(value TEXT)")
         connection.execute("INSERT INTO marker VALUES (?)", (marker,))
+        for table in ("users", "content_items", "exercise_sessions", "word_progress"):
+            connection.execute(f"CREATE TABLE {table}(id INTEGER)")
         connection.commit()
     finally:
         connection.close()
@@ -155,3 +157,53 @@ def test_restore_rejects_corrupt_file(tmp_path: Path) -> None:
     assert result.returncode != 0
     assert "integrity check failed" in result.stderr
     assert marker_value(db_path) == "untouched"
+
+
+def test_drill_verifies_backup(tmp_path: Path) -> None:
+    db_path = tmp_path / "bot.db"
+    backup_dir = tmp_path / "backups"
+    make_database(db_path)
+
+    backup = Path(run(db_path, backup_dir, "backup", "manual").stdout.strip())
+    result = run(db_path, backup_dir, "drill", str(backup))
+
+    assert "integrity: ok" in result.stdout
+    assert "revision: test-revision" in result.stdout
+    assert "content_items: 0" in result.stdout
+    assert "log:" in result.stdout
+    drill_log = backup_dir / "drills.log"
+    assert drill_log.exists()
+    assert "ok source=" in drill_log.read_text(encoding="utf-8")
+
+
+def test_drill_uses_latest_backup_by_default(tmp_path: Path) -> None:
+    db_path = tmp_path / "bot.db"
+    backup_dir = tmp_path / "backups"
+    make_database(db_path)
+    run(db_path, backup_dir, "backup", "manual")
+
+    result = run(db_path, backup_dir, "drill")
+
+    assert "integrity: ok" in result.stdout
+
+
+def test_drill_rejects_corrupt_backup(tmp_path: Path) -> None:
+    db_path = tmp_path / "bot.db"
+    backup_dir = tmp_path / "backups"
+    backup_dir.mkdir()
+    corrupt = backup_dir / "corrupt.db"
+    corrupt.write_text("not a database", encoding="utf-8")
+
+    result = run(db_path, backup_dir, "drill", str(corrupt), check=False)
+
+    assert result.returncode != 0
+    assert "integrity check failed" in result.stderr
+
+
+def test_drill_fails_without_backups(tmp_path: Path) -> None:
+    db_path = tmp_path / "bot.db"
+
+    result = run(db_path, tmp_path / "backups", "drill", check=False)
+
+    assert result.returncode != 0
+    assert "no backups found" in result.stderr
