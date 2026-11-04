@@ -15,6 +15,7 @@ from app.curriculum.vocabulary_html import load_vocabulary_html
 
 
 def main() -> int:
+    """Merge HTML and numbered text, then write normalized JSON."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--html", type=Path, required=True)
     parser.add_argument("--rtf-text", type=Path, required=True)

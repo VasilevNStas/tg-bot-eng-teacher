@@ -12,10 +12,13 @@ from app.db.repository import BaseRepository
 
 
 class VocabularyRepository(BaseRepository[Vocabulary]):
+    """Persistence for the user's personal word list."""
+
     def __init__(self, session: AsyncSession) -> None:
         super().__init__(session, Vocabulary)
 
     async def list_for_user(self, user_id: int, *, limit: int = 50) -> list[Vocabulary]:
+        """Newest saved words first; the limit keeps the list message small."""
         return await self._scalars(
             select(Vocabulary)
             .where(Vocabulary.user_id == user_id)
@@ -30,6 +33,13 @@ class VocabularyRepository(BaseRepository[Vocabulary]):
         *,
         source_message_id: int | None = None,
     ) -> int:
+        """Insert new words, skipping duplicates (case-insensitive) and blanks.
+
+        ``items`` are ``(term, translation, context)`` tuples extracted by the
+        LLM. Values are truncated to the column limits before insertion so a
+        long model response cannot fail the whole batch.
+        """
+        # Load existing terms once instead of issuing a query per item.
         terms = {
             term.casefold()
             for term in await self._session.scalars(

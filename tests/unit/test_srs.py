@@ -7,7 +7,7 @@ import pytest
 
 from app.db.base import Base
 from app.db.database import Database
-from app.db.models import SrsReview, User, Vocabulary
+from app.db.models import User, Vocabulary
 from app.services.vocabulary.srs import ReviewGrade, ReviewNotFound, SrsService, schedule
 
 NOW = datetime(2026, 10, 29, 12, 0, tzinfo=UTC)
@@ -40,9 +40,11 @@ async def add_word(database: Database, user: User, term: str = "cinema") -> Voca
     return word
 
 
-def new_review() -> SrsReview:
-    return SrsReview(
-        vocabulary_id=1,
+def new_review() -> Vocabulary:
+    return Vocabulary(
+        user_id=1,
+        term="cinema",
+        translation="кинотеатр",
         due_at=NOW,
         interval_days=0,
         ease=2.5,
@@ -104,7 +106,11 @@ async def test_due_cards_ensures_rows_and_review_hides_card(tmp_path: Path) -> N
     cards = await service.due_cards(user.id, now=NOW)
     assert [card.vocabulary_id for card in cards] == [word.id]
     assert cards[0].term == "cinema"
-    assert await count(database, SrsReview) == 1
+    async with database.session() as session:
+        stored = await session.get(Vocabulary, word.id)
+        assert stored is not None
+        assert stored.due_at is not None
+        assert stored.due_at.replace(tzinfo=UTC) == NOW
 
     await service.review(user.id, word.id, ReviewGrade.GOOD, now=NOW)
 
@@ -126,11 +132,3 @@ async def test_review_rejects_foreign_card(tmp_path: Path) -> None:
         await SrsService(database).review(other.id, word.id, ReviewGrade.GOOD, now=NOW)
 
     await database.dispose()
-
-
-async def count(database: Database, model: type[object]) -> int:
-    from sqlalchemy import func, select
-
-    async with database.session() as session:
-        value = await session.scalar(select(func.count()).select_from(model))
-    return int(value or 0)

@@ -1,4 +1,8 @@
-"""Shared user-facing handling for conversation failures."""
+"""Shared user-facing handling for conversation failures.
+
+Maps expected LLM/budget errors to friendly Russian messages and logs the
+technical cause; unexpected exceptions are re-raised so they surface in logs.
+"""
 
 from __future__ import annotations
 
@@ -27,6 +31,7 @@ async def answer_llm_error(
     user_id: int,
     operation: str,
 ) -> None:
+    """Send a user-friendly explanation for a known failure."""
     if isinstance(exc, PromptTooLong):
         logger.info(f"{operation}_prompt_too_long", user_id=user_id)
         await message.answer(ru.MESSAGE_TOO_LONG)

@@ -15,6 +15,7 @@ from app.texts import ru
 
 
 async def handle_delete_me(message: Message, services: AppServices) -> None:
+    """Ask for explicit confirmation before deleting the account."""
     if message.from_user is None:
         return
     if not await PrivacyService(services.database).has_user(message.from_user.id):
@@ -28,6 +29,7 @@ async def handle_delete_callback(
     services: AppServices,
     state: FSMContext,
 ) -> None:
+    """Delete all user data on confirm, or dismiss on cancel."""
     message = callback.message
     if callback.data is None or callback.from_user is None or not isinstance(message, Message):
         await callback.answer()
@@ -55,6 +57,7 @@ async def handle_delete_callback(
 
 
 def build_router() -> Router:
+    """Wire /delete_me and its confirmation callback."""
     router = Router(name="privacy")
     router.message.register(handle_delete_me, Command("delete_me"))
     router.callback_query.register(handle_delete_callback, DeleteCB.filter())

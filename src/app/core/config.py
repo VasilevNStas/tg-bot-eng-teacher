@@ -1,4 +1,9 @@
-"""Typed application settings loaded from the environment."""
+"""Typed application settings loaded from the environment.
+
+All values come from environment variables or ``.env``; secrets stay wrapped in
+``SecretStr`` so they are not repr'ed into logs. Validation happens once at
+startup, so services can assume settings are usable.
+"""
 
 from __future__ import annotations
 
@@ -12,11 +17,15 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class BotMode(StrEnum):
+    """How aiogram receives updates."""
+
     POLLING = "polling"
     WEBHOOK = "webhook"
 
 
 class Settings(BaseSettings):
+    """Environment-backed configuration for the bot, LLM, and storage."""
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
@@ -60,6 +69,7 @@ class Settings(BaseSettings):
 
     @model_validator(mode="after")
     def validate_webhook(self) -> Self:
+        """Require webhook URL/secret in webhook mode and a sane path always."""
         if self.bot_mode is BotMode.WEBHOOK:
             if not self.webhook_base_url:
                 raise ValueError("WEBHOOK_BASE_URL is required when BOT_MODE=webhook")
@@ -72,4 +82,5 @@ class Settings(BaseSettings):
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
+    """Return the process-wide settings instance (cached after first read)."""
     return Settings()

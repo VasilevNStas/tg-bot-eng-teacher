@@ -13,6 +13,7 @@ backups
 .env
 .env.*
 !.env.example
+content/private
 **/__pycache__
 **/*.pyc
 *.db

@@ -24,6 +24,13 @@ IrregularForm = Literal["past", "participle"]
 
 @dataclass(frozen=True, slots=True)
 class GradeResult:
+    """Outcome of comparing one user answer with the accepted variants.
+
+    ``expected`` is a human-readable list of accepted answers, ``matched`` is
+    the variant that actually matched, and ``distance`` is the edit distance
+    to the closest variant (useful for diagnostics and "almost correct" UX).
+    """
+
     verdict: Verdict
     expected: str
     normalized_answer: str
@@ -43,10 +50,19 @@ def grade_answer(
     *,
     fuzzy: bool = True,
 ) -> GradeResult:
+    """Grade ``answer`` against ``accepted`` using the exact → fuzzy ladder.
+
+    Exact matches are normalized first (case, punctuation, contractions), so
+    ``Don't`` and ``do not`` are interchangeable. If no exact variant matches
+    and ``fuzzy`` is enabled, a single small typo yields ``PARTIAL`` instead
+    of ``INCORRECT``; the caller decides whether that counts as correct.
+    """
     pairs = _normalized_variants(accepted)
     expected = " / ".join(raw for _, raw in pairs)
     normalized = normalize_answer(answer)
 
+    # An empty answer can never be correct; still report the closest variant's
+    # length so the UI can say "you are N characters away".
     if not normalized:
         return GradeResult(
             verdict=Verdict.INCORRECT,
@@ -55,6 +71,8 @@ def grade_answer(
             distance=min(len(norm) for norm, _ in pairs),
         )
 
+    # Exact pass: compare only normalized forms, but keep the raw variant for
+    # the ``matched`` field that is shown back to the user.
     for norm, raw in pairs:
         if normalized == norm:
             return GradeResult(
@@ -93,9 +111,18 @@ def accepted_answers(
     *,
     form: IrregularForm = "past",
 ) -> tuple[str, ...]:
+    """Return every answer that should be accepted for ``item``.
+
+    Each payload kind stores its reference answer differently (``answer``,
+    ``reference``, ``options[correct_index]``, ...). This is the single place
+    that translates a payload into a flat list of accepted strings, so the
+    grading ladder and callers do not need per-kind branching.
+    """
     payload = item.payload
 
     if isinstance(payload, IrregularVerbPayload):
+        # Regular verbs use ``past`` by default; the drill can ask for the
+        # participle instead.
         if form == "past":
             return tuple(payload.past)
         if form == "participle":
@@ -127,6 +154,12 @@ def grade_item(
     form: IrregularForm = "past",
     fuzzy: bool = True,
 ) -> GradeResult:
+    """Grade a free-text answer for any content item.
+
+    Multiple-choice items do not go through the fuzzy ladder: selection is
+    exact by design. Everything else uses ``grade_answer`` with the accepted
+    variants extracted by ``accepted_answers``.
+    """
     if isinstance(item.payload, MultipleChoicePayload):
         return grade_multiple_choice(item.payload, answer=answer)
     return grade_answer(answer, accepted_answers(item, form=form), fuzzy=fuzzy)
@@ -138,6 +171,11 @@ def grade_multiple_choice(
     answer: str | None = None,
     selected_index: int | None = None,
 ) -> GradeResult:
+    """Grade a multiple-choice answer either by index or by option text.
+
+    Index-based grading is used by inline keyboards (no parsing ambiguity);
+    text-based grading exists for tests and text answers.
+    """
     expected = payload.options[payload.correct_index]
 
     if selected_index is not None:
@@ -171,6 +209,11 @@ def grade_multiple_choice(
 
 
 def _normalized_variants(accepted: Sequence[str]) -> list[tuple[str, str]]:
+    """Normalize, deduplicate and pair each variant with its raw form.
+
+    Duplicate variants can appear after normalization (``don't`` vs ``do not``)
+    or in hand-written YAML; grading should not care about them.
+    """
     pairs: list[tuple[str, str]] = []
     seen: set[str] = set()
     for raw in accepted:
@@ -185,6 +228,15 @@ def _normalized_variants(accepted: Sequence[str]) -> list[tuple[str, str]]:
 
 
 def _fuzzy_score(answer: str, target: str) -> int | None:
+    """Return the typo cost if ``answer`` is one small edit away, else ``None``.
+
+    The rules are intentionally conservative:
+
+    - token counts must match, so missing/extra words are not "typos";
+    - only one token may differ;
+    - the allowed distance scales with length (1 for short words, 2 for
+      longer ones), which avoids turning ``cat`` into ``cut`` silently.
+    """
     answer_tokens = answer.split()
     target_tokens = target.split()
     if not answer_tokens or len(answer_tokens) != len(target_tokens):
@@ -202,4 +254,5 @@ def _fuzzy_score(answer: str, target: str) -> int | None:
         changed += 1
         total += distance
 
+    # More than one changed token is not a typo, it is a different answer.
     return total if changed == 1 else None

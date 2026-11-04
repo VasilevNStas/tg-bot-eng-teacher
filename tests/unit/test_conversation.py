@@ -168,7 +168,6 @@ async def test_first_turn_persists_messages_and_usage(tmp_path: Path) -> None:
         assert messages[0].update_id == 555
         assert messages[1].role is MessageRole.ASSISTANT
         assert messages[1].content == "Great!"
-        assert messages[1].prompt_version == turn.prompt_version
 
         ledger = (await session.scalars(select(UsageLedger))).one()
         assert ledger.prompt_version == turn.prompt_version
@@ -305,7 +304,7 @@ async def test_text_mode_skips_structured_output(tmp_path: Path) -> None:
     database = await make_database(tmp_path)
     user = await make_user(database)
     response = LLMResponse(
-        content="Fill the gap: I ___ to school yesterday.",
+        content="Fill the gap: I .... to school yesterday.",
         parsed=None,
         model="fake/model",
         input_tokens=8,

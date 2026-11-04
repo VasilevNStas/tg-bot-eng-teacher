@@ -24,6 +24,11 @@ async def handle_chat(
     services: AppServices,
     update_id: int | None = None,
 ) -> None:
+    """Handle any non-command text message.
+
+    If the user has an active roleplay scenario, the turn runs in that
+    scenario; otherwise it is a normal chat turn.
+    """
     if message.text is None or message.from_user is None:
         return
 
@@ -39,6 +44,7 @@ async def handle_chat(
         try:
             scenario = services.prompts.scenario(active_scenario)
         except PromptTemplateNotFound:
+            # The scenario file was removed while the user was inside it.
             await services.conversation.stop_roleplay(user.id)
             await message.answer(ru.ROLEPLAY_UNAVAILABLE)
             return
@@ -65,6 +71,7 @@ async def handle_chat(
 
 
 def build_router() -> Router:
+    """Catch-all router for plain text messages (must be registered last)."""
     router = Router(name="chat")
     router.message.register(handle_chat, F.text & ~F.text.startswith("/"))
     return router
@@ -74,6 +81,11 @@ router = build_router()
 
 
 async def _send_turn(message: Message, turn: ConversationTurn) -> None:
+    """Send the reply and, if present, corrections.
+
+    Telegram limits message size, so reply and corrections are split when the
+    combined text is too long.
+    """
     reply = format_reply(turn)
     corrections = format_corrections(turn)
 

@@ -268,7 +268,7 @@ async def test_full_test_uses_content_bank(tmp_path: Path) -> None:
         make_callback_update(2, OnboardingCB(action="test")),
     )
 
-    assert "BANK: I ___ a student." in last_edit(session).text
+    assert "BANK: I .... a student." in last_edit(session).text
 
     update_id = 3
     for index, question in enumerate(bank_questions):

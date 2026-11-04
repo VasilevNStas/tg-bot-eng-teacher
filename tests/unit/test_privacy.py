@@ -8,7 +8,6 @@ from sqlalchemy import func, select
 from app.db.base import Base
 from app.db.database import Database
 from app.db.enums import (
-    CEFRLevel,
     Checker,
     ContentKind,
     ConversationMode,
@@ -21,16 +20,13 @@ from app.db.models import (
     ContentItem,
     Conversation,
     Correction,
-    Event,
     ExerciseAttempt,
     ExerciseSession,
     Message,
     Reminder,
-    SrsReview,
     Topic,
     UsageLedger,
     User,
-    UserProgress,
     Vocabulary,
 )
 from app.services.privacy.service import PrivacyService
@@ -58,20 +54,22 @@ async def test_delete_user_removes_all_owned_data(tmp_path: Path) -> None:
         session.add(user)
         await session.flush()
 
-        topic = Topic(slug="test-topic", title="Test", level=CEFRLevel.A1, tags=[])
+        topic = Topic(slug="test-topic", title="Test")
+        conversation = Conversation(user_id=user.id, mode=ConversationMode.CHAT)
+        session.add_all([topic, conversation])
+        await session.flush()
         content = ContentItem(
             slug="test-item",
+            topic_id=topic.id,
             kind=ContentKind.MULTIPLE_CHOICE,
-            level=CEFRLevel.A1,
             payload={
                 "kind": "multiple_choice",
-                "question": "I ___ here.",
+                "question": "I .... here.",
                 "options": ["am", "is"],
                 "correct_index": 0,
             },
         )
-        conversation = Conversation(user_id=user.id, mode=ConversationMode.CHAT)
-        session.add_all([topic, content, conversation])
+        session.add(content)
         await session.flush()
 
         message = Message(
@@ -83,6 +81,7 @@ async def test_delete_user_removes_all_owned_data(tmp_path: Path) -> None:
             user_id=user.id,
             term="cinema",
             translation="кинотеатр",
+            due_at=now,
         )
         exercise_session = ExerciseSession(user_id=user.id, topic_id=topic.id)
         session.add_all([message, word, exercise_session])
@@ -97,7 +96,6 @@ async def test_delete_user_removes_all_owned_data(tmp_path: Path) -> None:
                     category=ErrorCategory.TENSE,
                     explanation="Past Simple",
                 ),
-                SrsReview(vocabulary_id=word.id, due_at=now),
                 ExerciseAttempt(
                     user_id=user.id,
                     content_item_id=content.id,
@@ -108,8 +106,6 @@ async def test_delete_user_removes_all_owned_data(tmp_path: Path) -> None:
                 ),
                 Reminder(user_id=user.id, due_at=now, kind=ReminderKind.SRS, payload={}),
                 UsageLedger(user_id=user.id, conversation_id=conversation.id, model="fake"),
-                Event(user_id=user.id, kind="test", payload={"secret": "value"}),
-                UserProgress(user_id=user.id, topic_id=topic.id),
             ]
         )
 
@@ -124,20 +120,16 @@ async def test_delete_user_removes_all_owned_data(tmp_path: Path) -> None:
     assert summary.attempts == 1
     assert summary.reminders == 1
     assert summary.usage == 1
-    assert summary.events == 1
 
     assert await count(database, User) == 0
     assert await count(database, Conversation) == 0
     assert await count(database, Message) == 0
     assert await count(database, Correction) == 0
     assert await count(database, Vocabulary) == 0
-    assert await count(database, SrsReview) == 0
     assert await count(database, ExerciseSession) == 0
     assert await count(database, ExerciseAttempt) == 0
     assert await count(database, Reminder) == 0
     assert await count(database, UsageLedger) == 0
-    assert await count(database, Event) == 0
-    assert await count(database, UserProgress) == 0
     assert await count(database, ContentItem) == 1
     assert await count(database, Topic) == 1
 

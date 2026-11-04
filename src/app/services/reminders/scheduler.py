@@ -17,6 +17,8 @@ logger = get_logger(__name__)
 
 
 class ReminderScheduler:
+    """Poll the database for due reminders and send Telegram messages."""
+
     def __init__(
         self,
         bot: Bot,
@@ -35,6 +37,11 @@ class ReminderScheduler:
         self._batch_size = batch_size
 
     async def tick(self, *, now: datetime | None = None) -> int:
+        """Process one batch and return how many messages were sent.
+
+        A failed send is logged but still marked as sent: retrying a broken
+        chat forever would block every later reminder in the queue.
+        """
         at = now or datetime.now(UTC)
         reminders = await self._service.due(now=at, limit=self._batch_size)
         sent = 0
@@ -57,6 +64,7 @@ class ReminderScheduler:
         return sent
 
     async def run_forever(self) -> None:
+        """Loop until cancelled, surviving individual tick failures."""
         logger.info(
             "reminder_scheduler_started",
             interval_seconds=self._interval_seconds,
@@ -69,12 +77,14 @@ class ReminderScheduler:
                 except asyncio.CancelledError:
                     raise
                 except Exception:
+                    # A bad tick should not kill the scheduler task.
                     logger.exception("reminder_tick_failed")
                 await asyncio.sleep(self._interval_seconds)
         finally:
             logger.info("reminder_scheduler_stopped")
 
     async def _send(self, reminder: DueReminder) -> None:
+        """Render the reminder text and send it to the user."""
         text = {
             ReminderKind.SRS: ru.REMINDER_SRS,
             ReminderKind.DAILY: ru.REMINDER_DAILY,

@@ -13,6 +13,8 @@ from app.db.repository import BaseRepository
 
 
 class WordProgressRepository(BaseRepository[WordProgress]):
+    """Aggregates and scheduling state for bank-word cards."""
+
     def __init__(self, session: AsyncSession) -> None:
         super().__init__(session, WordProgress)
 
@@ -25,10 +27,12 @@ class WordProgressRepository(BaseRepository[WordProgress]):
         )
 
     async def list_for_user(self, user_id: int) -> dict[int, WordProgress]:
+        """Return all progress rows keyed by content item id for O(1) lookups."""
         rows = await self._scalars(select(WordProgress).where(WordProgress.user_id == user_id))
         return {row.content_item_id: row for row in rows}
 
     async def recent_item_ids(self, user_id: int, *, limit: int) -> tuple[int, ...]:
+        """Recently shown items, used to avoid immediate repeats."""
         rows = await self._session.execute(
             select(WordProgress.content_item_id)
             .where(
@@ -41,6 +45,7 @@ class WordProgressRepository(BaseRepository[WordProgress]):
         return tuple(int(item_id) for item_id in rows.scalars())
 
     async def get_or_create(self, user_id: int, content_item_id: int) -> WordProgress:
+        """Fetch the row or create a zeroed one on first exposure."""
         progress = await self.get_for(user_id, content_item_id)
         if progress is None:
             progress = WordProgress(
@@ -52,6 +57,7 @@ class WordProgressRepository(BaseRepository[WordProgress]):
         return progress
 
     async def mark_shown(self, progress: WordProgress, at: datetime) -> None:
+        """Count an exposure; showing a card is not an attempt."""
         progress.shown_count += 1
         progress.last_shown_at = at
 
@@ -61,6 +67,12 @@ class WordProgressRepository(BaseRepository[WordProgress]):
         verdict: Verdict,
         at: datetime,
     ) -> None:
+        """Update accuracy counters and the consecutively-correct streak.
+
+        ``PARTIAL`` still counts as a miss for the streak: the user made a
+        typo, so the word deserves another review, but it is recorded
+        separately from a fully wrong answer.
+        """
         progress.attempt_count += 1
         progress.last_attempted_at = at
         if verdict is Verdict.CORRECT:

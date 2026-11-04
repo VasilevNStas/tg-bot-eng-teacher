@@ -6,14 +6,16 @@ from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from enum import StrEnum
 
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.database import Database
-from app.db.models import SrsReview, Vocabulary
+from app.db.models import Vocabulary
 
 
 class ReviewGrade(StrEnum):
+    """User's self-assessment after seeing a saved word."""
+
     AGAIN = "again"
     GOOD = "good"
     EASY = "easy"
@@ -21,6 +23,8 @@ class ReviewGrade(StrEnum):
 
 @dataclass(frozen=True, slots=True)
 class ReviewCard:
+    """A due vocabulary row projected for the review UI."""
+
     vocabulary_id: int
     term: str
     translation: str
@@ -32,6 +36,8 @@ class ReviewNotFound(Exception):
 
 
 class SrsService:
+    """Read due cards and apply review grades to the user's saved words."""
+
     def __init__(self, database: Database) -> None:
         self._database = database
 
@@ -42,17 +48,21 @@ class SrsService:
         limit: int = 10,
         now: datetime | None = None,
     ) -> list[ReviewCard]:
+        """Return up to ``limit`` due cards, oldest due first.
+
+        Words saved without a schedule get ``due_at = now`` first, so they
+        appear immediately instead of disappearing from reviews.
+        """
         at = now or datetime.now(UTC)
         async with self._database.session() as session:
-            await self._ensure_reviews(session, user_id, at)
-            rows = await session.execute(
-                select(Vocabulary, SrsReview)
-                .join(SrsReview, SrsReview.vocabulary_id == Vocabulary.id)
+            await self._ensure_due(session, user_id, at)
+            rows = await session.scalars(
+                select(Vocabulary)
                 .where(
                     Vocabulary.user_id == user_id,
-                    SrsReview.due_at <= at,
+                    Vocabulary.due_at <= at,
                 )
-                .order_by(SrsReview.due_at, SrsReview.id)
+                .order_by(Vocabulary.due_at, Vocabulary.id)
                 .limit(limit)
             )
             return [
@@ -62,7 +72,7 @@ class SrsService:
                     translation=word.translation,
                     context=word.context,
                 )
-                for word, _review in rows
+                for word in rows
             ]
 
     async def review(
@@ -73,48 +83,54 @@ class SrsService:
         *,
         now: datetime | None = None,
     ) -> datetime:
+        """Apply a grade to one card and return its next due time."""
         at = now or datetime.now(UTC)
         async with self._database.session() as session:
             row = await session.scalar(
-                select(SrsReview)
-                .join(Vocabulary, Vocabulary.id == SrsReview.vocabulary_id)
-                .where(
+                select(Vocabulary).where(
                     Vocabulary.id == vocabulary_id,
                     Vocabulary.user_id == user_id,
                 )
             )
             if row is None:
                 raise ReviewNotFound(vocabulary_id)
+            # A card that was never scheduled is due immediately.
+            if row.due_at is None:
+                row.due_at = at
             schedule(row, grade, at)
             return row.due_at
 
     @staticmethod
-    async def _ensure_reviews(
+    async def _ensure_due(
         session: AsyncSession,
         user_id: int,
         now: datetime,
     ) -> None:
-        missing = await session.scalars(
-            select(Vocabulary.id)
-            .outerjoin(SrsReview, SrsReview.vocabulary_id == Vocabulary.id)
+        """Mark unscheduled words as due now with one bulk UPDATE.
+
+        Doing this lazily keeps saving a word cheap: the schedule is created
+        the first time the user asks for due cards.
+        """
+        await session.execute(
+            update(Vocabulary)
             .where(
                 Vocabulary.user_id == user_id,
-                SrsReview.id.is_(None),
+                Vocabulary.due_at.is_(None),
             )
+            .values(due_at=now)
         )
-        for vocabulary_id in missing:
-            session.add(
-                SrsReview(
-                    vocabulary_id=vocabulary_id,
-                    due_at=now,
-                )
-            )
 
 
-def schedule(review: SrsReview, grade: ReviewGrade, now: datetime) -> None:
-    """Apply a simplified SM-2 step in place."""
+def schedule(review: Vocabulary, grade: ReviewGrade, now: datetime) -> None:
+    """Apply a simplified SM-2 step in place.
+
+    ``AGAIN`` resets the streak and schedules a short relearn step.
+    ``GOOD``/``EASY`` use the classic 1 -> 6 -> previous * ease progression,
+    with ``EASY`` multiplying by an extra 1.3 and nudging ease upward.
+    """
     review.last_reviewed_at = now
     if grade is ReviewGrade.AGAIN:
+        # Lapse: forget the streak, lower ease, retry in ten minutes.
         review.reps = 0
         review.lapses += 1
         review.interval_days = 0
@@ -131,6 +147,7 @@ def schedule(review: SrsReview, grade: ReviewGrade, now: datetime) -> None:
             interval = round(review.interval_days * review.ease * 1.3)
         review.ease = min(3.0, review.ease + 0.1)
     else:
+        # First two successful reviews use fixed steps, then the SRS curve.
         if review.reps == 0:
             interval = 1
         elif review.reps == 1:
@@ -138,6 +155,8 @@ def schedule(review: SrsReview, grade: ReviewGrade, now: datetime) -> None:
         else:
             interval = round(review.interval_days * review.ease)
 
+    # Keep intervals within one year so a single "easy" cannot hide a word
+    # forever.
     review.interval_days = min(365, max(1, interval))
     review.reps += 1
     review.due_at = now + timedelta(days=review.interval_days)

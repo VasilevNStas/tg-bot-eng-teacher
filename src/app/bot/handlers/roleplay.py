@@ -1,4 +1,9 @@
-"""Role-play scenario selection and lifecycle."""
+"""Role-play scenario selection and lifecycle.
+
+``/roleplay`` either starts the scenario passed as an argument or shows the
+scenario keyboard. Scenario metadata lives in prompt templates; the actual
+dialogue is owned by ``ConversationService``.
+"""
 
 from __future__ import annotations
 
@@ -16,11 +21,13 @@ from app.texts import ru
 
 
 def _scenario_arg(message: Message) -> str:
+    """Return the lower-cased argument after ``/roleplay`` or an empty string."""
     parts = (message.text or "").split(maxsplit=1)
     return parts[1].strip().lower() if len(parts) > 1 else ""
 
 
 async def _start_scenario(message: Message, services: AppServices, slug: str) -> None:
+    """Validate the slug and switch the user's conversation into role-play."""
     if message.from_user is None:
         return
     user = await resolve_user(services, message.from_user)
@@ -37,6 +44,7 @@ async def _start_scenario(message: Message, services: AppServices, slug: str) ->
 
 
 async def handle_roleplay(message: Message, services: AppServices) -> None:
+    """Start a named scenario or present the available scenarios."""
     slug = _scenario_arg(message)
     if slug:
         await _start_scenario(message, services, slug)
@@ -61,6 +69,7 @@ async def handle_start(
     callback_data: RoleplayCB,
     services: AppServices,
 ) -> None:
+    """Handle a scenario chosen from the inline keyboard."""
     if callback.from_user is None:
         return
     user = await resolve_user(services, callback.from_user)
@@ -81,6 +90,7 @@ async def handle_start(
 
 
 async def handle_stop(message: Message, services: AppServices) -> None:
+    """End the active role-play, if any."""
     if message.from_user is None:
         return
     user = await resolve_user(services, message.from_user)
@@ -89,6 +99,7 @@ async def handle_stop(message: Message, services: AppServices) -> None:
 
 
 def build_router() -> Router:
+    """Wire role-play commands and scenario callbacks."""
     router = Router(name="roleplay")
     router.message.register(handle_roleplay, Command("roleplay"))
     router.message.register(handle_stop, Command("stop"))

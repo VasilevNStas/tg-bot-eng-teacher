@@ -15,6 +15,7 @@ from app.texts import ru
 
 
 async def handle_vocab(message: Message, services: AppServices) -> None:
+    """List up to 50 words the bot saved from the user's conversations."""
     if message.from_user is None:
         return
 
@@ -33,6 +34,7 @@ async def handle_vocab(message: Message, services: AppServices) -> None:
 
 
 def build_router() -> Router:
+    """Wire the /vocab command."""
     router = Router(name="vocab")
     router.message.register(handle_vocab, Command("vocab"))
     return router

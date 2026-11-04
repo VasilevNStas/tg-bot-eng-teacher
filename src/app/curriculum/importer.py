@@ -5,17 +5,19 @@ from __future__ import annotations
 from collections.abc import Sequence
 from dataclasses import dataclass
 
-from sqlalchemy import delete, select
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.curriculum.errors import ContentConflictError, ContentReferenceError
+from app.curriculum.errors import ContentConflictError
 from app.curriculum.models import ContentFile, ContentItemSpec, TopicSpec
 from app.db.database import Database
-from app.db.models import ContentItem, ContentItemTag, Topic, TopicItem
+from app.db.models import ContentItem, Topic
 
 
 @dataclass(frozen=True, slots=True)
 class ImportResult:
+    """Per-file counters returned by the importer."""
+
     created: int = 0
     updated: int = 0
     skipped: int = 0
@@ -27,13 +29,29 @@ class ImportResult:
 
 @dataclass(frozen=True, slots=True)
 class _ItemEntry:
+    """An item paired with the file it came from (for defaults and counters)."""
+
     content_index: int
-    position: int
     content: ContentFile
     item: ContentItemSpec
 
 
+def _payload_data(item: ContentItemSpec) -> dict[str, object]:
+    """Serialize only real payload fields for the database JSON column.
+
+    ``kind`` is stored in its own column, and defaults are omitted so the JSON
+    stays small and readable in ``sqlite3`` (``exclude_defaults=True``).
+    """
+    return item.payload.model_dump(
+        mode="json",
+        exclude={"kind"},
+        exclude_defaults=True,
+    )
+
+
 class ContentImporter:
+    """Upsert content by slug without ever deleting user-owned rows."""
+
     def __init__(self, database: Database) -> None:
         self._database = database
 
@@ -42,6 +60,13 @@ class ContentImporter:
         return results[0]
 
     async def import_files(self, contents: Sequence[ContentFile]) -> list[ImportResult]:
+        """Import several files in one transaction and report per-file counts.
+
+        The whole batch shares a session so a failure leaves the database
+        unchanged. Slugs that already exist are updated only when something
+        actually changed; unchanged rows are reported as ``skipped``, which
+        makes repeated seed runs cheap and predictable.
+        """
         if not contents:
             return []
 
@@ -52,30 +77,14 @@ class ContentImporter:
         async with self._database.session() as session:
             topic_ids = await self._upsert_topics(session, contents)
             entries = self._entries(contents)
-            item_rows, new_slugs = await self._ensure_items(session, entries)
-            variant_changed = await self._resolve_variants(session, entries, item_rows)
-            await session.flush()
-            await self._ensure_no_variant_cycles(session)
+            item_rows, new_slugs = await self._ensure_items(session, entries, topic_ids)
 
             for entry in entries:
                 row = item_rows[entry.item.slug]
                 if entry.item.slug in new_slugs:
-                    await self._apply_memberships_and_tags(
-                        session,
-                        row.id,
-                        entry,
-                        topic_ids,
-                    )
                     created[entry.content_index] += 1
                     continue
-
-                if await self._update_existing(
-                    session,
-                    row,
-                    entry,
-                    topic_ids,
-                    variant_changed=variant_changed[entry.item.slug],
-                ):
+                if self._update_existing(row, entry, topic_ids):
                     updated[entry.content_index] += 1
                 else:
                     skipped[entry.content_index] += 1
@@ -94,6 +103,7 @@ class ContentImporter:
         session: AsyncSession,
         contents: Sequence[ContentFile],
     ) -> dict[str, int]:
+        """Create/refresh topics and return their database ids by slug."""
         topic_ids: dict[str, int] = {}
         for content in contents:
             topic_slug = content.topic.slug
@@ -104,17 +114,17 @@ class ContentImporter:
         return topic_ids
 
     def _entries(self, contents: Sequence[ContentFile]) -> list[_ItemEntry]:
+        """Flatten files into a single list and reject duplicate slugs early."""
         seen_items: set[str] = set()
         entries: list[_ItemEntry] = []
         for content_index, content in enumerate(contents):
-            for position, item in enumerate(content.items):
+            for item in content.items:
                 if item.slug in seen_items:
                     raise ContentConflictError(f"duplicate item slug '{item.slug}' in import batch")
                 seen_items.add(item.slug)
                 entries.append(
                     _ItemEntry(
                         content_index=content_index,
-                        position=position,
                         content=content,
                         item=item,
                     )
@@ -125,7 +135,13 @@ class ContentImporter:
         self,
         session: AsyncSession,
         entries: Sequence[_ItemEntry],
+        topic_ids: dict[str, int],
     ) -> tuple[dict[str, ContentItem], set[str]]:
+        """Fetch existing rows in one query and insert the missing ones.
+
+        Returns the rows keyed by slug plus the set of slugs that were newly
+        created, so the caller can distinguish ``created`` from ``updated``.
+        """
         slugs = [entry.item.slug for entry in entries]
         existing = (
             {
@@ -144,14 +160,13 @@ class ContentImporter:
             item = entry.item
             row = existing.get(item.slug)
             if row is None:
+                # Item-level source/license override the file-level defaults.
                 row = ContentItem(
                     slug=item.slug,
-                    variant_of_id=None,
-                    version=1,
+                    topic_id=topic_ids[entry.content.topic.slug],
                     is_active=item.active,
                     kind=item.kind,
-                    level=item.level,
-                    payload=item.payload.model_dump(mode="json"),
+                    payload=_payload_data(item),
                     source=item.source or entry.content.source,
                     license=item.license or entry.content.license,
                 )
@@ -159,224 +174,50 @@ class ContentImporter:
                 new_slugs.add(item.slug)
             item_rows[item.slug] = row
 
+        # Flush once so newly created rows get ids before the caller uses them.
         await session.flush()
         return item_rows, new_slugs
 
-    async def _resolve_variants(
-        self,
-        session: AsyncSession,
-        entries: Sequence[_ItemEntry],
-        item_rows: dict[str, ContentItem],
-    ) -> dict[str, bool]:
-        variant_changed: dict[str, bool] = {}
-        for entry in entries:
-            item = entry.item
-            row = item_rows[item.slug]
-            previous = row.variant_of_id
-            if item.variant_of is None:
-                desired = None
-            else:
-                base = item_rows.get(item.variant_of)
-                if base is None:
-                    base = await session.scalar(
-                        select(ContentItem).where(ContentItem.slug == item.variant_of)
-                    )
-                if base is None:
-                    raise ContentReferenceError(
-                        f"variant base '{item.variant_of}' for '{item.slug}' is not defined"
-                    )
-                if base.id == row.id:
-                    raise ContentConflictError(f"item '{item.slug}' cannot be a variant of itself")
-                desired = base.id
-            variant_changed[item.slug] = previous != desired
-            row.variant_of_id = desired
-        return variant_changed
-
     @staticmethod
-    async def _ensure_no_variant_cycles(session: AsyncSession) -> None:
-        rows = await session.execute(select(ContentItem.id, ContentItem.variant_of_id))
-        graph = {item_id: parent_id for item_id, parent_id in rows}
-        for start in graph:
-            seen: set[int] = set()
-            current: int | None = start
-            while current is not None:
-                if current in seen:
-                    raise ContentConflictError(f"variant cycle detected at item {current}")
-                seen.add(current)
-                current = graph.get(current)
-
-    async def _apply_memberships_and_tags(
-        self,
-        session: AsyncSession,
-        content_item_id: int,
-        entry: _ItemEntry,
-        topic_ids: dict[str, int],
-    ) -> None:
-        desired = await self._desired_memberships(session, entry, topic_ids)
-        await self._add_memberships(session, content_item_id, desired)
-        await self._replace_tags(session, content_item_id, entry.item.tags)
-
-    async def _update_existing(
-        self,
-        session: AsyncSession,
+    def _update_existing(
         row: ContentItem,
         entry: _ItemEntry,
         topic_ids: dict[str, int],
-        *,
-        variant_changed: bool,
     ) -> bool:
+        """Update a row only if any stored field differs; return whether it did."""
         item = entry.item
-        payload = item.payload.model_dump(mode="json")
+        payload = _payload_data(item)
         source = item.source or entry.content.source
         license_name = item.license or entry.content.license
+        topic_id = topic_ids[entry.content.topic.slug]
 
-        desired_memberships = await self._desired_memberships(session, entry, topic_ids)
-        membership_rows = list(
-            await session.scalars(select(TopicItem).where(TopicItem.content_item_id == row.id))
-        )
-        current_memberships = {link.topic_id: link.position for link in membership_rows}
-        existing_tags = await self._load_tags(session, row.id)
-        tags_changed = existing_tags != set(item.tags)
-        memberships_changed = current_memberships != desired_memberships
-        content_changed = (
-            row.kind is not item.kind
-            or row.level is not item.level
+        if not (
+            row.topic_id != topic_id
+            or row.kind is not item.kind
             or row.payload != payload
             or row.source != source
             or row.license != license_name
             or row.is_active is not item.active
-        )
-        if not (content_changed or tags_changed or memberships_changed or variant_changed):
+        ):
             return False
 
-        row.version += 1
+        row.topic_id = topic_id
         row.kind = item.kind
-        row.level = item.level
         row.payload = payload
         row.source = source
         row.license = license_name
         row.is_active = item.active
-        if tags_changed:
-            await self._replace_tags(session, row.id, item.tags)
-        if memberships_changed:
-            await self._sync_memberships(
-                session,
-                row.id,
-                membership_rows,
-                desired_memberships,
-            )
         return True
-
-    async def _desired_memberships(
-        self,
-        session: AsyncSession,
-        entry: _ItemEntry,
-        topic_ids: dict[str, int],
-    ) -> dict[int, int]:
-        topic_slugs = (
-            entry.item.topics if entry.item.topics is not None else [entry.content.topic.slug]
-        )
-        resolved = await self._resolve_topics(session, topic_slugs, topic_ids)
-        return {topic_id: entry.position for topic_id in resolved}
-
-    async def _resolve_topics(
-        self,
-        session: AsyncSession,
-        topic_slugs: Sequence[str],
-        topic_ids: dict[str, int],
-    ) -> list[int]:
-        resolved: list[int] = []
-        for topic_slug in topic_slugs:
-            topic_id = topic_ids.get(topic_slug)
-            if topic_id is None:
-                topic = await session.scalar(select(Topic).where(Topic.slug == topic_slug))
-                if topic is None:
-                    raise ContentReferenceError(f"topic '{topic_slug}' is not defined")
-                topic_ids[topic_slug] = topic.id
-                topic_id = topic.id
-            resolved.append(topic_id)
-        return resolved
-
-    @staticmethod
-    async def _add_memberships(
-        session: AsyncSession,
-        content_item_id: int,
-        memberships: dict[int, int],
-    ) -> None:
-        for topic_id, position in memberships.items():
-            session.add(
-                TopicItem(
-                    topic_id=topic_id,
-                    content_item_id=content_item_id,
-                    position=position,
-                )
-            )
-
-    @staticmethod
-    async def _sync_memberships(
-        session: AsyncSession,
-        content_item_id: int,
-        current_rows: list[TopicItem],
-        desired: dict[int, int],
-    ) -> None:
-        current = {row.topic_id: row for row in current_rows}
-        for topic_id, row in current.items():
-            if topic_id not in desired:
-                await session.delete(row)
-        for topic_id, position in desired.items():
-            existing_row = current.get(topic_id)
-            if existing_row is None:
-                session.add(
-                    TopicItem(
-                        topic_id=topic_id,
-                        content_item_id=content_item_id,
-                        position=position,
-                    )
-                )
-            else:
-                existing_row.position = position
-
-    @staticmethod
-    async def _load_tags(session: AsyncSession, content_item_id: int) -> set[str]:
-        tags = await session.scalars(
-            select(ContentItemTag.tag).where(ContentItemTag.content_item_id == content_item_id)
-        )
-        return set(tags.all())
-
-    @staticmethod
-    async def _replace_tags(
-        session: AsyncSession,
-        content_item_id: int,
-        tags: list[str],
-    ) -> None:
-        await session.execute(
-            delete(ContentItemTag).where(ContentItemTag.content_item_id == content_item_id)
-        )
-        for tag in sorted(set(tags)):
-            session.add(
-                ContentItemTag(
-                    content_item_id=content_item_id,
-                    tag=tag,
-                )
-            )
 
     @staticmethod
     async def _upsert_topic(session: AsyncSession, spec: TopicSpec) -> Topic:
+        """Find a topic by slug or create it; update its title in place."""
         topic = await session.scalar(select(Topic).where(Topic.slug == spec.slug))
         if topic is None:
-            topic = Topic(
-                slug=spec.slug,
-                title=spec.title,
-                level=spec.level,
-                description=spec.description,
-                tags=spec.tags,
-            )
+            topic = Topic(slug=spec.slug, title=spec.title)
             session.add(topic)
             await session.flush()
             return topic
 
         topic.title = spec.title
-        topic.level = spec.level
-        topic.description = spec.description
-        topic.tags = spec.tags
         return topic

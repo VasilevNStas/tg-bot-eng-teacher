@@ -32,6 +32,7 @@ async def _edit(
     *,
     reply_markup: InlineKeyboardMarkup | None = None,
 ) -> None:
+    """Edit the callback's message in place when it is a real message."""
     if isinstance(callback.message, Message):
         await callback.message.edit_text(text, reply_markup=reply_markup)
 
@@ -39,6 +40,7 @@ async def _edit(
 def _serialize_questions(
     questions: tuple[PlacementQuestion, ...],
 ) -> list[dict[str, object]]:
+    """Convert questions to JSON-friendly dicts for FSM storage."""
     return [
         {
             "level": question.level.value,
@@ -51,6 +53,7 @@ def _serialize_questions(
 
 
 def _deserialize_questions(raw: object) -> tuple[PlacementQuestion, ...]:
+    """Restore questions from FSM data, falling back to built-ins on bad data."""
     if not isinstance(raw, list):
         return QUESTIONS
     try:
@@ -73,6 +76,7 @@ async def _show_question(
     index: int,
     questions: tuple[PlacementQuestion, ...],
 ) -> None:
+    """Render one placement question with inline option buttons."""
     question = questions[index]
     await _edit(
         callback,
@@ -86,6 +90,7 @@ async def _show_question(
 
 
 async def _save_level(services: AppServices, tg_id: int, level: CEFRLevel) -> None:
+    """Persist the level and mark onboarding complete."""
     async with services.database.session() as session:
         await UserRepository(session).update_level(tg_id, level)
 
@@ -95,6 +100,7 @@ async def handle_test(
     state: FSMContext,
     services: AppServices,
 ) -> None:
+    """Start the placement test: load questions and reset the score."""
     questions = await load_placement_questions(services.database)
     await state.set_state(Onboarding.testing)
     await state.update_data(
@@ -112,6 +118,8 @@ async def handle_answer(
     state: FSMContext,
     services: AppServices,
 ) -> None:
+    """Record one answer; on the last question, save the resulting level."""
+    # Ignore taps from an old message after the test moved on or ended.
     if await state.get_state() != Onboarding.testing.state:
         await callback.answer(ru.STALE_QUESTION)
         return
@@ -119,6 +127,7 @@ async def handle_answer(
     data = await state.get_data()
     questions = _deserialize_questions(data.get("questions"))
     index = int(data.get("index", 0))
+    # The callback must reference the question currently on screen.
     if callback_data.index != index or not 0 <= index < len(questions):
         await callback.answer(ru.STALE_QUESTION)
         return
@@ -148,6 +157,7 @@ async def handle_answer(
 
 
 async def handle_skip(callback: CallbackQuery, state: FSMContext) -> None:
+    """Skip the test and show manual level buttons."""
     await state.set_state(Onboarding.choosing_level)
     await _edit(callback, ru.CHOOSE_LEVEL, reply_markup=levels_keyboard())
     await callback.answer()
@@ -159,6 +169,7 @@ async def handle_level(
     state: FSMContext,
     services: AppServices,
 ) -> None:
+    """Save a manually selected level."""
     try:
         level = CEFRLevel(callback_data.value)
     except ValueError:
@@ -173,6 +184,7 @@ async def handle_level(
 
 
 def build_router() -> Router:
+    """Register onboarding callbacks on a dedicated router."""
     router = Router(name="onboarding")
     router.callback_query.register(handle_test, OnboardingCB.filter(F.action == "test"))
     router.callback_query.register(

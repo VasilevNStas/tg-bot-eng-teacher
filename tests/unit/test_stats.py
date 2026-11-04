@@ -26,10 +26,8 @@ from app.db.models import (
     ExerciseAttempt,
     ExerciseSession,
     Message,
-    SrsReview,
     Topic,
     User,
-    UserProgress,
     Vocabulary,
     WordProgress,
 )
@@ -128,35 +126,30 @@ async def test_stats_aggregates_attempts_words_and_errors(tmp_path: Path) -> Non
             ]
         )
         session.add(
-            UserProgress(
+            WordProgress(
                 user_id=user.id,
-                topic_id=topic.id,
-                mastery=0.5,
-                streak=4,
+                content_item_id=item.id,
+                best_streak=4,
             )
         )
 
-        weak = Vocabulary(user_id=user.id, term="cinema", translation="кинотеатр")
+        weak = Vocabulary(
+            user_id=user.id,
+            term="cinema",
+            translation="кинотеатр",
+            due_at=NOW - timedelta(days=1),
+            lapses=2,
+            ease=2.0,
+        )
         new = Vocabulary(user_id=user.id, term="travel", translation="путешествовать")
-        future = Vocabulary(user_id=user.id, term="work", translation="работа")
+        future = Vocabulary(
+            user_id=user.id,
+            term="work",
+            translation="работа",
+            due_at=NOW + timedelta(days=2),
+        )
         session.add_all([weak, new, future])
         await session.flush()
-        session.add_all(
-            [
-                SrsReview(
-                    vocabulary_id=weak.id,
-                    due_at=NOW - timedelta(days=1),
-                    lapses=2,
-                    ease=2.0,
-                ),
-                SrsReview(
-                    vocabulary_id=future.id,
-                    due_at=NOW + timedelta(days=2),
-                    lapses=0,
-                    ease=2.5,
-                ),
-            ]
-        )
 
         conversation = Conversation(user_id=user.id, mode=ConversationMode.CORRECTION)
         session.add(conversation)

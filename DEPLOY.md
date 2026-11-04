@@ -295,12 +295,12 @@ gh run watch "$run_id"
 ### Импорт контента (один раз после первого деплоя)
 
 Deploy-ключ ограничен forced command, поэтому зайти им в shell нельзя.
-Импорт выполняйте под root на VDS:
+`seed` выполняется автоматически при каждом старте контейнера (после
+`alembic upgrade head`) и идемпотентен. Для ручного повторного импорта под root:
 
 ```bash
 cd /srv/tg-bot-eng-teacher
-sudo -u deploy docker compose run --rm bot \
-  python -m app.cli import-content content/topics
+sudo -u deploy docker compose run --rm bot python -m app.cli seed
 sudo -u deploy docker compose restart bot
 ```
 

@@ -77,7 +77,7 @@ async def make_database(tmp_path: Path) -> Database:
 
 async def seed_vocabulary(database: Database, *, count: int = 10) -> list[int]:
     async with database.session() as session:
-        topic = Topic(slug="core-words", title="Core words", level=CEFRLevel.A1, tags=[])
+        topic = Topic(slug="core-words", title="Core words")
         session.add(topic)
         await session.flush()
 
@@ -85,12 +85,12 @@ async def seed_vocabulary(database: Database, *, count: int = 10) -> list[int]:
         for index in range(count):
             item = ContentItem(
                 slug=f"word-{TERMS[index]}",
+                topic_id=topic.id,
                 kind=ContentKind.VOCABULARY,
-                level=CEFRLevel.A1,
                 payload={
                     "kind": "vocabulary",
                     "term": TERMS[index],
-                    "translations_ru": [TRANSLATIONS[index]],
+                    "translation_ru": TRANSLATIONS[index],
                     "accepted_en": [TERMS[index]],
                     "frequency": 1_000_000 - index * 1000,
                     "frequency_rank": index + 1,
@@ -244,14 +244,14 @@ async def test_en_ru_accepts_translation_without_fuzzy(tmp_path: Path) -> None:
         session_id=card.session_id,
         content_item_id=question.content_item_id,
         direction=WordDirection.EN_RU,
-        answer=question.translations_ru[0],
+        answer=question.translation_ru,
     )
     typo = await cards.submit_answer(
         user,
         session_id=card.session_id,
         content_item_id=question.content_item_id,
         direction=WordDirection.EN_RU,
-        answer=question.translations_ru[0][:-1] + "ь",
+        answer=question.translation_ru[:-1] + "ь",
     )
 
     assert correct.result.verdict is Verdict.CORRECT
@@ -259,6 +259,45 @@ async def test_en_ru_accepts_translation_without_fuzzy(tmp_path: Path) -> None:
     assert correct.streak == 1
     assert typo.result.verdict is Verdict.INCORRECT
     assert typo.streak == 0
+
+    await database.dispose()
+
+
+async def test_en_ru_accepts_accepted_ru_variants(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    async with database.session() as session:
+        topic = Topic(slug="core-words", title="Core words")
+        session.add(topic)
+        await session.flush()
+        session.add(
+            ContentItem(
+                slug="word-can",
+                topic_id=topic.id,
+                kind=ContentKind.VOCABULARY,
+                payload={
+                    "kind": "vocabulary",
+                    "term": "can",
+                    "translation_ru": "Мочь, уметь",
+                    "accepted_ru": ["мочь", "уметь"],
+                    "frequency": 1000,
+                },
+                license="unknown",
+            )
+        )
+    user = await make_user(database)
+    cards = service(database, card_size=1)
+    card = await cards.start_card(user, direction=WordCardDirection.EN_RU)
+    question = card.questions[0]
+
+    result = await cards.submit_answer(
+        user,
+        session_id=card.session_id,
+        content_item_id=question.content_item_id,
+        direction=WordDirection.EN_RU,
+        answer="уметь",
+    )
+
+    assert result.result.verdict is Verdict.CORRECT
 
     await database.dispose()
 
@@ -306,7 +345,7 @@ async def test_finish_card_reports_wrong_items(tmp_path: Path) -> None:
         session_id=card.session_id,
         content_item_id=correct.content_item_id,
         direction=WordDirection.EN_RU,
-        answer=correct.translations_ru[0],
+        answer=correct.translation_ru,
     )
     await cards.submit_answer(
         user,

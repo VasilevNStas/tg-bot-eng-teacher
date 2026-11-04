@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
-from sqlalchemy import text
+from sqlalchemy import JSON, Column, Integer, MetaData, Table, text
 from sqlalchemy.ext.asyncio import AsyncEngine
 
 from app.db.database import Database
@@ -60,3 +60,29 @@ async def test_session_rolls_back_on_error(tmp_path: Path) -> None:
         assert result.scalar_one() == 0
 
     await database.dispose()
+
+
+async def test_json_columns_keep_cyrillic_readable(tmp_path: Path) -> None:
+    database = Database()
+    database.init(tmp_path / "bot.db")
+
+    metadata = MetaData()
+    table = Table(
+        "json_items",
+        metadata,
+        Column("id", Integer, primary_key=True),
+        Column("payload", JSON, nullable=False),
+    )
+
+    async with database.engine.begin() as connection:
+        await connection.run_sync(metadata.create_all)
+        await connection.execute(table.insert().values(id=1, payload={"translation_ru": "идти"}))
+
+    async with database.session() as session:
+        raw = await session.scalar(text("SELECT payload FROM json_items"))
+
+    await database.dispose()
+
+    assert isinstance(raw, str)
+    assert "идти" in raw
+    assert "\\u" not in raw

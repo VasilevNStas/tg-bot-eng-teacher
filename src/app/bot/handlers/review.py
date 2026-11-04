@@ -1,4 +1,9 @@
-"""Spaced-repetition review flow."""
+"""Spaced-repetition review flow.
+
+``/review`` pulls one due card from ``vocabulary``, and the three inline buttons
+map to ``ReviewGrade``. Every grade reschedules the card, queues an SRS
+reminder, and immediately shows the next due card.
+"""
 
 from __future__ import annotations
 
@@ -23,11 +28,13 @@ async def _edit(
     *,
     reply_markup: InlineKeyboardMarkup | None = None,
 ) -> None:
+    """Edit the card message in place; ignore callbacks without a message."""
     if isinstance(callback.message, Message):
         await callback.message.edit_text(text, reply_markup=reply_markup)
 
 
 async def handle_review(message: Message, services: AppServices) -> None:
+    """Show the next due card or tell the user that the queue is empty."""
     if message.from_user is None:
         return
 
@@ -53,6 +60,7 @@ async def handle_grade(
     callback_data: ReviewCB,
     services: AppServices,
 ) -> None:
+    """Apply the chosen grade, reschedule, and show the next card."""
     if callback.from_user is None:
         return
 
@@ -71,9 +79,11 @@ async def handle_grade(
     try:
         due_at = await service.review(user.id, callback_data.vocabulary_id, grade)
     except ReviewNotFound:
+        # The card was deleted or belongs to another user.
         await callback.answer(ru.REVIEW_UNKNOWN)
         return
 
+    # Keep the reminder queue in sync with the new due date.
     await ReminderService(services.database).schedule_srs(user.id, due_at)
 
     cards = await service.due_cards(user.id, limit=1)
@@ -90,6 +100,7 @@ async def handle_grade(
 
 
 def build_router() -> Router:
+    """Wire the review command and grade callbacks."""
     router = Router(name="review")
     router.message.register(handle_review, Command("review"))
     router.callback_query.register(handle_grade, ReviewCB.filter())

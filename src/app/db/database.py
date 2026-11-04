@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import contextlib
+import json
 from collections.abc import AsyncIterator
 from pathlib import Path
 from typing import Any
@@ -22,7 +23,22 @@ from app.core.logging import get_logger
 logger = get_logger(__name__)
 
 
+def _json_serializer(value: Any) -> str:
+    """Store Cyrillic as UTF-8 instead of ASCII escape sequences.
+
+    SQLite is the only consumer, and readable JSON makes debugging the
+    ``content_items.payload`` column much easier.
+    """
+    return json.dumps(value, ensure_ascii=False)
+
+
 def _set_sqlite_pragmas(dbapi_connection: Any, _record: Any) -> None:
+    """Apply per-connection SQLite settings needed for a concurrent bot.
+
+    - WAL allows readers while a writer holds a transaction;
+    - foreign_keys is OFF by default in SQLite and must be enabled explicitly;
+    - busy_timeout makes concurrent writers wait instead of failing instantly.
+    """
     cursor = dbapi_connection.cursor()
     cursor.execute("PRAGMA journal_mode=WAL")
     cursor.execute("PRAGMA foreign_keys=ON")
@@ -57,6 +73,7 @@ class Database:
         if self._engine is not None:
             raise RuntimeError("Database is already initialized")
 
+        engine_kwargs.setdefault("json_serializer", _json_serializer)
         engine = create_async_engine(url, **engine_kwargs)
         if engine.url.get_backend_name() == "sqlite":
             event.listen(engine.sync_engine, "connect", _set_sqlite_pragmas)
@@ -77,6 +94,11 @@ class Database:
 
     @contextlib.asynccontextmanager
     async def session(self) -> AsyncIterator[AsyncSession]:
+        """Yield a session and commit on success, roll back on any exception.
+
+        Callers never commit explicitly; this keeps transaction boundaries in
+        one place and prevents half-written multi-step updates.
+        """
         session = self.sessionmaker()
         try:
             yield session
@@ -90,10 +112,12 @@ class Database:
 
     @contextlib.asynccontextmanager
     async def connect(self) -> AsyncIterator[AsyncConnection]:
+        """Yield a connection inside an explicit transaction (used by Alembic)."""
         async with self.engine.begin() as connection:
             yield connection
 
     async def dispose(self) -> None:
+        """Close pooled connections; safe to call once during shutdown."""
         if self._engine is not None:
             await self._engine.dispose()
             self._engine = None

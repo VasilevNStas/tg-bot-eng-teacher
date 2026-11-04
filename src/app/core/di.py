@@ -20,6 +20,8 @@ from app.services.words.service import WordCardService
 
 @dataclass(slots=True)
 class AppServices:
+    """Container passed to handlers through aiogram middleware data."""
+
     settings: Settings
     database: Database
     llm: LLMClient
@@ -31,10 +33,16 @@ class AppServices:
     words: WordCardService
 
     async def aclose(self) -> None:
+        """Release the HTTP client held by the LLM adapter."""
         await self.llm.aclose()
 
 
 def build_services(database: Database, settings: Settings) -> AppServices:
+    """Create the object graph once at startup.
+
+    Prompt templates are loaded eagerly so a missing or empty file fails the
+    deploy immediately, not on the first user message.
+    """
     prompts = PromptRegistry(settings.prompts_dir)
     prompts.persona()
     for level in CEFRLevel:

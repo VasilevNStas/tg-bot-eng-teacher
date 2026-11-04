@@ -9,11 +9,14 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 @dataclass(frozen=True, slots=True)
 class QuietHours:
+    """A local-time window during which notifications are deferred."""
+
     start: time
     end: time
 
 
 def parse_clock(value: str) -> time | None:
+    """Parse ``HH:MM``; malformed settings are ignored rather than fatal."""
     try:
         return time.fromisoformat(value)
     except ValueError:
@@ -21,6 +24,7 @@ def parse_clock(value: str) -> time | None:
 
 
 def quiet_hours(start: str | None, end: str | None) -> QuietHours | None:
+    """Build a quiet window; missing or equal endpoints mean "disabled"."""
     if not start or not end:
         return None
     start_time = parse_clock(start)
@@ -31,6 +35,11 @@ def quiet_hours(start: str | None, end: str | None) -> QuietHours | None:
 
 
 def in_quiet_hours(local_time: time, hours: QuietHours) -> bool:
+    """Check a local time against the window, including midnight wrap-around.
+
+    ``22:00-08:00`` has ``start > end`` and therefore covers both ends of the
+    day: the condition becomes ``>= start OR < end``.
+    """
     if hours.start < hours.end:
         return hours.start <= local_time < hours.end
     return local_time >= hours.start or local_time < hours.end
@@ -47,6 +56,8 @@ def next_allowed_utc(
     if hours is None or not in_quiet_hours(local_now.time(), hours):
         return None
 
+    # Look up to three days ahead for the first non-quiet instant at the
+    # window's end. This handles users whose quiet window spans midnight.
     candidates: list[datetime] = []
     for offset in range(3):
         day = local_now.date() + timedelta(days=offset)
@@ -56,6 +67,7 @@ def next_allowed_utc(
         if in_quiet_hours(candidate.astimezone(zone).time(), hours):
             continue
         candidates.append(candidate)
+    # If no candidate was found (pathological settings), retry in an hour.
     return min(candidates) if candidates else now + timedelta(hours=1)
 
 
@@ -70,6 +82,7 @@ def _wall_time_utc(day: date, wall_time: time, zone: ZoneInfo) -> datetime:
 
 
 def _zone(name: str) -> ZoneInfo:
+    """Resolve a timezone, falling back to UTC for invalid user input."""
     try:
         return ZoneInfo(name)
     except (ZoneInfoNotFoundError, ValueError):

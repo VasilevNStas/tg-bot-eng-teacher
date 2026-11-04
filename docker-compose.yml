@@ -19,7 +19,7 @@ services:
     command:
       - sh
       - -c
-      - alembic upgrade head && exec python -m app
+      - alembic upgrade head && python -m app.cli seed && exec python -m app
     init: true
     restart: unless-stopped
     stop_grace_period: 30s

@@ -14,17 +14,12 @@ EXPECTED_TABLES = {
     "processed_updates",
     "topics",
     "content_items",
-    "topic_items",
-    "content_item_tags",
     "exercise_sessions",
     "exercise_attempts",
     "corrections",
-    "user_progress",
     "vocabulary",
-    "srs_reviews",
     "usage_ledger",
     "reminders",
-    "events",
     "word_progress",
 }
 

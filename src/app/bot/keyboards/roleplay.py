@@ -12,6 +12,7 @@ from app.services.prompts.registry import PromptTemplate
 
 
 def scenarios_keyboard(scenarios: Sequence[PromptTemplate]) -> InlineKeyboardMarkup:
+    """One button per available role-play scenario."""
     builder = InlineKeyboardBuilder()
     for scenario in scenarios:
         builder.button(

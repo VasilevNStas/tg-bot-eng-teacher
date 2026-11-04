@@ -30,18 +30,18 @@ async def make_database(tmp_path: Path) -> Database:
 async def seed(database: Database) -> tuple[int, int, int]:
     async with database.session() as session:
         user = User(tg_id=100500, level=CEFRLevel.A1, profile={})
-        topic = Topic(slug="core-words", title="Core words", level=CEFRLevel.A1, tags=[])
+        topic = Topic(slug="core-words", title="Core words")
         session.add_all([user, topic])
         await session.flush()
 
         item = ContentItem(
             slug="word-one",
+            topic_id=topic.id,
             kind=ContentKind.VOCABULARY,
-            level=CEFRLevel.A1,
             payload={
                 "kind": "vocabulary",
                 "term": "one",
-                "translations_ru": ["один"],
+                "translation_ru": "один",
                 "frequency": 100,
                 "frequency_rank": 1,
             },

@@ -1,4 +1,10 @@
-"""Per-user serialization of update processing."""
+"""Per-user serialization of update processing.
+
+Telegram can deliver two updates for the same user close together (e.g. a
+message and a button press). Without a lock, both handlers could read the same
+FSM state and advance it twice. The registry keeps one ``asyncio.Lock`` per
+active user and drops it when the last waiter finishes.
+"""
 
 from __future__ import annotations
 
@@ -18,6 +24,8 @@ Handler = Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]]
 
 
 class UserLockRegistry:
+    """Reference-counted map of per-user locks."""
+
     def __init__(self) -> None:
         self._locks: dict[int, asyncio.Lock] = {}
         self._refs: dict[int, int] = {}
@@ -28,6 +36,11 @@ class UserLockRegistry:
 
     @asynccontextmanager
     async def acquire(self, user_id: int) -> AsyncIterator[None]:
+        """Hold the user's lock for the duration of the context.
+
+        The reference count prevents one finishing task from deleting a lock
+        that another task is still waiting on.
+        """
         lock = self._locks.get(user_id)
         if lock is None:
             lock = asyncio.Lock()
@@ -47,6 +60,7 @@ class UserLockRegistry:
 
 
 def extract_user_id(event: TelegramObject) -> int | None:
+    """Find the acting user in the update types the bot handles."""
     if not isinstance(event, Update):
         return None
     for candidate in (event.message, event.edited_message, event.callback_query):
@@ -58,6 +72,8 @@ def extract_user_id(event: TelegramObject) -> int | None:
 
 
 class UserLockMiddleware(BaseMiddleware):
+    """Serialize handler execution per Telegram user."""
+
     def __init__(self, registry: UserLockRegistry, *, timeout_seconds: float = 90.0) -> None:
         self._registry = registry
         self._timeout = timeout_seconds
@@ -70,9 +86,12 @@ class UserLockMiddleware(BaseMiddleware):
     ) -> Any:
         user_id = extract_user_id(event)
         if user_id is None:
+            # Updates without a user (channel posts, service updates) do not
+            # need serialization.
             return await handler(event, data)
 
         try:
+            # A stuck handler must not block this user's queue forever.
             async with asyncio.timeout(self._timeout):
                 async with self._registry.acquire(user_id):
                     return await handler(event, data)

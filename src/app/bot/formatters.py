@@ -1,4 +1,10 @@
-"""HTML formatting for Telegram replies."""
+"""HTML formatting for Telegram replies.
+
+Telegram accepts a small HTML subset, so every user- or LLM-provided string is
+escaped with ``quote=False`` before it is embedded. All builders also respect
+Telegram's hard message limit (4096 characters) and truncate gracefully instead
+of letting the API reject the whole message.
+"""
 
 from __future__ import annotations
 
@@ -12,10 +18,12 @@ from app.services.vocabulary.srs import ReviewCard
 from app.texts import ru
 
 TELEGRAM_LIMIT = 4096
+# Correction blocks are kept below the hard limit to leave room for the reply.
 CORRECTIONS_LIMIT = 4000
 
 
 def format_reply(turn: ConversationTurn, *, limit: int = TELEGRAM_LIMIT) -> str:
+    """Escape the assistant reply and cut it to the Telegram limit."""
     text = escape(turn.reply, quote=False)
     if len(text) <= limit:
         return text
@@ -27,6 +35,11 @@ def format_corrections(
     *,
     limit: int = CORRECTIONS_LIMIT,
 ) -> str | None:
+    """Render corrections as an expandable blockquote, or None when empty.
+
+    Lines are added until the *whole* block would exceed the limit, so we never
+    split an individual correction in half.
+    """
     if not turn.corrections:
         return None
 
@@ -55,6 +68,7 @@ def format_correction_report(
     *,
     limit: int = TELEGRAM_LIMIT,
 ) -> str:
+    """Render the full post-reply report: reply, corrections, new words."""
     reply = _shorten(escape(turn.reply, quote=False), max(1, limit - 80))
     lines = [reply, "", ru.CORRECTION_HEADER]
 
@@ -95,6 +109,7 @@ def format_correction_report(
 
 
 def format_review_card(card: ReviewCard) -> str:
+    """Render one saved-vocabulary card with its buttons' prompt."""
     lines = [
         ru.REVIEW_HEADER,
         "",
@@ -108,6 +123,7 @@ def format_review_card(card: ReviewCard) -> str:
 
 
 def format_stats(report: StatsReport) -> str:
+    """Render the read-only statistics report in fixed section order."""
     lines = [ru.STATS_HEADER, "", ru.STATS_PRACTICE_HEADER]
     if report.attempts_total:
         lines.append(
@@ -214,6 +230,7 @@ def format_vocabulary(
     *,
     limit: int = TELEGRAM_LIMIT,
 ) -> str:
+    """Render saved vocabulary, truncating whole entries to fit the limit."""
     lines = [ru.VOCAB_HEADER.format(count=len(words))]
     for number, word in enumerate(words, start=1):
         line = ru.VOCAB_ITEM.format(
@@ -232,6 +249,7 @@ def format_vocabulary(
 
 
 def _append_within(lines: list[str], line: str, limit: int) -> bool:
+    """Append a line only if the joined text stays within ``limit``."""
     candidate = "\n".join([*lines, line])
     if len(candidate) > limit:
         return False
@@ -240,4 +258,5 @@ def _append_within(lines: list[str], line: str, limit: int) -> bool:
 
 
 def _shorten(text: str, limit: int) -> str:
+    """Cut text to ``limit`` characters, replacing the last one with ellipsis."""
     return text if len(text) <= limit else text[: limit - 1] + "…"

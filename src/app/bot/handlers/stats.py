@@ -15,6 +15,7 @@ from app.texts import ru
 
 
 async def handle_stats(message: Message, services: AppServices) -> None:
+    """Build and send the read-only statistics report for this user."""
     if message.from_user is None:
         return
 
@@ -28,6 +29,7 @@ async def handle_stats(message: Message, services: AppServices) -> None:
 
 
 def build_router() -> Router:
+    """Wire the /stats command."""
     router = Router(name="stats")
     router.message.register(handle_stats, Command("stats"))
     return router

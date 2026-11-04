@@ -10,6 +10,7 @@ from app.texts import ru
 
 
 def review_keyboard(vocabulary_id: int) -> InlineKeyboardMarkup:
+    """Grade buttons for one saved-vocabulary card."""
     builder = InlineKeyboardBuilder()
     builder.button(
         text=ru.BUTTON_AGAIN,

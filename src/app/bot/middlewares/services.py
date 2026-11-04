@@ -14,6 +14,8 @@ Handler = Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]]
 
 
 class ServicesMiddleware(BaseMiddleware):
+    """Make ``services`` available to every handler as a named argument."""
+
     def __init__(self, services: AppServices) -> None:
         self._services = services
 

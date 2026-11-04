@@ -1,4 +1,8 @@
-"""Provider-agnostic LLM contract."""
+"""Provider-agnostic LLM contract.
+
+Services depend on ``LLMClient`` only, so the OpenRouter adapter can be swapped
+for a fake in tests or another provider without touching business logic.
+"""
 
 from __future__ import annotations
 
@@ -14,12 +18,16 @@ Role = Literal["system", "user", "assistant"]
 
 @dataclass(frozen=True, slots=True)
 class Message:
+    """One chat message in the OpenAI-compatible role/content format."""
+
     role: Role
     content: str
 
 
 @dataclass(frozen=True, slots=True)
 class LLMResponse:
+    """Normalized completion, including usage and provider-reported cost."""
+
     content: str
     parsed: dict[str, Any] | None
     model: str
@@ -34,6 +42,8 @@ class LLMResponse:
 
 
 class LLMClient(Protocol):
+    """Minimal async client surface used by the application."""
+
     async def complete(
         self,
         messages: Sequence[Message],

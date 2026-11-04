@@ -13,6 +13,7 @@ from app.texts import ru
 
 
 async def handle_start(message: Message, services: AppServices) -> None:
+    """Greet returning users and funnel new ones into onboarding."""
     if message.from_user is None:
         await message.answer(ru.START)
         return
@@ -26,10 +27,12 @@ async def handle_start(message: Message, services: AppServices) -> None:
 
 
 async def handle_help(message: Message) -> None:
+    """Send the static command reference."""
     await message.answer(ru.HELP)
 
 
 def build_router() -> Router:
+    """Wire /start and /help."""
     router = Router(name="common")
     router.message.register(handle_start, CommandStart())
     router.message.register(handle_help, Command("help"))

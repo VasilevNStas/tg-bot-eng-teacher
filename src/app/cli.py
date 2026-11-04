@@ -1,4 +1,10 @@
-"""Command-line utilities (content import)."""
+"""Command-line utilities for content import and maintenance.
+
+Every command is safe to run from a container entrypoint: imports are
+idempotent upserts by slug, and ``--dry-run`` validates without touching the
+database. ``DB_PATH`` selects the SQLite file and ``CONTENT_DIR`` the bundled
+content root.
+"""
 
 from __future__ import annotations
 
@@ -20,6 +26,11 @@ from app.services.privacy.service import PrivacyService
 
 
 async def import_content(path: Path, *, dry_run: bool) -> int:
+    """Validate and upsert one YAML file or a directory of files.
+
+    In dry-run mode the loader still performs full schema and cross-file
+    validation, but no database connection is opened.
+    """
     loaded = load_content_path(path)
 
     if dry_run:
@@ -46,7 +57,27 @@ async def import_content(path: Path, *, dry_run: bool) -> int:
     return 0
 
 
+async def seed(*, dry_run: bool) -> int:
+    """Import every bundled content file. Safe to run on each start."""
+    base = Path(os.environ.get("CONTENT_DIR", "content"))
+    topics = base / "topics"
+    vocabulary = base / "vocabulary"
+
+    if not topics.is_dir():
+        print(f"error: content directory not found: {topics}", file=sys.stderr)
+        return 1
+    if not vocabulary.is_dir():
+        print(f"error: content directory not found: {vocabulary}", file=sys.stderr)
+        return 1
+
+    result = await import_content(topics, dry_run=dry_run)
+    if result != 0:
+        return result
+    return await import_content(vocabulary, dry_run=dry_run)
+
+
 async def content_report(*, as_json: bool) -> int:
+    """Print coverage, duplicates, and license gaps for the imported content."""
     db_path = Path(os.environ.get("DB_PATH", "./data/bot.db"))
     database = Database()
     database.init(db_path)
@@ -63,6 +94,7 @@ async def content_report(*, as_json: bool) -> int:
 
 
 async def prune_history(*, days: int) -> int:
+    """Delete conversations and messages older than the retention period."""
     db_path = Path(os.environ.get("DB_PATH", "./data/bot.db"))
     database = Database()
     database.init(db_path)
@@ -75,6 +107,7 @@ async def prune_history(*, days: int) -> int:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
+    """Parse CLI arguments and dispatch to the async command functions."""
     parser = argparse.ArgumentParser(prog="app.cli")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -89,9 +122,19 @@ def main(argv: Sequence[str] | None = None) -> int:
         help="Validate only, do not write to the database",
     )
 
+    seed_parser = subparsers.add_parser(
+        "seed",
+        help="Import bundled topics and vocabulary (idempotent)",
+    )
+    seed_parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Validate only, do not write to the database",
+    )
+
     report_parser = subparsers.add_parser(
         "content-report",
-        help="Show content coverage, tags, duplicates and license gaps",
+        help="Show content coverage, duplicates and license gaps",
     )
     report_parser.add_argument(
         "--json",
@@ -111,6 +154,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
+    # Report/prune output must stay parseable, so logs go to stderr quietly.
     quiet_command = args.command in {"content-report", "prune-history"}
     setup_logging(
         "WARNING" if quiet_command else "INFO",
@@ -120,6 +164,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         if args.command == "import-content":
             return asyncio.run(import_content(args.path, dry_run=args.dry_run))
+        if args.command == "seed":
+            return asyncio.run(seed(dry_run=args.dry_run))
         if args.command == "content-report":
             return asyncio.run(content_report(as_json=args.json))
         if args.command == "prune-history":

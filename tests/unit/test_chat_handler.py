@@ -33,7 +33,6 @@ from app.db.models import (
     Conversation,
     Correction,
     Reminder,
-    SrsReview,
     UsageLedger,
     User,
     Vocabulary,
@@ -672,7 +671,7 @@ async def test_review_card_and_grade(tmp_path: Path) -> None:
     edits = [method for method in session.methods if isinstance(method, EditMessageText)]
     assert edits[-1].text == ru.REVIEW_DONE
     async with database.session() as db_session:
-        review = (await db_session.scalars(select(SrsReview))).one()
+        review = (await db_session.scalars(select(Vocabulary))).one()
         assert review.reps == 1
         assert review.interval_days == 1
         reminder = (await db_session.scalars(select(Reminder))).one()
