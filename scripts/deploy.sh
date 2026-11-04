@@ -38,7 +38,11 @@ echo "==> build"
 docker compose build
 
 echo "==> start"
-docker compose up -d --remove-orphans
+profile_args=()
+if grep -q '^ADMIN_BOT_TOKEN=.' .env 2>/dev/null; then
+  profile_args+=(--profile admin)
+fi
+docker compose "${profile_args[@]}" up -d --remove-orphans
 
 container="$(docker compose ps -q bot)"
 if [[ -z "$container" ]]; then

@@ -1,12 +1,12 @@
 """ORM models.
 
-Schema overview (13 tables):
+Schema overview (14 tables):
 
 - identity/chat: ``users``, ``conversations``, ``messages``, ``processed_updates``
 - content:      ``topics``, ``content_items``
 - practice:     ``exercise_sessions``, ``exercise_attempts``, ``corrections``
 - learning:     ``vocabulary`` (saved words + SRS), ``word_progress``
-- operations:   ``usage_ledger``, ``reminders``
+- operations:   ``usage_ledger``, ``reminders``, ``admin_audit``
 
 Quiz content lives in ``content_items.payload`` as JSON; its shape depends on
 the ``kind`` column. User-owned rows cascade from ``users`` so deleting a
@@ -34,6 +34,7 @@ from app.db.annotations import (
     bool_default_true,
     int_pk,
     json_dict_not_null,
+    str_32,
     str_64,
     str_128,
     str_enum,
@@ -83,6 +84,13 @@ class User(TimestampMixin, Base):
     onboarding_state: Mapped[str] = mapped_column(String(32), default="new", nullable=False)
     profile: Mapped[json_dict_not_null]
     last_seen_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+    # Containment state written by the admin bot and enforced by the user bot.
+    # ``blocked_at`` is a permanent block; ``muted_until`` expires on its own.
+    blocked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    blocked_reason: Mapped[str | None] = mapped_column(String(256))
+    muted_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    mute_reason: Mapped[str | None] = mapped_column(String(256))
 
 
 class Conversation(TimestampMixin, Base):
@@ -341,3 +349,23 @@ class Reminder(TimestampMixin, Base):
     kind: Mapped[ReminderKind] = mapped_column(nullable=False)
     payload: Mapped[json_dict_not_null]
     sent_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class AdminAudit(CreatedAtMixin, Base):
+    """One administrative action, written by the admin bot or the CLI.
+
+    ``target_tg_id`` is not a foreign key on purpose: an audit record must
+    survive deletion of the user it refers to. ``details`` keeps action-specific
+    data (reason, duration, counts) without schema changes.
+    """
+
+    __tablename__ = "admin_audit"
+    __table_args__ = (Index("ix_admin_audit_created_at", "created_at"),)
+
+    id: Mapped[int_pk]
+    actor: Mapped[str_128]
+    source: Mapped[str_32]
+    action: Mapped[str_32]
+    target_tg_id: Mapped[int | None] = mapped_column(BigInteger, index=True)
+    details: Mapped[json_dict_not_null]
+    success: Mapped[bool_default_true]

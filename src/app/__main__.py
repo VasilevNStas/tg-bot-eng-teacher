@@ -16,6 +16,7 @@ from app.core.config import BotMode, Settings, get_settings
 from app.core.di import build_services
 from app.core.logging import get_logger, setup_logging
 from app.db.database import Database
+from app.services.health import heartbeat_loop
 from app.services.privacy.service import PrivacyService
 from app.services.reminders.scheduler import ReminderScheduler
 from app.services.reminders.service import ReminderService
@@ -51,6 +52,10 @@ async def run_polling(settings: Settings) -> None:
         ).run_forever(),
         name="reminder-scheduler",
     )
+    heartbeat_task = asyncio.create_task(
+        heartbeat_loop(settings.db_path, "bot"),
+        name="heartbeat",
+    )
 
     try:
         await bot.delete_webhook(drop_pending_updates=True)
@@ -62,8 +67,11 @@ async def run_polling(settings: Settings) -> None:
         await dispatcher.start_polling(bot)
     finally:
         reminder_task.cancel()
+        heartbeat_task.cancel()
         with suppress(asyncio.CancelledError):
             await reminder_task
+        with suppress(asyncio.CancelledError):
+            await heartbeat_task
         await services.aclose()
         await database.dispose()
         await bot.session.close()

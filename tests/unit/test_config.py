@@ -3,7 +3,8 @@ from __future__ import annotations
 import pytest
 from pydantic import ValidationError
 
-from app.core.config import BotMode, Settings
+from app.core.admin_config import AdminSettings
+from app.core.config import BotMode, RestrictionMode, Settings
 
 
 def make_settings(**overrides: object) -> Settings:
@@ -60,3 +61,42 @@ def test_secrets_are_masked_in_repr() -> None:
 
     assert "secret-token" not in repr(settings)
     assert "sk-test-key" not in repr(settings)
+
+
+def test_containment_and_rate_limit_defaults() -> None:
+    settings = make_settings()
+
+    assert settings.block_mode is RestrictionMode.SILENT
+    assert settings.mute_mode is RestrictionMode.NEUTRAL
+    assert settings.rate_limit_enabled is False
+    assert settings.rate_limit_messages_per_min == 20
+
+
+def make_admin_settings(**overrides: object) -> AdminSettings:
+    values: dict[str, object] = {
+        "admin_bot_token": "123456:admin-secret",
+        "admin_ids": "100, 200",
+    }
+    values.update(overrides)
+    return AdminSettings(_env_file=None, **values)  # type: ignore[arg-type]
+
+
+def test_admin_ids_are_parsed_from_comma_separated_string() -> None:
+    settings = make_admin_settings()
+
+    assert settings.admin_id_set == frozenset({100, 200})
+    assert "admin-secret" not in repr(settings)
+
+
+def test_admin_ids_reject_empty_and_non_numeric_values() -> None:
+    with pytest.raises(ValidationError, match="at least one"):
+        make_admin_settings(admin_ids=" , ")
+    with pytest.raises(ValidationError, match="non-numeric"):
+        make_admin_settings(admin_ids="100,abc")
+
+
+def test_admin_rate_limit_defaults() -> None:
+    settings = make_admin_settings()
+
+    assert settings.rate_limit_enabled is True
+    assert settings.rate_limit_commands_per_min == 10
