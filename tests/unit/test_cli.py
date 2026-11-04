@@ -37,6 +37,19 @@ async def item_count(path: Path) -> int:
         await database.dispose()
 
 
+async def active_item_count(path: Path) -> int:
+    database = Database()
+    database.init(path)
+    try:
+        async with database.session() as session:
+            value = await session.scalar(
+                select(func.count()).select_from(ContentItem).where(ContentItem.is_active.is_(True))
+            )
+        return int(value or 0)
+    finally:
+        await database.dispose()
+
+
 def test_cli_imports_content(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     db_path = tmp_path / "bot.db"
     asyncio.run(prepare_database(db_path))
@@ -185,6 +198,53 @@ def test_cli_seed_imports_bundled_content(
 
     assert main(["seed"]) == 0
     assert asyncio.run(item_count(db_path)) == 7
+
+
+def test_cli_seed_prune_deactivates_removed_items(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    content = tmp_path / "content"
+    topics = content / "topics"
+    vocabulary = content / "vocabulary"
+    topics.mkdir(parents=True)
+    vocabulary.mkdir()
+    (topics / "sample.yaml").write_text(FIXTURE.read_text(encoding="utf-8"), encoding="utf-8")
+
+    def write_words(words: list[dict[str, object]]) -> None:
+        (vocabulary / "words.yaml").write_text(
+            yaml.safe_dump(vocabulary_doc(words), allow_unicode=True),
+            encoding="utf-8",
+        )
+
+    both: list[dict[str, object]] = [
+        {"slug": "word-be", "kind": "vocabulary", "term": "be", "translation_ru": "быть"},
+        {"slug": "word-and", "kind": "vocabulary", "term": "and", "translation_ru": "и"},
+    ]
+    write_words(both)
+
+    db_path = tmp_path / "bot.db"
+    asyncio.run(prepare_database(db_path))
+    monkeypatch.setenv("DB_PATH", str(db_path))
+    monkeypatch.setenv("CONTENT_DIR", str(content))
+
+    assert main(["seed"]) == 0
+    assert asyncio.run(active_item_count(db_path)) == 7
+
+    write_words(both[:1])
+
+    assert main(["seed", "--dry-run", "--prune"]) == 0
+    assert asyncio.run(active_item_count(db_path)) == 7
+
+    assert main(["seed", "--prune"]) == 0
+    assert "deactivated=1" in capsys.readouterr().out
+    assert asyncio.run(active_item_count(db_path)) == 6
+    assert asyncio.run(item_count(db_path)) == 7
+
+    assert main(["seed", "--prune"]) == 0
+    assert "deactivated=0" in capsys.readouterr().out
+    assert asyncio.run(active_item_count(db_path)) == 6
 
 
 def test_cli_returns_error_for_invalid_file(
