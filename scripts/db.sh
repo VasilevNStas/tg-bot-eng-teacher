@@ -75,7 +75,7 @@ stop_app() {
     info "local mode: make sure the bot process is stopped"
     return 0
   fi
-  $COMPOSE stop bot >/dev/null 2>&1 || true
+  $COMPOSE stop bot admin-bot >/dev/null 2>&1 || true
 }
 
 start_app() {
@@ -83,7 +83,11 @@ start_app() {
     info "local mode: start with 'uv run python -m app'"
     return 0
   fi
-  $COMPOSE up -d
+  local profile_args=()
+  if grep -q '^ADMIN_BOT_TOKEN=.' "$ROOT_DIR/.env" 2>/dev/null; then
+    profile_args+=(--profile admin)
+  fi
+  $COMPOSE "${profile_args[@]}" up -d
 }
 
 prune_backups() {

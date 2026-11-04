@@ -39,7 +39,7 @@ VDS: /srv/tg-bot-eng-teacher
   ├─ git fetch --tags && git checkout v0.1.0
   ├─ sqlite3 .backup  → backups/pre-release-*.db (хранит 10)
   ├─ docker compose build        # сборка на самом VDS
-  ├─ docker compose up -d        # alembic upgrade head + запуск
+  ├─ docker compose up -d        # migrate (alembic + seed) → bot
   └─ проверяет, что контейнер Running
 ```
 
@@ -53,8 +53,8 @@ VDS: /srv/tg-bot-eng-teacher
 - **Тег обязан быть в `main`** — в `main` уже требуется зелёный CI, поэтому
   релиз не может обогнать тесты.
 
-Миграции применяются автоматически при старте контейнера:
-`command: sh -c "alembic upgrade head && exec python -m app"`.
+Миграции и seed выполняет one-shot сервис `migrate`; `bot` стартует после его
+успешного завершения (`depends_on: service_completed_successfully`).
 
 ---
 
@@ -159,6 +159,8 @@ sudo -u deploy vi /srv/tg-bot-eng-teacher/.env   # или любой редак�
 | `LLM_API_KEY` | ключ OpenRouter |
 | `LLM_MODEL_FAST` | например `openai/gpt-4o-mini` |
 | `LLM_MODEL_SMART` | например `openai/gpt-4o` |
+| `ADMIN_BOT_TOKEN` | токен **второго** бота для админ-панели (опционально) |
+| `ADMIN_IDS` | numeric `tg_id` администраторов через запятую |
 
 Проверьте, что `BOT_TOKEN` **не совпадает** с токеном уже запущенного
 `tg-bot-ytdl` (иначе Telegram вернёт `409 Conflict`).
@@ -289,10 +291,10 @@ gh run watch "$run_id"
 4. `docker compose up -d --remove-orphans`
 5. Ожидание `Running` до 60 секунд; при падении — логи и exit 1
 
-Первый деплой создаёт БД и применяет миграции автоматически. Контент в БД
-**не импортируется** автоматически — это делается отдельно (см. ниже).
+Первый деплой создаёт БД, применяет миграции и импортирует контент
+автоматически (сервис `migrate`). Повторный `seed` идемпотентен.
 
-### Импорт контента (один раз после первого деплоя)
+### Импорт контента (вручную, при необходимости)
 
 Deploy-ключ ограничен forced command, поэтому зайти им в shell нельзя.
 `seed` выполняется автоматически при каждом старте контейнера (после
@@ -377,6 +379,7 @@ sudo -u deploy git fetch --tags --force
 sudo -u deploy git checkout --force v0.1.1
 sudo -u deploy docker compose build
 sudo -u deploy docker compose up -d --remove-orphans
+sudo -u deploy docker compose --profile admin up -d --remove-orphans  # если задан ADMIN_BOT_TOKEN
 sudo -u deploy docker compose ps
 ```
 

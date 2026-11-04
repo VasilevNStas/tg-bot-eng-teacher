@@ -232,3 +232,8 @@ HELP = (
     "/delete_me — удалить все мои данные\n"
     "/help — эта справка"
 )
+
+RESTRICTED_NEUTRAL = "Сейчас не могу ответить. Попробуйте позже."
+RESTRICTED_CONFUSED = "Не понял. Доступно: /start, /help."
+RESTRICTED_EXPLICIT = "Доступ ограничен."
+RATE_LIMITED = "Слишком часто. Попробуйте через минуту."

@@ -23,10 +23,14 @@ MVP-каркас работает:
 - контент в YAML с импортом в SQLite и единым форматом `items`;
 - банк слов: 6166 слов в `content/vocabulary/` — 2992 частотных с
   транскрипцией и 3174 дополнительных без частоты; CEFR не хранится;
-- coverage-отчёт и CI-валидация контента.
+- coverage-отчёт и CI-валидация контента;
+- отдельный админ-бот: `/admin`, `/health`, `/users`, `/user`, `/block`,
+  `/mute`, `/unblock`, `/audit`; общая БД, свой токен и allowlist;
+- `app.cli health` + heartbeat + Docker healthcheck;
+- `admin_audit` и containment (`block`/`mute`) в пользовательском боте.
 
-Ещё не реализованы: webhook, бэкапы и голос — см. локальный план в
-`.opencode/_backlog.md`.
+Ещё не реализованы: webhook, голос, внешний мониторинг/Sentry — см. локальный
+план в `.opencode/_backlog.md`.
 
 ## Стек
 
@@ -52,6 +56,7 @@ uv sync --all-extras
 ```bash
 cp .env.example .env
 # заполнить BOT_TOKEN, LLM_API_KEY, LLM_MODEL_FAST, LLM_MODEL_SMART
+# для админ-бота: ADMIN_BOT_TOKEN и ADMIN_IDS (см. .opencode/_admin.md)
 ```
 
 ## База и контент
@@ -144,11 +149,18 @@ cp .env.example .env                # заполнить BOT_TOKEN и LLM_*
 docker compose build
 docker compose up -d
 docker compose logs -f bot
+docker compose --profile admin up -d   # если настроен ADMIN_BOT_TOKEN
 ```
 
-Миграции применяются автоматически при старте контейнера
-(`alembic upgrade head`). Данные лежат в `./data` (bind mount), поэтому
+Миграции и seed выполняет one-shot сервис `migrate`; `bot` и `admin-bot`
+стартуют после него. Данные лежат в `./data` (bind mount), поэтому
 `docker compose down` их не удаляет.
+
+Проверка здоровья:
+
+```bash
+docker compose exec bot python -m app.cli health
+```
 
 Каждый бот запускается своим compose-проектом: имя `tg-bot-eng-teacher` задано
 в `docker-compose.yml`, контейнеры и сети изолированы от других ботов на VDS.

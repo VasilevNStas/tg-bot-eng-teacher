@@ -23,6 +23,15 @@ class BotMode(StrEnum):
     WEBHOOK = "webhook"
 
 
+class RestrictionMode(StrEnum):
+    """How the user bot answers a blocked or muted user."""
+
+    SILENT = "silent"
+    NEUTRAL = "neutral"
+    CONFUSED = "confused"
+    EXPLICIT = "explicit"
+
+
 class Settings(BaseSettings):
     """Environment-backed configuration for the bot, LLM, and storage."""
 
@@ -63,6 +72,16 @@ class Settings(BaseSettings):
     history_retention_days: int = Field(default=90, ge=0, le=3650)
     reminder_poll_seconds: int = Field(default=60, ge=5, le=3600)
     reminder_batch_size: int = Field(default=100, ge=1, le=1000)
+
+    # Containment modes. A blocked user is silent by default; a muted user gets
+    # a neutral reply that does not reveal the reason or that they were caught.
+    block_mode: RestrictionMode = RestrictionMode.SILENT
+    mute_mode: RestrictionMode = RestrictionMode.NEUTRAL
+
+    # Short-window flood control. Off by default so a fresh deployment behaves
+    # exactly as before until the limits are tuned.
+    rate_limit_enabled: bool = False
+    rate_limit_messages_per_min: int = Field(default=20, ge=1, le=1000)
 
     log_level: str = "INFO"
     log_json: bool = False
