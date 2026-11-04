@@ -29,6 +29,9 @@ jobs:
 
       - run: uv run ruff format --check .
 
+      - name: Check shell scripts
+        run: bash -n scripts/db.sh scripts/deploy.sh
+
       - run: uv run mypy src
 
       - run: uv run pytest

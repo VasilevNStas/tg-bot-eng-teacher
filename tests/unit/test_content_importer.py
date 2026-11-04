@@ -161,6 +161,52 @@ async def test_topic_only_file_creates_topic(tmp_path: Path) -> None:
     await database.dispose()
 
 
+async def test_deactivate_missing_marks_only_removed_items(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    importer = ContentImporter(database)
+    await importer.import_file(load_content_file(FIXTURE))
+
+    doc = copy.deepcopy(fixture_doc())
+    removed_slug = doc["items"][0]["slug"]
+    kept_slug = doc["items"][1]["slug"]
+    doc["items"] = doc["items"][1:]
+    reduced = ContentFile.model_validate(doc)
+
+    assert await importer.deactivate_missing([reduced]) == 1
+
+    async with database.session() as session:
+        removed = await session.scalar(select(ContentItem).where(ContentItem.slug == removed_slug))
+        kept = await session.scalar(select(ContentItem).where(ContentItem.slug == kept_slug))
+        assert removed is not None and removed.is_active is False
+        assert kept is not None and kept.is_active is True
+
+    await database.dispose()
+
+
+async def test_deactivate_missing_does_not_touch_other_topics(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    importer = ContentImporter(database)
+    await importer.import_file(load_content_file(FIXTURE))
+
+    other_doc = copy.deepcopy(fixture_doc())
+    other_doc["topic"] = {"slug": "other-topic", "title": "Other"}
+    other_doc["items"] = [other_doc["items"][0]]
+    other_doc["items"][0]["slug"] = "other-item"
+    await importer.import_file(ContentFile.model_validate(other_doc))
+
+    empty_doc = copy.deepcopy(fixture_doc())
+    empty_doc["items"] = []
+    empty = ContentFile.model_validate(empty_doc)
+
+    assert await importer.deactivate_missing([empty]) == 5
+
+    async with database.session() as session:
+        other = await session.scalar(select(ContentItem).where(ContentItem.slug == "other-item"))
+        assert other is not None and other.is_active is True
+
+    await database.dispose()
+
+
 async def test_move_item_to_another_topic_updates_topic_id(tmp_path: Path) -> None:
     database = await make_database(tmp_path)
     importer = ContentImporter(database)

@@ -421,19 +421,25 @@ gh workflow run release.yml -f tag=v0.1.0
 /srv/tg-bot-eng-teacher/backups/pre-release-YYYYMMDD-HHMMSS.db
 ```
 
-Ручной бэкап (SQLite `.backup` безопасен на работающей БД):
+Ручной бэкап и восстановление — через `scripts/db.sh`
+(тот же `.backup`, ротация и проверка целостности):
 
 ```bash
 cd /srv/tg-bot-eng-teacher
-sudo -u deploy mkdir -p backups
-sudo -u deploy sqlite3 data/bot.db \
-  ".backup 'backups/manual-$(date +%Y%m%d-%H%M%S).db'"
+sudo -u deploy ./scripts/db.sh backup
+sudo -u deploy ./scripts/db.sh migrate          # сохранить данные + миграции
+sudo -u deploy ./scripts/db.sh restore backups/pre-release-20261029-120000.db
 ```
 
-Восстановление:
+`./scripts/db.sh reset --yes` полностью удаляет БД (с предварительным бэкапом).
+На проде для этого дополнительно нужен `APP_ENV=production` и `--force`.
+Полный сценарий — `.opencode/_db_operations.md`.
+
+Ручной fallback без скрипта:
 
 ```bash
-cd /srv/tg-bot-eng-teacher
+sudo -u deploy sqlite3 data/bot.db \
+  ".backup 'backups/manual-$(date +%Y%m%d-%H%M%S).db'"
 sudo -u deploy docker compose stop bot
 sudo -u deploy cp backups/pre-release-20261029-120000.db data/bot.db
 sudo -u deploy rm -f data/bot.db-wal data/bot.db-shm

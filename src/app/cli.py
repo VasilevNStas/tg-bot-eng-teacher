@@ -21,18 +21,22 @@ from app.curriculum.coverage import CoverageService, format_coverage
 from app.curriculum.errors import ContentError
 from app.curriculum.importer import ContentImporter
 from app.curriculum.loader import load_content_path
+from app.curriculum.models import ContentFile
 from app.db.database import Database
 from app.services.privacy.service import PrivacyService
 
 
-async def import_content(path: Path, *, dry_run: bool) -> int:
-    """Validate and upsert one YAML file or a directory of files.
+async def _import_loaded(
+    loaded: list[tuple[Path, ContentFile]],
+    *,
+    dry_run: bool,
+    prune: bool,
+) -> int:
+    """Import validated files and optionally retire content missing from YAML.
 
-    In dry-run mode the loader still performs full schema and cross-file
-    validation, but no database connection is opened.
+    ``prune`` only touches topics present in ``loaded`` and marks items
+    inactive, so user progress is preserved.
     """
-    loaded = load_content_path(path)
-
     if dry_run:
         for file_path, content in loaded:
             print(
@@ -52,12 +56,24 @@ async def import_content(path: Path, *, dry_run: bool) -> int:
                 f"{file_path}: created={result.created} "
                 f"updated={result.updated} skipped={result.skipped}"
             )
+        if prune:
+            deactivated = await importer.deactivate_missing([content for _, content in loaded])
+            print(f"deactivated={deactivated}")
     finally:
         await database.dispose()
     return 0
 
 
-async def seed(*, dry_run: bool) -> int:
+async def import_content(path: Path, *, dry_run: bool, prune: bool = False) -> int:
+    """Validate and upsert one YAML file or a directory of files.
+
+    In dry-run mode the loader still performs full schema and cross-file
+    validation, but no database connection is opened.
+    """
+    return await _import_loaded(load_content_path(path), dry_run=dry_run, prune=prune)
+
+
+async def seed(*, dry_run: bool, prune: bool = False) -> int:
     """Import every bundled content file. Safe to run on each start."""
     base = Path(os.environ.get("CONTENT_DIR", "content"))
     topics = base / "topics"
@@ -70,10 +86,10 @@ async def seed(*, dry_run: bool) -> int:
         print(f"error: content directory not found: {vocabulary}", file=sys.stderr)
         return 1
 
-    result = await import_content(topics, dry_run=dry_run)
-    if result != 0:
-        return result
-    return await import_content(vocabulary, dry_run=dry_run)
+    # One batch keeps the import in a single transaction and lets --prune see
+    # the complete desired set across topics and vocabulary.
+    loaded = load_content_path(topics) + load_content_path(vocabulary)
+    return await _import_loaded(loaded, dry_run=dry_run, prune=prune)
 
 
 async def content_report(*, as_json: bool) -> int:
@@ -131,6 +147,11 @@ def main(argv: Sequence[str] | None = None) -> int:
         action="store_true",
         help="Validate only, do not write to the database",
     )
+    seed_parser.add_argument(
+        "--prune",
+        action="store_true",
+        help="Deactivate items that are missing from bundled topics/vocabulary",
+    )
 
     report_parser = subparsers.add_parser(
         "content-report",
@@ -165,7 +186,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         if args.command == "import-content":
             return asyncio.run(import_content(args.path, dry_run=args.dry_run))
         if args.command == "seed":
-            return asyncio.run(seed(dry_run=args.dry_run))
+            return asyncio.run(seed(dry_run=args.dry_run, prune=args.prune))
         if args.command == "content-report":
             return asyncio.run(content_report(as_json=args.json))
         if args.command == "prune-history":

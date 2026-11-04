@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Sequence
 from dataclasses import dataclass
 
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.curriculum.errors import ContentConflictError
@@ -97,6 +97,49 @@ class ContentImporter:
             )
             for index in range(len(contents))
         ]
+
+    async def deactivate_missing(self, contents: Sequence[ContentFile]) -> int:
+        """Deactivate items that disappeared from the imported topics.
+
+        Only topics present in ``contents`` are affected, so importing a single
+        directory cannot retire custom or unrelated content. Rows are marked
+        ``is_active=false`` instead of being deleted: user progress and attempt
+        history keep pointing at a valid item id.
+
+        A topic that becomes empty (a topic-only YAML file) still gets its old
+        items deactivated because the topic itself is in the batch.
+        """
+        desired = {item.slug for content in contents for item in content.items}
+        topic_slugs = {content.topic.slug for content in contents}
+        if not topic_slugs:
+            # No topics means no scope to prune; never touch the whole table.
+            return 0
+
+        async with self._database.session() as session:
+            topic_ids = list(
+                await session.scalars(select(Topic.id).where(Topic.slug.in_(topic_slugs)))
+            )
+            if not topic_ids:
+                return 0
+
+            rows = await session.execute(
+                select(ContentItem.id, ContentItem.slug).where(
+                    ContentItem.is_active.is_(True),
+                    ContentItem.topic_id.in_(topic_ids),
+                )
+            )
+            missing = [row.id for row in rows if row.slug not in desired]
+            if not missing:
+                return 0
+
+            # SQLite has a limit on bound parameters; deactivate in chunks.
+            for start in range(0, len(missing), 500):
+                chunk = missing[start : start + 500]
+                await session.execute(
+                    update(ContentItem).where(ContentItem.id.in_(chunk)).values(is_active=False)
+                )
+
+        return len(missing)
 
     async def _upsert_topics(
         self,
