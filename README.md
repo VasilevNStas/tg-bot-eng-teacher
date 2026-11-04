@@ -93,6 +93,27 @@ uv run python -m app.cli prune-history
 uv run python -m app.cli prune-history --days 30
 ```
 
+## Сохранение и сброс БД
+
+`data/bot.db` **не обнуляется** при обычном рестарте, `docker compose down`
+или пересборке образа. На старте применяются только новые миграции
+(`alembic upgrade head`) и идемпотентный `seed`.
+
+Для явных операций есть `scripts/db.sh`:
+
+```bash
+./scripts/db.sh status           # revision, integrity, счётчики
+./scripts/db.sh backup           # бэкап в backups/, хранит 10 файлов
+./scripts/db.sh migrate          # backup -> миграции -> seed -> рестарт
+./scripts/db.sh reset --yes      # backup -> удалить БД -> миграции+seed
+./scripts/db.sh restore backups/pre-reset-....db
+./scripts/db.sh prune            # деактивировать контент, убранный из YAML
+```
+
+`reset` без `--yes` отказывает; при `APP_ENV=production` требует `--force`.
+Перед `migrate`/`reset`/`restore` бэкап делается автоматически. Подробный
+сценарий, миграции и recovery — в `.opencode/_db_operations.md`.
+
 ## Запуск
 
 ```bash
@@ -129,9 +150,11 @@ docker compose logs -f bot
 Бэкап SQLite:
 
 ```bash
-docker compose exec bot sh -c \
-  'sqlite3 /app/data/bot.db ".backup /app/data/backup-$(date +%F).db"'
+./scripts/db.sh backup
 ```
+
+Восстановление и сброс — там же, либо вручную через `sqlite3 .backup`
+(см. `.opencode/_db_operations.md`).
 
 ## CI/CD
 
