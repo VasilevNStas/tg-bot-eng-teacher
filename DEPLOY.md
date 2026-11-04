@@ -435,6 +435,22 @@ sudo -u deploy ./scripts/db.sh restore backups/pre-release-20261029-120000.db
 На проде для этого дополнительно нужен `APP_ENV=production` и `--force`.
 Полный сценарий — `.opencode/_db_operations.md`.
 
+Off-site копия в R2 (нужны `rclone` и креды бакета; без них — `--dry-run`):
+
+```bash
+sudo -u deploy env BACKUP_REMOTE=r2:<bucket>/backups \
+  ./scripts/backup_r2.sh
+```
+
+Проверка восстановления без влияния на прод:
+
+```bash
+sudo -u deploy ./scripts/db.sh drill
+```
+
+Реальный R2-путь ещё не проверен (нет кредов) — см. техдолг в
+`.opencode/_db_operations.md` и `runbooks/restore.md`.
+
 Ручной fallback без скрипта:
 
 ```bash
