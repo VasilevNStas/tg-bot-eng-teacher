@@ -22,6 +22,7 @@ DB_PATH="${DB_PATH:-$ROOT_DIR/data/bot.db}"
 BACKUP_DIR="${BACKUP_DIR:-$ROOT_DIR/backups}"
 BACKUP_RETENTION="${BACKUP_RETENTION:-10}"
 COMPOSE="${COMPOSE:-docker compose}"
+DRILL_LOG="${DRILL_LOG:-}"
 LOCAL=0
 
 usage() {
@@ -37,6 +38,7 @@ Commands:
   restore <file>         Stop, verify, back up current DB, replace, start.
         [--no-backup] [--no-start]
   prune                  Deactivate content items missing from bundled YAML.
+  drill [file]           Restore a backup into a temp dir and verify it.
 
 Global options:
   --local    Use uv/alembic directly instead of Docker Compose.
@@ -57,7 +59,7 @@ die() {
 }
 
 info() {
-  printf '==> %s\n' "$*"
+  printf '==> %s\n' "$*" >&2
 }
 
 is_local() {
@@ -260,6 +262,81 @@ cmd_prune() {
   fi
 }
 
+latest_backup() {
+  local file
+  file="$(ls -1t "$BACKUP_DIR"/*.db 2>/dev/null | head -n 1 || true)"
+  printf '%s' "$file"
+}
+
+count_rows() {
+  local db="$1" table="$2"
+  sqlite3 "$db" "SELECT COUNT(*) FROM $table;" 2>/dev/null || printf 'n/a'
+}
+
+cmd_drill() {
+  local source=""
+  while [ "$#" -gt 0 ]; do
+    case "$1" in
+      -h|--help) usage; return 0 ;;
+      -*) die "unknown option for drill: $1" ;;
+      *)
+        [ -z "$source" ] || die "usage: db.sh drill [file]"
+        source="$1"
+        ;;
+    esac
+    shift
+  done
+
+  if [ -z "$source" ]; then
+    source="$(latest_backup)"
+    [ -n "$source" ] || die "no backups found in $BACKUP_DIR"
+  fi
+  [ -f "$source" ] || die "backup file not found: $source"
+
+  local work
+  work="$(mktemp -d "${TMPDIR:-/tmp}/db-drill.XXXXXX")"
+  # shellcheck disable=SC2064
+  trap "rm -rf '$work'" EXIT
+
+  info "drill $source"
+  cp "$source" "$work/bot.db"
+  check_integrity "$work/bot.db"
+
+  local revision
+  revision="$(sqlite3 "$work/bot.db" 'SELECT version_num FROM alembic_version;' 2>/dev/null || true)"
+  [ -n "$revision" ] || die "backup has no alembic_version: $source"
+
+  local required="users content_items exercise_sessions word_progress"
+  local table missing=""
+  for table in $required; do
+    if [ -z "$(sqlite3 "$work/bot.db" "SELECT name FROM sqlite_master WHERE type='table' AND name='$table';" 2>/dev/null)" ]; then
+      missing="$missing $table"
+    fi
+  done
+  [ -z "$missing" ] || die "backup is missing tables:$missing"
+
+  local users items sessions progress
+  users="$(count_rows "$work/bot.db" users)"
+  items="$(count_rows "$work/bot.db" content_items)"
+  sessions="$(count_rows "$work/bot.db" exercise_sessions)"
+  progress="$(count_rows "$work/bot.db" word_progress)"
+
+  [ -n "$DRILL_LOG" ] || DRILL_LOG="$BACKUP_DIR/drills.log"
+  mkdir -p "$(dirname "$DRILL_LOG")"
+  printf '%s ok source=%s revision=%s users=%s content_items=%s sessions=%s word_progress=%s\n' \
+    "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$source" "$revision" \
+    "$users" "$items" "$sessions" "$progress" >> "$DRILL_LOG"
+
+  printf 'source: %s\n' "$source"
+  printf 'integrity: ok\n'
+  printf 'revision: %s\n' "$revision"
+  printf 'users: %s\n' "$users"
+  printf 'content_items: %s\n' "$items"
+  printf 'exercise_sessions: %s\n' "$sessions"
+  printf 'word_progress: %s\n' "$progress"
+  printf 'log: %s\n' "$DRILL_LOG"
+}
+
 while [ "$#" -gt 0 ]; do
   case "$1" in
     --local) LOCAL=1 ;;
@@ -280,6 +357,7 @@ case "$command" in
   reset) cmd_reset "$@" ;;
   restore) cmd_restore "$@" ;;
   prune) cmd_prune "$@" ;;
+  drill) cmd_drill "$@" ;;
   help) usage ;;
   *)
     usage >&2

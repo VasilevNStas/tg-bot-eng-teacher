@@ -108,6 +108,14 @@ uv run python -m app.cli prune-history --days 30
 ./scripts/db.sh reset --yes      # backup -> удалить БД -> миграции+seed
 ./scripts/db.sh restore backups/pre-reset-....db
 ./scripts/db.sh prune            # деактивировать контент, убранный из YAML
+./scripts/db.sh drill            # проверить последний бэкап, не трогая рабочую БД
+```
+
+Off-site копия (нужны R2-креды и `rclone`; без них доступен `--dry-run`):
+
+```bash
+BACKUP_REMOTE=r2:my-bucket/backups ./scripts/backup_r2.sh --dry-run
+BACKUP_REMOTE=r2:my-bucket/backups ./scripts/backup_r2.sh
 ```
 
 `reset` без `--yes` отказывает; при `APP_ENV=production` требует `--force`.
