@@ -16,6 +16,8 @@ from app.db.models import ContentItem, Topic
 
 @dataclass(frozen=True, slots=True)
 class ImportResult:
+    """Per-file counters returned by the importer."""
+
     created: int = 0
     updated: int = 0
     skipped: int = 0
@@ -27,12 +29,19 @@ class ImportResult:
 
 @dataclass(frozen=True, slots=True)
 class _ItemEntry:
+    """An item paired with the file it came from (for defaults and counters)."""
+
     content_index: int
     content: ContentFile
     item: ContentItemSpec
 
 
 def _payload_data(item: ContentItemSpec) -> dict[str, object]:
+    """Serialize only real payload fields for the database JSON column.
+
+    ``kind`` is stored in its own column, and defaults are omitted so the JSON
+    stays small and readable in ``sqlite3`` (``exclude_defaults=True``).
+    """
     return item.payload.model_dump(
         mode="json",
         exclude={"kind"},
@@ -41,6 +50,8 @@ def _payload_data(item: ContentItemSpec) -> dict[str, object]:
 
 
 class ContentImporter:
+    """Upsert content by slug without ever deleting user-owned rows."""
+
     def __init__(self, database: Database) -> None:
         self._database = database
 
@@ -49,6 +60,13 @@ class ContentImporter:
         return results[0]
 
     async def import_files(self, contents: Sequence[ContentFile]) -> list[ImportResult]:
+        """Import several files in one transaction and report per-file counts.
+
+        The whole batch shares a session so a failure leaves the database
+        unchanged. Slugs that already exist are updated only when something
+        actually changed; unchanged rows are reported as ``skipped``, which
+        makes repeated seed runs cheap and predictable.
+        """
         if not contents:
             return []
 
@@ -85,6 +103,7 @@ class ContentImporter:
         session: AsyncSession,
         contents: Sequence[ContentFile],
     ) -> dict[str, int]:
+        """Create/refresh topics and return their database ids by slug."""
         topic_ids: dict[str, int] = {}
         for content in contents:
             topic_slug = content.topic.slug
@@ -95,6 +114,7 @@ class ContentImporter:
         return topic_ids
 
     def _entries(self, contents: Sequence[ContentFile]) -> list[_ItemEntry]:
+        """Flatten files into a single list and reject duplicate slugs early."""
         seen_items: set[str] = set()
         entries: list[_ItemEntry] = []
         for content_index, content in enumerate(contents):
@@ -117,6 +137,11 @@ class ContentImporter:
         entries: Sequence[_ItemEntry],
         topic_ids: dict[str, int],
     ) -> tuple[dict[str, ContentItem], set[str]]:
+        """Fetch existing rows in one query and insert the missing ones.
+
+        Returns the rows keyed by slug plus the set of slugs that were newly
+        created, so the caller can distinguish ``created`` from ``updated``.
+        """
         slugs = [entry.item.slug for entry in entries]
         existing = (
             {
@@ -135,6 +160,7 @@ class ContentImporter:
             item = entry.item
             row = existing.get(item.slug)
             if row is None:
+                # Item-level source/license override the file-level defaults.
                 row = ContentItem(
                     slug=item.slug,
                     topic_id=topic_ids[entry.content.topic.slug],
@@ -148,6 +174,7 @@ class ContentImporter:
                 new_slugs.add(item.slug)
             item_rows[item.slug] = row
 
+        # Flush once so newly created rows get ids before the caller uses them.
         await session.flush()
         return item_rows, new_slugs
 
@@ -157,6 +184,7 @@ class ContentImporter:
         entry: _ItemEntry,
         topic_ids: dict[str, int],
     ) -> bool:
+        """Update a row only if any stored field differs; return whether it did."""
         item = entry.item
         payload = _payload_data(item)
         source = item.source or entry.content.source
@@ -183,6 +211,7 @@ class ContentImporter:
 
     @staticmethod
     async def _upsert_topic(session: AsyncSession, spec: TopicSpec) -> Topic:
+        """Find a topic by slug or create it; update its title in place."""
         topic = await session.scalar(select(Topic).where(Topic.slug == spec.slug))
         if topic is None:
             topic = Topic(slug=spec.slug, title=spec.title)

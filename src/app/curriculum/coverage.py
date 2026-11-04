@@ -19,6 +19,8 @@ LICENSE_PREVIEW_LIMIT = 30
 
 @dataclass(frozen=True)
 class CoverageCell:
+    """One row of the topic x kind matrix."""
+
     topic_slug: str
     topic_title: str
     kind: ContentKind
@@ -27,12 +29,16 @@ class CoverageCell:
 
 @dataclass(frozen=True)
 class DuplicateGroup:
+    """Items that normalize to the same signature (same exercise, different slug)."""
+
     signature: str
     slugs: tuple[str, ...]
 
 
 @dataclass(frozen=True)
 class ContentCoverage:
+    """Snapshot used by ``content-report`` and the CI dry-run."""
+
     active_items: int
     topics: int
     empty_topics: tuple[str, ...]
@@ -45,11 +51,15 @@ class ContentCoverage:
 
 
 class CoverageService:
+    """Builds the read-only content coverage report."""
+
     def __init__(self, database: Database) -> None:
         self._database = database
 
     async def build(self) -> ContentCoverage:
+        """Collect all report sections with a handful of read-only queries."""
         async with self._database.session() as session:
+            # Headline counters: active items and all topics (including empty).
             active_items = int(
                 await session.scalar(
                     select(func.count())
@@ -59,6 +69,7 @@ class CoverageService:
                 or 0
             )
             topics = int(await session.scalar(select(func.count()).select_from(Topic)) or 0)
+            # Left join + IS NULL finds topics that currently have no items.
             empty_topics = tuple(
                 await session.scalars(
                     select(Topic.slug)
@@ -67,6 +78,7 @@ class CoverageService:
                     .order_by(Topic.slug)
                 )
             )
+            # Legally risky content: active items without a known license.
             license_unknown = tuple(
                 await session.scalars(
                     select(ContentItem.slug)
@@ -78,6 +90,7 @@ class CoverageService:
                 )
             )
 
+            # Topic x kind matrix: one GROUP BY row per combination.
             rows = await session.execute(
                 select(
                     Topic.slug,
@@ -101,6 +114,7 @@ class CoverageService:
                 for topic_slug, topic_title, kind, count in rows
             )
 
+            # Duplicate detection needs full payloads; load active items once.
             items = tuple(
                 await session.scalars(
                     select(ContentItem)
@@ -120,6 +134,11 @@ class CoverageService:
 
 
 def _duplicates(items: Iterable[ContentItem]) -> tuple[DuplicateGroup, ...]:
+    """Group active items whose normalized content is identical.
+
+    The database ``kind`` is injected back into the payload because it is
+    stored as a separate column and the discriminated union needs it.
+    """
     groups: dict[str, list[str]] = defaultdict(list)
     for item in items:
         spec = ContentItemSpec.model_validate(
@@ -137,12 +156,19 @@ def _duplicates(items: Iterable[ContentItem]) -> tuple[DuplicateGroup, ...]:
 
 
 def _signature(spec: ContentItemSpec) -> str:
+    """Build a kind-specific, normalized fingerprint for duplicate detection.
+
+    Only the pedagogically meaningful fields are included: translations, IPA,
+    source ids and display formatting are ignored, so two files that teach the
+    same exercise are reported as duplicates even if their metadata differs.
+    """
     payload = spec.payload
     match payload.kind:
         case ContentKind.IRREGULAR_VERB:
             parts = [
                 payload.kind.value,
                 normalize_answer(payload.base),
+                # Form order does not matter, so sort before comparing.
                 *sorted(normalize_answer(form) for form in payload.past),
                 *sorted(normalize_answer(form) for form in payload.participle),
             ]
@@ -170,11 +196,13 @@ def _signature(spec: ContentItemSpec) -> str:
         case ContentKind.VOCABULARY:
             parts = [payload.kind.value, normalize_answer(payload.term)]
         case _:
+            # Future kinds at least remain comparable instead of crashing.
             parts = [payload.kind.value, str(payload)]
     return " | ".join(parts)
 
 
 def format_coverage(report: ContentCoverage) -> str:
+    """Render the report as plain text for the CLI."""
     lines = [
         "Content coverage",
         f"active items: {report.active_items}",
@@ -197,6 +225,8 @@ def format_coverage(report: ContentCoverage) -> str:
     else:
         lines.append("(none)")
 
+    # The word bank alone can have thousands of unknown-license items, so the
+    # text report prints a bounded preview instead of flooding the terminal.
     if report.license_unknown:
         preview = report.license_unknown[:LICENSE_PREVIEW_LIMIT]
         lines.extend(["", "Items with unknown license:", *preview])

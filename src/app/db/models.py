@@ -1,4 +1,17 @@
-"""ORM models."""
+"""ORM models.
+
+Schema overview (13 tables):
+
+- identity/chat: ``users``, ``conversations``, ``messages``, ``processed_updates``
+- content:      ``topics``, ``content_items``
+- practice:     ``exercise_sessions``, ``exercise_attempts``, ``corrections``
+- learning:     ``vocabulary`` (saved words + SRS), ``word_progress``
+- operations:   ``usage_ledger``, ``reminders``
+
+Quiz content lives in ``content_items.payload`` as JSON; its shape depends on
+the ``kind`` column. User-owned rows cascade from ``users`` so deleting a
+profile removes everything the user produced.
+"""
 
 from __future__ import annotations
 
@@ -45,10 +58,18 @@ from app.db.enums import (
 
 
 def _now() -> datetime:
+    """Timezone-aware UTC default used by timestamp columns."""
     return datetime.now(UTC)
 
 
 class User(TimestampMixin, Base):
+    """Telegram user and learning preferences.
+
+    ``profile`` is a JSON bag for feature settings (word card size/direction)
+    so adding an option does not require a migration. ``onboarding_state``
+    tracks the FSM position by name rather than aiogram state objects.
+    """
+
     __tablename__ = "users"
 
     id: Mapped[int_pk]
@@ -65,6 +86,8 @@ class User(TimestampMixin, Base):
 
 
 class Conversation(TimestampMixin, Base):
+    """A chat or roleplay session; messages belong to one conversation."""
+
     __tablename__ = "conversations"
 
     id: Mapped[int_pk]
@@ -73,6 +96,7 @@ class Conversation(TimestampMixin, Base):
     )
     mode: Mapped[ConversationMode] = mapped_column(default=ConversationMode.CHAT, nullable=False)
     topic: Mapped[str | None] = mapped_column(String(128))
+    # Rolling summary used to keep the LLM context small for long chats.
     summary: Mapped[str | None] = mapped_column(Text)
     started_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=_now, nullable=False
@@ -81,6 +105,12 @@ class Conversation(TimestampMixin, Base):
 
 
 class Message(Base):
+    """One message in a conversation.
+
+    Token usage and cost are not stored here; they live in ``usage_ledger`` so
+    analytics can track LLM calls (including retries) independently.
+    """
+
     __tablename__ = "messages"
 
     id: Mapped[int_pk]
@@ -90,6 +120,7 @@ class Message(Base):
     role: Mapped[MessageRole] = mapped_column(nullable=False)
     message_type: Mapped[MessageType] = mapped_column(default=MessageType.TEXT, nullable=False)
     content: Mapped[text]
+    # Telegram update id, when known, for tracing and deduplication.
     update_id: Mapped[int | None] = mapped_column(BigInteger, index=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=_now, nullable=False
@@ -97,6 +128,12 @@ class Message(Base):
 
 
 class ProcessedUpdate(Base):
+    """Telegram update ids that have already been handled.
+
+    Polling can redeliver an update after a restart; this table makes handlers
+    idempotent by letting the middleware skip a known ``update_id``.
+    """
+
     __tablename__ = "processed_updates"
 
     update_id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=False)
@@ -106,6 +143,8 @@ class ProcessedUpdate(Base):
 
 
 class Topic(TimestampMixin, Base):
+    """A named group of content items (a unit, a word block, a drill set)."""
+
     __tablename__ = "topics"
 
     id: Mapped[int_pk]
@@ -114,6 +153,13 @@ class Topic(TimestampMixin, Base):
 
 
 class ContentItem(TimestampMixin, Base):
+    """A single learning unit: word, verb, gap-fill, question, etc.
+
+    ``slug`` is the identity used by the idempotent importer. ``kind`` selects
+    how ``payload`` is validated and interpreted; ``payload`` never repeats
+    the kind, so the database stays readable.
+    """
+
     __tablename__ = "content_items"
 
     id: Mapped[int_pk]
@@ -129,6 +175,12 @@ class ContentItem(TimestampMixin, Base):
 
 
 class ExerciseSession(TimestampMixin, Base):
+    """A run of a drill or word-card session.
+
+    ``meta`` stores the session snapshot (selected item ids, directions) so a
+    session can be restored after a restart without re-randomizing.
+    """
+
     __tablename__ = "exercise_sessions"
 
     id: Mapped[int_pk]
@@ -152,12 +204,15 @@ class ExerciseSession(TimestampMixin, Base):
 
 
 class ExerciseAttempt(CreatedAtMixin, Base):
+    """A single graded answer; the source of truth for accuracy stats."""
+
     __tablename__ = "exercise_attempts"
 
     id: Mapped[int_pk]
     user_id: Mapped[int] = mapped_column(
         ForeignKey("users.id", ondelete="CASCADE"), index=True, nullable=False
     )
+    # RESTRICT: content with attempts stays in the database for statistics.
     content_item_id: Mapped[int] = mapped_column(
         ForeignKey("content_items.id", ondelete="RESTRICT"), index=True, nullable=False
     )
@@ -167,11 +222,14 @@ class ExerciseAttempt(CreatedAtMixin, Base):
     answer: Mapped[text]
     verdict: Mapped[Verdict] = mapped_column(nullable=False)
     checker: Mapped[Checker] = mapped_column(nullable=False)
+    # Set only for word cards: which direction the user was answering.
     direction: Mapped[WordDirection | None] = mapped_column(str_enum(WordDirection))
     latency_ms: Mapped[int | None]
 
 
 class Correction(CreatedAtMixin, Base):
+    """An error correction produced from a chat message."""
+
     __tablename__ = "corrections"
 
     id: Mapped[int_pk]
@@ -185,6 +243,13 @@ class Correction(CreatedAtMixin, Base):
 
 
 class Vocabulary(TimestampMixin, Base):
+    """A word saved by the user, with its own SRS scheduling state.
+
+    This is the "my words" list captured from chat. Bank words are practiced
+    through ``word_progress`` instead; the two systems are intentionally
+    separate because one is user-curated and the other is course content.
+    """
+
     __tablename__ = "vocabulary"
     __table_args__ = (UniqueConstraint("user_id", "term", name="uq_vocabulary_user_term"),)
 
@@ -198,6 +263,7 @@ class Vocabulary(TimestampMixin, Base):
     source_message_id: Mapped[int | None] = mapped_column(
         ForeignKey("messages.id", ondelete="SET NULL"), index=True
     )
+    # SRS state (simplified SM-2): NULL due_at means "not scheduled yet".
     due_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), index=True)
     interval_days: Mapped[int] = mapped_column(default=0, nullable=False)
     ease: Mapped[float] = mapped_column(default=2.5, nullable=False)
@@ -207,6 +273,12 @@ class Vocabulary(TimestampMixin, Base):
 
 
 class WordProgress(TimestampMixin, Base):
+    """Per-user statistics and scheduling for one content-bank word.
+
+    The unique constraint guarantees exactly one row per user/item pair; the
+    composite index serves the "due words for this user" query.
+    """
+
     __tablename__ = "word_progress"
     __table_args__ = (
         UniqueConstraint("user_id", "content_item_id", name="uq_word_progress_user_item"),
@@ -233,6 +305,12 @@ class WordProgress(TimestampMixin, Base):
 
 
 class UsageLedger(CreatedAtMixin, Base):
+    """One LLM call: tokens, cost, latency and the prompt version used.
+
+    Rows are kept when a user or conversation is deleted (SET NULL) so cost
+    accounting survives profile deletion.
+    """
+
     __tablename__ = "usage_ledger"
 
     id: Mapped[int_pk]
@@ -251,6 +329,8 @@ class UsageLedger(CreatedAtMixin, Base):
 
 
 class Reminder(TimestampMixin, Base):
+    """A scheduled notification; ``sent_at`` is NULL until it is delivered."""
+
     __tablename__ = "reminders"
 
     id: Mapped[int_pk]

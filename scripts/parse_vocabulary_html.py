@@ -11,6 +11,7 @@ from app.curriculum.vocabulary_html import load_vocabulary_html
 
 
 def main() -> int:
+    """Parse the HTML table and write normalized JSON."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("input", type=Path)
     parser.add_argument(

@@ -1,4 +1,16 @@
-"""Vocabulary word cards: study, quiz, result."""
+"""Vocabulary word cards: study, quiz, result.
+
+Flow:
+
+1. ``/words`` builds a card and shows a study list of the selected words.
+2. "Quiz" switches to question mode; each text answer goes to
+   ``WordCardService.submit_answer``.
+3. The final answer finishes the session and shows the result keyboard with
+   an optional "retry mistakes" button.
+
+The handler keeps the question snapshot in FSM data so a restart of the bot
+process does not re-randomize the card; the real progress lives in the DB.
+"""
 
 from __future__ import annotations
 
@@ -33,12 +45,14 @@ PROFILE_SECTION = "words"
 
 
 def _section(user: User) -> dict[str, Any]:
+    """Return the ``words`` section of the JSON profile, or an empty dict."""
     profile = user.profile if isinstance(user.profile, dict) else {}
     section = profile.get(PROFILE_SECTION)
     return section if isinstance(section, dict) else {}
 
 
 def _card_size(user: User) -> int:
+    """Read the saved card size, falling back to the default on bad data."""
     value = _section(user).get("card_size")
     if isinstance(value, int) and 1 <= value <= 20:
         return value
@@ -46,6 +60,7 @@ def _card_size(user: User) -> int:
 
 
 def _direction(user: User) -> WordCardDirection:
+    """Read the saved direction; unknown values fall back to MIX."""
     value = _section(user).get("direction")
     if isinstance(value, str):
         try:
@@ -56,6 +71,7 @@ def _direction(user: User) -> WordCardDirection:
 
 
 async def _save_settings(services: AppServices, user: User, **values: object) -> None:
+    """Merge settings into ``profile.words`` without touching other sections."""
     async with services.database.session() as session:
         await UserRepository(session).update_profile_section(
             user.tg_id,
@@ -65,6 +81,11 @@ async def _save_settings(services: AppServices, user: User, **values: object) ->
 
 
 def _questions_data(card: WordCardSession) -> list[dict[str, Any]]:
+    """Serialize questions into FSM-friendly dicts.
+
+    FSM storage is JSON-based, so dataclasses are converted to plain dicts.
+    Directions are stored as strings for the same reason.
+    """
     return [
         {
             "id": question.content_item_id,
@@ -79,6 +100,11 @@ def _questions_data(card: WordCardSession) -> list[dict[str, Any]]:
 
 
 def _format_study(questions: list[dict[str, Any]]) -> str:
+    """Render the study list, one line per word.
+
+    With ``direction=both`` each item produces two questions (en→ru and
+    ru→en); the study list must still show the word only once.
+    """
     unique: dict[int, dict[str, Any]] = {}
     for question in questions:
         unique.setdefault(int(question["id"]), question)
@@ -100,6 +126,7 @@ def _format_study(questions: list[dict[str, Any]]) -> str:
 
 
 def _format_question(question: dict[str, Any], number: int, total: int) -> str:
+    """Render one quiz prompt with its direction hint."""
     direction = (
         ru.WORDS_DIRECTION_EN_RU
         if question["direction"] == WordDirection.EN_RU.value
@@ -114,6 +141,7 @@ def _format_question(question: dict[str, Any], number: int, total: int) -> str:
 
 
 def _format_attempt(attempt: WordAttemptResult) -> str:
+    """Render grading feedback; show the expected answer unless correct."""
     result = attempt.result
     if result.verdict is Verdict.CORRECT:
         header = ru.WORDS_CORRECT
@@ -131,6 +159,7 @@ def _format_attempt(attempt: WordAttemptResult) -> str:
 
 
 def _format_settings(user: User) -> str:
+    """Render current card size and direction."""
     return ru.WORDS_SETTINGS.format(
         size=_card_size(user),
         direction=ru.WORDS_DIRECTION_LABELS[_direction(user).value],
@@ -148,6 +177,12 @@ async def _start_card(
     item_ids: list[int] | None = None,
     edit: Message | None = None,
 ) -> bool:
+    """Start a card and move the FSM to the study state.
+
+    ``edit`` is set when the command came from a callback: the existing
+    message is edited instead of sending a new one. Returns ``False`` when
+    the bank is empty so callers can stop early.
+    """
     try:
         card = await services.words.start_card(
             user,
@@ -181,6 +216,7 @@ async def _send_question(
     questions: list[dict[str, Any]],
     index: int,
 ) -> None:
+    """Ask one question and remember when it was shown for latency stats."""
     await state.update_data(started_at=time.time())
     await message.answer(_format_question(questions[index], index + 1, len(questions)))
 
@@ -190,6 +226,7 @@ async def handle_words(
     state: FSMContext,
     services: AppServices,
 ) -> None:
+    """``/words``: start a fresh card with the user's saved settings."""
     if message.from_user is None:
         return
 
@@ -207,6 +244,7 @@ async def handle_quiz(
     state: FSMContext,
     services: AppServices,
 ) -> None:
+    """Switch from the study list to the first quiz question."""
     if callback.from_user is None:
         return
 
@@ -228,6 +266,7 @@ async def handle_settings(
     callback: CallbackQuery,
     services: AppServices,
 ) -> None:
+    """Show the settings screen."""
     if callback.from_user is None:
         return
 
@@ -246,6 +285,7 @@ async def handle_size(
     state: FSMContext,
     services: AppServices,
 ) -> None:
+    """Save the selected card size and immediately start a matching card."""
     if callback.from_user is None:
         return
 
@@ -263,6 +303,7 @@ async def handle_size(
 
     user = await resolve_user(services, callback.from_user)
     await _save_settings(services, user, card_size=size)
+    # Re-read the user so the new setting is visible to ``_start_card``.
     user = await resolve_user(services, callback.from_user)
     await callback.answer()
     await _start_card(
@@ -281,6 +322,7 @@ async def handle_direction(
     state: FSMContext,
     services: AppServices,
 ) -> None:
+    """Save the selected direction and immediately start a matching card."""
     if callback.from_user is None:
         return
 
@@ -312,6 +354,7 @@ async def handle_retry(
     state: FSMContext,
     services: AppServices,
 ) -> None:
+    """Start a card containing only the words answered incorrectly."""
     if callback.from_user is None:
         return
 
@@ -343,6 +386,7 @@ async def handle_new(
     state: FSMContext,
     services: AppServices,
 ) -> None:
+    """Start a brand-new card with the saved settings."""
     if callback.from_user is None:
         return
     if not isinstance(callback.message, Message):
@@ -359,6 +403,11 @@ async def handle_answer(
     state: FSMContext,
     services: AppServices,
 ) -> None:
+    """Grade a text answer, advance to the next question or finish the card.
+
+    FSM data is treated as untrusted: it may be stale after a deploy, so every
+    field is type-checked before use and the session is cleared on mismatch.
+    """
     if message.text is None or message.from_user is None:
         return
 
@@ -410,6 +459,7 @@ async def handle_answer(
         await _send_question(message, state, questions, next_index)
         return
 
+    # Last question answered: close the session and show the summary.
     try:
         stats = await services.words.finish_card(user, session_id)
     except WordCardSessionError:
@@ -431,6 +481,7 @@ async def handle_answer(
 
 
 def build_router() -> Router:
+    """Register word-card commands and callbacks on a dedicated router."""
     router = Router(name="words")
     router.message.register(handle_words, Command("words"))
     router.callback_query.register(handle_quiz, WordsCB.filter(F.action == "quiz"))

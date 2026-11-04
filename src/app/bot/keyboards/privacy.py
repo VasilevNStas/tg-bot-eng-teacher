@@ -9,6 +9,7 @@ from app.texts import ru
 
 
 def delete_confirm_keyboard() -> InlineKeyboardMarkup:
+    """Ask for explicit confirmation before deleting data."""
     return InlineKeyboardMarkup(
         inline_keyboard=[
             [

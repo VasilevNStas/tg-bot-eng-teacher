@@ -1,4 +1,10 @@
-"""OpenRouter adapter for the OpenAI-compatible chat completions API."""
+"""OpenRouter adapter for the OpenAI-compatible chat completions API.
+
+The adapter owns only transport concerns: building the request, retrying
+transient failures, mapping HTTP/TLS errors to the ``LLMError`` hierarchy, and
+normalizing usage/cost fields. Prompt construction and business rules stay in
+the services layer.
+"""
 
 from __future__ import annotations
 
@@ -27,10 +33,17 @@ from app.llm.port import LLMResponse, Message
 
 SleepFn = Callable[[float], Awaitable[None]]
 
+# Auth and payment errors are not transient, so they bypass the retry loop.
 _RETRYABLE_EXCEPTIONS = (LLMTimeout, LLMRateLimited, LLMUnavailable)
 
 
 class OpenRouterClient:
+    """Async LLM client with a bounded retry policy.
+
+    An injected ``httpx.AsyncClient`` is never closed by ``aclose()``; only a
+    client created internally is owned by this object.
+    """
+
     def __init__(
         self,
         settings: Settings,
@@ -61,6 +74,11 @@ class OpenRouterClient:
         max_tokens: int = 800,
         response_schema: type[BaseModel] | None = None,
     ) -> LLMResponse:
+        """Send a chat completion request and return normalized response data.
+
+        When ``response_schema`` is provided the provider must return JSON that
+        validates against it; the raw dict is exposed as ``LLMResponse.parsed``.
+        """
         payload: dict[str, Any] = {
             "model": model or self._default_model,
             "messages": [
@@ -93,6 +111,7 @@ class OpenRouterClient:
         raise LLMUnavailable("LLM retry loop exhausted")
 
     async def aclose(self) -> None:
+        """Close the HTTP client only if this instance created it."""
         if self._owns_client:
             await self._client.aclose()
 
@@ -101,6 +120,7 @@ class OpenRouterClient:
         payload: dict[str, Any],
         response_schema: type[BaseModel] | None,
     ) -> LLMResponse:
+        """Perform one HTTP attempt and translate transport errors."""
         started = time.perf_counter()
         try:
             response = await self._client.post("chat/completions", json=payload)
@@ -116,6 +136,7 @@ class OpenRouterClient:
         return self._parse(response, str(payload["model"]), latency_ms, response_schema)
 
     def _raise_for_status(self, status_code: int) -> None:
+        """Map provider status codes onto the domain error hierarchy."""
         if status_code in (httpx.codes.UNAUTHORIZED, httpx.codes.FORBIDDEN):
             raise LLMUnauthorized("LLM credentials are invalid")
         if status_code == httpx.codes.PAYMENT_REQUIRED:
@@ -133,6 +154,7 @@ class OpenRouterClient:
         latency_ms: int,
         response_schema: type[BaseModel] | None,
     ) -> LLMResponse:
+        """Validate the envelope and extract content, usage, and cost."""
         try:
             data = response.json()
         except ValueError as exc:
@@ -165,6 +187,7 @@ class OpenRouterClient:
         content: str,
         response_schema: type[BaseModel],
     ) -> dict[str, Any]:
+        """Parse JSON content and validate it against the requested schema."""
         try:
             raw = json.loads(content)
         except json.JSONDecodeError as exc:
@@ -179,6 +202,7 @@ class OpenRouterClient:
 
 
 def _as_int(value: Any) -> int:
+    """Coerce provider counters to int, treating missing/odd values as zero."""
     if isinstance(value, bool):
         return 0
     if isinstance(value, int):
@@ -189,6 +213,7 @@ def _as_int(value: Any) -> int:
 
 
 def _as_decimal(value: Any) -> Decimal:
+    """Coerce provider cost to Decimal; unknown cost is reported as zero."""
     if value is None:
         return Decimal("0")
     try:

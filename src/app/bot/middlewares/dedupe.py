@@ -1,4 +1,9 @@
-"""Idempotent update processing keyed by Telegram update_id."""
+"""Idempotent update processing keyed by Telegram update_id.
+
+Telegram may redeliver updates after a restart or timeout. Inserting the id
+first makes processing at-most-once; if the handler fails, the marker is
+removed so a redelivery can retry.
+"""
 
 from __future__ import annotations
 
@@ -21,6 +26,8 @@ Handler = Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]]
 
 
 class UpdateDedupeMiddleware(BaseMiddleware):
+    """Drop duplicate updates and expose ``update_id`` to handlers."""
+
     def __init__(self, database: Database) -> None:
         self._database = database
 
@@ -42,10 +49,12 @@ class UpdateDedupeMiddleware(BaseMiddleware):
         try:
             return await handler(event, data)
         except Exception:
+            # Allow a redelivery to retry after a real failure.
             await self._unmark(update_id)
             raise
 
     async def _mark(self, update_id: int) -> bool:
+        """Insert the id; False means it was already processed."""
         try:
             async with self._database.session() as session:
                 session.add(ProcessedUpdate(update_id=update_id))
@@ -54,6 +63,7 @@ class UpdateDedupeMiddleware(BaseMiddleware):
         return True
 
     async def _unmark(self, update_id: int) -> None:
+        """Remove the id after a handler failure."""
         async with self._database.session() as session:
             record = await session.get(ProcessedUpdate, update_id)
             if record is not None:
@@ -61,6 +71,7 @@ class UpdateDedupeMiddleware(BaseMiddleware):
 
 
 async def prune_processed_updates(database: Database, *, older_than_days: int = 7) -> int:
+    """Delete dedupe markers older than the retention window."""
     cutoff = datetime.now(UTC) - timedelta(days=older_than_days)
     async with database.session() as session:
         result = await session.execute(

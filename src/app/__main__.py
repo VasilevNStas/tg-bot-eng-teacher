@@ -24,6 +24,7 @@ logger = get_logger(__name__)
 
 
 async def run_polling(settings: Settings) -> None:
+    """Start polling, the reminder scheduler, and periodic cleanup."""
     bot = create_bot(settings)
     database = Database()
     database.init(settings.db_path)
@@ -70,12 +71,14 @@ async def run_polling(settings: Settings) -> None:
 
 
 def _print_validation_errors(exc: ValidationError) -> None:
+    """Print concise per-field configuration errors without echoing secrets."""
     for error in exc.errors(include_input=False):
         location = ".".join(str(part) for part in error["loc"])
         print(f"Configuration error: {location}: {error['msg']}", file=sys.stderr)
 
 
 def main() -> None:
+    """Load settings, set up logging, and run the bot until interrupted."""
     try:
         settings = get_settings()
     except ValidationError as exc:

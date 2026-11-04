@@ -14,6 +14,12 @@ YAML_SUFFIXES = {".yaml", ".yml"}
 
 
 def load_content_file(path: Path) -> ContentFile:
+    """Read one YAML file and validate it against the content schema.
+
+    All low-level errors (I/O, YAML syntax, Pydantic validation) are wrapped
+    in ``ContentLoadError`` so the CLI can print one clear message and the CI
+    dry-run fails with a useful path instead of a traceback.
+    """
     try:
         raw = yaml.safe_load(path.read_text(encoding="utf-8"))
     except OSError as exc:
@@ -31,6 +37,14 @@ def load_content_file(path: Path) -> ContentFile:
 
 
 def load_content_path(path: Path) -> list[tuple[Path, ContentFile]]:
+    """Load a file or every YAML file in a directory.
+
+    In addition to per-file validation, this enforces two global invariants
+    that the importer relies on:
+
+    - topic slugs are unique across files (a topic is upserted by slug);
+    - item slugs are unique across files (an item is upserted by slug).
+    """
     files = _collect_files(path)
     loaded = [(file_path, load_content_file(file_path)) for file_path in files]
 
@@ -57,6 +71,11 @@ def load_content_path(path: Path) -> list[tuple[Path, ContentFile]]:
 
 
 def _collect_files(path: Path) -> list[Path]:
+    """Resolve a path argument to a sorted list of YAML files.
+
+    Sorting makes import order deterministic, which keeps CLI output and test
+    expectations stable.
+    """
     if path.is_file():
         return [path]
     if not path.exists():

@@ -1,4 +1,9 @@
-"""Structured logging setup."""
+"""Structured logging setup.
+
+Console output is for humans, JSON is for log collectors. ``setup_logging`` is
+idempotent thanks to ``force=True`` and is called once at process start; all
+modules then obtain loggers through ``get_logger``.
+"""
 
 from __future__ import annotations
 
@@ -17,11 +22,13 @@ def setup_logging(
     json_logs: bool = False,
     stream: TextIO | None = None,
 ) -> None:
+    """Configure stdlib logging and structlog with a shared level and stream."""
     numeric_level = getattr(logging, level.upper(), None)
     if not isinstance(numeric_level, int):
         raise ConfigurationError(f"Unknown log level: {level}")
 
     target = stream or sys.stdout
+    # force=True makes repeated setup safe (tests, CLI, bot in one process).
     logging.basicConfig(
         level=numeric_level,
         format="%(message)s",
@@ -49,4 +56,5 @@ def setup_logging(
 
 
 def get_logger(name: str) -> structlog.stdlib.BoundLogger:
+    """Return a structlog logger bound to the module name."""
     return structlog.get_logger(name)

@@ -1,4 +1,10 @@
-"""Drill sessions over deterministic content."""
+"""Drill sessions over deterministic content.
+
+A drill picks a handful of irregular verbs, asks for the past or participle
+form of each, and stores every graded attempt. The drill is intentionally
+stateless with respect to the user's word list: progress is derived from
+attempts, not stored per item here.
+"""
 
 from __future__ import annotations
 
@@ -23,6 +29,8 @@ DEFAULT_TOPIC_SLUG = "irregular-verbs"
 
 @dataclass(frozen=True, slots=True)
 class DrillQuestion:
+    """One irregular-verb prompt; ``form`` selects past vs participle."""
+
     content_item_id: int
     slug: str
     base: str
@@ -36,15 +44,19 @@ class DrillQuestion:
 
     @property
     def forms(self) -> tuple[str, ...]:
+        """Accepted answers for the requested form."""
         return self.past if self.form == "past" else self.participle
 
     @property
     def ipa(self) -> str | None:
+        """IPA for the requested form, when the source provided it."""
         return self.past_ipa if self.form == "past" else self.participle_ipa
 
 
 @dataclass(frozen=True, slots=True)
 class DrillSession:
+    """A started drill with its ordered questions."""
+
     session_id: int
     topic_id: int
     questions: tuple[DrillQuestion, ...]
@@ -52,12 +64,16 @@ class DrillSession:
 
 @dataclass(frozen=True, slots=True)
 class DrillAttemptResult:
+    """Grading outcome plus the question it belongs to."""
+
     result: GradeResult
     question: DrillQuestion
 
 
 @dataclass(frozen=True, slots=True)
 class SessionStats:
+    """Aggregated verdict counts for a drill session."""
+
     total: int = 0
     correct: int = 0
     partial: int = 0
@@ -77,6 +93,8 @@ class SessionStats:
 
 
 class ExerciseService:
+    """Start, grade and finish irregular-verb drill sessions."""
+
     def __init__(
         self,
         database: Database,
@@ -87,10 +105,16 @@ class ExerciseService:
     ) -> None:
         self._database = database
         self._session_size = max(1, session_size)
+        # Injectable RNG keeps question order reproducible in tests.
         self._rng = rng or random.Random()
         self._topic_slug = topic_slug
 
     async def start_session(self, user: User) -> DrillSession:
+        """Pick random verbs and open a new drill session.
+
+        Any previous active drill is abandoned first, so ``/drill`` always
+        starts cleanly instead of stacking sessions.
+        """
         async with self._database.session() as session:
             content_repo = ContentRepository(session)
             topic = await content_repo.get_topic_by_slug(self._topic_slug)
@@ -122,6 +146,7 @@ class ExerciseService:
                 started_at=now,
             )
 
+            # Alternate past/participle so one session covers both forms.
             questions = tuple(
                 self._to_question(item, self._form_for(index))
                 for index, item in enumerate(selected)
@@ -140,6 +165,7 @@ class ExerciseService:
         content_item_id: int,
         form: IrregularForm,
     ) -> DrillQuestion:
+        """Re-render one question, e.g. after a restart."""
         async with self._database.session() as session:
             await self._require_active(session, user, session_id)
             item = await ContentRepository(session).get_active(content_item_id)
@@ -157,6 +183,7 @@ class ExerciseService:
         answer: str,
         latency_ms: int | None = None,
     ) -> DrillAttemptResult:
+        """Grade one verb form and store the attempt."""
         async with self._database.session() as session:
             exercise_session = await self._require_active(session, user, session_id)
             item = await ContentRepository(session).get_active(content_item_id)
@@ -164,6 +191,8 @@ class ExerciseService:
                 raise DrillUnavailable(f"content item {content_item_id} is unavailable")
 
             question = self._to_question(item, form)
+            # grade_item expands the payload into all accepted forms (e.g.
+            # ``was``/``were``) and applies the exact → fuzzy ladder.
             result = grade_item(self._to_spec(item), answer, form=form)
 
             exercise_repo = ExerciseRepository(session)
@@ -186,6 +215,7 @@ class ExerciseService:
         )
 
     async def cancel_active(self, user: User) -> SessionStats | None:
+        """Abandon the active drill and return what was answered so far."""
         async with self._database.session() as session:
             exercise_repo = ExerciseRepository(session)
             exercise_session = await exercise_repo.get_active(
@@ -210,6 +240,7 @@ class ExerciseService:
         *,
         state: ExerciseState,
     ) -> SessionStats:
+        """Close a drill session (finished or abandoned) and return its stats."""
         async with self._database.session() as session:
             exercise_repo = ExerciseRepository(session)
             exercise_session = await exercise_repo.get_for_user(session_id, user.id)
@@ -226,10 +257,12 @@ class ExerciseService:
 
     @staticmethod
     def _form_for(index: int) -> IrregularForm:
+        """Alternate forms by position: even → past, odd → participle."""
         return "past" if index % 2 == 0 else "participle"
 
     @staticmethod
     def _to_question(item: ContentItem, form: IrregularForm) -> DrillQuestion:
+        """Convert a stored content row into a drill question."""
         spec = ExerciseService._to_spec(item)
         payload = spec.payload
         if not isinstance(payload, IrregularVerbPayload):
@@ -251,6 +284,11 @@ class ExerciseService:
 
     @staticmethod
     def _to_spec(item: ContentItem) -> ContentItemSpec:
+        """Rebuild a validated spec from a database row.
+
+        ``kind`` lives in its own column, so it is injected back into the
+        payload before the discriminated union can validate it.
+        """
         return ContentItemSpec.model_validate(
             {
                 "slug": item.slug,
@@ -267,6 +305,7 @@ class ExerciseService:
         user: User,
         session_id: int,
     ) -> ExerciseSession:
+        """Load a session and verify that it belongs to the user and is active."""
         exercise_session = await ExerciseRepository(session).get_for_user(
             session_id,
             user.id,

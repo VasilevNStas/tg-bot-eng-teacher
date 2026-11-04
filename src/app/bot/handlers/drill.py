@@ -1,4 +1,10 @@
-"""Irregular-verb drill sessions."""
+"""Irregular-verb drill sessions.
+
+``/drill`` starts a session, each non-command text answer is graded until the
+questions run out, and ``/cancel`` closes the session early. The FSM stores
+only the session id and the question snapshot; attempts and progress live in
+the database.
+"""
 
 from __future__ import annotations
 
@@ -32,6 +38,7 @@ async def handle_drill(
     state: FSMContext,
     services: AppServices,
 ) -> None:
+    """``/drill``: start a new session and ask the first question."""
     if message.from_user is None:
         return
 
@@ -46,6 +53,7 @@ async def handle_drill(
         await message.answer(ru.DRILL_UNAVAILABLE)
         return
 
+    # FSM data is JSON: keep only ids and form names, re-fetch content later.
     questions = [
         {"id": question.content_item_id, "form": question.form} for question in session.questions
     ]
@@ -72,6 +80,7 @@ async def handle_cancel(
     state: FSMContext,
     services: AppServices,
 ) -> None:
+    """``/cancel``: abandon the drill and report what was answered."""
     if message.from_user is None:
         return
 
@@ -102,6 +111,7 @@ async def handle_answer(
     state: FSMContext,
     services: AppServices,
 ) -> None:
+    """Grade an answer, ask the next question or finish the session."""
     if message.text is None or message.from_user is None:
         return
 
@@ -110,6 +120,7 @@ async def handle_answer(
     questions = data.get("questions")
     index = data.get("index")
 
+    # Validate FSM data before trusting it: it may be stale after a deploy.
     if (
         not isinstance(session_id, int)
         or not isinstance(questions, list)
@@ -188,6 +199,11 @@ async def _send_question(
     number: int,
     total: int,
 ) -> None:
+    """Fetch the full question from the DB and ask it.
+
+    Only ``(id, form)`` is stored in FSM, so content edits between questions
+    are picked up automatically.
+    """
     question = await services.exercise.get_question(
         user,
         session_id,
@@ -199,6 +215,7 @@ async def _send_question(
 
 
 def _format_question(question: DrillQuestion, number: int, total: int) -> str:
+    """Render the prompt with base form, IPA, translation and target form."""
     form_label = ru.DRILL_FORM_PAST if question.form == "past" else ru.DRILL_FORM_PARTICIPLE
     return ru.DRILL_QUESTION.format(
         number=number,
@@ -211,6 +228,7 @@ def _format_question(question: DrillQuestion, number: int, total: int) -> str:
 
 
 def _format_attempt(attempt: DrillAttemptResult) -> str:
+    """Render feedback and the full conjugation for learning value."""
     result = attempt.result
     question = attempt.question
 
@@ -238,6 +256,7 @@ def _format_attempt(attempt: DrillAttemptResult) -> str:
 
 
 def _format_summary(stats: SessionStats) -> str:
+    """Render the end-of-session score."""
     return ru.DRILL_SUMMARY.format(
         correct=stats.correct,
         total=stats.total,
@@ -246,18 +265,21 @@ def _format_summary(stats: SessionStats) -> str:
 
 
 def _format_cancelled(stats: SessionStats) -> str:
+    """Render the cancellation message with or without answered questions."""
     if stats.total == 0:
         return ru.DRILL_CANCELLED
     return ru.DRILL_CANCELLED_STATS.format(correct=stats.correct, total=stats.total)
 
 
 def _ipa_suffix(ipa: str | None) -> str:
+    """Return `` [ipa]`` or an empty string; always HTML-escaped."""
     if not ipa:
         return ""
     return f" [{html.escape(ipa)}]"
 
 
 def _forms_display(forms: tuple[str, ...], ipa: str | None) -> str:
+    """Join alternate forms (``was / were``) and append their IPA."""
     value = " / ".join(html.escape(form) for form in forms)
     if ipa:
         value += f" [{html.escape(ipa)}]"
@@ -265,6 +287,7 @@ def _forms_display(forms: tuple[str, ...], ipa: str | None) -> str:
 
 
 def build_router() -> Router:
+    """Register drill commands/state on a dedicated router."""
     router = Router(name="drill")
     router.message.register(handle_drill, Command("drill"))
     router.message.register(handle_cancel, Command("cancel"))

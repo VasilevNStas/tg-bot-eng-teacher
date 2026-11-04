@@ -15,6 +15,8 @@ from app.services.reminders.quiet import QuietHours, next_allowed_utc, quiet_hou
 
 @dataclass(frozen=True, slots=True)
 class DueReminder:
+    """A reminder row joined with the user fields needed to send it."""
+
     id: int
     user_id: int
     tg_id: int
@@ -26,10 +28,13 @@ class DueReminder:
 
 
 def _as_aware(value: datetime) -> datetime:
+    """SQLite may return naive datetimes; interpret them as UTC."""
     return value.replace(tzinfo=UTC) if value.tzinfo is None else value
 
 
 class ReminderService:
+    """Schedule and fetch database-backed reminders."""
+
     def __init__(self, database: Database) -> None:
         self._database = database
 
@@ -56,6 +61,8 @@ class ReminderService:
             )
             if existing is not None:
                 current = _as_aware(existing.due_at)
+                # Move the pending reminder earlier only when it is already due
+                # now or a newly due card appeared sooner.
                 if current <= at or due < current:
                     existing.due_at = due
                 return
@@ -75,6 +82,11 @@ class ReminderService:
         now: datetime | None = None,
         limit: int = 100,
     ) -> list[DueReminder]:
+        """Return reminders ready to send, deferring quiet-hours ones.
+
+        Deferred reminders are pushed to the next allowed local time inside
+        the same transaction, so the next tick does not see them again.
+        """
         at = _as_aware(now or datetime.now(UTC))
         async with self._database.session() as session:
             rows = await session.execute(
@@ -120,6 +132,7 @@ class ReminderService:
         *,
         now: datetime | None = None,
     ) -> None:
+        """Mark a reminder as delivered; missing rows are ignored."""
         at = now or datetime.now(UTC)
         async with self._database.session() as session:
             reminder = await session.get(Reminder, reminder_id)

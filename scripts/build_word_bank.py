@@ -19,11 +19,13 @@ _SLUG_CLEAN = re.compile(r"[^a-z0-9]+")
 
 
 def slugify_term(term: str) -> str:
+    """Turn a term into a URL/path-safe slug."""
     slug = _SLUG_CLEAN.sub("-", term.casefold()).strip("-")
     return slug or "word"
 
 
 def build_entries(source: dict[str, Any]) -> list[dict[str, Any]]:
+    """Read source items and validate terms, positions, and translations."""
     items = source.get("items")
     if not isinstance(items, list) or not items:
         raise ValueError("input must contain a non-empty 'items' list")
@@ -65,6 +67,7 @@ def build_entries(source: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def assign_slugs(entries: list[dict[str, Any]]) -> None:
+    """Assign stable word slugs, suffixing global collisions with -2, -3."""
     used: set[str] = set()
     for index, entry in enumerate(entries):
         base = f"word-{slugify_term(str(entry['term']))}"
@@ -78,6 +81,7 @@ def assign_slugs(entries: list[dict[str, Any]]) -> None:
 
 
 def split_blocks(entries: list[dict[str, Any]], block_size: int) -> list[list[dict[str, Any]]]:
+    """Split ordered entries into fixed-size output blocks."""
     if block_size < 1:
         raise ValueError("block_size must be positive")
     return [entries[index : index + block_size] for index in range(0, len(entries), block_size)]
@@ -90,6 +94,7 @@ def write_block(
     source: str,
     license_name: str,
 ) -> Path:
+    """Write one topic + items YAML file and return its path."""
     first = entries[0]["frequency_rank"]
     last = entries[-1]["frequency_rank"]
     topic_slug = f"core-words-{first:04d}-{last:04d}"
@@ -111,6 +116,7 @@ def write_block(
 
 
 def main() -> int:
+    """Parse CLI arguments and regenerate the core vocabulary blocks."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", type=Path, default=DEFAULT_INPUT)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT)

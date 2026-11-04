@@ -1,4 +1,16 @@
-"""One conversational turn from input to persisted response."""
+"""One conversational turn from input to persisted response.
+
+The service owns the whole turn:
+
+1. find/create the conversation and load the recent history;
+2. build the prompt (system prompt + scenario + history);
+3. check the user's daily token budget;
+4. call the LLM (plain text or structured JSON);
+5. persist both messages, corrections, new vocabulary and usage in one DB
+   transaction.
+
+Handlers receive a ``ConversationTurn`` with everything needed for the reply.
+"""
 
 from __future__ import annotations
 
@@ -27,11 +39,15 @@ from app.services.prompts.builder import PromptBuilder, PromptContext
 from app.services.prompts.registry import PromptTemplate
 from app.services.usage.service import UsageService
 
+# These modes ask the LLM for a JSON payload with corrections and vocabulary.
+# Drill/roleplay replies are plain text.
 STRUCTURED_MODES = frozenset({ConversationMode.CHAT, ConversationMode.CORRECTION})
 
 
 @dataclass(frozen=True, slots=True)
 class ConversationTurn:
+    """Everything a handler needs after one completed turn."""
+
     conversation_id: int
     user_message_id: int
     assistant_message_id: int
@@ -46,6 +62,8 @@ class ConversationTurn:
 
 
 class ConversationService:
+    """Run a single LLM-supported conversation turn."""
+
     def __init__(
         self,
         database: Database,
@@ -67,6 +85,7 @@ class ConversationService:
         self._model_fast = model_fast
         self._model_smart = model_smart
         self._max_output_tokens = max_output_tokens
+        # A conversation idle for longer than this is closed automatically.
         self._idle_timeout = idle_timeout
 
     async def respond(
@@ -78,6 +97,7 @@ class ConversationService:
         update_id: int | None = None,
         scenario: PromptTemplate | None = None,
     ) -> ConversationTurn:
+        """Process one user message and return the assistant reply."""
         topic = scenario.id if scenario is not None else None
         conversation, history = await self._prepare(user, mode, topic)
 
@@ -94,6 +114,7 @@ class ConversationService:
             )
         )
 
+        # Refuse before spending money if this call would exceed the budget.
         await self._usage.ensure_available(
             user.id,
             estimated_tokens=prompt.estimated_input_tokens + self._max_output_tokens,
@@ -103,6 +124,7 @@ class ConversationService:
         response = await self._llm.complete(
             prompt.messages,
             model=self._model_for(mode),
+            # Corrections benefit from lower temperature; free chat is looser.
             temperature=0.4 if mode is ConversationMode.CORRECTION else 0.7,
             max_tokens=self._max_output_tokens,
             response_schema=CorrectionPayload if structured else None,
@@ -134,6 +156,10 @@ class ConversationService:
         )
 
     async def start_roleplay(self, user_id: int, scenario_id: str) -> None:
+        """Start a roleplay scenario, closing other active scenarios.
+
+        Starting the same scenario twice is a no-op.
+        """
         now = datetime.now(UTC)
         async with self._database.session() as session:
             active = await session.scalars(
@@ -161,6 +187,7 @@ class ConversationService:
             )
 
     async def stop_roleplay(self, user_id: int) -> str | None:
+        """Close the newest active scenario and return its id."""
         now = datetime.now(UTC)
         async with self._database.session() as session:
             conversation = await session.scalar(
@@ -179,6 +206,7 @@ class ConversationService:
             return conversation.topic
 
     async def active_roleplay(self, user_id: int) -> str | None:
+        """Return the active scenario id, if any."""
         async with self._database.session() as session:
             return await session.scalar(
                 select(Conversation.topic)
@@ -192,12 +220,18 @@ class ConversationService:
             )
 
     def _model_for(self, mode: ConversationMode) -> str:
+        """Corrections need the smarter model; free chat uses the fast one."""
         if mode is ConversationMode.CORRECTION:
             return self._model_smart
         return self._model_fast
 
     @staticmethod
     def _payload(response: LLMResponse, structured: bool) -> CorrectionPayload:
+        """Normalize the LLM response into one payload type.
+
+        Plain-text modes are wrapped with empty corrections/vocabulary so the
+        caller does not need two code paths.
+        """
         if not structured:
             return CorrectionPayload(
                 reply=response.content,
@@ -214,6 +248,11 @@ class ConversationService:
         mode: ConversationMode,
         topic: str | None,
     ) -> tuple[Conversation, list[LlmMessage]]:
+        """Find the active conversation or start a new one.
+
+        ``/new`` is not required: a conversation that has been idle longer
+        than ``idle_timeout`` is closed and a fresh one is created.
+        """
         now = datetime.now(UTC)
         async with self._database.session() as session:
             conversation = await session.scalar(
@@ -255,6 +294,11 @@ class ConversationService:
         session: AsyncSession,
         conversation_id: int,
     ) -> list[LlmMessage]:
+        """Load the most recent messages in chronological order.
+
+        The query takes the newest ``history_window`` rows, then reverses them
+        because the LLM expects oldest-first context.
+        """
         rows = await session.scalars(
             select(DbMessage)
             .where(
@@ -279,6 +323,7 @@ class ConversationService:
         prompt_version: str,
         update_id: int | None,
     ) -> tuple[int, int]:
+        """Store messages, corrections, new words and usage atomically."""
         user_row = DbMessage(
             conversation_id=conversation_id,
             role=MessageRole.USER,
@@ -293,6 +338,7 @@ class ConversationService:
 
         async with self._database.session() as session:
             session.add_all((user_row, assistant_row))
+            # Flush to obtain message ids used by corrections/vocabulary.
             await session.flush()
             session.add_all(
                 DbCorrection(
@@ -326,4 +372,5 @@ class ConversationService:
 
 
 def _as_aware(value: datetime) -> datetime:
+    """SQLite can return naive datetimes; treat them as UTC before comparing."""
     return value if value.tzinfo is not None else value.replace(tzinfo=UTC)

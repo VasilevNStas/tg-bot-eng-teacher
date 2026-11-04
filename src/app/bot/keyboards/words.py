@@ -13,6 +13,7 @@ CARD_SIZES = (5, 10, 15, 20)
 
 
 def study_keyboard() -> InlineKeyboardMarkup:
+    """Entry point: start a quiz or open settings."""
     builder = InlineKeyboardBuilder()
     builder.button(text=ru.BUTTON_START_QUIZ, callback_data=WordsCB(action="quiz"))
     builder.button(text=ru.BUTTON_SETTINGS, callback_data=WordsCB(action="settings"))
@@ -21,6 +22,7 @@ def study_keyboard() -> InlineKeyboardMarkup:
 
 
 def settings_keyboard(size: int, direction: WordCardDirection) -> InlineKeyboardMarkup:
+    """Show current size/direction and let the user change them."""
     builder = InlineKeyboardBuilder()
     for card_size in CARD_SIZES:
         builder.button(
@@ -38,6 +40,7 @@ def settings_keyboard(size: int, direction: WordCardDirection) -> InlineKeyboard
 
 
 def result_keyboard(*, has_wrong: bool) -> InlineKeyboardMarkup:
+    """Offer a retry of wrong answers and a fresh card."""
     builder = InlineKeyboardBuilder()
     if has_wrong:
         builder.button(

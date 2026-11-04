@@ -13,6 +13,8 @@ from app.db.repository import BaseRepository
 
 
 class ExerciseRepository(BaseRepository[ExerciseSession]):
+    """Session lifecycle plus per-attempt aggregates."""
+
     def __init__(self, session: AsyncSession) -> None:
         super().__init__(session, ExerciseSession)
 
@@ -21,6 +23,7 @@ class ExerciseRepository(BaseRepository[ExerciseSession]):
         session_id: int,
         user_id: int,
     ) -> ExerciseSession | None:
+        """Fetch a session only if it belongs to the user (authorization check)."""
         return await self._session.scalar(
             select(ExerciseSession).where(
                 ExerciseSession.id == session_id,
@@ -34,6 +37,7 @@ class ExerciseRepository(BaseRepository[ExerciseSession]):
         *,
         kind: ExerciseSessionKind | None = None,
     ) -> ExerciseSession | None:
+        """Return the newest active session, optionally of a specific kind."""
         stmt = select(ExerciseSession).where(
             ExerciseSession.user_id == user_id,
             ExerciseSession.state == ExerciseState.ACTIVE,
@@ -49,6 +53,7 @@ class ExerciseRepository(BaseRepository[ExerciseSession]):
         *,
         kind: ExerciseSessionKind | None = None,
     ) -> int:
+        """Close all active sessions so a new one can start cleanly."""
         stmt = select(ExerciseSession).where(
             ExerciseSession.user_id == user_id,
             ExerciseSession.state == ExerciseState.ACTIVE,
@@ -67,6 +72,7 @@ class ExerciseRepository(BaseRepository[ExerciseSession]):
         state: ExerciseState,
         at: datetime,
     ) -> None:
+        """Finish a session once; repeated calls are no-ops."""
         if exercise_session.state is ExerciseState.ACTIVE:
             exercise_session.state = state
             exercise_session.finished_at = at
@@ -83,6 +89,7 @@ class ExerciseRepository(BaseRepository[ExerciseSession]):
         latency_ms: int | None,
         direction: WordDirection | None = None,
     ) -> ExerciseAttempt:
+        """Persist one graded answer and return the stored row."""
         attempt = ExerciseAttempt(
             user_id=user_id,
             content_item_id=content_item_id,
@@ -98,6 +105,7 @@ class ExerciseRepository(BaseRepository[ExerciseSession]):
         return attempt
 
     async def counts(self, session_id: int) -> dict[Verdict, int]:
+        """Aggregate attempts by verdict for the end-of-session summary."""
         rows = await self._session.execute(
             select(ExerciseAttempt.verdict, func.count())
             .where(ExerciseAttempt.session_id == session_id)
@@ -106,6 +114,7 @@ class ExerciseRepository(BaseRepository[ExerciseSession]):
         return {verdict: int(count) for verdict, count in rows}
 
     async def incorrect_item_ids(self, session_id: int) -> tuple[int, ...]:
+        """Items answered incorrectly or partially, used for a retry round."""
         rows = await self._session.execute(
             select(ExerciseAttempt.content_item_id)
             .where(

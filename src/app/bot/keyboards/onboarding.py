@@ -13,6 +13,7 @@ from app.texts import ru
 
 
 def start_keyboard() -> InlineKeyboardMarkup:
+    """Offer the placement test or a manual level choice."""
     builder = InlineKeyboardBuilder()
     builder.button(text=ru.BUTTON_TAKE_TEST, callback_data=OnboardingCB(action="test"))
     builder.button(text=ru.BUTTON_SKIP, callback_data=OnboardingCB(action="skip"))
@@ -21,6 +22,7 @@ def start_keyboard() -> InlineKeyboardMarkup:
 
 
 def question_keyboard(index: int, options: Sequence[str]) -> InlineKeyboardMarkup:
+    """Render one option per row for a placement question."""
     builder = InlineKeyboardBuilder()
     for option_index, option in enumerate(options):
         builder.button(
@@ -36,6 +38,7 @@ def question_keyboard(index: int, options: Sequence[str]) -> InlineKeyboardMarku
 
 
 def levels_keyboard() -> InlineKeyboardMarkup:
+    """Show every CEFR level as a manual choice."""
     builder = InlineKeyboardBuilder()
     for level in CEFRLevel:
         builder.button(
@@ -47,6 +50,7 @@ def levels_keyboard() -> InlineKeyboardMarkup:
 
 
 def result_keyboard() -> InlineKeyboardMarkup:
+    """Offer to change the level after the placement result."""
     builder = InlineKeyboardBuilder()
     builder.button(text=ru.BUTTON_CHANGE_LEVEL, callback_data=OnboardingCB(action="skip"))
     return builder.as_markup()

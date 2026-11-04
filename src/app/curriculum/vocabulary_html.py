@@ -19,11 +19,15 @@ _MISSING_TRANSCRIPTION = "транскрипция не найдена"
 
 
 class VocabularyParseError(ValueError):
+    """The HTML table is missing required fields or has no rows."""
+
     pass
 
 
 @dataclass(frozen=True, slots=True)
 class VocabularyEntry:
+    """One parsed vocabulary row with source metadata."""
+
     position: int
     rank: int
     term: str
@@ -34,6 +38,8 @@ class VocabularyEntry:
 
 @dataclass(frozen=True, slots=True)
 class VocabularyParseResult:
+    """Parsed rows plus diagnostics about missing ranks/duplicates."""
+
     entries: tuple[VocabularyEntry, ...]
     missing_ranks: tuple[int, ...]
     duplicate_terms: tuple[str, ...]
@@ -124,6 +130,7 @@ def _parse_transcription(value: str | None) -> str | None:
 
 
 def parse_vocabulary_html(html: str) -> VocabularyParseResult:
+    """Parse the external HTML table into typed entries and source diagnostics."""
     parser = _VocabularyHTMLParser()
     parser.feed(html)
     if not parser.rows:
@@ -169,4 +176,5 @@ def parse_vocabulary_html(html: str) -> VocabularyParseResult:
 
 
 def load_vocabulary_html(path: Path) -> VocabularyParseResult:
+    """Read and parse the HTML file from disk."""
     return parse_vocabulary_html(path.read_text(encoding="utf-8"))

@@ -16,6 +16,7 @@ from app.core.di import AppServices
 
 
 def create_bot(settings: Settings) -> Bot:
+    """Create the aiogram bot with HTML parse mode for formatted replies."""
     return Bot(
         token=settings.bot_token.get_secret_value(),
         default=DefaultBotProperties(parse_mode=ParseMode.HTML),
@@ -23,6 +24,11 @@ def create_bot(settings: Settings) -> Bot:
 
 
 def create_dispatcher(services: AppServices) -> Dispatcher:
+    """Build the dispatcher and install update-level middlewares.
+
+    Order matters: dedupe drops repeated Telegram updates, services injects the
+    DI container, and the user lock serialises concurrent updates per user.
+    """
     dispatcher = Dispatcher(storage=MemoryStorage())
     dispatcher.update.outer_middleware(UpdateDedupeMiddleware(services.database))
     dispatcher.update.outer_middleware(ServicesMiddleware(services))

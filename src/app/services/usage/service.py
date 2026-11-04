@@ -15,6 +15,8 @@ from app.db.models import UsageLedger
 
 
 class DailyBudgetExceeded(AppError):
+    """Raised before an LLM call that would exceed the daily token budget."""
+
     def __init__(self, *, spent: int, requested: int, budget: int) -> None:
         super().__init__(
             f"daily token budget exceeded: spent={spent}, requested={requested}, budget={budget}"
@@ -26,6 +28,8 @@ class DailyBudgetExceeded(AppError):
 
 @dataclass(frozen=True, slots=True)
 class UsageSnapshot:
+    """Current spend versus the configured daily budget."""
+
     spent_tokens: int
     budget_tokens: int
 
@@ -39,6 +43,8 @@ class UsageSnapshot:
 
 
 class UsageService:
+    """Track LLM token spend per user per UTC day."""
+
     def __init__(self, database: Database, *, daily_budget: int) -> None:
         if daily_budget <= 0:
             raise ValueError("daily_budget must be positive")
@@ -46,6 +52,7 @@ class UsageService:
         self._daily_budget = daily_budget
 
     async def spent_today(self, user_id: int) -> int:
+        """Sum input+output tokens recorded since 00:00 UTC."""
         day_start = utc_day_start()
         async with self._database.session() as session:
             return await self._sum_since(session, user_id, day_start)
@@ -62,6 +69,11 @@ class UsageService:
         *,
         estimated_tokens: int = 0,
     ) -> UsageSnapshot:
+        """Raise ``DailyBudgetExceeded`` if the next call would exceed budget.
+
+        ``estimated_tokens`` is the prompt size plus the max output size, i.e.
+        the worst-case cost of the call.
+        """
         if estimated_tokens < 0:
             raise ValueError("estimated_tokens must not be negative")
 
@@ -86,7 +98,11 @@ class UsageService:
         conversation_id: int | None = None,
         latency_ms: int | None = None,
     ) -> UsageLedger:
-        """Build an unattached ledger row for a caller-owned transaction."""
+        """Build an unattached ledger row for a caller-owned transaction.
+
+        Used by ``ConversationService`` so messages, corrections and usage are
+        committed together.
+        """
         if input_tokens < 0 or output_tokens < 0:
             raise ValueError("token counts must not be negative")
 
@@ -113,6 +129,7 @@ class UsageService:
         conversation_id: int | None = None,
         latency_ms: int | None = None,
     ) -> UsageLedger:
+        """Convenience wrapper that records an entry in its own transaction."""
         entry = self.build_entry(
             user_id=user_id,
             model=model,
@@ -133,6 +150,7 @@ class UsageService:
         user_id: int,
         since: datetime,
     ) -> int:
+        """SUM with COALESCE so a user with no calls returns 0, not NULL."""
         total = await session.scalar(
             select(
                 func.coalesce(
@@ -148,5 +166,6 @@ class UsageService:
 
 
 def utc_day_start(now: datetime | None = None) -> datetime:
+    """Return midnight UTC for the given instant (defaults to now)."""
     current = now or datetime.now(UTC)
     return datetime.combine(current.date(), time.min, tzinfo=UTC)

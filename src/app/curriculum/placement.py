@@ -15,12 +15,16 @@ from app.db.repositories.content import ContentRepository
 
 @dataclass(frozen=True, slots=True)
 class PlacementQuestion:
+    """One placement-test question with a known CEFR level."""
+
     level: CEFRLevel
     prompt: str
     options: tuple[str, ...]
     correct_index: int
 
 
+# Built-in fallback used when the content bank has no complete placement set.
+# Exactly one question per level lets ``score_to_level`` map score -> level.
 QUESTIONS: tuple[PlacementQuestion, ...] = (
     PlacementQuestion(
         level=CEFRLevel.A1,
@@ -61,10 +65,16 @@ QUESTIONS: tuple[PlacementQuestion, ...] = (
 )
 
 
+# Sort questions by level without relying on the enum's declaration order.
 _LEVEL_ORDER = {level: index for index, level in enumerate(CEFRLevel)}
 
 
 def _from_content_item(item: ContentItem) -> PlacementQuestion | None:
+    """Convert an active multiple-choice item into a placement question.
+
+    Items without a ``level`` are normal practice questions, not placement
+    material, so they are ignored.
+    """
     if item.kind != ContentKind.MULTIPLE_CHOICE:
         return None
     try:

@@ -1,4 +1,8 @@
-"""Router registry."""
+"""Router registry.
+
+Registration order is the routing order: the catch-all chat router must stay
+last, otherwise it would swallow commands handled by later routers.
+"""
 
 from __future__ import annotations
 
@@ -19,6 +23,7 @@ from app.bot.handlers.words import build_router as build_words_router
 
 
 def register_routers(dispatcher: Dispatcher) -> None:
+    """Attach every feature router to the dispatcher."""
     dispatcher.include_router(build_common_router())
     dispatcher.include_router(build_onboarding_router())
     dispatcher.include_router(build_drill_router())

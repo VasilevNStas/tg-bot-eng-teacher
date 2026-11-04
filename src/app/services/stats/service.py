@@ -1,4 +1,9 @@
-"""Aggregated user progress for /stats."""
+"""Aggregated user progress for /stats.
+
+Everything here is read-only and computed on demand from attempts, sessions,
+corrections and word progress. There is no separate statistics table: the raw
+events are the source of truth, which keeps the schema small.
+"""
 
 from __future__ import annotations
 
@@ -24,6 +29,8 @@ from app.db.models import (
 
 @dataclass(frozen=True, slots=True)
 class TopicStats:
+    """Accuracy for one drill topic."""
+
     slug: str
     title: str
     attempts: int
@@ -36,6 +43,8 @@ class TopicStats:
 
 @dataclass(frozen=True, slots=True)
 class WeakWord:
+    """A saved chat word with many lapses (SRS state)."""
+
     term: str
     lapses: int
     ease: float
@@ -43,12 +52,16 @@ class WeakWord:
 
 @dataclass(frozen=True, slots=True)
 class ErrorCategoryCount:
+    """How often a correction category appeared in chat."""
+
     category: ErrorCategory
     count: int
 
 
 @dataclass(frozen=True, slots=True)
 class WeakBankWord:
+    """A content-bank word with the most wrong answers."""
+
     term: str
     wrong: int
     attempts: int
@@ -56,6 +69,8 @@ class WeakBankWord:
 
 @dataclass(frozen=True, slots=True)
 class StatsReport:
+    """All counters rendered by the /stats handler in one snapshot."""
+
     attempts_total: int
     correct: int
     partial: int
@@ -84,12 +99,16 @@ class StatsReport:
 
 @dataclass(slots=True)
 class _TopicAccumulator:
+    """Mutable helper for summing GROUP BY rows per topic."""
+
     title: str
     attempts: int = 0
     correct: int = 0
 
 
 class StatsService:
+    """Build a read-only progress snapshot for one user."""
+
     def __init__(self, database: Database) -> None:
         self._database = database
 
@@ -99,8 +118,10 @@ class StatsService:
         *,
         now: datetime | None = None,
     ) -> StatsReport:
+        """Collect all sections in one session with narrow aggregate queries."""
         at = now or datetime.now(UTC)
         async with self._database.session() as session:
+            # Overall verdict counts (drills and word cards together).
             attempt_rows = await session.execute(
                 select(ExerciseAttempt.verdict, func.count())
                 .where(ExerciseAttempt.user_id == user_id)
@@ -121,6 +142,7 @@ class StatsService:
                 or 0
             )
 
+            # Per-topic accuracy: join attempts → sessions → topics.
             topic_rows = await session.execute(
                 select(
                     Topic.slug,
@@ -141,6 +163,8 @@ class StatsService:
                 if verdict is Verdict.CORRECT:
                     bucket.correct += int(count)
 
+            # Weakest first: lowest accuracy, then most attempts (more signal),
+            # then slug for deterministic output.
             weak_topics = tuple(
                 sorted(
                     (
@@ -164,6 +188,8 @@ class StatsService:
                 )
                 or 0
             )
+            # A word is due when it was never scheduled (due_at IS NULL) or its
+            # scheduled time has passed.
             due_count = int(
                 await session.scalar(
                     select(func.count(Vocabulary.id))
@@ -190,6 +216,7 @@ class StatsService:
                 for term, lapses, ease in weak_word_rows
             )
 
+            # Correction categories from the user's chat conversations.
             error_rows = await session.execute(
                 select(Correction.category, func.count())
                 .join(Message, Message.id == Correction.message_id)
@@ -204,6 +231,7 @@ class StatsService:
                 for category, count in error_rows
             )
 
+            # Best streak across all bank words (not the current streak).
             progress_streak = int(
                 await session.scalar(
                     select(func.max(WordProgress.best_streak)).where(
@@ -225,6 +253,7 @@ class StatsService:
                 )
                 or 0
             )
+            # Word-card accuracy is computed separately from drill accuracy.
             word_attempt_rows = await session.execute(
                 select(ExerciseAttempt.verdict, func.count())
                 .join(ExerciseSession, ExerciseSession.id == ExerciseAttempt.session_id)
@@ -260,6 +289,7 @@ class StatsService:
                 .order_by(WordProgress.wrong_count.desc(), ContentItem.id)
                 .limit(3)
             )
+            # The term is read from the JSON payload; no extra join is needed.
             weak_bank_words = tuple(
                 WeakBankWord(
                     term=str(payload["term"]),

@@ -1,4 +1,10 @@
-"""Command-line utilities (content import)."""
+"""Command-line utilities for content import and maintenance.
+
+Every command is safe to run from a container entrypoint: imports are
+idempotent upserts by slug, and ``--dry-run`` validates without touching the
+database. ``DB_PATH`` selects the SQLite file and ``CONTENT_DIR`` the bundled
+content root.
+"""
 
 from __future__ import annotations
 
@@ -20,6 +26,11 @@ from app.services.privacy.service import PrivacyService
 
 
 async def import_content(path: Path, *, dry_run: bool) -> int:
+    """Validate and upsert one YAML file or a directory of files.
+
+    In dry-run mode the loader still performs full schema and cross-file
+    validation, but no database connection is opened.
+    """
     loaded = load_content_path(path)
 
     if dry_run:
@@ -66,6 +77,7 @@ async def seed(*, dry_run: bool) -> int:
 
 
 async def content_report(*, as_json: bool) -> int:
+    """Print coverage, duplicates, and license gaps for the imported content."""
     db_path = Path(os.environ.get("DB_PATH", "./data/bot.db"))
     database = Database()
     database.init(db_path)
@@ -82,6 +94,7 @@ async def content_report(*, as_json: bool) -> int:
 
 
 async def prune_history(*, days: int) -> int:
+    """Delete conversations and messages older than the retention period."""
     db_path = Path(os.environ.get("DB_PATH", "./data/bot.db"))
     database = Database()
     database.init(db_path)
@@ -94,6 +107,7 @@ async def prune_history(*, days: int) -> int:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
+    """Parse CLI arguments and dispatch to the async command functions."""
     parser = argparse.ArgumentParser(prog="app.cli")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -120,7 +134,7 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     report_parser = subparsers.add_parser(
         "content-report",
-        help="Show content coverage, tags, duplicates and license gaps",
+        help="Show content coverage, duplicates and license gaps",
     )
     report_parser.add_argument(
         "--json",
@@ -140,6 +154,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
+    # Report/prune output must stay parseable, so logs go to stderr quietly.
     quiet_command = args.command in {"content-report", "prune-history"}
     setup_logging(
         "WARNING" if quiet_command else "INFO",

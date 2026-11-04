@@ -25,6 +25,8 @@ from app.db.models import Message as DbMessage
 
 @dataclass(frozen=True)
 class DeletionSummary:
+    """How many rows of each type were removed with the account."""
+
     conversations: int
     messages: int
     corrections: int
@@ -36,6 +38,8 @@ class DeletionSummary:
 
 
 class PrivacyService:
+    """Account deletion and retention pruning."""
+
     def __init__(self, database: Database) -> None:
         self._database = database
 
@@ -45,7 +49,12 @@ class PrivacyService:
         return user_id is not None
 
     async def delete_user(self, tg_id: int) -> DeletionSummary | None:
-        """Delete the account and all user-owned rows in one transaction."""
+        """Delete the account and all user-owned rows in one transaction.
+
+        Most child tables cascade from ``users``. ``usage_ledger`` uses
+        ``SET NULL`` so cost history survives normal account deletion, which
+        is why it is deleted explicitly here instead of being orphaned.
+        """
         async with self._database.session() as session:
             user = await session.scalar(select(User).where(User.tg_id == tg_id))
             if user is None:
@@ -67,6 +76,7 @@ class PrivacyService:
             return 0
         cutoff = (now or datetime.now(UTC)) - timedelta(days=days)
         async with self._database.session() as session:
+            # Unfinished conversations fall back to their start time.
             result = await session.execute(
                 delete(Conversation).where(
                     func.coalesce(Conversation.ended_at, Conversation.started_at) < cutoff
@@ -75,6 +85,7 @@ class PrivacyService:
             return int(getattr(result, "rowcount", 0) or 0)
 
     async def _summary(self, session: AsyncSession, user_id: int) -> DeletionSummary:
+        """Count rows before deletion so the handler can report the result."""
         conversations = await _count(
             session,
             select(func.count()).select_from(Conversation).where(Conversation.user_id == user_id),
@@ -131,5 +142,6 @@ class PrivacyService:
 
 
 async def _count(session: AsyncSession, statement: Select[Any]) -> int:
+    """Run a COUNT statement and normalize NULL to zero."""
     value = await session.scalar(statement)
     return int(value or 0)

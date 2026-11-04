@@ -1,4 +1,10 @@
-"""Validated content file schema (ADR-014, ADR-015, B-012)."""
+"""Validated content file schema (ADR-014, ADR-015, B-012).
+
+Every YAML file follows the same shape: a ``topic``, file-level ``source`` and
+``license``, and a list of ``items``. Each item is validated by a Pydantic
+payload class selected through the ``kind`` discriminator. Keeping validation
+here means the importer and the bot only ever see well-formed data.
+"""
 
 from __future__ import annotations
 
@@ -9,15 +15,23 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 
 from app.db.enums import CEFRLevel, ContentKind
 
+# Slugs are stable identity keys: lowercase, digits and hyphens only. They are
+# used for idempotent upserts, so changing a slug creates a "new" item and
+# loses the user's progress for the old one.
 SLUG_PATTERN = r"^[a-z0-9][a-z0-9-]{2,127}$"
+# Gap-fill sentences must contain a visible placeholder for the missing word.
 BLANK_MARKER = "...."
 
 
 class PayloadBase(BaseModel):
+    """Common config for payloads: reject unknown fields so YAML typos fail loudly."""
+
     model_config = ConfigDict(extra="forbid")
 
 
 class IrregularVerbPayload(PayloadBase):
+    """One irregular verb with its past/participle forms and optional IPA."""
+
     kind: Literal[ContentKind.IRREGULAR_VERB] = ContentKind.IRREGULAR_VERB
     base: str = Field(min_length=1)
     past: list[str] = Field(min_length=1)
@@ -30,12 +44,14 @@ class IrregularVerbPayload(PayloadBase):
     @field_validator("past", "participle", mode="before")
     @classmethod
     def check_forms_input(cls, forms: Any) -> Any:
+        """Accept a flat string as a one-element list (``past: was``)."""
         if isinstance(forms, str):
             return [forms]
         return forms
 
     @model_validator(mode="after")
     def check_forms(self) -> Self:
+        """Reject blank or duplicate forms such as ``past: [went, went]``."""
         for label, forms in (("past", self.past), ("participle", self.participle)):
             if any(not form.strip() for form in forms):
                 raise ValueError(f"{label} forms must be non-empty")
@@ -45,6 +61,8 @@ class IrregularVerbPayload(PayloadBase):
 
 
 class GapFillPayload(PayloadBase):
+    """A sentence with a placeholder and the word that fills it."""
+
     kind: Literal[ContentKind.GAP_FILL] = ContentKind.GAP_FILL
     sentence: str = Field(min_length=1)
     answer: str = Field(min_length=1)
@@ -53,12 +71,15 @@ class GapFillPayload(PayloadBase):
 
     @model_validator(mode="after")
     def check_blank(self) -> Self:
+        """A gap-fill without a placeholder is unanswerable, so fail at load time."""
         if BLANK_MARKER not in self.sentence:
             raise ValueError(f"sentence must contain '{BLANK_MARKER}'")
         return self
 
 
 class TranslationPayload(PayloadBase):
+    """Translate a Russian prompt; ``reference`` is the model answer."""
+
     kind: Literal[ContentKind.TRANSLATION_PAIR] = ContentKind.TRANSLATION_PAIR
     prompt_ru: str = Field(min_length=1)
     reference: str = Field(min_length=1)
@@ -67,27 +88,35 @@ class TranslationPayload(PayloadBase):
 
 
 class WordOrderPayload(PayloadBase):
+    """Reorder shuffled words into a sentence."""
+
     kind: Literal[ContentKind.WORD_ORDER] = ContentKind.WORD_ORDER
     words: list[str] = Field(min_length=2)
     answer: str = Field(min_length=1)
 
     @model_validator(mode="after")
     def check_answer(self) -> Self:
+        """Ensure the answer uses exactly the provided words (multiset equality)."""
         if Counter(self.words) != Counter(self.answer.split()):
             raise ValueError("answer must be a permutation of words")
         return self
 
 
 class MultipleChoicePayload(PayloadBase):
+    """A question with options; ``correct_index`` points into ``options``."""
+
     kind: Literal[ContentKind.MULTIPLE_CHOICE] = ContentKind.MULTIPLE_CHOICE
     question: str = Field(min_length=1)
     options: list[str] = Field(min_length=2)
     correct_index: int = Field(ge=0)
+    # Placement questions carry a level so onboarding can pick an entry point.
+    # Regular multiple-choice items may leave it empty.
     level: CEFRLevel | None = None
     explanation_ru: str | None = None
 
     @model_validator(mode="after")
     def check_options(self) -> Self:
+        """Guard against out-of-range or duplicate answer options."""
         if self.correct_index >= len(self.options):
             raise ValueError("correct_index is out of range")
         if len(set(self.options)) != len(self.options):
@@ -96,6 +125,15 @@ class MultipleChoicePayload(PayloadBase):
 
 
 class VocabularyPayload(PayloadBase):
+    """A word card: the term plus one display translation and grading variants.
+
+    ``translation_ru`` is what the user sees and may contain several senses
+    (``"мочь, уметь"``). ``accepted_ru`` lists the individual answers accepted
+    for the en→ru direction; when empty, the whole ``translation_ru`` string is
+    required. ``frequency``/``transcription`` are optional because not every
+    source provides them.
+    """
+
     kind: Literal[ContentKind.VOCABULARY] = ContentKind.VOCABULARY
     term: str = Field(min_length=1, max_length=128)
     translation_ru: str = Field(min_length=1, max_length=512)
@@ -111,6 +149,7 @@ class VocabularyPayload(PayloadBase):
     @field_validator("term", "translation_ru")
     @classmethod
     def check_line(cls, value: str) -> str:
+        """Keep display fields single-line: the bot renders them inline."""
         value = value.strip()
         if not value:
             raise ValueError("must be non-empty")
@@ -121,6 +160,7 @@ class VocabularyPayload(PayloadBase):
     @field_validator("accepted_ru", "accepted_en")
     @classmethod
     def check_variants(cls, values: list[str]) -> list[str]:
+        """Trim variants and reject blanks, overlong values and duplicates."""
         cleaned = [value.strip() for value in values]
         if any(not value for value in cleaned):
             raise ValueError("translations must be non-empty")
@@ -131,6 +171,8 @@ class VocabularyPayload(PayloadBase):
         return cleaned
 
 
+# Discriminated union: Pydantic reads the ``kind`` field and validates the
+# matching payload, so callers get a concrete type instead of a loose dict.
 ContentPayload = Annotated[
     IrregularVerbPayload
     | GapFillPayload
@@ -142,10 +184,13 @@ ContentPayload = Annotated[
 ]
 
 
+# Fields that belong to the item wrapper rather than to its payload.
 _ITEM_FIELDS = frozenset({"slug", "payload", "source", "license", "active"})
 
 
 class ContentItemSpec(BaseModel):
+    """One validated learning item inside a content file."""
+
     model_config = ConfigDict(extra="forbid")
 
     slug: str = Field(pattern=SLUG_PATTERN, max_length=128)
@@ -187,10 +232,13 @@ class ContentItemSpec(BaseModel):
 
     @property
     def kind(self) -> ContentKind:
+        """Payload kind exposed on the wrapper so callers do not dig into ``payload``."""
         return self.payload.kind
 
 
 class TopicSpec(BaseModel):
+    """Topic metadata; a topic groups related items and is upserted by slug."""
+
     model_config = ConfigDict(extra="forbid")
 
     slug: str = Field(pattern=SLUG_PATTERN, max_length=64)
@@ -198,6 +246,12 @@ class TopicSpec(BaseModel):
 
 
 class ContentFile(BaseModel):
+    """A whole YAML file: topic metadata, defaults and a list of items.
+
+    File-level ``source``/``license`` act as defaults for items that do not
+    specify their own values.
+    """
+
     model_config = ConfigDict(extra="forbid")
 
     topic: TopicSpec
@@ -207,6 +261,7 @@ class ContentFile(BaseModel):
 
     @model_validator(mode="after")
     def check_unique_slugs(self) -> Self:
+        """Slugs are identity keys, so a file cannot define the same item twice."""
         slugs = [item.slug for item in self.items]
         if len(slugs) != len(set(slugs)):
             raise ValueError("item slugs must be unique within a file")

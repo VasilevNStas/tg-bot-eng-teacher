@@ -1,4 +1,15 @@
-"""Adaptive word cards over the vocabulary bank."""
+"""Adaptive word cards over the vocabulary bank.
+
+A card session is a short sequence of questions built from ``content_items``
+with ``kind=vocabulary``. Selection mixes three signals:
+
+- new words (never shown) get a fixed quota so the user keeps learning;
+- weak words (high error rate, low mastery) get more weight;
+- stale words (not seen for a while) get a recency boost.
+
+The session itself is persisted in ``exercise_sessions.meta`` as a snapshot,
+so it can be restored after a restart without changing the questions.
+"""
 
 from __future__ import annotations
 
@@ -32,12 +43,17 @@ from app.services.words.errors import (
     WordCardUnavailable,
 )
 
+# Share of a card that should consist of never-seen words (at least one).
 NEW_WORD_QUOTA = 0.4
+# How many recent cards to keep out of the pool, as a multiple of card size.
 RECENT_CARDS_EXCLUDED = 2
+# Recency weight stops growing after this many days; older words are equal.
 RECENCY_CAP_DAYS = 30.0
 
 
 class WordCardDirection(StrEnum):
+    """Requested card direction; ``BOTH`` doubles every word, ``MIX`` flips a coin."""
+
     EN_RU = "en_ru"
     RU_EN = "ru_en"
     BOTH = "both"
@@ -46,6 +62,8 @@ class WordCardDirection(StrEnum):
 
 @dataclass(frozen=True, slots=True)
 class WordQuestion:
+    """One rendered question: the prompt depends on the direction."""
+
     content_item_id: int
     term: str
     translation_ru: str
@@ -56,6 +74,7 @@ class WordQuestion:
 
     @property
     def prompt(self) -> str:
+        """Show English for en→ru, Russian for ru→en."""
         if self.direction is WordDirection.EN_RU:
             return self.term
         return self.translation_ru
@@ -63,6 +82,8 @@ class WordQuestion:
 
 @dataclass(frozen=True, slots=True)
 class WordCardSession:
+    """A started card, including the exact questions to ask in order."""
+
     session_id: int
     direction: WordCardDirection
     questions: tuple[WordQuestion, ...]
@@ -71,6 +92,8 @@ class WordCardSession:
 
 @dataclass(frozen=True, slots=True)
 class WordAttemptResult:
+    """Grading result plus the user's counters for this word."""
+
     result: GradeResult
     question: WordQuestion
     attempt_count: int
@@ -80,6 +103,8 @@ class WordAttemptResult:
 
 @dataclass(frozen=True, slots=True)
 class WordCardStats:
+    """End-of-card summary derived from stored attempts."""
+
     total: int
     correct: int
     partial: int
@@ -103,6 +128,8 @@ class WordCardStats:
 
 @dataclass(frozen=True, slots=True)
 class _Candidate:
+    """A vocabulary item enriched with progress and normalized frequency."""
+
     item: ContentItem
     payload: VocabularyPayload
     progress: WordProgress | None
@@ -114,6 +141,8 @@ class _Candidate:
 
 
 class WordCardService:
+    """Build, restore and grade adaptive word-card sessions."""
+
     def __init__(
         self,
         database: Database,
@@ -122,7 +151,9 @@ class WordCardService:
         rng: random.Random | None = None,
     ) -> None:
         self._database = database
+        # ``max(1, ...)`` keeps the service usable even with bad config.
         self._card_size = max(1, card_size)
+        # Injectable RNG makes adaptive selection deterministic in tests.
         self._rng = rng or random.Random()
 
     async def start_card(
@@ -135,11 +166,18 @@ class WordCardService:
         item_ids: Sequence[int] | None = None,
         now: datetime | None = None,
     ) -> WordCardSession:
+        """Build and persist a new card session.
+
+        ``source`` is ``adaptive`` (weighted mix) or ``random`` (uniform).
+        Passing ``item_ids`` restricts the card to an explicit list, which is
+        how a retry of "these words I got wrong" is implemented.
+        """
         size = self._card_size if card_size is None else card_size
         if size < 1:
             raise WordCardError("card_size must be positive")
         if source not in {"adaptive", "random"}:
             raise WordCardError(f"unsupported card source: {source}")
+        # Preserve order while removing duplicates from an explicit retry list.
         restrict = tuple(dict.fromkeys(item_ids)) if item_ids is not None else None
         if restrict is not None:
             if not restrict:
@@ -157,16 +195,21 @@ class WordCardService:
             else:
                 selected = list(candidates)
                 self._rng.shuffle(selected)
+            # A restricted card may contain fewer items than requested.
             size = len(selected)
             questions = self._build_questions(selected, direction)
 
             exercise_repo = ExerciseRepository(session)
+            # Only one active word-card session per user; an old one is
+            # abandoned rather than resumed when a new card starts.
             await exercise_repo.abandon_active(
                 user.id,
                 at=at,
                 kind=ExerciseSessionKind.WORDS,
             )
             item_ids = tuple(dict.fromkeys(question.content_item_id for question in questions))
+            # Snapshot the exact questions so ``active_card`` can restore the
+            # session after a bot restart without re-randomizing.
             exercise_session = await exercise_repo.add(
                 user_id=user.id,
                 topic_id=None,
@@ -191,6 +234,7 @@ class WordCardService:
             progress_repo = WordProgressRepository(session)
             for candidate in selected:
                 progress = await progress_repo.get_or_create(user.id, candidate.item.id)
+                # Showing a card counts as exposure, not as an attempt.
                 await progress_repo.mark_shown(progress, at)
 
             session_id = exercise_session.id
@@ -203,6 +247,7 @@ class WordCardService:
         )
 
     async def active_card(self, user: User) -> WordCardSession | None:
+        """Restore the user's active word card, if any."""
         async with self._database.session() as session:
             exercise_session = await ExerciseRepository(session).get_active(
                 user.id,
@@ -223,10 +268,13 @@ class WordCardService:
         latency_ms: int | None = None,
         now: datetime | None = None,
     ) -> WordAttemptResult:
+        """Grade one answer, persist the attempt and update word progress."""
         at = now or datetime.now(UTC)
 
         async with self._database.session() as session:
             exercise_session = await self._require_active(session, user, session_id)
+            # Only items that were part of the snapshot may be answered; this
+            # blocks forged callback data from touching arbitrary content.
             item_ids = tuple(int(value) for value in exercise_session.meta.get("item_ids", []))
             if content_item_id not in item_ids:
                 raise WordCardSessionError(
@@ -247,6 +295,7 @@ class WordCardService:
                 answer=answer,
                 verdict=result.verdict,
                 checker=result.checker,
+                # Negative latency would mean a clock problem; store zero.
                 latency_ms=None if latency_ms is None else max(0, latency_ms),
                 direction=direction,
             )
@@ -254,6 +303,7 @@ class WordCardService:
             progress_repo = WordProgressRepository(session)
             progress = await progress_repo.get_or_create(user.id, item.id)
             await progress_repo.record_attempt(progress, result.verdict, at)
+            # Read counters before the session closes and expires the objects.
             attempt_count = progress.attempt_count
             correct_count = progress.correct_count
             streak = progress.streak
@@ -274,6 +324,7 @@ class WordCardService:
         state: ExerciseState = ExerciseState.FINISHED,
         now: datetime | None = None,
     ) -> WordCardStats:
+        """Close a card and return its aggregate statistics."""
         at = now or datetime.now(UTC)
 
         async with self._database.session() as session:
@@ -295,6 +346,7 @@ class WordCardService:
         *,
         now: datetime | None = None,
     ) -> WordCardStats | None:
+        """Abandon the active card (used by ``/stop``); ``None`` if no card."""
         at = now or datetime.now(UTC)
 
         async with self._database.session() as session:
@@ -319,15 +371,23 @@ class WordCardService:
         size: int,
         restrict: Sequence[int] | None = None,
     ) -> list[_Candidate]:
+        """Load and pre-filter the pool that selection will draw from.
+
+        Duplicate terms are collapsed so the same word is not asked twice,
+        and recently shown cards are excluded when enough fresh material
+        remains.
+        """
         content_repo = ContentRepository(session)
         items = await content_repo.list_active(kind=ContentKind.VOCABULARY)
 
         payloads = {item.id: VocabularyPayload.model_validate(item.payload) for item in items}
+        # Function words (the, and, ...) are not useful as flashcards.
         items = [item for item in items if not payloads[item.id].function_word]
         if restrict is not None:
             allowed = set(restrict)
             items = [item for item in items if item.id in allowed]
         else:
+            # Keep the first item for each case-insensitive term.
             unique_terms: dict[str, ContentItem] = {}
             for item in items:
                 unique_terms.setdefault(payloads[item.id].term.casefold(), item)
@@ -342,9 +402,12 @@ class WordCardService:
             )
         )
         fresh = [item for item in items if item.id not in recent]
+        # Fall back to the full pool if the bank is too small to avoid repeats.
         if restrict is None and len(fresh) >= size:
             items = fresh
 
+        # Log-scaling compresses the huge frequency range (914k vs 1) into a
+        # comparable 0..1 weight.
         frequencies = [math.log1p(payloads[item.id].frequency or 0) for item in items]
         max_frequency = max(frequencies, default=0.0) or 1.0
         return [
@@ -365,6 +428,12 @@ class WordCardService:
         source: str,
         now: datetime,
     ) -> list[_Candidate]:
+        """Pick ``size`` candidates, mixing new and known words.
+
+        Adaptive mode reserves a quota for new words, then fills the rest
+        with weighted sampling from known words. If that is not enough, the
+        remaining slots are filled from the full pool.
+        """
         if source == "random":
             return self._rng.sample(candidates, k=min(size, len(candidates)))
 
@@ -377,6 +446,7 @@ class WordCardService:
         if len(picked) < size:
             remaining = [candidate for candidate in candidates if candidate not in picked]
             picked.extend(self._weighted_sample(remaining, size - len(picked), now))
+        # Shuffle so new words are not always at the start of the card.
         self._rng.shuffle(picked)
         return picked
 
@@ -386,13 +456,17 @@ class WordCardService:
         count: int,
         now: datetime,
     ) -> list[_Candidate]:
+        """Sample without replacement using the weights from ``_weight``."""
         pool = [(candidate, self._weight(candidate, now)) for candidate in candidates]
         picked: list[_Candidate] = []
         for _ in range(min(count, len(pool))):
             total = sum(weight for _, weight in pool)
             if total <= 0:
+                # Degenerate weights: fall back to uniform choice.
                 index = self._rng.randrange(len(pool))
             else:
+                # Roulette-wheel selection: pick the first item whose
+                # cumulative weight crosses a random point in [0, total).
                 threshold = self._rng.random() * total
                 cumulative = 0.0
                 index = 0
@@ -405,19 +479,32 @@ class WordCardService:
         return picked
 
     def _weight(self, candidate: _Candidate, now: datetime) -> float:
+        """Score how useful this word is for the next card.
+
+        The formula is a hand-tuned blend, not a learning-theory model:
+
+        - ``error_rate`` dominates: words answered wrong are repeated more;
+        - ``recency`` brings back words that have not been seen for a while;
+        - ``(1 - mastery)`` favors words the user has not mastered;
+        - ``frequency_norm`` favors common words;
+        - the ``0.05`` floor keeps every word reachable.
+        """
         if candidate.is_new:
+            # New words are attractive, with a small frequency bonus.
             return 1.0 + 0.5 * candidate.frequency_norm
 
         progress = candidate.progress
         if progress is None:
             return 1.0
         seen = progress.attempt_count
+        # Laplace smoothing avoids 0% or 100% error rates on tiny samples.
         error_rate = (progress.wrong_count + 1) / (seen + 2)
         mastery = progress.correct_count / seen if seen else 0.0
         last_seen = progress.last_attempted_at or progress.last_shown_at
         if last_seen is None:
             recency = 1.0
         else:
+            # SQLite may return naive datetimes; treat them as UTC.
             last_seen_utc = (
                 last_seen.replace(tzinfo=UTC)
                 if last_seen.tzinfo is None
@@ -438,6 +525,7 @@ class WordCardService:
         selected: list[_Candidate],
         direction: WordCardDirection,
     ) -> tuple[WordQuestion, ...]:
+        """Expand selected words into one question per requested direction."""
         questions: list[WordQuestion] = []
         for candidate in selected:
             for item_direction in self._directions(direction):
@@ -447,9 +535,11 @@ class WordCardService:
         return tuple(questions)
 
     def _directions(self, direction: WordCardDirection) -> tuple[WordDirection, ...]:
+        """Resolve the requested card direction into concrete per-item directions."""
         if direction is WordCardDirection.BOTH:
             return (WordDirection.EN_RU, WordDirection.RU_EN)
         if direction is WordCardDirection.MIX:
+            # One random direction per word keeps the card varied.
             return (self._rng.choice((WordDirection.EN_RU, WordDirection.RU_EN)),)
         return (WordDirection(direction.value),)
 
@@ -459,6 +549,7 @@ class WordCardService:
         payload: VocabularyPayload,
         direction: WordDirection,
     ) -> WordQuestion:
+        """Project a stored payload into the question object used by handlers."""
         return WordQuestion(
             content_item_id=content_item_id,
             term=payload.term,
@@ -475,6 +566,11 @@ class WordCardService:
         direction: WordDirection,
         answer: str,
     ) -> GradeResult:
+        """Grade a word answer according to the card direction.
+
+        en→ru is exact (a translation has many valid wordings), ru→en allows
+        a typo because the target English spelling is usually unique.
+        """
         if direction is WordDirection.EN_RU:
             variants = payload.accepted_ru or [payload.translation_ru]
             return grade_answer(answer, variants, fuzzy=False)
@@ -485,6 +581,11 @@ class WordCardService:
         session: AsyncSession,
         exercise_session: ExerciseSession,
     ) -> WordCardSession | None:
+        """Rebuild a card session from its stored snapshot.
+
+        Items that became inactive are skipped; if none remain the session is
+        treated as gone so the handler can offer a new card.
+        """
         meta: dict[str, Any] = exercise_session.meta
         content_repo = ContentRepository(session)
         questions: list[WordQuestion] = []
@@ -512,6 +613,7 @@ class WordCardService:
         user: User,
         session_id: int,
     ) -> ExerciseSession:
+        """Load a session and verify ownership, kind and state."""
         exercise_session = await ExerciseRepository(session).get_for_user(session_id, user.id)
         if exercise_session is None:
             raise WordCardSessionError(f"session {session_id} not found")

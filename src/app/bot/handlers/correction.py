@@ -1,4 +1,9 @@
-"""Explicit correction mode."""
+"""Explicit correction mode.
+
+``/correction <text>`` runs a one-off LLM turn in correction mode and returns
+the full report (reply, corrections, new vocabulary) instead of the compact
+chat answer.
+"""
 
 from __future__ import annotations
 
@@ -19,6 +24,7 @@ from app.texts import ru
 
 
 def _correction_text(message: Message) -> str:
+    """Return the text following the command, or an empty string."""
     parts = (message.text or "").split(maxsplit=1)
     return parts[1].strip() if len(parts) > 1 else ""
 
@@ -28,6 +34,7 @@ async def handle_correction(
     services: AppServices,
     update_id: int | None = None,
 ) -> None:
+    """Correct the provided text and render the detailed report."""
     if message.from_user is None:
         return
 
@@ -56,6 +63,7 @@ async def handle_correction(
 
 
 def build_router() -> Router:
+    """Wire the /correction command."""
     router = Router(name="correction")
     router.message.register(handle_correction, Command("correction"))
     return router

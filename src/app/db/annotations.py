@@ -1,4 +1,9 @@
-"""Reusable SQLAlchemy column annotations."""
+"""Reusable SQLAlchemy column annotations.
+
+Keeping common column definitions here makes the ORM models declarative and
+ensures every timestamp is timezone-aware and every JSON column has the same
+nullability/default behavior.
+"""
 
 from __future__ import annotations
 
@@ -11,6 +16,7 @@ from sqlalchemy import Enum as SAEnum
 from sqlalchemy.orm import mapped_column
 
 int_pk = Annotated[int, mapped_column(primary_key=True, autoincrement=True)]
+# Telegram ids exceed 32-bit ints, hence BigInteger and a unique index.
 tg_id = Annotated[int, mapped_column(BigInteger, unique=True, index=True)]
 
 str_32 = Annotated[str, mapped_column(String(32))]
@@ -31,6 +37,12 @@ bool_default_true = Annotated[bool, mapped_column(Boolean, default=True, nullabl
 
 
 def str_enum(enum_cls: type[StrEnum], *, length: int = 32) -> SAEnum:
+    """Store a StrEnum as VARCHAR instead of a native database enum.
+
+    ``native_enum=False`` keeps SQLite simple and makes adding a new enum value
+    a code-only change; ``validate_strings`` still rejects unknown values on
+    write.
+    """
     return SAEnum(
         enum_cls,
         native_enum=False,

@@ -1,4 +1,9 @@
-"""Structured correction payload (ADR-020, B-032)."""
+"""Structured correction payload (ADR-020, B-032).
+
+The LLM returns this JSON shape in chat/correction modes. Keeping it as a
+Pydantic model gives us validation, a JSON schema for the provider, and a
+single place to evolve the contract.
+"""
 
 from __future__ import annotations
 
@@ -8,6 +13,8 @@ from app.db.enums import ErrorCategory
 
 
 class CorrectionItem(BaseModel):
+    """One corrected fragment with a category and a short Russian explanation."""
+
     model_config = ConfigDict(extra="forbid")
 
     original: str = Field(min_length=1, description="Learner's original fragment")
@@ -17,6 +24,8 @@ class CorrectionItem(BaseModel):
 
 
 class NewVocabularyItem(BaseModel):
+    """A useful word/collocation to add to the user's personal list."""
+
     model_config = ConfigDict(extra="forbid")
 
     term: str = Field(min_length=1, description="English word or collocation")
@@ -25,6 +34,8 @@ class NewVocabularyItem(BaseModel):
 
 
 class CorrectionPayload(BaseModel):
+    """Complete structured reply for one conversational turn."""
+
     model_config = ConfigDict(extra="forbid")
 
     reply: str = Field(min_length=1, description="Conversational reply in English")

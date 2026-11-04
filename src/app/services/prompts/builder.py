@@ -16,6 +16,8 @@ from app.services.prompts.registry import PromptRegistry, PromptTemplate
 
 @dataclass(frozen=True, slots=True)
 class PromptContext:
+    """Everything the builder needs to render one prompt."""
+
     level: CEFRLevel
     mode: ConversationMode
     user_input: str
@@ -28,12 +30,16 @@ class PromptContext:
 
 @dataclass(frozen=True, slots=True)
 class BuiltPrompt:
+    """Rendered messages plus the version hash stored in ``usage_ledger``."""
+
     messages: list[Message]
     prompt_version: str
     estimated_input_tokens: int
 
 
 class PromptBuilder:
+    """Compose system prompts, profile, summary and history under a budget."""
+
     def __init__(
         self,
         registry: PromptRegistry,
@@ -51,13 +57,23 @@ class PromptBuilder:
 
     @property
     def history_window(self) -> int:
+        """How many recent messages the caller may load for this prompt."""
         return self._history_window
 
     def build(self, context: PromptContext) -> BuiltPrompt:
+        """Render the final message list, trimming context until it fits.
+
+        The system prompt (persona + level + mode + scenario) is mandatory.
+        Profile and summary are optional context; history is trimmed oldest
+        first. If even the mandatory part is too large, ``PromptTooLong`` is
+        raised instead of silently sending a partial instruction.
+        """
         persona = self._registry.persona()
         level = self._registry.level(context.level)
         mode = self._registry.mode(context.mode)
 
+        # Each part is versioned; the combined hash identifies the exact
+        # prompt composition in the usage ledger.
         system_parts = [persona.content, level.content, mode.content]
         versions = [persona.version, level.version, mode.version]
         if context.scenario is not None:
@@ -79,6 +95,7 @@ class PromptBuilder:
         history = list(context.history[-self._history_window :]) if self._history_window else []
         user_message = Message(role="user", content=context.user_input)
 
+        # Budget loop: drop the oldest history, then the summary, then fail.
         while (
             estimate_messages_tokens([*messages, *history, user_message]) > self._max_input_tokens
         ):
@@ -103,6 +120,7 @@ class PromptBuilder:
 
     @staticmethod
     def _profile_block(profile: Mapping[str, object]) -> str | None:
+        """Serialize the learner profile deterministically (stable prompt hash)."""
         if not profile:
             return None
         payload = json.dumps(
@@ -115,11 +133,13 @@ class PromptBuilder:
 
     @staticmethod
     def _summary_message(summary: str | None) -> Message | None:
+        """Wrap a non-empty conversation summary as a system message."""
         if summary is None or not summary.strip():
             return None
         return Message(role="system", content=f"Conversation summary:\n{summary.strip()}")
 
 
 def _combined_version(*versions: str) -> str:
+    """Short stable hash of all template versions used in this prompt."""
     payload = ":".join(versions).encode("utf-8")
     return hashlib.sha256(payload).hexdigest()[:12]

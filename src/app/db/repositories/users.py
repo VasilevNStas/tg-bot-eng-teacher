@@ -13,10 +13,13 @@ from app.db.repository import BaseRepository
 
 
 class UserRepository(BaseRepository[User]):
+    """Create and update Telegram users by their ``tg_id``."""
+
     def __init__(self, session: AsyncSession) -> None:
         super().__init__(session, User)
 
     async def get_by_tg_id(self, tg_id: int) -> User | None:
+        """Telegram id is the external identity; the integer PK stays internal."""
         return await self._session.scalar(select(User).where(User.tg_id == tg_id))
 
     async def get_or_create(
@@ -26,6 +29,11 @@ class UserRepository(BaseRepository[User]):
         username: str | None,
         native_lang: str = "ru",
     ) -> User:
+        """Return the user or insert a minimal profile on first contact.
+
+        Defaults (A2, UTC, ``new``) are placeholders; onboarding is expected
+        to replace them.
+        """
         user = await self.get_by_tg_id(tg_id)
         if user is None:
             user = User(
@@ -40,10 +48,12 @@ class UserRepository(BaseRepository[User]):
             self._session.add(user)
             await self._session.flush()
         elif username is not None and user.username != username:
+            # Keep the displayed username fresh without touching the profile.
             user.username = username
         return user
 
     async def update_level(self, tg_id: int, level: CEFRLevel) -> bool:
+        """Store the placement result and mark onboarding as complete."""
         user = await self.get_by_tg_id(tg_id)
         if user is None:
             return False
@@ -77,6 +87,11 @@ class UserRepository(BaseRepository[User]):
         section: str,
         values: dict[str, object],
     ) -> bool:
+        """Merge ``values`` into ``profile[section]`` without dropping siblings.
+
+        ``profile`` is a JSON column, so updates must preserve keys owned by
+        other features (e.g. ``words`` and ``reminders``).
+        """
         user = await self.get_by_tg_id(tg_id)
         if user is None:
             return False
@@ -90,4 +105,5 @@ class UserRepository(BaseRepository[User]):
 
     @staticmethod
     def touch(user: User, at: datetime | None = None) -> None:
+        """Record activity; callers commit the session."""
         user.last_seen_at = at or datetime.now(UTC)

@@ -7,6 +7,8 @@ from datetime import UTC, datetime
 from sqlalchemy import DateTime, MetaData
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
+# Explicit names keep Alembic diffs stable and avoid SQLite's auto-generated
+# constraint names, which are hard to target in migrations.
 NAMING_CONVENTION = {
     "ix": "ix_%(column_0_label)s",
     "uq": "uq_%(table_name)s_%(column_0_name)s",
@@ -17,10 +19,14 @@ NAMING_CONVENTION = {
 
 
 class Base(DeclarativeBase):
+    """Declarative base shared by every ORM model."""
+
     metadata = MetaData(naming_convention=NAMING_CONVENTION)
 
 
 class CreatedAtMixin:
+    """Adds a timezone-aware creation timestamp."""
+
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         default=lambda: datetime.now(UTC),
@@ -29,6 +35,8 @@ class CreatedAtMixin:
 
 
 class TimestampMixin(CreatedAtMixin):
+    """Adds creation and last-update timestamps."""
+
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         default=lambda: datetime.now(UTC),

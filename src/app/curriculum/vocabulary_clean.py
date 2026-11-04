@@ -17,17 +17,23 @@ _MAX_NOTES = 512
 
 
 class VocabularyCleanError(ValueError):
+    """The source list cannot be normalized."""
+
     pass
 
 
 @dataclass(frozen=True, slots=True)
 class RawVocabularyEntry:
+    """Minimal term/translation pair from the numbered text source."""
+
     term: str
     translation_ru: str
 
 
 @dataclass(frozen=True, slots=True)
 class NormalizedVocabularyEntry:
+    """Merged vocabulary entry ready for serialization."""
+
     position: int
     term: str
     translations_ru: tuple[str, ...]
@@ -52,6 +58,8 @@ class _MutableVocabularyEntry:
 
 @dataclass(frozen=True, slots=True)
 class NormalizedVocabularyResult:
+    """Normalized entries plus merge diagnostics."""
+
     entries: tuple[NormalizedVocabularyEntry, ...]
     html_count: int
     rtf_count: int
@@ -214,6 +222,7 @@ FUNCTION_WORDS = frozenset(
 
 
 def normalize_term(term: str) -> str:
+    """NFKC-normalize a term and collapse whitespace."""
     value = unicodedata.normalize("NFKC", term).strip()
     value = re.sub(r"\s+", " ", value)
     if not value:
@@ -222,6 +231,7 @@ def normalize_term(term: str) -> str:
 
 
 def normalize_translation(value: str) -> tuple[list[str], str | None]:
+    """Split a translation into variants and collect parenthetical notes."""
     text = unicodedata.normalize("NFKC", value).strip()
     notes: list[str] = []
 
@@ -258,6 +268,7 @@ def normalize_translation(value: str) -> tuple[list[str], str | None]:
 
 
 def parse_numbered_vocabulary_text(text: str) -> tuple[RawVocabularyEntry, ...]:
+    """Parse number/term/translation triples from plain text."""
     lines = [line.strip() for line in text.splitlines() if line.strip()]
     if not lines:
         raise VocabularyCleanError("no vocabulary lines found")
@@ -281,6 +292,7 @@ def parse_numbered_vocabulary_text(text: str) -> tuple[RawVocabularyEntry, ...]:
 
 
 def load_numbered_vocabulary_text(path: Path) -> tuple[RawVocabularyEntry, ...]:
+    """Read and parse the numbered text file from disk."""
     return parse_numbered_vocabulary_text(path.read_text(encoding="utf-8"))
 
 
@@ -288,6 +300,7 @@ def normalize_vocabulary(
     html_result: VocabularyParseResult,
     rtf_entries: tuple[RawVocabularyEntry, ...],
 ) -> NormalizedVocabularyResult:
+    """Merge HTML and RTF sources by casefolded term, preferring HTML metadata."""
     merged: dict[str, _MutableVocabularyEntry] = {}
 
     for entry in html_result.entries:
@@ -368,6 +381,7 @@ def _merge_entry(
     frequency: int | None,
     frequency_rank: int | None,
 ) -> None:
+    """Merge one source entry into the accumulator, deduplicating translations."""
     term = normalize_term(entry.term)
     key = term.casefold()
     translations, notes = normalize_translation(entry.translation_ru)
