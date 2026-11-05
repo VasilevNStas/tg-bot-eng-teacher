@@ -18,6 +18,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 
 from app.bot.keyboards.onboarding import start_keyboard
+from app.bot.keyboards.task import task_keyboard
 from app.bot.states import Drill
 from app.bot.user_context import resolve_user
 from app.core.di import AppServices
@@ -73,37 +74,6 @@ async def handle_drill(
         1,
         len(questions),
     )
-
-
-async def handle_cancel(
-    message: Message,
-    state: FSMContext,
-    services: AppServices,
-) -> None:
-    """``/cancel``: abandon the drill and report what was answered."""
-    if message.from_user is None:
-        return
-
-    data = await state.get_data()
-    session_id = data.get("session_id")
-    if not isinstance(session_id, int):
-        await message.answer(ru.DRILL_NOTHING_TO_CANCEL)
-        return
-
-    user = await resolve_user(services, message.from_user)
-    try:
-        stats = await services.exercise.finish_session(
-            user,
-            session_id,
-            state=ExerciseState.ABANDONED,
-        )
-    except DrillSessionError:
-        await state.clear()
-        await message.answer(ru.DRILL_SESSION_ERROR)
-        return
-
-    await state.clear()
-    await message.answer(ru.DRILL_CANCELLED.format(correct=stats.correct, total=stats.total))
 
 
 async def handle_answer(
@@ -211,7 +181,7 @@ async def _send_question(
         cast(IrregularForm, item["form"]),
     )
     await state.update_data(started_at=time.time())
-    await message.answer(_format_question(question, number, total))
+    await message.answer(_format_question(question, number, total), reply_markup=task_keyboard())
 
 
 def _format_question(question: DrillQuestion, number: int, total: int) -> str:
@@ -264,13 +234,6 @@ def _format_summary(stats: SessionStats) -> str:
     )
 
 
-def _format_cancelled(stats: SessionStats) -> str:
-    """Render the cancellation message with or without answered questions."""
-    if stats.total == 0:
-        return ru.DRILL_CANCELLED
-    return ru.DRILL_CANCELLED_STATS.format(correct=stats.correct, total=stats.total)
-
-
 def _ipa_suffix(ipa: str | None) -> str:
     """Return `` [ipa]`` or an empty string; always HTML-escaped."""
     if not ipa:
@@ -290,7 +253,6 @@ def build_router() -> Router:
     """Register drill commands/state on a dedicated router."""
     router = Router(name="drill")
     router.message.register(handle_drill, Command("drill"))
-    router.message.register(handle_cancel, Command("cancel"))
     router.message.register(
         handle_answer,
         StateFilter(Drill.active),

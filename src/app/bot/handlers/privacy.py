@@ -8,10 +8,23 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
 
 from app.bot.callbacks import DeleteCB
+from app.bot.formatters import format_about_me
 from app.bot.keyboards.privacy import delete_confirm_keyboard
 from app.core.di import AppServices
 from app.services.privacy.service import PrivacyService
 from app.texts import ru
+
+
+async def handle_about_me(message: Message, services: AppServices) -> None:
+    """``/about_me``: show the stored profile and row counts, not message texts."""
+    if message.from_user is None:
+        return
+
+    summary = await PrivacyService(services.database).describe_user(message.from_user.id)
+    if summary is None:
+        await message.answer(ru.ABOUT_ME_UNKNOWN)
+        return
+    await message.answer(format_about_me(summary, services.settings.history_retention_days))
 
 
 async def handle_delete_me(message: Message, services: AppServices) -> None:
@@ -59,6 +72,7 @@ async def handle_delete_callback(
 def build_router() -> Router:
     """Wire /delete_me and its confirmation callback."""
     router = Router(name="privacy")
+    router.message.register(handle_about_me, Command("about_me"))
     router.message.register(handle_delete_me, Command("delete_me"))
     router.callback_query.register(handle_delete_callback, DeleteCB.filter())
     return router

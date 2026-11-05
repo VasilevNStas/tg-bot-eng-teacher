@@ -4,12 +4,13 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
-from typing import Any
+from typing import Any, cast
 
 from sqlalchemy import Select, delete, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.database import Database
+from app.db.enums import CEFRLevel
 from app.db.models import (
     Conversation,
     Correction,
@@ -19,6 +20,7 @@ from app.db.models import (
     UsageLedger,
     User,
     Vocabulary,
+    WordProgress,
 )
 from app.db.models import Message as DbMessage
 
@@ -37,6 +39,31 @@ class DeletionSummary:
     usage: int
 
 
+@dataclass(frozen=True)
+class UserDataSummary:
+    """Read-only view of the profile and the user-owned rows kept in the DB."""
+
+    tg_id: int
+    username: str | None
+    level: CEFRLevel
+    timezone: str
+    quiet_hours_start: str | None
+    quiet_hours_end: str | None
+    created_at: datetime
+    last_seen_at: datetime | None
+    card_size: int | None
+    card_direction: str | None
+    conversations: int
+    messages: int
+    corrections: int
+    vocabulary: int
+    sessions: int
+    attempts: int
+    word_progress: int
+    reminders: int
+    usage: int
+
+
 class PrivacyService:
     """Account deletion and retention pruning."""
 
@@ -47,6 +74,48 @@ class PrivacyService:
         async with self._database.session() as session:
             user_id = await session.scalar(select(User.id).where(User.tg_id == tg_id))
         return user_id is not None
+
+    async def describe_user(self, tg_id: int) -> UserDataSummary | None:
+        """Return what the bot stores about a user, without message contents."""
+        async with self._database.session() as session:
+            user = await session.scalar(select(User).where(User.tg_id == tg_id))
+            if user is None:
+                return None
+
+            counts = await self._summary(session, user.id)
+            word_progress = await _count(
+                session,
+                select(func.count())
+                .select_from(WordProgress)
+                .where(WordProgress.user_id == user.id),
+            )
+            profile = cast(dict[str, Any], user.profile or {})
+            words_value = profile.get("words")
+            words = words_value if isinstance(words_value, dict) else {}
+            card_size = words.get("card_size")
+            card_direction = words.get("direction")
+
+            return UserDataSummary(
+                tg_id=user.tg_id,
+                username=user.username,
+                level=user.level,
+                timezone=user.timezone,
+                quiet_hours_start=user.quiet_hours_start,
+                quiet_hours_end=user.quiet_hours_end,
+                created_at=user.created_at,
+                last_seen_at=user.last_seen_at,
+                card_size=card_size if isinstance(card_size, int) else None,
+                card_direction=card_direction if isinstance(card_direction, str) else None,
+                conversations=counts.conversations,
+                messages=counts.messages,
+                corrections=counts.corrections,
+                vocabulary=counts.vocabulary,
+                sessions=counts.sessions,
+                attempts=counts.attempts,
+                word_progress=word_progress,
+                reminders=counts.reminders,
+                usage=counts.usage,
+            )
 
     async def delete_user(self, tg_id: int) -> DeletionSummary | None:
         """Delete the account and all user-owned rows in one transaction.

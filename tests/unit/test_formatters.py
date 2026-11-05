@@ -1,10 +1,18 @@
 from __future__ import annotations
 
+from datetime import datetime
 from decimal import Decimal
 
-from app.bot.formatters import CORRECTIONS_LIMIT, format_corrections, format_reply
+from app.bot.formatters import (
+    CORRECTIONS_LIMIT,
+    format_about_me,
+    format_corrections,
+    format_reply,
+)
+from app.db.enums import CEFRLevel
 from app.services.conversation.service import ConversationTurn
 from app.services.correction.schema import CorrectionItem
+from app.services.privacy.service import UserDataSummary
 
 
 def make_turn(
@@ -53,6 +61,49 @@ def test_reply_is_truncated() -> None:
 
     assert len(text) == 4096
     assert text.endswith("…")
+
+
+def make_about() -> UserDataSummary:
+    return UserDataSummary(
+        tg_id=100,
+        username="<tester>",
+        level=CEFRLevel.A2,
+        timezone="Europe/Moscow",
+        quiet_hours_start="22:00",
+        quiet_hours_end="08:00",
+        created_at=datetime(2026, 1, 2),
+        last_seen_at=None,
+        card_size=10,
+        card_direction="en_ru",
+        conversations=2,
+        messages=7,
+        corrections=3,
+        vocabulary=4,
+        sessions=5,
+        attempts=6,
+        word_progress=8,
+        reminders=9,
+        usage=10,
+    )
+
+
+def test_about_me_escapes_username_and_shows_counts() -> None:
+    text = format_about_me(make_about(), 90)
+
+    assert "&lt;tester&gt;" in text
+    assert "<code>100</code>" in text
+    assert "A2" in text
+    assert "22:00-08:00" in text
+    assert "Диалоги: 2" in text
+    assert "Слова с прогрессом: 8" in text
+    assert "История чата хранится до 90 дней." in text
+    assert "/delete_me" in text
+
+
+def test_about_me_without_retention() -> None:
+    text = format_about_me(make_about(), 0)
+
+    assert "История чата не хранится." in text
 
 
 def test_no_corrections_means_no_block() -> None:

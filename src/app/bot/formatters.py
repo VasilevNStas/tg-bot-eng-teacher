@@ -9,10 +9,12 @@ of letting the API reject the whole message.
 from __future__ import annotations
 
 from collections.abc import Sequence
+from datetime import datetime
 from html import escape
 
 from app.db.models import Vocabulary
 from app.services.conversation.service import ConversationTurn
+from app.services.privacy.service import UserDataSummary
 from app.services.stats.service import StatsReport
 from app.services.vocabulary.srs import ReviewCard
 from app.texts import ru
@@ -246,6 +248,52 @@ def format_vocabulary(
             lines.append("…")
             break
     return "\n".join(lines)
+
+
+def format_about_me(summary: UserDataSummary, retention_days: int) -> str:
+    """Render the user's stored profile and row counts, never message texts."""
+    quiet = ru.QUIET_NONE
+    if summary.quiet_hours_start and summary.quiet_hours_end:
+        quiet = f"{summary.quiet_hours_start}-{summary.quiet_hours_end}"
+
+    retention = (
+        ru.ABOUT_ME_RETENTION.format(days=retention_days)
+        if retention_days > 0
+        else ru.ABOUT_ME_NO_RETENTION
+    )
+    username = f"@{escape(summary.username, quote=False)}" if summary.username else "—"
+    direction = (
+        ru.WORDS_DIRECTION_LABELS.get(summary.card_direction, summary.card_direction)
+        if summary.card_direction
+        else "—"
+    )
+
+    return ru.ABOUT_ME.format(
+        tg_id=summary.tg_id,
+        username=username,
+        level=summary.level.value,
+        timezone=escape(summary.timezone, quote=False),
+        quiet=quiet,
+        created=_date(summary.created_at),
+        last_seen=_date(summary.last_seen_at),
+        card_size=summary.card_size if summary.card_size is not None else "—",
+        direction=direction,
+        conversations=summary.conversations,
+        messages=summary.messages,
+        corrections=summary.corrections,
+        vocabulary=summary.vocabulary,
+        sessions=summary.sessions,
+        attempts=summary.attempts,
+        word_progress=summary.word_progress,
+        reminders=summary.reminders,
+        usage=summary.usage,
+        retention=retention,
+    )
+
+
+def _date(value: datetime | None) -> str:
+    """Format a datetime as a short date, or a dash when it is missing."""
+    return value.strftime("%d.%m.%Y") if value else "—"
 
 
 def _append_within(lines: list[str], line: str, limit: int) -> bool:

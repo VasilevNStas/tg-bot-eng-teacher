@@ -8,6 +8,7 @@ from sqlalchemy import func, select
 from app.db.base import Base
 from app.db.database import Database
 from app.db.enums import (
+    CEFRLevel,
     Checker,
     ContentKind,
     ConversationMode,
@@ -108,6 +109,23 @@ async def test_delete_user_removes_all_owned_data(tmp_path: Path) -> None:
                 UsageLedger(user_id=user.id, conversation_id=conversation.id, model="fake"),
             ]
         )
+
+    about = await PrivacyService(database).describe_user(100)
+    assert about is not None
+    assert about.tg_id == 100
+    assert about.username == "tester"
+    assert about.level is CEFRLevel.A2
+    assert about.timezone == "UTC"
+    assert about.conversations == 1
+    assert about.messages == 1
+    assert about.corrections == 1
+    assert about.vocabulary == 1
+    assert about.sessions == 1
+    assert about.attempts == 1
+    assert about.word_progress == 0
+    assert about.reminders == 1
+    assert about.usage == 1
+    assert await PrivacyService(database).describe_user(999) is None
 
     summary = await PrivacyService(database).delete_user(100)
 

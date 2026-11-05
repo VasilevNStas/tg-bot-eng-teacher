@@ -367,3 +367,29 @@ async def test_words_reports_missing_content(tmp_path: Path) -> None:
 
     await bot.session.close()
     await database.dispose()
+
+
+async def test_words_cancel_abandons_active_card(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    await seed_fixture(database)
+    await make_user(database, profile=words_profile())
+    dispatcher = create_dispatcher(make_services(database))
+    bot, session = await make_bot()
+
+    await dispatcher.feed_update(bot, make_message_update(1, "/words"))
+    await dispatcher.feed_update(bot, make_message_update(2, "/cancel"))
+
+    assert any("досрочно" in text for text in sent_texts(session))
+    async with database.session() as db_session:
+        exercise_session = await db_session.scalar(
+            select(ExerciseSession)
+            .where(ExerciseSession.kind == ExerciseSessionKind.WORDS)
+            .order_by(ExerciseSession.id.desc())
+            .limit(1)
+        )
+        assert exercise_session is not None
+        assert exercise_session.state is ExerciseState.ABANDONED
+        assert exercise_session.finished_at is not None
+
+    await bot.session.close()
+    await database.dispose()

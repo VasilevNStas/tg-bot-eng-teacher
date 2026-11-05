@@ -10,13 +10,15 @@ MVP-каркас работает:
 - онбординг: короткий placement-тест или ручной выбор уровня;
 - чат с LLM-персоной и expandable-коррекциями;
 - `/correction <текст>` — полный разбор ошибок;
-- `/drill` — неправильные глаголы, mastery/streak, `/cancel`;
+- `/menu` — разделы «Учёба», «Практика», «Прогресс», «Настройки»;
+- `/drill` — неправильные глаголы, mastery/streak, выход через `/cancel` или кнопку;
 - `/words` — адаптивные карточки слов: study → quiz → результат, настройки и повтор ошибок;
 - `/vocab` — автосохранённые слова из диалога;
 - `/review` — интервальное повторение слов (упрощённый SM-2);
 - `/stats` — прогресс, слабые темы и слова;
 - `/roleplay` — ролевые сцены, `/stop` — выход;
 - `/timezone` и `/quiet` — часовой пояс и тихие часы;
+- `/about_me` — что бот хранит о пользователе (профиль и счётчики данных);
 - `/delete_me` — удаление профиля и всех данных с подтверждением;
 - retention диалогов 90 дней + `prune-history`;
 - DB-backed напоминания с quiet hours и DST-safe переносом;
@@ -134,9 +136,10 @@ uv run python -m app
 ```
 
 MVP работает в режиме polling — публичный URL не требуется.
-Команды бота: `/start`, `/help`, `/correction <текст>`, `/drill`, `/words`,
-`/vocab`, `/review`, `/stats`, `/roleplay`, `/stop`, `/timezone`, `/quiet`,
-`/delete_me`, `/cancel`.
+В меню бота: `/start`, `/menu`, `/stats`, `/help`. Остальные
+команды (`/drill`, `/words`, `/review`, `/vocab`, `/correction`, `/roleplay`,
+`/stop`, `/timezone`, `/quiet`, `/about_me`, `/delete_me`) сгруппированы в
+`/menu`.
 
 ## Docker
 

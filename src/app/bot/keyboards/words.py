@@ -5,7 +5,7 @@ from __future__ import annotations
 from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from app.bot.callbacks import WordsCB
+from app.bot.callbacks import TaskCB, WordsCB
 from app.services.words.service import WordCardDirection
 from app.texts import ru
 
@@ -17,7 +17,8 @@ def study_keyboard() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     builder.button(text=ru.BUTTON_START_QUIZ, callback_data=WordsCB(action="quiz"))
     builder.button(text=ru.BUTTON_SETTINGS, callback_data=WordsCB(action="settings"))
-    builder.adjust(2)
+    builder.button(text=ru.BUTTON_CANCEL_TASK, callback_data=TaskCB(action="cancel"))
+    builder.adjust(2, 1)
     return builder.as_markup()
 
 

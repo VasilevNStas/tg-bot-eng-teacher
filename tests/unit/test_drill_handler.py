@@ -8,11 +8,12 @@ from typing import Any
 
 from aiogram import Bot
 from aiogram.client.session.base import BaseSession
-from aiogram.methods import SendMessage, TelegramMethod
-from aiogram.types import Chat, Message, Update
+from aiogram.methods import EditMessageText, SendMessage, TelegramMethod
+from aiogram.types import CallbackQuery, Chat, Message, Update
 from aiogram.types import User as TgUser
 from sqlalchemy import func, select
 
+from app.bot.callbacks import MenuCB, TaskCB
 from app.bot.factory import create_dispatcher
 from app.core.config import Settings
 from app.core.di import AppServices
@@ -152,6 +153,32 @@ def make_message_update(update_id: int, text: str, *, user_id: int = 100) -> Upd
     return Update(update_id=update_id, message=message)
 
 
+def make_callback_update(update_id: int, data: TaskCB | MenuCB, *, user_id: int = 100) -> Update:
+    message = Message(
+        message_id=update_id,
+        date=datetime.now(UTC),
+        chat=Chat(id=user_id, type="private"),
+        from_user=TgUser(id=999, is_bot=True, first_name="Bot"),
+        text="question",
+    )
+    callback = CallbackQuery(
+        id=f"cb{update_id}",
+        from_user=TgUser(id=user_id, is_bot=False, first_name="Tester"),
+        chat_instance="chat-instance",
+        message=message,
+        data=data.pack(),
+    )
+    return Update(update_id=update_id, callback_query=callback)
+
+
+def make_task_cancel_update(update_id: int, *, user_id: int = 100) -> Update:
+    return make_callback_update(update_id, TaskCB(action="cancel"), user_id=user_id)
+
+
+def make_menu_update(update_id: int, data: MenuCB, *, user_id: int = 100) -> Update:
+    return make_callback_update(update_id, data, user_id=user_id)
+
+
 async def make_bot() -> tuple[Bot, RecordingSession]:
     session = RecordingSession()
     return Bot(token="123456:secret-token", session=session), session
@@ -162,6 +189,14 @@ def sent_texts(session: RecordingSession) -> list[str]:
         method.text
         for method in session.methods
         if isinstance(method, SendMessage) and method.text is not None
+    ]
+
+
+def edited_texts(session: RecordingSession) -> list[str]:
+    return [
+        method.text
+        for method in session.methods
+        if isinstance(method, EditMessageText) and method.text is not None
     ]
 
 
@@ -240,6 +275,59 @@ async def test_drill_cancel_abandons_session(tmp_path: Path) -> None:
         assert exercise_session is not None
         assert exercise_session.state is ExerciseState.ABANDONED
         assert exercise_session.finished_at is not None
+
+    await bot.session.close()
+    await database.dispose()
+
+
+async def test_drill_inline_exit_abandons_session(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    await seed_fixture(database)
+    await make_user(database)
+    dispatcher = create_dispatcher(make_services(database))
+    bot, session = await make_bot()
+
+    await dispatcher.feed_update(bot, make_message_update(1, "/drill"))
+    await dispatcher.feed_update(bot, make_task_cancel_update(2))
+
+    assert any("досрочно" in text for text in edited_texts(session))
+    async with database.session() as db_session:
+        exercise_session = await db_session.scalar(select(ExerciseSession))
+        assert exercise_session is not None
+        assert exercise_session.state is ExerciseState.ABANDONED
+        assert exercise_session.finished_at is not None
+
+    await bot.session.close()
+    await database.dispose()
+
+
+async def test_menu_section_navigation_edits_message(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    await make_user(database)
+    dispatcher = create_dispatcher(make_services(database))
+    bot, session = await make_bot()
+
+    await dispatcher.feed_update(bot, make_menu_update(1, MenuCB(target="learn")))
+
+    assert edited_texts(session) == [ru.MENU_LEARN_TEXT]
+    await bot.session.close()
+    await database.dispose()
+
+
+async def test_menu_action_starts_drill(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    await seed_fixture(database)
+    await make_user(database)
+    dispatcher = create_dispatcher(make_services(database))
+    bot, session = await make_bot()
+
+    await dispatcher.feed_update(bot, make_menu_update(1, MenuCB(target="drill")))
+
+    assert any("Вопрос 1 из 1" in text for text in sent_texts(session))
+    async with database.session() as db_session:
+        exercise_session = await db_session.scalar(select(ExerciseSession))
+        assert exercise_session is not None
+        assert exercise_session.state is ExerciseState.ACTIVE
 
     await bot.session.close()
     await database.dispose()
