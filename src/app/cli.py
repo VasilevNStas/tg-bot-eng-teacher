@@ -15,7 +15,7 @@ import json
 import os
 import sys
 from collections.abc import Sequence
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 from app.core.durations import parse_duration
@@ -29,6 +29,7 @@ from app.db.database import Database
 from app.services.admin.service import AdminService
 from app.services.health import check_health, format_health
 from app.services.privacy.service import PrivacyService
+from app.services.usage.report import build_usage_report, format_usage_report
 
 
 async def _import_loaded(
@@ -124,6 +125,23 @@ async def prune_history(*, days: int) -> int:
     finally:
         await database.dispose()
     print(f"deleted conversations: {deleted}")
+    return 0
+
+
+async def llm_report(*, days: int, as_json: bool) -> int:
+    """Print token, cost and latency aggregates from ``usage_ledger``."""
+    since = datetime.now(UTC) - timedelta(days=days)
+    database = Database()
+    database.init(_db_path())
+    try:
+        report = await build_usage_report(database, since=since)
+    finally:
+        await database.dispose()
+
+    if as_json:
+        print(json.dumps(report.as_dict(), ensure_ascii=False, indent=2))
+    else:
+        print(format_usage_report(report))
     return 0
 
 
@@ -328,6 +346,22 @@ def main(argv: Sequence[str] | None = None) -> int:
         help="Retention in days (default: HISTORY_RETENTION_DAYS or 90)",
     )
 
+    usage_parser = subparsers.add_parser(
+        "llm-report",
+        help="Show LLM token, cost and latency aggregates",
+    )
+    usage_parser.add_argument(
+        "--days",
+        type=int,
+        default=30,
+        help="Reporting window in days (default: 30)",
+    )
+    usage_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Emit machine-readable JSON",
+    )
+
     health_parser = subparsers.add_parser(
         "health",
         help="Check database, migration, content, heartbeat and disk",
@@ -363,7 +397,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     # Report/prune/health output must stay parseable, so logs go to stderr.
-    quiet_command = args.command in {"content-report", "prune-history", "health", "admin"}
+    quiet_command = args.command in {
+        "content-report",
+        "prune-history",
+        "llm-report",
+        "health",
+        "admin",
+    }
     setup_logging(
         "WARNING" if quiet_command else "INFO",
         stream=sys.stderr if quiet_command else sys.stdout,
@@ -381,6 +421,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             if days is None:
                 days = int(os.environ.get("HISTORY_RETENTION_DAYS", "90"))
             return asyncio.run(prune_history(days=days))
+        if args.command == "llm-report":
+            return asyncio.run(llm_report(days=args.days, as_json=args.json))
         if args.command == "health":
             return asyncio.run(health(service=args.service, as_json=args.json))
         if args.command == "admin":

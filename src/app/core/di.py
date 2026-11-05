@@ -6,8 +6,10 @@ from dataclasses import dataclass
 from datetime import timedelta
 
 from app.core.config import Settings
+from app.core.logging import get_logger
 from app.db.database import Database
 from app.db.enums import CEFRLevel, ConversationMode
+from app.llm.models import build_routes, validate_routes
 from app.llm.openrouter import OpenRouterClient
 from app.llm.port import LLMClient
 from app.services.conversation.service import ConversationService
@@ -16,6 +18,8 @@ from app.services.prompts.builder import PromptBuilder
 from app.services.prompts.registry import PromptRegistry
 from app.services.usage.service import UsageService
 from app.services.words.service import WordCardService
+
+logger = get_logger(__name__)
 
 
 @dataclass(slots=True)
@@ -56,15 +60,21 @@ def build_services(database: Database, settings: Settings) -> AppServices:
         history_window=settings.prompt_history_window,
     )
     llm = OpenRouterClient(settings)
+    routes = build_routes(settings)
+    validation = validate_routes(routes)
+    if not validation.ok:
+        raise ValueError("invalid LLM routes: " + "; ".join(validation.errors))
+    for warning in validation.warnings:
+        logger.warning("llm_route_warning", warning=warning)
+
     usage = UsageService(database, daily_budget=settings.daily_token_budget)
     conversation = ConversationService(
         database,
         llm,
         usage,
         builder,
-        model_fast=settings.llm_model_fast,
-        model_smart=settings.llm_model_smart,
-        max_output_tokens=settings.llm_max_output_tokens,
+        routes=routes,
+        repair_attempts=settings.llm_repair_attempts,
         idle_timeout=timedelta(minutes=settings.conversation_idle_minutes),
     )
     exercise = ExerciseService(

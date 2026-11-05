@@ -14,6 +14,7 @@ Handlers receive a ``ConversationTurn`` with everything needed for the reply.
 
 from __future__ import annotations
 
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from decimal import Decimal
@@ -21,6 +22,7 @@ from decimal import Decimal
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.logging import get_logger
 from app.db.database import Database
 from app.db.enums import ConversationMode, MessageRole
 from app.db.models import Conversation, User
@@ -28,6 +30,7 @@ from app.db.models import Correction as DbCorrection
 from app.db.models import Message as DbMessage
 from app.db.repositories.vocabulary import VocabularyRepository
 from app.llm.errors import LLMInvalidResponse
+from app.llm.models import Route, RouteSpec
 from app.llm.port import LLMClient, LLMResponse
 from app.llm.port import Message as LlmMessage
 from app.services.correction.schema import (
@@ -35,13 +38,23 @@ from app.services.correction.schema import (
     CorrectionPayload,
     NewVocabularyItem,
 )
+from app.services.correction.validation import sanitize_payload
 from app.services.prompts.builder import PromptBuilder, PromptContext
 from app.services.prompts.registry import PromptTemplate
 from app.services.usage.service import UsageService
 
+logger = get_logger(__name__)
+
 # These modes ask the LLM for a JSON payload with corrections and vocabulary.
 # Drill/roleplay replies are plain text.
 STRUCTURED_MODES = frozenset({ConversationMode.CHAT, ConversationMode.CORRECTION})
+
+_ROUTE_BY_MODE: dict[ConversationMode, Route] = {
+    ConversationMode.CHAT: Route.CHAT,
+    ConversationMode.CORRECTION: Route.CORRECTION,
+    ConversationMode.DRILL: Route.CHAT,
+    ConversationMode.ROLEPLAY: Route.ROLEPLAY,
+}
 
 
 @dataclass(frozen=True, slots=True)
@@ -71,22 +84,19 @@ class ConversationService:
         usage: UsageService,
         builder: PromptBuilder,
         *,
-        model_fast: str,
-        model_smart: str,
-        max_output_tokens: int,
+        routes: Mapping[Route, RouteSpec],
         idle_timeout: timedelta = timedelta(minutes=30),
+        repair_attempts: int = 1,
     ) -> None:
-        if max_output_tokens <= 0:
-            raise ValueError("max_output_tokens must be positive")
+        if not routes:
+            raise ValueError("at least one LLM route is required")
         self._database = database
         self._llm = llm
         self._usage = usage
         self._builder = builder
-        self._model_fast = model_fast
-        self._model_smart = model_smart
-        self._max_output_tokens = max_output_tokens
-        # A conversation idle for longer than this is closed automatically.
+        self._routes = routes
         self._idle_timeout = idle_timeout
+        self._repair_attempts = max(repair_attempts, 0)
 
     async def respond(
         self,
@@ -114,22 +124,18 @@ class ConversationService:
             )
         )
 
+        route = self._routes[_ROUTE_BY_MODE.get(mode, Route.CHAT)]
+        structured = mode in STRUCTURED_MODES
+        schema = CorrectionPayload if structured else None
+
         # Refuse before spending money if this call would exceed the budget.
         await self._usage.ensure_available(
             user.id,
-            estimated_tokens=prompt.estimated_input_tokens + self._max_output_tokens,
+            estimated_tokens=prompt.estimated_input_tokens + route.max_tokens,
         )
 
-        structured = mode in STRUCTURED_MODES
-        response = await self._llm.complete(
-            prompt.messages,
-            model=self._model_for(mode),
-            # Corrections benefit from lower temperature; free chat is looser.
-            temperature=0.4 if mode is ConversationMode.CORRECTION else 0.7,
-            max_tokens=self._max_output_tokens,
-            response_schema=CorrectionPayload if structured else None,
-        )
-        payload = self._payload(response, structured)
+        response = await self._complete_with_repair(prompt.messages, route, schema)
+        payload = sanitize_payload(self._payload(response, structured), text)
 
         user_message_id, assistant_message_id = await self._persist(
             user=user,
@@ -219,11 +225,77 @@ class ConversationService:
                 .limit(1)
             )
 
-    def _model_for(self, mode: ConversationMode) -> str:
-        """Corrections need the smarter model; free chat uses the fast one."""
-        if mode is ConversationMode.CORRECTION:
-            return self._model_smart
-        return self._model_fast
+    async def _complete_with_repair(
+        self,
+        messages: Sequence[LlmMessage],
+        route: RouteSpec,
+        schema: type[CorrectionPayload] | None,
+    ) -> LLMResponse:
+        """Call the route once, then try one structured-output repair."""
+        try:
+            return await self._complete(route, messages, schema)
+        except LLMInvalidResponse as exc:
+            if schema is None or self._repair_attempts < 1:
+                raise
+            logger.warning(
+                "llm_repair",
+                route=route.name.value,
+                model=route.model,
+                error=str(exc),
+            )
+            return await self._complete(route, self._repair_messages(messages, exc), schema)
+
+    async def _complete(
+        self,
+        route: RouteSpec,
+        messages: Sequence[LlmMessage],
+        schema: type[CorrectionPayload] | None,
+    ) -> LLMResponse:
+        """Call one route with its model, temperature and token cap."""
+        if route.fallback:
+            response = await self._llm.complete(
+                messages,
+                model=route.model,
+                fallback_model=route.fallback,
+                temperature=route.temperature,
+                max_tokens=route.max_tokens,
+                response_schema=schema,
+            )
+        else:
+            response = await self._llm.complete(
+                messages,
+                model=route.model,
+                temperature=route.temperature,
+                max_tokens=route.max_tokens,
+                response_schema=schema,
+            )
+        logger.info(
+            "llm_call",
+            route=route.name.value,
+            model=response.model,
+            input_tokens=response.input_tokens,
+            output_tokens=response.output_tokens,
+            cost_usd=str(response.cost_usd),
+            latency_ms=response.latency_ms,
+        )
+        return response
+
+    @staticmethod
+    def _repair_messages(
+        messages: Sequence[LlmMessage],
+        error: LLMInvalidResponse,
+    ) -> list[LlmMessage]:
+        """Ask the model to repeat its answer as valid JSON after a schema error."""
+        instruction = (
+            "Your previous answer could not be parsed. Return ONLY one JSON object "
+            "matching the required schema, with no prose and no code fences. "
+            f"Validation error: {error}"
+        )
+        repair = list(messages)
+        if error.content:
+            repair.append(LlmMessage(role="assistant", content=error.content))
+        repair.append(LlmMessage(role="user", content=instruction))
+        return repair
 
     @staticmethod
     def _payload(response: LLMResponse, structured: bool) -> CorrectionPayload:

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import json
 from collections.abc import AsyncGenerator
 from datetime import UTC, datetime, timedelta
@@ -10,7 +11,7 @@ from unittest.mock import AsyncMock
 
 from aiogram import Bot
 from aiogram.client.session.base import BaseSession
-from aiogram.methods import EditMessageText, SendMessage, TelegramMethod
+from aiogram.methods import EditMessageText, SendChatAction, SendMessage, TelegramMethod
 from aiogram.types import CallbackQuery, Chat, Message
 from aiogram.types import User as TgUser
 from sqlalchemy import func, select
@@ -23,6 +24,7 @@ from app.bot.handlers.privacy import handle_delete_callback, handle_delete_me
 from app.bot.handlers.review import handle_grade, handle_review
 from app.bot.handlers.roleplay import handle_roleplay, handle_start, handle_stop
 from app.bot.handlers.stats import handle_stats
+from app.bot.handlers.typing import typing_action
 from app.bot.handlers.vocab import handle_vocab
 from app.core.config import Settings
 from app.core.di import AppServices
@@ -40,6 +42,7 @@ from app.db.models import (
 from app.db.models import Message as DbMessage
 from app.db.repositories.users import UserRepository
 from app.llm.errors import LLMUnavailable
+from app.llm.models import build_routes
 from app.llm.port import LLMResponse
 from app.services.conversation.service import ConversationService
 from app.services.exercises.service import ExerciseService
@@ -62,6 +65,7 @@ class FakeLLM:
         messages: Any,
         *,
         model: str | None = None,
+        fallback_model: str | None = None,
         temperature: float = 0.7,
         max_tokens: int = 800,
         response_schema: Any = None,
@@ -169,6 +173,8 @@ def make_settings(*, budget: int = 10_000) -> Settings:
         llm_api_key="sk-test",
         llm_model_fast="fast/model",
         llm_model_smart="smart/model",
+        llm_max_output_tokens=300,
+        typing_indicator_enabled=False,
         daily_token_budget=budget,
     )
 
@@ -197,9 +203,7 @@ def make_services(
         llm,
         usage,
         builder,
-        model_fast="fast/model",
-        model_smart="smart/model",
-        max_output_tokens=300,
+        routes=build_routes(settings),
         idle_timeout=timedelta(minutes=30),
     )
     return AppServices(
@@ -391,7 +395,7 @@ async def test_chat_splits_long_reply_and_corrections(tmp_path: Path) -> None:
     )
     bot, session = await make_bot()
 
-    await handle_chat(make_message(bot, "hello"), services)
+    await handle_chat(make_message(bot, "I go to cinema"), services)
 
     assert len(session.methods) == 2
     first, second = session.methods
@@ -748,3 +752,37 @@ async def test_delete_me_cancel_keeps_user(tmp_path: Path) -> None:
 
     await bot.session.close()
     await database.dispose()
+
+
+async def test_oversized_message_is_rejected_before_llm(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    await make_onboarded_user(database)
+    services = make_services(database, FakeLLM())
+    bot, session = await make_bot()
+    text = "x" * (services.settings.max_user_message_chars + 1)
+
+    await handle_chat(make_message(bot, text), services)
+
+    assert len(session.methods) == 1
+    sent = session.methods[0]
+    assert isinstance(sent, SendMessage)
+    assert sent.text == ru.MESSAGE_TOO_LONG
+
+    await bot.session.close()
+    await database.dispose()
+
+
+async def test_typing_action_can_be_disabled() -> None:
+    bot, session = await make_bot()
+    message = make_message(bot, "hi")
+
+    async with typing_action(message, enabled=True):
+        await asyncio.sleep(0.01)
+    assert any(isinstance(method, SendChatAction) for method in session.methods)
+
+    session.methods.clear()
+    async with typing_action(message, enabled=False):
+        pass
+    assert session.methods == []
+
+    await bot.session.close()

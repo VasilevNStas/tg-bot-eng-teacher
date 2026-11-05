@@ -9,6 +9,7 @@ MVP-каркас работает:
 
 - онбординг: короткий placement-тест или ручной выбор уровня;
 - чат с LLM-персоной и expandable-коррекциями;
+- LLM routing fast/smart/fallback, repair JSON, лимит сообщения и typing-индикатор;
 - `/correction <текст>` — полный разбор ошибок;
 - `/menu` — разделы «Учёба», «Практика», «Прогресс», «Настройки»;
 - `/drill` — неправильные глаголы, mastery/streak, выход через `/cancel` или кнопку;
@@ -87,6 +88,7 @@ uv run python -m app.cli import-content content/vocabulary
 ```bash
 uv run python -m app.cli seed --dry-run
 uv run python -m app.cli content-report
+uv run python -m app.cli llm-report          # токены, стоимость, latency
 ```
 
 Бот читает только SQLite; YAML — источник истины для git-ревью. Подробнее о

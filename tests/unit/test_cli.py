@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import json
 import sys
+from decimal import Decimal
 from pathlib import Path
 
 import pytest
@@ -13,7 +14,7 @@ from app.cli import main
 from app.core.logging import setup_logging
 from app.db.base import Base
 from app.db.database import Database
-from app.db.models import ContentItem
+from app.db.models import ContentItem, UsageLedger
 
 FIXTURE = Path(__file__).resolve().parents[1] / "fixtures" / "content" / "sample.yaml"
 
@@ -297,3 +298,54 @@ def test_cli_prune_history(
 
     assert main(["prune-history", "--days", "0"]) == 0
     assert "deleted conversations: 0" in capsys.readouterr().out
+
+
+async def add_usage(path: Path) -> None:
+    database = Database()
+    database.init(path)
+    try:
+        async with database.session() as session:
+            session.add_all(
+                [
+                    UsageLedger(
+                        model="fast/model",
+                        input_tokens=100,
+                        output_tokens=20,
+                        cost_usd=Decimal("0.001"),
+                        latency_ms=100,
+                    ),
+                    UsageLedger(
+                        model="smart/model",
+                        input_tokens=200,
+                        output_tokens=40,
+                        cost_usd=Decimal("0.002"),
+                        latency_ms=300,
+                    ),
+                ]
+            )
+    finally:
+        await database.dispose()
+
+
+def test_cli_llm_report(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    db_path = tmp_path / "bot.db"
+    asyncio.run(prepare_database(db_path))
+    asyncio.run(add_usage(db_path))
+    monkeypatch.setenv("DB_PATH", str(db_path))
+
+    assert main(["llm-report"]) == 0
+    output = capsys.readouterr().out
+    assert "calls=2" in output
+    assert "fast/model" in output
+    assert "smart/model" in output
+
+    assert main(["llm-report", "--json"]) == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["calls"] == 2
+    assert payload["input_tokens"] == 300
+    assert payload["output_tokens"] == 60
+    assert payload["cost_usd"] == "0.003000"
