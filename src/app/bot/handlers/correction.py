@@ -13,6 +13,7 @@ from aiogram.types import Message
 
 from app.bot.formatters import format_correction_report
 from app.bot.handlers.errors import answer_llm_error
+from app.bot.handlers.typing import typing_action
 from app.bot.keyboards.onboarding import start_keyboard
 from app.bot.user_context import resolve_user
 from app.core.di import AppServices
@@ -42,6 +43,9 @@ async def handle_correction(
     if not text:
         await message.answer(ru.CORRECTION_USAGE)
         return
+    if len(text) > services.settings.max_user_message_chars:
+        await message.answer(ru.MESSAGE_TOO_LONG)
+        return
 
     user = await resolve_user(services, message.from_user)
     if user.onboarding_state != "done":
@@ -49,12 +53,16 @@ async def handle_correction(
         return
 
     try:
-        turn = await services.conversation.respond(
-            user,
-            text,
-            mode=ConversationMode.CORRECTION,
-            update_id=update_id,
-        )
+        async with typing_action(
+            message,
+            enabled=services.settings.typing_indicator_enabled,
+        ):
+            turn = await services.conversation.respond(
+                user,
+                text,
+                mode=ConversationMode.CORRECTION,
+                update_id=update_id,
+            )
     except (PromptTooLong, DailyBudgetExceeded, LLMError) as exc:
         await answer_llm_error(message, exc, user_id=user.id, operation="correction")
         return

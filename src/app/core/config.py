@@ -53,15 +53,38 @@ class Settings(BaseSettings):
     llm_model_fast: str
     llm_model_smart: str
     llm_model_fallback: str | None = None
+    llm_model_roleplay: str | None = None
+    llm_model_summary: str | None = None
+    llm_model_judge: str | None = None
     llm_timeout_seconds: float = Field(default=60.0, gt=0)
+    llm_connect_timeout_seconds: float = Field(default=5.0, gt=0)
     llm_max_retries: int = Field(default=2, ge=0, le=10)
     llm_retry_backoff_seconds: float = Field(default=1.0, ge=0)
+    llm_retry_max_backoff_seconds: float = Field(default=8.0, ge=0)
+    llm_circuit_breaker_failures: int = Field(default=5, ge=1)
+    llm_circuit_breaker_seconds: float = Field(default=60.0, gt=0)
+    llm_repair_attempts: int = Field(default=1, ge=0, le=3)
     llm_max_input_tokens: int = Field(default=4000, gt=0)
     llm_max_output_tokens: int = Field(default=800, gt=0)
+
+    # Per-route generation settings. Routes are resolved into RouteSpec in
+    # app.llm.models so services never hardcode a temperature or token cap.
+    llm_temperature_chat: float = Field(default=0.7, ge=0, le=2)
+    llm_temperature_correction: float = Field(default=0.3, ge=0, le=2)
+    llm_temperature_roleplay: float = Field(default=0.8, ge=0, le=2)
+    llm_temperature_summary: float = Field(default=0.2, ge=0, le=2)
+    llm_temperature_judge: float = Field(default=0.0, ge=0, le=2)
+    llm_max_tokens_chat: int = Field(default=600, gt=0)
+    llm_max_tokens_correction: int = Field(default=800, gt=0)
+    llm_max_tokens_roleplay: int = Field(default=500, gt=0)
+    llm_max_tokens_summary: int = Field(default=300, gt=0)
+    llm_max_tokens_judge: int = Field(default=200, gt=0)
 
     prompts_dir: Path = Path("./prompts")
     prompt_history_window: int = Field(default=12, ge=0, le=50)
     conversation_idle_minutes: int = Field(default=30, ge=1, le=1440)
+    max_user_message_chars: int = Field(default=2000, ge=1, le=4096)
+    typing_indicator_enabled: bool = True
     drill_session_size: int = Field(default=5, ge=1, le=20)
     words_card_size: int = Field(default=10, ge=1, le=20)
 

@@ -24,6 +24,7 @@ from app.db.database import Database
 from app.db.enums import CEFRLevel, ExerciseSessionKind, ExerciseState, Verdict
 from app.db.models import ContentItem, ExerciseAttempt, ExerciseSession, User, WordProgress
 from app.db.repositories.users import UserRepository
+from app.llm.models import build_routes
 from app.llm.port import LLMResponse
 from app.services.conversation.service import ConversationService
 from app.services.exercises.service import ExerciseService
@@ -115,6 +116,8 @@ def make_services(database: Database) -> AppServices:
         llm_api_key="sk-test",
         llm_model_fast="fast/model",
         llm_model_smart="smart/model",
+        llm_max_output_tokens=300,
+        typing_indicator_enabled=False,
     )
     prompts = PromptRegistry(PROMPTS_DIR)
     builder = PromptBuilder(prompts, max_input_tokens=8000, history_window=12)
@@ -125,9 +128,7 @@ def make_services(database: Database) -> AppServices:
         llm,
         usage,
         builder,
-        model_fast="fast/model",
-        model_smart="smart/model",
-        max_output_tokens=300,
+        routes=build_routes(settings),
         idle_timeout=timedelta(minutes=30),
     )
     return AppServices(

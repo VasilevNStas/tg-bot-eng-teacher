@@ -9,12 +9,14 @@ from typing import Any
 import pytest
 from sqlalchemy import func, select
 
+from app.core.config import Settings
 from app.db.base import Base
 from app.db.database import Database
 from app.db.enums import CEFRLevel, ConversationMode, ErrorCategory, MessageRole
 from app.db.models import Conversation, Correction, UsageLedger, User, Vocabulary
 from app.db.models import Message as DbMessage
-from app.llm.errors import LLMUnavailable
+from app.llm.errors import LLMInvalidResponse, LLMUnavailable
+from app.llm.models import build_routes
 from app.llm.port import LLMResponse
 from app.services.conversation.service import ConversationService
 from app.services.prompts.builder import PromptBuilder
@@ -34,6 +36,7 @@ class FakeLLM:
         messages: Any,
         *,
         model: str | None = None,
+        fallback_model: str | None = None,
         temperature: float = 0.7,
         max_tokens: int = 800,
         response_schema: Any = None,
@@ -126,14 +129,20 @@ def make_service(
         max_input_tokens=8000,
         history_window=history_window,
     )
+    settings = Settings(
+        _env_file=None,
+        bot_token="123456:secret-token",
+        llm_api_key="sk-test",
+        llm_model_fast="fast/model",
+        llm_model_smart="smart/model",
+        llm_max_output_tokens=300,
+    )
     return ConversationService(
         database,
         llm,
         usage,
         builder,
-        model_fast="fast/model",
-        model_smart="smart/model",
-        max_output_tokens=300,
+        routes=build_routes(settings),
         idle_timeout=timedelta(minutes=30),
     )
 
@@ -397,5 +406,48 @@ async def test_history_window_limits_second_prompt(tmp_path: Path) -> None:
 
     conversation = [m.content for m in llm.calls[2]["messages"] if m.role != "system"]
     assert conversation == ["second", "two", "third"]
+
+    await database.dispose()
+
+
+async def test_invalid_structured_response_is_repaired_once(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    user = await make_user(database)
+    llm = FakeLLM(
+        LLMInvalidResponse("bad schema", content='{"reply": "broken"'),
+        structured_response(reply="Fixed!"),
+    )
+    service = make_service(database, llm, UsageService(database, daily_budget=10_000))
+
+    turn = await service.respond(user, "I go to cinema")
+
+    assert turn.reply == "Fixed!"
+    assert len(llm.calls) == 2
+    repair_messages = llm.calls[1]["messages"]
+    assert any(
+        message.role == "assistant" and '{"reply": "broken"' in message.content
+        for message in repair_messages
+    )
+    assert any(
+        "could not be parsed" in message.content
+        for message in repair_messages
+        if message.role == "user"
+    )
+
+    await database.dispose()
+
+
+async def test_invented_correction_is_dropped(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    user = await make_user(database)
+    invented = correction()
+    invented["original"] = "I have never said this"
+    llm = FakeLLM(structured_response(corrections=[invented]))
+    service = make_service(database, llm, UsageService(database, daily_budget=10_000))
+
+    turn = await service.respond(user, "I go to cinema")
+
+    assert turn.corrections == ()
+    assert turn.reply == "Nice!"
 
     await database.dispose()

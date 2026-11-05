@@ -7,6 +7,7 @@ from aiogram.types import Message
 
 from app.bot.formatters import TELEGRAM_LIMIT, format_corrections, format_reply
 from app.bot.handlers.errors import answer_llm_error
+from app.bot.handlers.typing import typing_action
 from app.bot.keyboards.onboarding import start_keyboard
 from app.bot.user_context import resolve_user
 from app.core.di import AppServices
@@ -31,6 +32,9 @@ async def handle_chat(
     """
     if message.text is None or message.from_user is None:
         return
+    if len(message.text) > services.settings.max_user_message_chars:
+        await message.answer(ru.MESSAGE_TOO_LONG)
+        return
 
     user = await resolve_user(services, message.from_user)
     if user.onboarding_state != "done":
@@ -51,13 +55,17 @@ async def handle_chat(
         mode = ConversationMode.ROLEPLAY
 
     try:
-        turn = await services.conversation.respond(
-            user,
-            message.text,
-            mode=mode,
-            update_id=update_id,
-            scenario=scenario,
-        )
+        async with typing_action(
+            message,
+            enabled=services.settings.typing_indicator_enabled,
+        ):
+            turn = await services.conversation.respond(
+                user,
+                message.text,
+                mode=mode,
+                update_id=update_id,
+                scenario=scenario,
+            )
     except (PromptTooLong, DailyBudgetExceeded, LLMError) as exc:
         await answer_llm_error(
             message,

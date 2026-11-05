@@ -1,5 +1,10 @@
 name: tg-bot-eng-teacher
 
+x-common-env: &common-env
+  DB_PATH: /app/data/bot.db
+  PROMPTS_DIR: /app/prompts
+  LOG_JSON: "true"
+
 x-bot-service: &bot-service
   build:
     context: .
@@ -10,9 +15,7 @@ x-bot-service: &bot-service
     - path: .env
       required: false
   environment:
-    DB_PATH: /app/data/bot.db
-    PROMPTS_DIR: /app/prompts
-    LOG_JSON: "true"
+    <<: *common-env
   volumes:
     - ./data:/app/data
   init: true
@@ -47,6 +50,13 @@ services:
       - python
       - -m
       - app
+    # The user-facing process must not see admin credentials even though both
+    # services read the same .env file.
+    environment:
+      <<: *common-env
+      ADMIN_BOT_TOKEN: ""
+      ADMIN_IDS: ""
+      ADMIN_ALERT_CHAT_ID: ""
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "python", "-m", "app.cli", "health", "--service", "bot"]
@@ -65,7 +75,12 @@ services:
     depends_on:
       migrate:
         condition: service_completed_successfully
-    # ADMIN_BOT_TOKEN and ADMIN_IDS come from .env.
+    # ADMIN_BOT_TOKEN and ADMIN_IDS come from .env. The admin process does not
+    # need the user bot token or the LLM key.
+    environment:
+      <<: *common-env
+      BOT_TOKEN: ""
+      LLM_API_KEY: ""
     command:
       - python
       - -m

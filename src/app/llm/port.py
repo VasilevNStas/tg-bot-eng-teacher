@@ -49,6 +49,7 @@ class LLMClient(Protocol):
         messages: Sequence[Message],
         *,
         model: str | None = None,
+        fallback_model: str | None = None,
         temperature: float = 0.7,
         max_tokens: int = 800,
         response_schema: type[BaseModel] | None = None,

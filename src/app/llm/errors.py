@@ -16,6 +16,11 @@ class LLMTimeout(LLMError):
 class LLMRateLimited(LLMError):
     """Provider returned 429."""
 
+    def __init__(self, message: str, *, retry_after: float | None = None) -> None:
+        super().__init__(message)
+        # Parsed from the Retry-After header when present.
+        self.retry_after = retry_after
+
 
 class LLMUnavailable(LLMError):
     """Provider is unreachable or returned 5xx."""
@@ -30,4 +35,12 @@ class LLMUnauthorized(LLMError):
 
 
 class LLMInvalidResponse(LLMError):
-    """Provider response is malformed or does not match the schema."""
+    """Provider response is malformed or does not match the schema.
+
+    ``content`` keeps the raw assistant text so the conversation layer can use
+    it in a repair prompt or degrade to a plain reply.
+    """
+
+    def __init__(self, message: str, *, content: str | None = None) -> None:
+        super().__init__(message)
+        self.content = content
