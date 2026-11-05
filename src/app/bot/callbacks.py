@@ -44,3 +44,34 @@ class WordsCB(CallbackData, prefix="wrd"):
 
     action: Literal["quiz", "settings", "size", "direction", "retry", "new"]
     value: str = ""
+
+
+class MenuCB(CallbackData, prefix="menu"):
+    """Main menu navigation and action shortcuts."""
+
+    target: Literal[
+        "root",
+        "learn",
+        "practice",
+        "progress",
+        "settings",
+        "help",
+        "drill",
+        "words",
+        "review",
+        "vocab",
+        "correction",
+        "roleplay",
+        "stop",
+        "stats",
+        "timezone",
+        "quiet",
+        "about",
+        "delete",
+    ]
+
+
+class TaskCB(CallbackData, prefix="task"):
+    """Actions shown directly under an active task."""
+
+    action: Literal["cancel"]

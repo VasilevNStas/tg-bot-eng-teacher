@@ -25,6 +25,7 @@ from aiogram.types import CallbackQuery, Message
 
 from app.bot.callbacks import WordsCB
 from app.bot.keyboards.onboarding import start_keyboard
+from app.bot.keyboards.task import task_keyboard
 from app.bot.keyboards.words import CARD_SIZES, result_keyboard, settings_keyboard, study_keyboard
 from app.bot.states import Words
 from app.bot.user_context import resolve_user
@@ -218,7 +219,10 @@ async def _send_question(
 ) -> None:
     """Ask one question and remember when it was shown for latency stats."""
     await state.update_data(started_at=time.time())
-    await message.answer(_format_question(questions[index], index + 1, len(questions)))
+    await message.answer(
+        _format_question(questions[index], index + 1, len(questions)),
+        reply_markup=task_keyboard(),
+    )
 
 
 async def handle_words(

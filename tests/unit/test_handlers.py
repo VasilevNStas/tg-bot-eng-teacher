@@ -11,6 +11,7 @@ from aiogram.types import Chat, Message, User
 
 from app.bot.commands import BOT_COMMANDS
 from app.bot.handlers.common import handle_help, router
+from app.bot.handlers.menu import handle_menu
 from app.texts import ru
 
 
@@ -67,6 +68,34 @@ def test_bot_commands_are_unique() -> None:
     commands = [command.command for command in BOT_COMMANDS]
 
     assert len(commands) == len(set(commands))
+
+
+def test_bot_commands_stay_compact() -> None:
+    commands = {command.command for command in BOT_COMMANDS}
+
+    assert len(commands) <= 4
+    assert {"start", "menu", "stats", "help"} <= commands
+    assert "cancel" not in commands
+
+
+def test_help_is_grouped_by_topic() -> None:
+    assert "<b>Учёба</b>" in ru.HELP
+    assert "<b>Практика</b>" in ru.HELP
+    assert "<b>Прогресс</b>" in ru.HELP
+    assert "<b>Настройки</b>" in ru.HELP
+
+
+async def test_menu_replies_with_section_keyboard() -> None:
+    session = RecordingSession()
+    bot = Bot(token="123456:secret-token", session=session)
+
+    await handle_menu(make_message(bot, "/menu"))
+
+    method = session.methods[0]
+    assert isinstance(method, SendMessage)
+    assert method.text == ru.MENU_TITLE
+    assert method.reply_markup is not None
+    await bot.session.close()
 
 
 async def test_help_replies_with_help_text() -> None:

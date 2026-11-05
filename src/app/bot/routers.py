@@ -8,10 +8,12 @@ from __future__ import annotations
 
 from aiogram import Dispatcher
 
+from app.bot.handlers.cancel import build_router as build_cancel_router
 from app.bot.handlers.chat import build_router as build_chat_router
 from app.bot.handlers.common import build_router as build_common_router
 from app.bot.handlers.correction import build_router as build_correction_router
 from app.bot.handlers.drill import build_router as build_drill_router
+from app.bot.handlers.menu import build_router as build_menu_router
 from app.bot.handlers.onboarding import build_router as build_onboarding_router
 from app.bot.handlers.preferences import build_router as build_preferences_router
 from app.bot.handlers.privacy import build_router as build_privacy_router
@@ -25,6 +27,8 @@ from app.bot.handlers.words import build_router as build_words_router
 def register_routers(dispatcher: Dispatcher) -> None:
     """Attach every feature router to the dispatcher."""
     dispatcher.include_router(build_common_router())
+    dispatcher.include_router(build_menu_router())
+    dispatcher.include_router(build_cancel_router())
     dispatcher.include_router(build_onboarding_router())
     dispatcher.include_router(build_drill_router())
     dispatcher.include_router(build_words_router())
