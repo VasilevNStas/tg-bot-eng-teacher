@@ -28,3 +28,9 @@ class Words(StatesGroup):
 
     study = State()
     quiz = State()
+
+
+class Translation(StatesGroup):
+    """One Russian-to-English translation practice session."""
+
+    active = State()

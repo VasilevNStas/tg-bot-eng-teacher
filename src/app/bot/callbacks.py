@@ -57,6 +57,7 @@ class MenuCB(CallbackData, prefix="menu"):
         "settings",
         "help",
         "drill",
+        "translate",
         "words",
         "review",
         "vocab",

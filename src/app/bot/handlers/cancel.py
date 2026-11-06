@@ -13,12 +13,13 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
 
 from app.bot.callbacks import TaskCB
-from app.bot.states import Drill, Words
+from app.bot.states import Drill, Translation, Words
 from app.bot.user_context import resolve_user
 from app.core.di import AppServices
 from app.db.enums import ExerciseState
 from app.db.models import User
 from app.services.exercises.errors import DrillSessionError
+from app.services.translation.errors import TranslationSessionError
 from app.texts import ru
 
 
@@ -33,13 +34,19 @@ async def cancel_active_task(
     if current == Drill.active.state:
         return await _cancel_drill(state, services, user)
 
+    if current == Translation.active.state:
+        return await _cancel_translation(state, services, user)
+
     if current in (Words.study.state, Words.quiz.state):
         return await _cancel_words(state, services, user)
 
-    # FSM data can be lost after a deploy; still close a dangling word card.
+    # FSM data can be lost after a deploy; still close dangling sessions.
     stats = await services.words.cancel_active(user)
     if stats is not None:
         return _words_summary(stats.total, stats.correct)
+    translation_stats = await services.translation.cancel_active(user)
+    if translation_stats is not None:
+        return _translation_summary(translation_stats.total, translation_stats.correct)
     return None
 
 
@@ -71,6 +78,32 @@ async def _cancel_drill(
     return ru.DRILL_CANCELLED_STATS.format(correct=stats.correct, total=stats.total)
 
 
+async def _cancel_translation(
+    state: FSMContext,
+    services: AppServices,
+    user: User,
+) -> str:
+    """Finish the translation session stored in FSM, if the id is still valid."""
+    data = await state.get_data()
+    session_id = data.get("session_id")
+    if not isinstance(session_id, int):
+        await state.clear()
+        return ru.TRANSLATION_SESSION_ERROR
+
+    try:
+        stats = await services.translation.finish_session(
+            user,
+            session_id,
+            state=ExerciseState.ABANDONED,
+        )
+    except TranslationSessionError:
+        await state.clear()
+        return ru.TRANSLATION_SESSION_ERROR
+
+    await state.clear()
+    return _translation_summary(stats.total, stats.correct)
+
+
 async def _cancel_words(
     state: FSMContext,
     services: AppServices,
@@ -89,6 +122,13 @@ def _words_summary(total: int, correct: int) -> str:
     if total == 0:
         return ru.WORDS_CANCELLED
     return ru.WORDS_CANCELLED_STATS.format(correct=correct, total=total)
+
+
+def _translation_summary(total: int, correct: int) -> str:
+    """Pick the no-answers or with-stats translation cancellation message."""
+    if total == 0:
+        return ru.TRANSLATION_CANCELLED
+    return ru.TRANSLATION_CANCELLED_STATS.format(correct=correct, total=total)
 
 
 async def handle_cancel(

@@ -1,0 +1,416 @@
+topic:
+  slug: translation-bank-b1
+  title: Translation bank B1
+source: Original (project)
+license: unknown
+items:
+- slug: translation-b1-001
+  kind: translation_pair
+  prompt_ru: Я живу в Москве уже пять лет.
+  reference: I have lived in Moscow for five years.
+  accepted:
+  - I've lived in Moscow for five years.
+- slug: translation-b1-002
+  kind: translation_pair
+  prompt_ru: Вчера я опоздал на работу из-за дождя.
+  reference: Yesterday I was late for work because of the rain.
+- slug: translation-b1-003
+  kind: translation_pair
+  prompt_ru: Если будет хорошая погода, мы пойдём в парк.
+  reference: If the weather is good, we will go to the park.
+- slug: translation-b1-004
+  kind: translation_pair
+  prompt_ru: Она сказала, что не сможет прийти сегодня.
+  reference: She said she could not come today.
+- slug: translation-b1-005
+  kind: translation_pair
+  prompt_ru: Этот фильм стоит посмотреть.
+  reference: This film is worth watching.
+- slug: translation-b1-006
+  kind: translation_pair
+  prompt_ru: Я не привык вставать так рано.
+  reference: I am not used to getting up so early.
+- slug: translation-b1-007
+  kind: translation_pair
+  prompt_ru: Сколько времени ты добираешься до работы?
+  reference: How long does it take you to get to work?
+- slug: translation-b1-008
+  kind: translation_pair
+  prompt_ru: Мне нужно закончить отчёт до пятницы.
+  reference: I need to finish the report by Friday.
+- slug: translation-b1-009
+  kind: translation_pair
+  prompt_ru: Он выглядит уставшим, потому что мало спал.
+  reference: He looks tired because he slept little.
+- slug: translation-b1-010
+  kind: translation_pair
+  prompt_ru: Мы обсудим это завтра утром.
+  reference: We will discuss it tomorrow morning.
+- slug: translation-b1-011
+  kind: translation_pair
+  prompt_ru: Я забыл взять зонт, поэтому промок.
+  reference: I forgot to take an umbrella, so I got wet.
+- slug: translation-b1-012
+  kind: translation_pair
+  prompt_ru: Она интересуется современным искусством.
+  reference: She is interested in modern art.
+- slug: translation-b1-013
+  kind: translation_pair
+  prompt_ru: Это место известно своими старыми улицами.
+  reference: This place is known for its old streets.
+- slug: translation-b1-014
+  kind: translation_pair
+  prompt_ru: Я пытаюсь учить английский каждый день.
+  reference: I try to learn English every day.
+- slug: translation-b1-015
+  kind: translation_pair
+  prompt_ru: Нам пришлось ждать почти час.
+  reference: We had to wait for almost an hour.
+- slug: translation-b1-016
+  kind: translation_pair
+  prompt_ru: Ты уже был в Лондоне?
+  reference: Have you ever been to London?
+- slug: translation-b1-017
+  kind: translation_pair
+  prompt_ru: Я не люблю, когда мне мешают работать.
+  reference: I do not like being interrupted while I work.
+  accepted:
+  - I don't like being interrupted when I work.
+- slug: translation-b1-018
+  kind: translation_pair
+  prompt_ru: Эта книга была написана в прошлом веке.
+  reference: This book was written in the last century.
+- slug: translation-b1-019
+  kind: translation_pair
+  prompt_ru: Он попросил меня помочь ему с переездом.
+  reference: He asked me to help him with the move.
+- slug: translation-b1-020
+  kind: translation_pair
+  prompt_ru: Чем больше практики, тем лучше результат.
+  reference: The more practice, the better the result.
+- slug: translation-b1-021
+  kind: translation_pair
+  prompt_ru: Я предпочитаю чай кофе.
+  reference: I prefer tea to coffee.
+- slug: translation-b1-022
+  kind: translation_pair
+  prompt_ru: Мы должны были встретиться вчера, но она заболела.
+  reference: We were supposed to meet yesterday, but she got sick.
+- slug: translation-b1-023
+  kind: translation_pair
+  prompt_ru: Я не могу найти ключи от машины.
+  reference: I cannot find my car keys.
+- slug: translation-b1-024
+  kind: translation_pair
+  prompt_ru: Она работает здесь с прошлого года.
+  reference: She has worked here since last year.
+- slug: translation-b1-025
+  kind: translation_pair
+  prompt_ru: Если бы у меня было больше времени, я бы больше читал.
+  reference: If I had more time, I would read more.
+  accepted:
+  - If I had more time, I'd read more.
+- slug: translation-b1-026
+  kind: translation_pair
+  prompt_ru: Мне кажется, это не очень хорошая идея.
+  reference: It seems to me that this is not a very good idea.
+- slug: translation-b1-027
+  kind: translation_pair
+  prompt_ru: Он не только умный, но и очень трудолюбивый.
+  reference: He is not only smart but also very hardworking.
+- slug: translation-b1-028
+  kind: translation_pair
+  prompt_ru: Я собираюсь начать новый курс на следующей неделе.
+  reference: I am going to start a new course next week.
+- slug: translation-b1-029
+  kind: translation_pair
+  prompt_ru: Мы не знали, что делать в такой ситуации.
+  reference: We did not know what to do in such a situation.
+- slug: translation-b1-030
+  kind: translation_pair
+  prompt_ru: Она извинилась за опоздание.
+  reference: She apologized for being late.
+- slug: translation-b1-031
+  kind: translation_pair
+  prompt_ru: Этот вопрос сложнее, чем кажется.
+  reference: This question is more difficult than it seems.
+- slug: translation-b1-032
+  kind: translation_pair
+  prompt_ru: Я слышал, что ресторан закрылся.
+  reference: I heard that the restaurant has closed.
+- slug: translation-b1-033
+  kind: translation_pair
+  prompt_ru: Он всегда находит время для семьи.
+  reference: He always finds time for his family.
+- slug: translation-b1-034
+  kind: translation_pair
+  prompt_ru: Нам нужно купить немного хлеба и молока.
+  reference: We need to buy some bread and milk.
+- slug: translation-b1-035
+  kind: translation_pair
+  prompt_ru: Я не уверен, что правильно понял вопрос.
+  reference: I am not sure I understood the question correctly.
+- slug: translation-b1-036
+  kind: translation_pair
+  prompt_ru: Она попросила повторить ответ ещё раз.
+  reference: She asked me to repeat the answer once more.
+- slug: translation-b1-037
+  kind: translation_pair
+  prompt_ru: Поезд отправляется через десять минут.
+  reference: The train leaves in ten minutes.
+- slug: translation-b1-038
+  kind: translation_pair
+  prompt_ru: Я живу недалеко от станции.
+  reference: I live near the station.
+- slug: translation-b1-039
+  kind: translation_pair
+  prompt_ru: Он объяснил правило простыми словами.
+  reference: He explained the rule in simple words.
+- slug: translation-b1-040
+  kind: translation_pair
+  prompt_ru: Мы решили остаться дома из-за холода.
+  reference: We decided to stay at home because of the cold.
+- slug: translation-b1-041
+  kind: translation_pair
+  prompt_ru: Я никогда не пробовал эту еду.
+  reference: I have never tried this food.
+- slug: translation-b1-042
+  kind: translation_pair
+  prompt_ru: Она выглядит моложе своих лет.
+  reference: She looks younger than her age.
+- slug: translation-b1-043
+  kind: translation_pair
+  prompt_ru: Не забудь выключить свет перед уходом.
+  reference: Do not forget to turn off the light before leaving.
+- slug: translation-b1-044
+  kind: translation_pair
+  prompt_ru: Я хочу научиться готовить лучше.
+  reference: I want to learn to cook better.
+- slug: translation-b1-045
+  kind: translation_pair
+  prompt_ru: Этот фильм длится почти три часа.
+  reference: This film lasts almost three hours.
+- slug: translation-b1-046
+  kind: translation_pair
+  prompt_ru: Мы встретились случайно в аэропорту.
+  reference: We met by chance at the airport.
+- slug: translation-b1-047
+  kind: translation_pair
+  prompt_ru: Он не смог ответить на вопрос.
+  reference: He could not answer the question.
+- slug: translation-b1-048
+  kind: translation_pair
+  prompt_ru: Я думаю, тебе стоит поговорить с ней.
+  reference: I think you should talk to her.
+- slug: translation-b1-049
+  kind: translation_pair
+  prompt_ru: Она жила в Париже, когда была студенткой.
+  reference: She lived in Paris when she was a student.
+- slug: translation-b1-050
+  kind: translation_pair
+  prompt_ru: Наша команда работает над новым проектом.
+  reference: Our team is working on a new project.
+- slug: translation-b1-051
+  kind: translation_pair
+  prompt_ru: Я забыл, как называется этот фильм.
+  reference: I forgot what this film is called.
+- slug: translation-b1-052
+  kind: translation_pair
+  prompt_ru: Он пообещал позвонить мне вечером.
+  reference: He promised to call me in the evening.
+- slug: translation-b1-053
+  kind: translation_pair
+  prompt_ru: Мы должны экономить деньги на отпуск.
+  reference: We need to save money for a holiday.
+- slug: translation-b1-054
+  kind: translation_pair
+  prompt_ru: Я не знал, что она говорит по-французски.
+  reference: I did not know that she speaks French.
+- slug: translation-b1-055
+  kind: translation_pair
+  prompt_ru: Мне нравится, как ты это объяснил.
+  reference: I like the way you explained it.
+- slug: translation-b1-056
+  kind: translation_pair
+  prompt_ru: Он пришёл позже, чем мы ожидали.
+  reference: He arrived later than we expected.
+- slug: translation-b1-057
+  kind: translation_pair
+  prompt_ru: Я хотел бы заказать столик на двоих.
+  reference: I would like to book a table for two.
+- slug: translation-b1-058
+  kind: translation_pair
+  prompt_ru: Она не любит говорить о своей работе.
+  reference: She does not like talking about her work.
+- slug: translation-b1-059
+  kind: translation_pair
+  prompt_ru: Мы посетили музей, который был открыт недавно.
+  reference: We visited the museum that had recently opened.
+- slug: translation-b1-060
+  kind: translation_pair
+  prompt_ru: Я не смогу прийти, потому что у меня встреча.
+  reference: I will not be able to come because I have a meeting.
+- slug: translation-b1-061
+  kind: translation_pair
+  prompt_ru: Он попросил меня не опаздывать.
+  reference: He asked me not to be late.
+- slug: translation-b1-062
+  kind: translation_pair
+  prompt_ru: Я уже видел этот сериал.
+  reference: I have already seen this series.
+- slug: translation-b1-063
+  kind: translation_pair
+  prompt_ru: Она сказала, что ей нужно больше времени.
+  reference: She said she needed more time.
+- slug: translation-b1-064
+  kind: translation_pair
+  prompt_ru: Этот город сильно изменился за последние годы.
+  reference: This city has changed a lot in recent years.
+- slug: translation-b1-065
+  kind: translation_pair
+  prompt_ru: Я не могу позволить себе новую машину.
+  reference: I cannot afford a new car.
+- slug: translation-b1-066
+  kind: translation_pair
+  prompt_ru: Мы должны уйти до восьми.
+  reference: We have to leave before eight.
+- slug: translation-b1-067
+  kind: translation_pair
+  prompt_ru: Он выглядит так, будто не спал всю ночь.
+  reference: He looks as if he has not slept all night.
+- slug: translation-b1-068
+  kind: translation_pair
+  prompt_ru: Я надеюсь, что ты сможешь прийти.
+  reference: I hope you can come.
+- slug: translation-b1-069
+  kind: translation_pair
+  prompt_ru: Она всегда помогает мне с домашним заданием.
+  reference: She always helps me with my homework.
+- slug: translation-b1-070
+  kind: translation_pair
+  prompt_ru: Я не помню, куда положил телефон.
+  reference: I do not remember where I put my phone.
+- slug: translation-b1-071
+  kind: translation_pair
+  prompt_ru: Нам нужно решить эту проблему вместе.
+  reference: We need to solve this problem together.
+- slug: translation-b1-072
+  kind: translation_pair
+  prompt_ru: Он не пришёл, хотя обещал.
+  reference: He did not come, although he promised.
+- slug: translation-b1-073
+  kind: translation_pair
+  prompt_ru: Я бы хотел узнать больше об этой профессии.
+  reference: I would like to learn more about this profession.
+- slug: translation-b1-074
+  kind: translation_pair
+  prompt_ru: Она работает над своей уверенностью.
+  reference: She is working on her confidence.
+- slug: translation-b1-075
+  kind: translation_pair
+  prompt_ru: Этот магазин открыт до десяти вечера.
+  reference: This shop is open until ten in the evening.
+- slug: translation-b1-076
+  kind: translation_pair
+  prompt_ru: Я не успел закончить работу вовремя.
+  reference: I did not manage to finish the work on time.
+- slug: translation-b1-077
+  kind: translation_pair
+  prompt_ru: Мы часто ходим в кино по выходным.
+  reference: We often go to the cinema at weekends.
+  accepted:
+  - We often go to the cinema on weekends.
+- slug: translation-b1-078
+  kind: translation_pair
+  prompt_ru: Он сказал, что уже видел этот фильм.
+  reference: He said he had already seen this film.
+- slug: translation-b1-079
+  kind: translation_pair
+  prompt_ru: Я не уверен, стоит ли это делать.
+  reference: I am not sure whether it is worth doing.
+- slug: translation-b1-080
+  kind: translation_pair
+  prompt_ru: Она попросила меня подождать немного.
+  reference: She asked me to wait a little.
+- slug: translation-b1-081
+  kind: translation_pair
+  prompt_ru: Я хочу больше путешествовать в будущем.
+  reference: I want to travel more in the future.
+- slug: translation-b1-082
+  kind: translation_pair
+  prompt_ru: Он не любит, когда его перебивают.
+  reference: He does not like being interrupted.
+- slug: translation-b1-083
+  kind: translation_pair
+  prompt_ru: Мы должны быть осторожны с деньгами.
+  reference: We need to be careful with money.
+- slug: translation-b1-084
+  kind: translation_pair
+  prompt_ru: Я никогда не был в этой части города.
+  reference: I have never been to this part of the city.
+- slug: translation-b1-085
+  kind: translation_pair
+  prompt_ru: Она объяснила, почему опоздала.
+  reference: She explained why she was late.
+- slug: translation-b1-086
+  kind: translation_pair
+  prompt_ru: Этот ресторан популярен среди туристов.
+  reference: This restaurant is popular with tourists.
+- slug: translation-b1-087
+  kind: translation_pair
+  prompt_ru: Я не могу перестать думать об этом.
+  reference: I cannot stop thinking about it.
+  accepted:
+  - I can't stop thinking about it.
+- slug: translation-b1-088
+  kind: translation_pair
+  prompt_ru: Мы встретимся у входа в театр.
+  reference: We will meet at the entrance to the theatre.
+- slug: translation-b1-089
+  kind: translation_pair
+  prompt_ru: Он спросил, где я живу.
+  reference: He asked where I lived.
+- slug: translation-b1-090
+  kind: translation_pair
+  prompt_ru: Я хотел бы поблагодарить тебя за помощь.
+  reference: I would like to thank you for your help.
+- slug: translation-b1-091
+  kind: translation_pair
+  prompt_ru: Она не смогла найти нужную информацию.
+  reference: She could not find the information she needed.
+- slug: translation-b1-092
+  kind: translation_pair
+  prompt_ru: Я не думаю, что это хорошая идея.
+  reference: I do not think it is a good idea.
+- slug: translation-b1-093
+  kind: translation_pair
+  prompt_ru: Мы должны соблюдать правила безопасности.
+  reference: We must follow the safety rules.
+- slug: translation-b1-094
+  kind: translation_pair
+  prompt_ru: Он уже закончил университет.
+  reference: He has already graduated from university.
+- slug: translation-b1-095
+  kind: translation_pair
+  prompt_ru: Я стараюсь не есть поздно вечером.
+  reference: I try not to eat late in the evening.
+- slug: translation-b1-096
+  kind: translation_pair
+  prompt_ru: Она сказала, что вернётся через час.
+  reference: She said she would be back in an hour.
+- slug: translation-b1-097
+  kind: translation_pair
+  prompt_ru: Этот вопрос требует больше времени.
+  reference: This question requires more time.
+- slug: translation-b1-098
+  kind: translation_pair
+  prompt_ru: Я не знал, что ты умеешь плавать.
+  reference: I did not know you could swim.
+- slug: translation-b1-099
+  kind: translation_pair
+  prompt_ru: Мы решили попробовать что-то новое.
+  reference: We decided to try something new.
+- slug: translation-b1-100
+  kind: translation_pair
+  prompt_ru: Он всегда опаздывает на встречи.
+  reference: He is always late for meetings.

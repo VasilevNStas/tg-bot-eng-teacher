@@ -21,6 +21,7 @@ from app.bot.handlers.privacy import handle_about_me, handle_delete_me
 from app.bot.handlers.review import handle_review
 from app.bot.handlers.roleplay import handle_roleplay, handle_stop
 from app.bot.handlers.stats import handle_stats
+from app.bot.handlers.translation import handle_translate
 from app.bot.handlers.vocab import handle_vocab
 from app.bot.handlers.words import handle_words
 from app.bot.keyboards.menu import (
@@ -103,6 +104,8 @@ async def _run_action(
     """Dispatch a menu action to the handler that owns it."""
     if target == "drill":
         await handle_drill(message, state, services)
+    elif target == "translate":
+        await handle_translate(message, state, services)
     elif target == "words":
         await handle_words(message, state, services)
     elif target == "review":

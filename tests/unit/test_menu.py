@@ -53,12 +53,14 @@ def test_practice_section_has_roleplay_and_stop() -> None:
     markup = practice_keyboard()
 
     assert labels(markup) == [
+        ru.MENU_TRANSLATE,
         ru.MENU_CORRECTION,
         ru.MENU_ROLEPLAY,
         ru.MENU_STOP,
         ru.MENU_NEW,
         ru.MENU_BACK,
     ]
+    assert MenuCB(target="translate").pack() in callbacks(markup)
     assert MenuCB(target="stop").pack() in callbacks(markup)
     assert MenuCB(target="new").pack() in callbacks(markup)
 

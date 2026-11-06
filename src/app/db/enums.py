@@ -68,6 +68,7 @@ class ExerciseSessionKind(StrEnum):
 
     DRILL = "drill"
     WORDS = "words"
+    TRANSLATION = "translation"
 
 
 class WordDirection(StrEnum):

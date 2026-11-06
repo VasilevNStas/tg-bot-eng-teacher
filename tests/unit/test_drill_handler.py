@@ -30,6 +30,7 @@ from app.services.conversation.service import ConversationService
 from app.services.exercises.service import ExerciseService
 from app.services.prompts.builder import PromptBuilder
 from app.services.prompts.registry import PromptRegistry
+from app.services.translation.service import TranslationService
 from app.services.usage.service import UsageService
 from app.services.words.service import WordCardService
 from app.texts import ru
@@ -139,6 +140,7 @@ def make_services(database: Database) -> AppServices:
             rng=random.Random(7),
             topic_slug="test-topic-a1",
         ),
+        translation=TranslationService(database, session_size=1),
         words=WordCardService(database),
     )
 

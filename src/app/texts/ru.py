@@ -192,6 +192,26 @@ DRILL_NOTHING_TO_CANCEL = "Сейчас нет активной трениров
 DRILL_UNAVAILABLE = "Банк упражнений пуст. Попроси администратора импортировать контент."
 DRILL_SESSION_ERROR = "Сессия тренировки потеряна. Начни заново: /drill."
 
+TRANSLATION_QUESTION = (
+    "<b>Перевод {number} из {total}</b>\n\n{prompt}\n\nНапиши перевод на английский."
+)
+TRANSLATION_CORRECT = "✅ Отличный перевод!"
+TRANSLATION_PARTIAL = "Почти! Смысл в целом верный, но есть неточность."
+TRANSLATION_INCORRECT = "❌ Пока неверно."
+TRANSLATION_ANSWER = "Твой перевод: <b>{answer}</b>"
+TRANSLATION_REFERENCE = "Эталон: <b>{reference}</b>"
+TRANSLATION_EXPLANATION = "Комментарий: {explanation}"
+TRANSLATION_SUMMARY = (
+    "<b>Перевод завершён.</b>\n\n"
+    "Верно: <b>{correct}</b> из {total}\n"
+    "Почти: {partial}\n\n"
+    "Прогресс сохранён."
+)
+TRANSLATION_CANCELLED = "Перевод завершён досрочно."
+TRANSLATION_CANCELLED_STATS = "Перевод завершён досрочно.\n\nВерно: <b>{correct}</b> из {total}"
+TRANSLATION_UNAVAILABLE = "Банк переводов пуст. Попроси администратора импортировать контент."
+TRANSLATION_SESSION_ERROR = "Сессия перевода потеряна. Начни заново: /translate."
+
 WORDS_UNAVAILABLE = "Банк слов пуст. Попроси администратора импортировать контент."
 WORDS_HEADER = "<b>Карточка слов</b> ({count})"
 WORDS_STUDY_ITEM = "{number}. <b>{term}</b>{ipa} — {translation}"
@@ -243,6 +263,7 @@ MENU_DRILL = "Неправильные глаголы"
 MENU_WORDS = "Карточки слов"
 MENU_REVIEW = "Повторить слова"
 MENU_VOCAB = "Сохранённые слова"
+MENU_TRANSLATE = "Перевод"
 MENU_CORRECTION = "Разбор ошибок"
 MENU_ROLEPLAY = "Ролевая сцена"
 MENU_STOP = "Завершить сцену"
@@ -299,6 +320,7 @@ HELP = (
     "/review — повторение слов\n"
     "/vocab — сохранённые слова\n\n"
     "<b>Практика</b>\n"
+    "/translate — перевод на английский\n"
     "/correction &lt;текст&gt; — разбор ошибок\n"
     "/roleplay — ролевая сцена\n"
     "/stop — завершить сцену\n"
