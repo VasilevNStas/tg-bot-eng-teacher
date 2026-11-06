@@ -1,1 +1,1 @@
-"""Conversation orchestration: prompt, LLM call, persistence, usage."""
+"""Conversation orchestration: summary, prompt, LLM call, persistence, usage."""

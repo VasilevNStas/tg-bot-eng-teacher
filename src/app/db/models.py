@@ -106,6 +106,8 @@ class Conversation(TimestampMixin, Base):
     topic: Mapped[str | None] = mapped_column(String(128))
     # Rolling summary used to keep the LLM context small for long chats.
     summary: Mapped[str | None] = mapped_column(Text)
+    # Last message folded into ``summary``; NULL means nothing summarized yet.
+    summarized_until_message_id: Mapped[int | None] = mapped_column(BigInteger)
     started_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=_now, nullable=False
     )

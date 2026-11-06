@@ -33,6 +33,7 @@ from app.llm.errors import LLMInvalidResponse
 from app.llm.models import Route, RouteSpec
 from app.llm.port import LLMClient, LLMResponse
 from app.llm.port import Message as LlmMessage
+from app.services.conversation.summary import ConversationSummarizer
 from app.services.correction.schema import (
     CorrectionItem,
     CorrectionPayload,
@@ -72,6 +73,16 @@ class ConversationTurn:
     input_tokens: int
     output_tokens: int
     cost_usd: Decimal
+    conversation_ended: bool = False
+
+
+@dataclass(frozen=True, slots=True)
+class NewConversationResult:
+    """What ``/new`` closed and how many summaries were written."""
+
+    closed: int
+    summarized: int
+    had_roleplay: bool
 
 
 class ConversationService:
@@ -85,18 +96,31 @@ class ConversationService:
         builder: PromptBuilder,
         *,
         routes: Mapping[Route, RouteSpec],
+        summarizer: ConversationSummarizer | None = None,
         idle_timeout: timedelta = timedelta(minutes=30),
         repair_attempts: int = 1,
+        max_conversation_messages: int = 200,
     ) -> None:
         if not routes:
             raise ValueError("at least one LLM route is required")
+        if max_conversation_messages <= 0:
+            raise ValueError("max_conversation_messages must be positive")
         self._database = database
         self._llm = llm
         self._usage = usage
         self._builder = builder
         self._routes = routes
+        self._summarizer = summarizer or ConversationSummarizer(
+            database,
+            llm,
+            usage,
+            builder.registry,
+            routes=routes,
+            history_window=builder.history_window,
+        )
         self._idle_timeout = idle_timeout
         self._repair_attempts = max(repair_attempts, 0)
+        self._max_conversation_messages = max_conversation_messages
 
     async def respond(
         self,
@@ -110,6 +134,9 @@ class ConversationService:
         """Process one user message and return the assistant reply."""
         topic = scenario.id if scenario is not None else None
         conversation, history = await self._prepare(user, mode, topic)
+        summary = await self._summarizer.maybe_rollup(conversation)
+        conversation.summary = summary.text
+        conversation.summarized_until_message_id = summary.summarized_until_message_id
 
         prompt = self._builder.build(
             PromptContext(
@@ -146,6 +173,7 @@ class ConversationService:
             prompt_version=prompt.prompt_version,
             update_id=update_id,
         )
+        conversation_ended = await self._maybe_close_at_limit(conversation)
 
         return ConversationTurn(
             conversation_id=conversation.id,
@@ -159,6 +187,7 @@ class ConversationService:
             input_tokens=response.input_tokens,
             output_tokens=response.output_tokens,
             cost_usd=response.cost_usd,
+            conversation_ended=conversation_ended,
         )
 
     async def start_roleplay(self, user_id: int, scenario_id: str) -> None:
@@ -167,6 +196,7 @@ class ConversationService:
         Starting the same scenario twice is a no-op.
         """
         now = datetime.now(UTC)
+        closed: list[Conversation] = []
         async with self._database.session() as session:
             active = await session.scalars(
                 select(Conversation).where(
@@ -181,15 +211,22 @@ class ConversationService:
                     same = True
                 else:
                     conversation.ended_at = now
-            if same:
-                return
-            session.add(
-                Conversation(
-                    user_id=user_id,
-                    mode=ConversationMode.ROLEPLAY,
-                    topic=scenario_id,
-                    started_at=now,
+                    closed.append(conversation)
+            if not same:
+                session.add(
+                    Conversation(
+                        user_id=user_id,
+                        mode=ConversationMode.ROLEPLAY,
+                        topic=scenario_id,
+                        started_at=now,
+                    )
                 )
+        for conversation in closed:
+            await self._summarizer.finalize(conversation)
+            logger.info(
+                "conversation_closed",
+                conversation_id=conversation.id,
+                reason="roleplay_switch",
             )
 
     async def stop_roleplay(self, user_id: int) -> str | None:
@@ -209,7 +246,47 @@ class ConversationService:
             if conversation is None:
                 return None
             conversation.ended_at = now
-            return conversation.topic
+            topic = conversation.topic
+        await self._summarizer.finalize(conversation)
+        logger.info(
+            "conversation_closed",
+            conversation_id=conversation.id,
+            reason="roleplay_stop",
+        )
+        return topic
+
+    async def start_new(self, user_id: int) -> NewConversationResult:
+        """Close every active conversation and finalize their summaries."""
+        now = datetime.now(UTC)
+        async with self._database.session() as session:
+            conversations = list(
+                await session.scalars(
+                    select(Conversation).where(
+                        Conversation.user_id == user_id,
+                        Conversation.ended_at.is_(None),
+                    )
+                )
+            )
+            for conversation in conversations:
+                conversation.ended_at = now
+
+        summarized = 0
+        had_roleplay = False
+        for conversation in conversations:
+            had_roleplay = had_roleplay or conversation.mode is ConversationMode.ROLEPLAY
+            state = await self._summarizer.finalize(conversation)
+            if state.updated:
+                summarized += 1
+            logger.info(
+                "conversation_closed",
+                conversation_id=conversation.id,
+                reason="new",
+            )
+        return NewConversationResult(
+            closed=len(conversations),
+            summarized=summarized,
+            had_roleplay=had_roleplay,
+        )
 
     async def active_roleplay(self, user_id: int) -> str | None:
         """Return the active scenario id, if any."""
@@ -314,6 +391,33 @@ class ConversationService:
             raise LLMInvalidResponse("structured mode returned no parsed payload")
         return CorrectionPayload.model_validate(response.parsed)
 
+    async def _maybe_close_at_limit(self, conversation: Conversation) -> bool:
+        """Close a conversation that reached the emergency message cap."""
+        async with self._database.session() as session:
+            count = await session.scalar(
+                select(func.count())
+                .select_from(DbMessage)
+                .where(DbMessage.conversation_id == conversation.id)
+            )
+        total = int(count or 0)
+        if total < self._max_conversation_messages:
+            return False
+
+        state = await self._summarizer.finalize(conversation)
+        conversation.summary = state.text
+        conversation.summarized_until_message_id = state.summarized_until_message_id
+        async with self._database.session() as session:
+            stored = await session.get(Conversation, conversation.id)
+            if stored is not None and stored.ended_at is None:
+                stored.ended_at = datetime.now(UTC)
+        logger.info(
+            "conversation_closed",
+            conversation_id=conversation.id,
+            reason="limit",
+            messages=total,
+        )
+        return True
+
     async def _prepare(
         self,
         user: User,
@@ -322,8 +426,8 @@ class ConversationService:
     ) -> tuple[Conversation, list[LlmMessage]]:
         """Find the active conversation or start a new one.
 
-        ``/new`` is not required: a conversation that has been idle longer
-        than ``idle_timeout`` is closed and a fresh one is created.
+        A conversation is closed by ``/new``, by switching roleplay scenes, or
+        when it has been idle longer than ``idle_timeout``.
         """
         now = datetime.now(UTC)
         async with self._database.session() as session:
@@ -349,6 +453,11 @@ class ConversationService:
                     last_activity is not None
                     and now - _as_aware(last_activity) > self._idle_timeout
                 ):
+                    logger.info(
+                        "conversation_closed",
+                        conversation_id=conversation.id,
+                        reason="idle",
+                    )
                     conversation.ended_at = now
                     conversation = None
 

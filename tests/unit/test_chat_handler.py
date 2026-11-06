@@ -19,6 +19,7 @@ from sqlalchemy import func, select
 from app.bot.callbacks import DeleteCB, ReviewCB, RoleplayCB
 from app.bot.formatters import TELEGRAM_LIMIT
 from app.bot.handlers.chat import handle_chat
+from app.bot.handlers.common import handle_new
 from app.bot.handlers.correction import handle_correction
 from app.bot.handlers.privacy import handle_delete_callback, handle_delete_me
 from app.bot.handlers.review import handle_grade, handle_review
@@ -193,6 +194,7 @@ def make_services(
     *,
     budget: int = 10_000,
     max_input_tokens: int = 8000,
+    max_conversation_messages: int = 200,
 ) -> AppServices:
     settings = make_settings(budget=budget)
     prompts = PromptRegistry(PROMPTS_DIR)
@@ -205,6 +207,7 @@ def make_services(
         builder,
         routes=build_routes(settings),
         idle_timeout=timedelta(minutes=30),
+        max_conversation_messages=max_conversation_messages,
     )
     return AppServices(
         settings=settings,
@@ -786,3 +789,59 @@ async def test_typing_action_can_be_disabled() -> None:
     assert session.methods == []
 
     await bot.session.close()
+
+
+async def test_new_closes_active_roleplay(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    user = await make_onboarded_user(database)
+    services = make_services(database, FakeLLM(plain_response("Welcome to the café!")))
+    bot, session = await make_bot()
+
+    await services.conversation.start_roleplay(user.id, "cafe")
+    await handle_chat(make_message(bot, "I would like a coffee"), services)
+    await handle_new(make_message(bot, "/new"), services)
+
+    assert session.methods[-1].text == ru.NEW_CONVERSATION
+    assert await services.conversation.active_roleplay(user.id) is None
+    async with database.session() as db_session:
+        conversations = list(await db_session.scalars(select(Conversation)))
+    assert conversations
+    assert all(conversation.ended_at is not None for conversation in conversations)
+
+    await bot.session.close()
+    await database.dispose()
+
+
+async def test_new_without_active_conversation(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    await make_onboarded_user(database)
+    services = make_services(database, FakeLLM())
+    bot, session = await make_bot()
+
+    await handle_new(make_message(bot, "/new"), services)
+
+    assert session.methods[-1].text == ru.NEW_NOTHING
+
+    await bot.session.close()
+    await database.dispose()
+
+
+async def test_chat_sends_conversation_limit_notice(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    await make_onboarded_user(database)
+    services = make_services(
+        database,
+        FakeLLM(structured_response(reply="Great!")),
+        max_conversation_messages=2,
+    )
+    bot, session = await make_bot()
+
+    await handle_chat(make_message(bot, "hello"), services)
+
+    sent = session.methods[0]
+    assert isinstance(sent, SendMessage)
+    assert "Great!" in sent.text
+    assert ru.CONVERSATION_LIMIT_REACHED in sent.text
+
+    await bot.session.close()
+    await database.dispose()

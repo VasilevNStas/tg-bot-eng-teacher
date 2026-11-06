@@ -60,8 +60,8 @@ def make_message(bot: Bot, text: str) -> Message:
     ).as_(bot)
 
 
-def test_common_router_has_two_handlers() -> None:
-    assert len(router.message.handlers) == 2
+def test_common_router_has_three_handlers() -> None:
+    assert len(router.message.handlers) == 3
 
 
 def test_bot_commands_are_unique() -> None:

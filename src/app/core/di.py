@@ -13,6 +13,7 @@ from app.llm.models import build_routes, validate_routes
 from app.llm.openrouter import OpenRouterClient
 from app.llm.port import LLMClient
 from app.services.conversation.service import ConversationService
+from app.services.conversation.summary import ConversationSummarizer
 from app.services.exercises.service import ExerciseService
 from app.services.prompts.builder import PromptBuilder
 from app.services.prompts.registry import PromptRegistry
@@ -49,6 +50,7 @@ def build_services(database: Database, settings: Settings) -> AppServices:
     """
     prompts = PromptRegistry(settings.prompts_dir)
     prompts.persona()
+    prompts.summary()
     for level in CEFRLevel:
         prompts.level(level)
     for mode in ConversationMode:
@@ -68,14 +70,29 @@ def build_services(database: Database, settings: Settings) -> AppServices:
         logger.warning("llm_route_warning", warning=warning)
 
     usage = UsageService(database, daily_budget=settings.daily_token_budget)
+    summarizer = ConversationSummarizer(
+        database,
+        llm,
+        usage,
+        prompts,
+        routes=routes,
+        history_window=builder.history_window,
+        batch_size=settings.summary_batch_messages,
+        max_batch_size=settings.summary_max_batch_messages,
+        message_max_chars=settings.summary_message_max_chars,
+        summary_max_chars=settings.summary_max_chars,
+        max_input_tokens=settings.llm_max_input_tokens,
+    )
     conversation = ConversationService(
         database,
         llm,
         usage,
         builder,
         routes=routes,
+        summarizer=summarizer,
         repair_attempts=settings.llm_repair_attempts,
         idle_timeout=timedelta(minutes=settings.conversation_idle_minutes),
+        max_conversation_messages=settings.max_conversation_messages,
     )
     exercise = ExerciseService(
         database,

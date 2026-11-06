@@ -56,9 +56,11 @@ def test_practice_section_has_roleplay_and_stop() -> None:
         ru.MENU_CORRECTION,
         ru.MENU_ROLEPLAY,
         ru.MENU_STOP,
+        ru.MENU_NEW,
         ru.MENU_BACK,
     ]
     assert MenuCB(target="stop").pack() in callbacks(markup)
+    assert MenuCB(target="new").pack() in callbacks(markup)
 
 
 def test_progress_and_settings_sections() -> None:

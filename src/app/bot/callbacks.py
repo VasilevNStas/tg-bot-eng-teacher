@@ -63,6 +63,7 @@ class MenuCB(CallbackData, prefix="menu"):
         "correction",
         "roleplay",
         "stop",
+        "new",
         "stats",
         "timezone",
         "quiet",
