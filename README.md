@@ -91,6 +91,7 @@ uv run python -m app.cli import-content content/vocabulary
 uv run python -m app.cli seed --dry-run
 uv run python -m app.cli content-report
 uv run python -m app.cli llm-report          # токены, стоимость, latency
+uv run python -m app.cli eval                # golden-диалоги: replay + baseline
 ```
 
 Бот читает только SQLite; YAML — источник истины для git-ревью. Подробнее о

@@ -1,0 +1,123 @@
+suite: chat
+cases:
+  - id: chat-a1-routine
+    level: a1
+    input: "I go to school every day."
+    replay:
+      reply: "That sounds busy! What do you do after school?"
+      corrections: []
+      new_vocabulary: []
+    expect:
+      must_contain: ["school"]
+
+  - id: chat-a1-food
+    level: a1
+    input: "I like pizza and my sister like pasta."
+    replay:
+      reply: "Pizza is a great choice! Does your sister cook pasta at home?"
+      corrections:
+        - original: "my sister like"
+          corrected: "my sister likes"
+          category: tense
+          explanation_ru: "В present simple с he, she, it к глаголу добавляется -s."
+      new_vocabulary:
+        - term: pasta
+          translation_ru: паста
+          context: my sister like pasta
+    expect:
+      corrections:
+        - original: "my sister like"
+          corrected: "my sister likes"
+          category: tense
+      max_corrections: 2
+      vocabulary: ["pasta"]
+
+  - id: chat-a2-weekend
+    level: a2
+    input: "Last weekend I go to the cinema with my friends."
+    replay:
+      reply: "That sounds fun! What film did you watch?"
+      corrections:
+        - original: "I go"
+          corrected: "I went"
+          category: tense
+          explanation_ru: "Для завершённого действия в прошлом нужен past simple."
+      new_vocabulary: []
+    expect:
+      corrections:
+        - original: "I go"
+          corrected: "I went"
+          category: tense
+      max_corrections: 2
+
+  - id: chat-a2-work
+    level: a2
+    input: "I work like a teacher."
+    replay:
+      reply: "Nice! How long have you worked as a teacher?"
+      corrections:
+        - original: "work like"
+          corrected: "work as"
+          category: preposition
+          explanation_ru: "Профессия вводится предлогом as, а не like."
+      new_vocabulary: []
+    expect:
+      corrections:
+        - original: "work like"
+          corrected: "work as"
+          category: preposition
+      max_corrections: 2
+
+  - id: chat-b1-opinion
+    level: b1
+    input: "I think online learning is more convenient than offline."
+    replay:
+      reply: "That is a fair point. What do you find most convenient about it?"
+      corrections: []
+      new_vocabulary: []
+    expect:
+      must_contain: ["convenient"]
+
+  - id: chat-b1-holiday
+    level: b1
+    input: "I have went to Turkey last summer."
+    replay:
+      reply: "Turkey sounds lovely! What did you enjoy most there?"
+      corrections:
+        - original: "have went"
+          corrected: "went"
+          category: tense
+          explanation_ru: "С last summer используется past simple, а не present perfect."
+      new_vocabulary: []
+    expect:
+      corrections:
+        - original: "have went"
+          corrected: "went"
+          category: tense
+
+  - id: chat-b2-article
+    level: b2
+    input: "The technology changes our life very fast."
+    replay:
+      reply: "True, technology develops quickly. Which change matters most to you?"
+      corrections:
+        - original: "The technology"
+          corrected: "Technology"
+          category: article
+          explanation_ru: "В общем значении technology употребляется без артикля."
+      new_vocabulary: []
+    expect:
+      corrections:
+        - original: "The technology"
+          corrected: "Technology"
+          category: article
+
+  - id: chat-c1-debate
+    level: c1
+    input: "Although the idea sounds promising, I am not convinced it will work in practice."
+    replay:
+      reply: "That is a reasonable concern. What evidence would change your mind?"
+      corrections: []
+      new_vocabulary: []
+    expect:
+      must_contain: ["evidence"]

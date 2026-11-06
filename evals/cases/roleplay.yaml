@@ -1,0 +1,65 @@
+suite: roleplay
+cases:
+  - id: roleplay-cafe-a1-order
+    level: a1
+    scenario: cafe
+    input: "I want coffee."
+    replay: "Sure! Would you like a small or large coffee?"
+    expect:
+      must_contain: ["coffee"]
+
+  - id: roleplay-cafe-a1-milk
+    level: a1
+    scenario: cafe
+    input: "Can I get milk?"
+    replay: "Of course. Would you like hot or cold milk?"
+    expect:
+      must_contain: ["milk"]
+
+  - id: roleplay-airport-a2-checkin
+    level: a2
+    scenario: airport
+    input: "I need check in for London."
+    replay: "Certainly. May I see your passport, please?"
+    expect:
+      must_contain: ["passport"]
+
+  - id: roleplay-airport-a2-bag
+    level: a2
+    scenario: airport
+    input: "I have one bag."
+    replay: "Thank you. Would you like to check it in?"
+    expect:
+      must_contain: ["check"]
+
+  - id: roleplay-interview-b1-intro
+    level: b1
+    scenario: interview
+    input: "I have five years of experience in marketing."
+    replay: "That is impressive. Could you tell me about a campaign you led?"
+    expect:
+      must_contain: ["campaign"]
+
+  - id: roleplay-interview-b1-strength
+    level: b1
+    scenario: interview
+    input: "My strength is communication."
+    replay: "Good to know. Can you give me an example of how you use it at work?"
+    expect:
+      must_contain: ["example"]
+
+  - id: roleplay-cafe-b2-complication
+    level: b2
+    scenario: cafe
+    input: "I would like the breakfast set."
+    replay: "I am sorry, the breakfast set is sold out today. Would you like to try our pastry instead?"
+    expect:
+      must_contain: ["sold out"]
+
+  - id: roleplay-interview-c1-salary
+    level: c1
+    scenario: interview
+    input: "I would like to discuss the salary."
+    replay: "Of course. What range did you have in mind for this role?"
+    expect:
+      must_contain: ["range"]
