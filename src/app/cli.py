@@ -16,6 +16,7 @@ import os
 import sys
 from collections.abc import Sequence
 from datetime import UTC, datetime, timedelta
+from decimal import Decimal
 from pathlib import Path
 
 from app.core.durations import parse_duration
@@ -26,6 +27,8 @@ from app.curriculum.importer import ContentImporter
 from app.curriculum.loader import load_content_path
 from app.curriculum.models import ContentFile
 from app.db.database import Database
+from app.evals.errors import EvalError
+from app.evals.runner import run_evals
 from app.services.admin.service import AdminService
 from app.services.health import check_health, format_health
 from app.services.privacy.service import PrivacyService
@@ -362,6 +365,50 @@ def main(argv: Sequence[str] | None = None) -> int:
         help="Emit machine-readable JSON",
     )
 
+    eval_parser = subparsers.add_parser(
+        "eval",
+        help="Run golden-dialogue LLM evals (replay by default)",
+    )
+    eval_parser.add_argument(
+        "--suite",
+        choices=("all", "chat", "correction", "roleplay"),
+        default="all",
+        help="Case suite to run (default: all)",
+    )
+    eval_parser.add_argument(
+        "--cases-dir",
+        type=Path,
+        default=Path("evals/cases"),
+        help="Directory with YAML eval cases",
+    )
+    eval_parser.add_argument(
+        "--baseline",
+        type=Path,
+        default=Path("evals/baseline.json"),
+        help="Baseline JSON path",
+    )
+    eval_parser.add_argument(
+        "--live",
+        action="store_true",
+        help="Call the real LLM provider (manual, costs money)",
+    )
+    eval_parser.add_argument(
+        "--update-baseline",
+        action="store_true",
+        help="Write replay results to the baseline file",
+    )
+    eval_parser.add_argument(
+        "--max-cost-usd",
+        type=Decimal,
+        default=Decimal("0.05"),
+        help="Maximum live-run cost in USD (default: 0.05)",
+    )
+    eval_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Emit machine-readable JSON",
+    )
+
     health_parser = subparsers.add_parser(
         "health",
         help="Check database, migration, content, heartbeat and disk",
@@ -401,6 +448,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         "content-report",
         "prune-history",
         "llm-report",
+        "eval",
         "health",
         "admin",
     }
@@ -423,6 +471,18 @@ def main(argv: Sequence[str] | None = None) -> int:
             return asyncio.run(prune_history(days=days))
         if args.command == "llm-report":
             return asyncio.run(llm_report(days=args.days, as_json=args.json))
+        if args.command == "eval":
+            return asyncio.run(
+                run_evals(
+                    cases_dir=args.cases_dir,
+                    suite=args.suite,
+                    baseline_path=args.baseline,
+                    live=args.live,
+                    update_baseline=args.update_baseline,
+                    max_cost_usd=args.max_cost_usd,
+                    as_json=args.json,
+                )
+            )
         if args.command == "health":
             return asyncio.run(health(service=args.service, as_json=args.json))
         if args.command == "admin":
@@ -440,7 +500,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 )
             if args.admin_command == "audit":
                 return asyncio.run(admin_audit(limit=args.limit))
-    except ContentError as exc:
+    except (ContentError, EvalError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
 

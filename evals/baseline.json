@@ -1,0 +1,150 @@
+{
+  "cases": {
+    "chat-a1-food": {
+      "failed_checks": [],
+      "passed": true,
+      "prompt_version": "60e485bc23bd",
+      "suite": "chat"
+    },
+    "chat-a1-routine": {
+      "failed_checks": [],
+      "passed": true,
+      "prompt_version": "60e485bc23bd",
+      "suite": "chat"
+    },
+    "chat-a2-weekend": {
+      "failed_checks": [],
+      "passed": true,
+      "prompt_version": "4c398aa86a06",
+      "suite": "chat"
+    },
+    "chat-a2-work": {
+      "failed_checks": [],
+      "passed": true,
+      "prompt_version": "4c398aa86a06",
+      "suite": "chat"
+    },
+    "chat-b1-holiday": {
+      "failed_checks": [],
+      "passed": true,
+      "prompt_version": "c43ced96df21",
+      "suite": "chat"
+    },
+    "chat-b1-opinion": {
+      "failed_checks": [],
+      "passed": true,
+      "prompt_version": "c43ced96df21",
+      "suite": "chat"
+    },
+    "chat-b2-article": {
+      "failed_checks": [],
+      "passed": true,
+      "prompt_version": "561066314b4a",
+      "suite": "chat"
+    },
+    "chat-c1-debate": {
+      "failed_checks": [],
+      "passed": true,
+      "prompt_version": "44e01a655536",
+      "suite": "chat"
+    },
+    "correction-a1-be": {
+      "failed_checks": [],
+      "passed": true,
+      "prompt_version": "b4bc91ec172d",
+      "suite": "correction"
+    },
+    "correction-a1-plural": {
+      "failed_checks": [],
+      "passed": true,
+      "prompt_version": "b4bc91ec172d",
+      "suite": "correction"
+    },
+    "correction-a2-article": {
+      "failed_checks": [],
+      "passed": true,
+      "prompt_version": "b6e7667c1c36",
+      "suite": "correction"
+    },
+    "correction-a2-preposition": {
+      "failed_checks": [],
+      "passed": true,
+      "prompt_version": "b6e7667c1c36",
+      "suite": "correction"
+    },
+    "correction-b1-tense": {
+      "failed_checks": [],
+      "passed": true,
+      "prompt_version": "9d1be9108115",
+      "suite": "correction"
+    },
+    "correction-b1-word-order": {
+      "failed_checks": [],
+      "passed": true,
+      "prompt_version": "9d1be9108115",
+      "suite": "correction"
+    },
+    "correction-b2-register": {
+      "failed_checks": [],
+      "passed": true,
+      "prompt_version": "17f25d5c8b2c",
+      "suite": "correction"
+    },
+    "correction-c1-vocabulary": {
+      "failed_checks": [],
+      "passed": true,
+      "prompt_version": "d035bd6cfe0a",
+      "suite": "correction"
+    },
+    "roleplay-airport-a2-bag": {
+      "failed_checks": [],
+      "passed": true,
+      "prompt_version": "ad7f75505c0f",
+      "suite": "roleplay"
+    },
+    "roleplay-airport-a2-checkin": {
+      "failed_checks": [],
+      "passed": true,
+      "prompt_version": "ad7f75505c0f",
+      "suite": "roleplay"
+    },
+    "roleplay-cafe-a1-milk": {
+      "failed_checks": [],
+      "passed": true,
+      "prompt_version": "768c3760cebc",
+      "suite": "roleplay"
+    },
+    "roleplay-cafe-a1-order": {
+      "failed_checks": [],
+      "passed": true,
+      "prompt_version": "768c3760cebc",
+      "suite": "roleplay"
+    },
+    "roleplay-cafe-b2-complication": {
+      "failed_checks": [],
+      "passed": true,
+      "prompt_version": "0278b1a386b9",
+      "suite": "roleplay"
+    },
+    "roleplay-interview-b1-intro": {
+      "failed_checks": [],
+      "passed": true,
+      "prompt_version": "1f1d723bad32",
+      "suite": "roleplay"
+    },
+    "roleplay-interview-b1-strength": {
+      "failed_checks": [],
+      "passed": true,
+      "prompt_version": "1f1d723bad32",
+      "suite": "roleplay"
+    },
+    "roleplay-interview-c1-salary": {
+      "failed_checks": [],
+      "passed": true,
+      "prompt_version": "f41e5842f9d1",
+      "suite": "roleplay"
+    }
+  },
+  "generated_at": "2026-11-06T13:26:26.956357+00:00",
+  "mode": "replay"
+}

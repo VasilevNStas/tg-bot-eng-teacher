@@ -1,0 +1,133 @@
+suite: correction
+cases:
+  - id: correction-a1-be
+    level: a1
+    input: "I am go to school."
+    replay:
+      reply: "Good try! Check the verb form."
+      corrections:
+        - original: "am go"
+          corrected: "go"
+          category: tense
+          explanation_ru: "В present simple после I используется глагол без am."
+      new_vocabulary: []
+    expect:
+      corrections:
+        - original: "am go"
+          corrected: "go"
+          category: tense
+
+  - id: correction-a1-plural
+    level: a1
+    input: "I have two cat."
+    replay:
+      reply: "Nice sentence! Remember the plural form."
+      corrections:
+        - original: "two cat"
+          corrected: "two cats"
+          category: spelling
+          explanation_ru: "Во множественном числе к cat добавляется -s."
+      new_vocabulary: []
+    expect:
+      corrections:
+        - original: "two cat"
+          corrected: "two cats"
+          category: spelling
+
+  - id: correction-a2-article
+    level: a2
+    input: "She is engineer."
+    replay:
+      reply: "Good effort! Add the missing article."
+      corrections:
+        - original: "is engineer"
+          corrected: "is an engineer"
+          category: article
+          explanation_ru: "Перед существительным в единственном числе нужен артикль an."
+      new_vocabulary: []
+    expect:
+      corrections:
+        - original: "is engineer"
+          corrected: "is an engineer"
+          category: article
+
+  - id: correction-a2-preposition
+    level: a2
+    input: "I am interested on music."
+    replay:
+      reply: "Almost there! Check the preposition."
+      corrections:
+        - original: "interested on"
+          corrected: "interested in"
+          category: preposition
+          explanation_ru: "После interested используется предлог in."
+      new_vocabulary: []
+    expect:
+      corrections:
+        - original: "interested on"
+          corrected: "interested in"
+          category: preposition
+
+  - id: correction-b1-word-order
+    level: b1
+    input: "I like very much this movie."
+    replay:
+      reply: "Good sentence! The word order needs a small change."
+      corrections:
+        - original: "like very much this movie"
+          corrected: "like this movie very much"
+          category: word_order
+          explanation_ru: "В английском обстоятельство very much обычно стоит в конце."
+      new_vocabulary: []
+    expect:
+      corrections:
+        - original: "like very much this movie"
+          corrected: "like this movie very much"
+          category: word_order
+
+  - id: correction-b1-tense
+    level: b1
+    input: "When I was young, I have lived in Moscow."
+    replay:
+      reply: "Good detail! Use one clear past tense here."
+      corrections:
+        - original: "I have lived"
+          corrected: "I lived"
+          category: tense
+          explanation_ru: "Для завершённого периода в прошлом нужен past simple."
+      new_vocabulary: []
+    expect:
+      corrections:
+        - original: "I have lived"
+          corrected: "I lived"
+          category: tense
+
+  - id: correction-b2-register
+    level: b2
+    input: "Hey, give me the report now."
+    replay:
+      reply: "Clear request! A softer register would fit work better."
+      corrections:
+        - original: "give me the report now"
+          corrected: "Could you send me the report, please?"
+          category: register
+          explanation_ru: "В рабочей переписке вежливая просьба звучит уместнее приказа."
+      new_vocabulary: []
+    expect:
+      corrections:
+        - original: "give me the report now"
+          corrected: "Could you send me the report, please?"
+          category: register
+
+  - id: correction-c1-vocabulary
+    level: c1
+    input: "The results were very good and made a big impact."
+    replay:
+      reply: "Strong sentence! Here is a more precise option."
+      corrections: []
+      new_vocabulary:
+        - term: substantial
+          translation_ru: существенный
+          context: a substantial impact
+    expect:
+      vocabulary: ["substantial"]
