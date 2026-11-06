@@ -9,7 +9,13 @@ import pytest
 from app.db.base import Base
 from app.db.database import Database
 from app.db.models import UsageLedger, User
-from app.services.usage.service import DailyBudgetExceeded, UsageService, utc_day_start
+from app.services.usage.service import (
+    DailyBudgetExceeded,
+    GlobalBudgetExceeded,
+    UsageService,
+    utc_day_start,
+    utc_month_start,
+)
 
 
 async def make_database(tmp_path: Path) -> Database:
@@ -130,3 +136,97 @@ def test_utc_day_start_is_midnight() -> None:
     moment = datetime(2026, 10, 29, 15, 30, tzinfo=UTC)
 
     assert utc_day_start(moment) == datetime(2026, 10, 29, tzinfo=UTC)
+
+
+async def test_monthly_spend_and_global_budget(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    user = await make_user(database)
+    service = UsageService(database, daily_budget=10_000, monthly_budget_usd=Decimal("1.00"))
+    await service.record(
+        user_id=user.id,
+        model="vendor/model",
+        input_tokens=10,
+        output_tokens=5,
+        cost_usd=Decimal("0.40"),
+    )
+    await service.record(
+        user_id=user.id,
+        model="vendor/model",
+        input_tokens=10,
+        output_tokens=5,
+        cost_usd=Decimal("0.35"),
+    )
+
+    snapshot = await service.ensure_global_available(estimated_cost_usd=Decimal("0.20"))
+    assert snapshot.spent_usd == Decimal("0.75")
+    assert snapshot.budget_usd == Decimal("1.00")
+    assert snapshot.remaining_usd == Decimal("0.25")
+
+    with pytest.raises(GlobalBudgetExceeded) as error:
+        await service.ensure_global_available(estimated_cost_usd=Decimal("0.30"))
+
+    assert error.value.spent_usd == Decimal("0.75")
+    assert error.value.requested_usd == Decimal("0.30")
+
+    await database.dispose()
+
+
+async def test_missing_provider_cost_is_estimated_from_price_table(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    user = await make_user(database)
+    service = UsageService(database, daily_budget=10_000)
+
+    entry = await service.record(
+        user_id=user.id,
+        model="mistralai/mistral-nemo",
+        input_tokens=1_000_000,
+        output_tokens=0,
+        cost_usd=Decimal("0"),
+    )
+
+    assert entry.cost_usd == Decimal("0.029")
+    assert await service.spent_this_month() == Decimal("0.029")
+
+    await database.dispose()
+
+
+async def test_budget_alerts_fire_once_per_threshold(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    user = await make_user(database)
+    service = UsageService(database, daily_budget=10_000, monthly_budget_usd=Decimal("1.00"))
+    await service.record(
+        user_id=user.id,
+        model="vendor/model",
+        input_tokens=1,
+        output_tokens=0,
+        cost_usd=Decimal("0.81"),
+    )
+
+    alert = await service.pending_budget_alert()
+    assert alert is not None
+    assert alert.threshold_percent == 80
+    assert await service.pending_budget_alert() is not None
+
+    service.mark_budget_alerted(alert)
+    assert await service.pending_budget_alert() is None
+
+    await service.record(
+        user_id=user.id,
+        model="vendor/model",
+        input_tokens=1,
+        output_tokens=0,
+        cost_usd=Decimal("0.20"),
+    )
+    alert = await service.pending_budget_alert()
+    assert alert is not None
+    assert alert.threshold_percent == 100
+    service.mark_budget_alerted(alert)
+    assert await service.pending_budget_alert() is None
+
+    await database.dispose()
+
+
+def test_utc_month_start_is_first_day() -> None:
+    moment = datetime(2026, 10, 29, 15, 30, tzinfo=UTC)
+
+    assert utc_month_start(moment) == datetime(2026, 10, 1, tzinfo=UTC)

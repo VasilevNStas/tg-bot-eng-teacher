@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from decimal import Decimal
+
 import pytest
 from pydantic import ValidationError
 
@@ -25,6 +27,9 @@ def test_defaults() -> None:
     assert settings.db_path.name == "bot.db"
     assert settings.llm_base_url == "https://openrouter.ai/api/v1"
     assert settings.daily_token_budget == 50_000
+    assert settings.global_monthly_budget_usd == Decimal("2.00")
+    assert settings.budget_alert_poll_seconds == 300
+    assert settings.admin_alert_chat_id is None
 
 
 def test_webhook_mode_requires_public_url() -> None:

@@ -20,7 +20,7 @@ from app.core.di import AppServices
 from app.db.enums import ConversationMode
 from app.llm.errors import LLMError
 from app.services.prompts.errors import PromptTooLong
-from app.services.usage.service import DailyBudgetExceeded
+from app.services.usage.service import DailyBudgetExceeded, GlobalBudgetExceeded
 from app.texts import ru
 
 
@@ -63,7 +63,7 @@ async def handle_correction(
                 mode=ConversationMode.CORRECTION,
                 update_id=update_id,
             )
-    except (PromptTooLong, DailyBudgetExceeded, LLMError) as exc:
+    except (PromptTooLong, DailyBudgetExceeded, GlobalBudgetExceeded, LLMError) as exc:
         await answer_llm_error(message, exc, user_id=user.id, operation="correction")
         return
 

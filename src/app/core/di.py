@@ -69,7 +69,11 @@ def build_services(database: Database, settings: Settings) -> AppServices:
     for warning in validation.warnings:
         logger.warning("llm_route_warning", warning=warning)
 
-    usage = UsageService(database, daily_budget=settings.daily_token_budget)
+    usage = UsageService(
+        database,
+        daily_budget=settings.daily_token_budget,
+        monthly_budget_usd=settings.global_monthly_budget_usd,
+    )
     summarizer = ConversationSummarizer(
         database,
         llm,

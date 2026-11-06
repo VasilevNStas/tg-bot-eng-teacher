@@ -21,7 +21,7 @@ from app.llm.port import LLMResponse
 from app.services.conversation.service import ConversationService
 from app.services.prompts.builder import PromptBuilder
 from app.services.prompts.registry import PromptRegistry
-from app.services.usage.service import DailyBudgetExceeded, UsageService
+from app.services.usage.service import DailyBudgetExceeded, GlobalBudgetExceeded, UsageService
 
 PROMPTS_DIR = Path(__file__).resolve().parents[2] / "prompts"
 
@@ -300,6 +300,34 @@ async def test_budget_exceeded_does_not_call_llm(tmp_path: Path) -> None:
     service = make_service(database, llm, usage)
 
     with pytest.raises(DailyBudgetExceeded):
+        await service.respond(user, "hello")
+
+    assert llm.calls == []
+    assert await count(database, DbMessage) == 0
+    assert await count(database, UsageLedger) == 1
+
+    await database.dispose()
+
+
+async def test_global_budget_exceeded_does_not_call_llm(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    user = await make_user(database)
+    usage = UsageService(
+        database,
+        daily_budget=10_000,
+        monthly_budget_usd=Decimal("1.00"),
+    )
+    await usage.record(
+        user_id=user.id,
+        model="vendor/model",
+        input_tokens=0,
+        output_tokens=0,
+        cost_usd=Decimal("1.00"),
+    )
+    llm = FakeLLM()
+    service = make_service(database, llm, usage)
+
+    with pytest.raises(GlobalBudgetExceeded):
         await service.respond(user, "hello")
 
     assert llm.calls == []

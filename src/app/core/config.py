@@ -7,6 +7,7 @@ startup, so services can assume settings are usable.
 
 from __future__ import annotations
 
+from decimal import Decimal
 from enum import StrEnum
 from functools import lru_cache
 from pathlib import Path
@@ -47,6 +48,7 @@ class Settings(BaseSettings):
     webhook_base_url: str | None = None
     webhook_path: str = "/webhook"
     webhook_secret: SecretStr | None = None
+    admin_alert_chat_id: int | None = None
 
     llm_base_url: str = "https://openrouter.ai/api/v1"
     llm_api_key: SecretStr
@@ -95,6 +97,8 @@ class Settings(BaseSettings):
 
     db_path: Path = Path("./data/bot.db")
     daily_token_budget: int = Field(default=50_000, gt=0)
+    global_monthly_budget_usd: Decimal = Field(default=Decimal("2.00"), gt=0)
+    budget_alert_poll_seconds: int = Field(default=300, ge=30, le=3600)
     user_lock_timeout_seconds: float = Field(default=90.0, gt=0)
     processed_updates_retention_days: int = Field(default=7, ge=1)
     history_retention_days: int = Field(default=90, ge=0, le=3650)

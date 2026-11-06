@@ -20,6 +20,7 @@ from app.services.health import heartbeat_loop
 from app.services.privacy.service import PrivacyService
 from app.services.reminders.scheduler import ReminderScheduler
 from app.services.reminders.service import ReminderService
+from app.services.usage.alerts import BudgetAlertScheduler
 
 logger = get_logger(__name__)
 
@@ -56,6 +57,15 @@ async def run_polling(settings: Settings) -> None:
         heartbeat_loop(settings.db_path, "bot"),
         name="heartbeat",
     )
+    budget_task = asyncio.create_task(
+        BudgetAlertScheduler(
+            bot,
+            services.usage,
+            chat_id=settings.admin_alert_chat_id,
+            interval_seconds=settings.budget_alert_poll_seconds,
+        ).run_forever(),
+        name="budget-alerts",
+    )
 
     try:
         await bot.delete_webhook(drop_pending_updates=True)
@@ -68,10 +78,13 @@ async def run_polling(settings: Settings) -> None:
     finally:
         reminder_task.cancel()
         heartbeat_task.cancel()
+        budget_task.cancel()
         with suppress(asyncio.CancelledError):
             await reminder_task
         with suppress(asyncio.CancelledError):
             await heartbeat_task
+        with suppress(asyncio.CancelledError):
+            await budget_task
         await services.aclose()
         await database.dispose()
         await bot.session.close()

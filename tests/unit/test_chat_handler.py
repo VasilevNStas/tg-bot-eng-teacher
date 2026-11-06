@@ -845,3 +845,27 @@ async def test_chat_sends_conversation_limit_notice(tmp_path: Path) -> None:
 
     await bot.session.close()
     await database.dispose()
+
+
+async def test_chat_reports_global_budget_exhaustion(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    user = await make_onboarded_user(database)
+    services = make_services(database, FakeLLM())
+    await services.usage.record(
+        user_id=user.id,
+        model="vendor/model",
+        input_tokens=0,
+        output_tokens=0,
+        cost_usd=Decimal("2.00"),
+    )
+    bot, session = await make_bot()
+
+    await handle_chat(make_message(bot, "hello"), services)
+
+    assert len(session.methods) == 1
+    sent = session.methods[0]
+    assert isinstance(sent, SendMessage)
+    assert sent.text == ru.SERVICE_BUDGET_EXHAUSTED
+
+    await bot.session.close()
+    await database.dispose()
