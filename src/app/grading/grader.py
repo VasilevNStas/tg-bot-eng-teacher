@@ -38,6 +38,7 @@ class GradeResult:
     distance: int = 0
     is_typo: bool = False
     checker: Checker = Checker.CODE
+    explanation: str | None = None
 
     @property
     def is_correct(self) -> bool:

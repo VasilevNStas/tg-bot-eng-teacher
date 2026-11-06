@@ -51,6 +51,7 @@ def build_services(database: Database, settings: Settings) -> AppServices:
     prompts = PromptRegistry(settings.prompts_dir)
     prompts.persona()
     prompts.summary()
+    prompts.judge()
     for level in CEFRLevel:
         prompts.level(level)
     for mode in ConversationMode:
