@@ -8,6 +8,7 @@ import pytest
 from pydantic import BaseModel
 
 from app.core.config import Settings
+from app.core.metrics import MetricsRegistry
 from app.llm.errors import (
     LLMBalanceExhausted,
     LLMInvalidResponse,
@@ -42,6 +43,7 @@ def make_client(
     settings: Settings | None = None,
     sleep: Any = None,
     clock: Any = None,
+    metrics: MetricsRegistry | None = None,
 ) -> tuple[OpenRouterClient, httpx.AsyncClient]:
     settings = settings or make_settings(llm_max_retries=max_retries)
     http_client = httpx.AsyncClient(
@@ -53,6 +55,8 @@ def make_client(
         kwargs["sleep"] = sleep
     if clock is not None:
         kwargs["clock"] = clock
+    if metrics is not None:
+        kwargs["metrics"] = metrics
     return OpenRouterClient(settings, **kwargs), http_client
 
 
@@ -309,3 +313,33 @@ async def test_structured_response_tolerates_code_fences() -> None:
 
     assert response.parsed == {"answer": "ok"}
     await http_client.aclose()
+
+
+async def test_metrics_record_success_and_error() -> None:
+    metrics = MetricsRegistry()
+
+    def success(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, json=success_payload())
+
+    client, http_client = make_client(success, metrics=metrics)
+    await client.complete([Message(role="user", content="Hi")])
+    await http_client.aclose()
+
+    counters = metrics.snapshot()["counters"]
+    assert counters["llm_calls_total"] == 1.0
+    assert counters["llm_input_tokens_total"] == 10.0
+    assert counters["llm_output_tokens_total"] == 5.0
+    assert counters["llm_cost_usd_total"] == 0.0001
+
+    def failure(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(500, json={"error": "down"})
+
+    failing, failing_http = make_client(failure, metrics=metrics)
+    with pytest.raises(LLMUnavailable):
+        await failing.complete([Message(role="user", content="Hi")])
+    await failing_http.aclose()
+
+    counters = metrics.snapshot()["counters"]
+    assert counters["llm_errors_total"] == 1.0
+    timers = metrics.snapshot()["timers"]
+    assert timers["llm_duration_ms"]["count"] == 2

@@ -31,6 +31,7 @@ from app.evals.errors import EvalError
 from app.evals.runner import run_evals
 from app.services.admin.service import AdminService
 from app.services.health import check_health, format_health
+from app.services.metrics import read_metrics_snapshot
 from app.services.privacy.service import PrivacyService
 from app.services.usage.report import build_usage_report, format_usage_report
 
@@ -145,6 +146,45 @@ async def llm_report(*, days: int, as_json: bool) -> int:
         print(json.dumps(report.as_dict(), ensure_ascii=False, indent=2))
     else:
         print(format_usage_report(report))
+    return 0
+
+
+def format_metrics(snapshot: dict[str, object]) -> str:
+    """Render a metrics snapshot without assuming every key is present."""
+    lines = [
+        f"{snapshot.get('service', '?')} "
+        f"generated_at={snapshot.get('generated_at', '?')} "
+        f"uptime={snapshot.get('uptime_seconds', '?')}s"
+    ]
+    counters = snapshot.get("counters")
+    if isinstance(counters, dict):
+        for name, value in sorted(counters.items()):
+            lines.append(f"{name}={value}")
+    timers = snapshot.get("timers")
+    if isinstance(timers, dict):
+        for name, data in sorted(timers.items()):
+            if not isinstance(data, dict):
+                continue
+            lines.append(
+                f"{name}: count={data.get('count', 0)} "
+                f"avg={data.get('avg_ms', 0)}ms max={data.get('max_ms', 0)}ms"
+            )
+    return "\n".join(lines)
+
+
+async def metrics_report(*, as_json: bool) -> int:
+    """Read the bot's latest metrics snapshot from the shared volume."""
+    try:
+        snapshot = await asyncio.to_thread(read_metrics_snapshot, _db_path())
+    except ValueError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+    if snapshot is None:
+        print("error: metrics snapshot not found; start the bot first", file=sys.stderr)
+        return 1
+    print(
+        json.dumps(snapshot, ensure_ascii=False, indent=2) if as_json else format_metrics(snapshot)
+    )
     return 0
 
 
@@ -409,6 +449,16 @@ def main(argv: Sequence[str] | None = None) -> int:
         help="Emit machine-readable JSON",
     )
 
+    metrics_parser = subparsers.add_parser(
+        "metrics",
+        help="Show the latest runtime metrics snapshot",
+    )
+    metrics_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Emit machine-readable JSON",
+    )
+
     health_parser = subparsers.add_parser(
         "health",
         help="Check database, migration, content, heartbeat and disk",
@@ -449,6 +499,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         "prune-history",
         "llm-report",
         "eval",
+        "metrics",
         "health",
         "admin",
     }
@@ -483,6 +534,8 @@ def main(argv: Sequence[str] | None = None) -> int:
                     as_json=args.json,
                 )
             )
+        if args.command == "metrics":
+            return asyncio.run(metrics_report(as_json=args.json))
         if args.command == "health":
             return asyncio.run(health(service=args.service, as_json=args.json))
         if args.command == "admin":

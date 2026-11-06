@@ -49,6 +49,9 @@ class Settings(BaseSettings):
     webhook_path: str = "/webhook"
     webhook_secret: SecretStr | None = None
     admin_alert_chat_id: int | None = None
+    sentry_dsn: SecretStr | None = None
+    sentry_environment: str = "production"
+    sentry_traces_sample_rate: float = Field(default=0.0, ge=0, le=1)
 
     llm_base_url: str = "https://openrouter.ai/api/v1"
     llm_api_key: SecretStr
@@ -118,6 +121,7 @@ class Settings(BaseSettings):
 
     log_level: str = "INFO"
     log_json: bool = False
+    metrics_snapshot_seconds: int = Field(default=60, ge=5, le=3600)
 
     @model_validator(mode="after")
     def validate_webhook(self) -> Self:

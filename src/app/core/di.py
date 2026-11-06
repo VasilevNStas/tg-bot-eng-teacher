@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import timedelta
 
 from app.core.config import Settings
 from app.core.logging import get_logger
+from app.core.metrics import MetricsRegistry
 from app.db.database import Database
 from app.db.enums import CEFRLevel, ConversationMode
 from app.grading.llm_judge import LLMJudge
@@ -39,6 +40,7 @@ class AppServices:
     exercise: ExerciseService
     translation: TranslationService
     words: WordCardService
+    metrics: MetricsRegistry = field(default_factory=MetricsRegistry)
 
     async def aclose(self) -> None:
         """Release the HTTP client held by the LLM adapter."""
@@ -65,7 +67,8 @@ def build_services(database: Database, settings: Settings) -> AppServices:
         max_input_tokens=settings.llm_max_input_tokens,
         history_window=settings.prompt_history_window,
     )
-    llm = OpenRouterClient(settings)
+    metrics = MetricsRegistry()
+    llm = OpenRouterClient(settings, metrics=metrics)
     routes = build_routes(settings)
     validation = validate_routes(routes)
     if not validation.ok:
@@ -133,4 +136,5 @@ def build_services(database: Database, settings: Settings) -> AppServices:
         exercise=exercise,
         translation=translation,
         words=words,
+        metrics=metrics,
     )

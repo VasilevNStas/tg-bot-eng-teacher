@@ -15,8 +15,10 @@ from app.bot.middlewares.dedupe import prune_processed_updates
 from app.core.config import BotMode, Settings, get_settings
 from app.core.di import build_services
 from app.core.logging import get_logger, setup_logging
+from app.core.sentry import setup_sentry
 from app.db.database import Database
 from app.services.health import heartbeat_loop
+from app.services.metrics import metrics_loop
 from app.services.privacy.service import PrivacyService
 from app.services.reminders.scheduler import ReminderScheduler
 from app.services.reminders.service import ReminderService
@@ -66,6 +68,14 @@ async def run_polling(settings: Settings) -> None:
         ).run_forever(),
         name="budget-alerts",
     )
+    metrics_task = asyncio.create_task(
+        metrics_loop(
+            settings.db_path,
+            services.metrics,
+            interval_seconds=settings.metrics_snapshot_seconds,
+        ),
+        name="metrics",
+    )
 
     try:
         await bot.delete_webhook(drop_pending_updates=True)
@@ -79,12 +89,15 @@ async def run_polling(settings: Settings) -> None:
         reminder_task.cancel()
         heartbeat_task.cancel()
         budget_task.cancel()
+        metrics_task.cancel()
         with suppress(asyncio.CancelledError):
             await reminder_task
         with suppress(asyncio.CancelledError):
             await heartbeat_task
         with suppress(asyncio.CancelledError):
             await budget_task
+        with suppress(asyncio.CancelledError):
+            await metrics_task
         await services.aclose()
         await database.dispose()
         await bot.session.close()
@@ -107,6 +120,7 @@ def main() -> None:
         raise SystemExit(2) from exc
 
     setup_logging(settings.log_level, json_logs=settings.log_json)
+    setup_sentry(settings)
 
     if settings.bot_mode is BotMode.WEBHOOK:
         logger.error("webhook_mode_not_implemented", hint="use BOT_MODE=polling (ADR-013)")

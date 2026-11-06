@@ -12,9 +12,11 @@ from sqlalchemy import func, select
 
 from app.cli import main
 from app.core.logging import setup_logging
+from app.core.metrics import MetricsRegistry
 from app.db.base import Base
 from app.db.database import Database
 from app.db.models import ContentItem, UsageLedger
+from app.services.metrics import write_metrics_snapshot
 
 FIXTURE = Path(__file__).resolve().parents[1] / "fixtures" / "content" / "sample.yaml"
 
@@ -349,3 +351,26 @@ def test_cli_llm_report(
     assert payload["input_tokens"] == 300
     assert payload["output_tokens"] == 60
     assert payload["cost_usd"] == "0.003000"
+
+
+def test_cli_metrics(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    db_path = tmp_path / "bot.db"
+    monkeypatch.setenv("DB_PATH", str(db_path))
+    metrics = MetricsRegistry()
+    metrics.incr("updates_total")
+    metrics.observe("update_duration_ms", 12)
+    write_metrics_snapshot(db_path, metrics, service="bot")
+
+    assert main(["metrics"]) == 0
+    output = capsys.readouterr().out
+    assert "bot generated_at=" in output
+    assert "updates_total=1.0" in output
+    assert "update_duration_ms: count=1" in output
+
+    assert main(["metrics", "--json"]) == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["counters"]["updates_total"] == 1.0

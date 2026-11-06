@@ -31,6 +31,7 @@ from tenacity import (
 
 from app.core.config import Settings
 from app.core.logging import get_logger
+from app.core.metrics import MetricsRegistry
 from app.llm.errors import (
     LLMBalanceExhausted,
     LLMError,
@@ -75,10 +76,12 @@ class OpenRouterClient:
         client: httpx.AsyncClient | None = None,
         sleep: SleepFn = asyncio.sleep,
         clock: ClockFn = time.monotonic,
+        metrics: MetricsRegistry | None = None,
     ) -> None:
         self._settings = settings
         self._sleep = sleep
         self._clock = clock
+        self._metrics = metrics
         self._attempts = settings.llm_max_retries + 1
         self._owns_client = client is None
         self._client = client or httpx.AsyncClient(
@@ -121,6 +124,28 @@ class OpenRouterClient:
         """
         primary = model or self._default_model
         payload = self._payload(primary, messages, temperature, max_tokens, response_schema)
+        started = time.perf_counter()
+        try:
+            response = await self._complete_with_fallback(
+                primary,
+                payload,
+                fallback_model=fallback_model,
+                response_schema=response_schema,
+            )
+        except Exception:
+            self._record_failure_metrics(started)
+            raise
+        self._record_success_metrics(response, started)
+        return response
+
+    async def _complete_with_fallback(
+        self,
+        primary: str,
+        payload: dict[str, Any],
+        *,
+        fallback_model: str | None,
+        response_schema: type[BaseModel] | None,
+    ) -> LLMResponse:
         try:
             return await self._complete_model(primary, payload, response_schema)
         except _RETRYABLE_EXCEPTIONS as exc:
@@ -134,6 +159,21 @@ class OpenRouterClient:
             )
             fallback_payload = {**payload, "model": fallback_model}
             return await self._complete_model(fallback_model, fallback_payload, response_schema)
+
+    def _record_success_metrics(self, response: LLMResponse, started: float) -> None:
+        if self._metrics is None:
+            return
+        self._metrics.incr("llm_calls_total")
+        self._metrics.observe("llm_duration_ms", (time.perf_counter() - started) * 1000)
+        self._metrics.incr("llm_input_tokens_total", response.input_tokens)
+        self._metrics.incr("llm_output_tokens_total", response.output_tokens)
+        self._metrics.incr("llm_cost_usd_total", float(response.cost_usd))
+
+    def _record_failure_metrics(self, started: float) -> None:
+        if self._metrics is None:
+            return
+        self._metrics.incr("llm_errors_total")
+        self._metrics.observe("llm_duration_ms", (time.perf_counter() - started) * 1000)
 
     async def aclose(self) -> None:
         """Close the HTTP client only if this instance created it."""

@@ -19,6 +19,7 @@ from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from decimal import Decimal
 
+import structlog
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -135,6 +136,7 @@ class ConversationService:
         """Process one user message and return the assistant reply."""
         topic = scenario.id if scenario is not None else None
         conversation, history = await self._prepare(user, mode, topic)
+        structlog.contextvars.bind_contextvars(conversation_id=conversation.id)
         summary = await self._summarizer.maybe_rollup(conversation)
         conversation.summary = summary.text
         conversation.summarized_until_message_id = summary.summarized_until_message_id
