@@ -44,6 +44,10 @@ class PromptRegistry:
         """Level-specific instructions (``levels/a1.md``)."""
         return self._load(f"levels/{level.value.lower()}")
 
+    def summary(self) -> PromptTemplate:
+        """Prompt that folds older messages into a rolling summary."""
+        return self._load("summaries/conversation")
+
     def mode(self, mode: ConversationMode) -> PromptTemplate:
         """Mode-specific instructions (``modes/chat.md``)."""
         return self._load(f"modes/{mode.value}")

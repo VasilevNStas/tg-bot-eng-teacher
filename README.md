@@ -9,6 +9,7 @@ MVP-каркас работает:
 
 - онбординг: короткий placement-тест или ручной выбор уровня;
 - чат с LLM-персоной и expandable-коррекциями;
+- rolling summary длинного диалога, watermark и `/new`; cap на 200 сообщений;
 - LLM routing fast/smart/fallback, repair JSON, лимит сообщения и typing-индикатор;
 - `/correction <текст>` — полный разбор ошибок;
 - `/menu` — разделы «Учёба», «Практика», «Прогресс», «Настройки»;
@@ -140,8 +141,8 @@ uv run python -m app
 MVP работает в режиме polling — публичный URL не требуется.
 В меню бота: `/start`, `/menu`, `/stats`, `/help`. Остальные
 команды (`/drill`, `/words`, `/review`, `/vocab`, `/correction`, `/roleplay`,
-`/stop`, `/timezone`, `/quiet`, `/about_me`, `/delete_me`) сгруппированы в
-`/menu`.
+`/stop`, `/new`, `/timezone`, `/quiet`, `/about_me`, `/delete_me`) сгруппированы
+в `/menu`.
 
 ## Docker
 

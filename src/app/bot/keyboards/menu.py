@@ -39,8 +39,9 @@ def practice_keyboard() -> InlineKeyboardMarkup:
     builder.button(text=ru.MENU_CORRECTION, callback_data=MenuCB(target="correction"))
     builder.button(text=ru.MENU_ROLEPLAY, callback_data=MenuCB(target="roleplay"))
     builder.button(text=ru.MENU_STOP, callback_data=MenuCB(target="stop"))
+    builder.button(text=ru.MENU_NEW, callback_data=MenuCB(target="new"))
     builder.button(text=ru.MENU_BACK, callback_data=MenuCB(target="root"))
-    builder.adjust(1, 1, 1, 1)
+    builder.adjust(1, 1, 1, 1, 1)
     return builder.as_markup()
 
 

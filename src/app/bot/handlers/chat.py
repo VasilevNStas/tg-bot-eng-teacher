@@ -95,6 +95,8 @@ async def _send_turn(message: Message, turn: ConversationTurn) -> None:
     combined text is too long.
     """
     reply = format_reply(turn)
+    if turn.conversation_ended:
+        reply = f"{reply}\n\n{ru.CONVERSATION_LIMIT_REACHED}"
     corrections = format_corrections(turn)
 
     if corrections is None:

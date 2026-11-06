@@ -13,6 +13,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
 
 from app.bot.callbacks import MenuCB
+from app.bot.handlers.common import handle_new
 from app.bot.handlers.correction import handle_correction
 from app.bot.handlers.drill import handle_drill
 from app.bot.handlers.preferences import handle_quiet, handle_timezone
@@ -114,6 +115,8 @@ async def _run_action(
         await handle_roleplay(message, services)
     elif target == "stop":
         await handle_stop(message, services)
+    elif target == "new":
+        await handle_new(message, services)
     elif target == "stats":
         await handle_stats(message, services)
     elif target == "timezone":

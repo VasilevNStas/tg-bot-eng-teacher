@@ -82,6 +82,11 @@ class Settings(BaseSettings):
 
     prompts_dir: Path = Path("./prompts")
     prompt_history_window: int = Field(default=12, ge=0, le=50)
+    summary_batch_messages: int = Field(default=12, ge=1, le=100)
+    summary_max_batch_messages: int = Field(default=50, ge=1, le=500)
+    summary_message_max_chars: int = Field(default=800, ge=100, le=4000)
+    summary_max_chars: int = Field(default=2000, ge=200, le=8000)
+    max_conversation_messages: int = Field(default=200, ge=20, le=10000)
     conversation_idle_minutes: int = Field(default=30, ge=1, le=1440)
     max_user_message_chars: int = Field(default=2000, ge=1, le=4096)
     typing_indicator_enabled: bool = True
