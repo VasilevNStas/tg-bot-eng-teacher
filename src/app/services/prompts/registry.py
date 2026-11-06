@@ -48,6 +48,10 @@ class PromptRegistry:
         """Prompt that folds older messages into a rolling summary."""
         return self._load("summaries/conversation")
 
+    def judge(self) -> PromptTemplate:
+        """Prompt for grading a class-B translation with an LLM judge."""
+        return self._load("grading/judge")
+
     def mode(self, mode: ConversationMode) -> PromptTemplate:
         """Mode-specific instructions (``modes/chat.md``)."""
         return self._load(f"modes/{mode.value}")
