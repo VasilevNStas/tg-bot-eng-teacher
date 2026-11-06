@@ -9,7 +9,8 @@ from app.core.config import Settings
 from app.core.logging import get_logger
 from app.db.database import Database
 from app.db.enums import CEFRLevel, ConversationMode
-from app.llm.models import build_routes, validate_routes
+from app.grading.llm_judge import LLMJudge
+from app.llm.models import Route, build_routes, validate_routes
 from app.llm.openrouter import OpenRouterClient
 from app.llm.port import LLMClient
 from app.services.conversation.service import ConversationService
@@ -17,6 +18,7 @@ from app.services.conversation.summary import ConversationSummarizer
 from app.services.exercises.service import ExerciseService
 from app.services.prompts.builder import PromptBuilder
 from app.services.prompts.registry import PromptRegistry
+from app.services.translation.service import TranslationService
 from app.services.usage.service import UsageService
 from app.services.words.service import WordCardService
 
@@ -35,6 +37,7 @@ class AppServices:
     builder: PromptBuilder
     conversation: ConversationService
     exercise: ExerciseService
+    translation: TranslationService
     words: WordCardService
 
     async def aclose(self) -> None:
@@ -103,6 +106,18 @@ def build_services(database: Database, settings: Settings) -> AppServices:
         database,
         session_size=settings.drill_session_size,
     )
+    judge = LLMJudge(
+        llm,
+        usage,
+        prompts,
+        routes[Route.JUDGE],
+        repair_attempts=settings.llm_repair_attempts,
+    )
+    translation = TranslationService(
+        database,
+        judge=judge,
+        session_size=settings.translation_session_size,
+    )
     words = WordCardService(
         database,
         card_size=settings.words_card_size,
@@ -116,5 +131,6 @@ def build_services(database: Database, settings: Settings) -> AppServices:
         builder=builder,
         conversation=conversation,
         exercise=exercise,
+        translation=translation,
         words=words,
     )

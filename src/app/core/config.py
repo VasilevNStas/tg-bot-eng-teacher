@@ -93,6 +93,7 @@ class Settings(BaseSettings):
     max_user_message_chars: int = Field(default=2000, ge=1, le=4096)
     typing_indicator_enabled: bool = True
     drill_session_size: int = Field(default=5, ge=1, le=20)
+    translation_session_size: int = Field(default=3, ge=1, le=10)
     words_card_size: int = Field(default=10, ge=1, le=20)
 
     db_path: Path = Path("./data/bot.db")
