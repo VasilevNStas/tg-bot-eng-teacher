@@ -30,6 +30,10 @@ def test_defaults() -> None:
     assert settings.global_monthly_budget_usd == Decimal("2.00")
     assert settings.budget_alert_poll_seconds == 300
     assert settings.admin_alert_chat_id is None
+    assert settings.sentry_dsn is None
+    assert settings.sentry_environment == "production"
+    assert settings.sentry_traces_sample_rate == 0.0
+    assert settings.metrics_snapshot_seconds == 60
 
 
 def test_webhook_mode_requires_public_url() -> None:

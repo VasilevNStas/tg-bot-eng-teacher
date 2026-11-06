@@ -13,6 +13,7 @@ MVP-каркас работает:
 - LLM routing fast/smart/fallback, repair JSON, лимит сообщения и typing-индикатор;
 - глобальный месячный USD-бюджет ($2), price table и алерты 80/100% в админ-чат;
 - LLM-судья для переводов класса B только при расхождении с эталоном;
+- correlation id, runtime-метрики и `app.cli metrics`, опциональный Sentry;
 - `/translate` — банк 100 фраз B1, deterministic-проверка + judge на mismatch;
 - `/correction <текст>` — полный разбор ошибок;
 - `/menu` — разделы «Учёба», «Практика», «Прогресс», «Настройки»;
@@ -36,7 +37,7 @@ MVP-каркас работает:
 - `app.cli health` + heartbeat + Docker healthcheck;
 - `admin_audit` и containment (`block`/`mute`) в пользовательском боте.
 
-Ещё не реализованы: webhook, голос, внешний мониторинг/Sentry — см. локальный
+Ещё не реализованы: webhook, голос, внешний uptime/VPS-мониторинг — см. локальный
 план в `.opencode/_backlog.md`.
 
 ## Стек
@@ -94,6 +95,7 @@ uv run python -m app.cli seed --dry-run
 uv run python -m app.cli content-report
 uv run python -m app.cli llm-report          # токены, стоимость, latency
 uv run python -m app.cli eval                # golden-диалоги: replay + baseline
+uv run python -m app.cli metrics             # runtime counters/timers
 ```
 
 Бот читает только SQLite; YAML — источник истины для git-ревью. Подробнее о

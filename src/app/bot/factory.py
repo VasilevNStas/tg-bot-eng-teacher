@@ -8,6 +8,7 @@ from aiogram.enums import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
 
 from app.bot.middlewares.dedupe import UpdateDedupeMiddleware
+from app.bot.middlewares.observability import ObservabilityMiddleware
 from app.bot.middlewares.rate_limit import RateLimitMiddleware
 from app.bot.middlewares.restriction import RestrictionMiddleware
 from app.bot.middlewares.services import ServicesMiddleware
@@ -34,6 +35,7 @@ def create_dispatcher(services: AppServices) -> Dispatcher:
     container, and the user lock serialises concurrent updates per user.
     """
     dispatcher = Dispatcher(storage=MemoryStorage())
+    dispatcher.update.outer_middleware(ObservabilityMiddleware(services.metrics))
     dispatcher.update.outer_middleware(UpdateDedupeMiddleware(services.database))
     if services.settings.rate_limit_enabled:
         dispatcher.update.outer_middleware(
