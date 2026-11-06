@@ -23,9 +23,10 @@ from app.llm.errors import LLMError
 from app.llm.models import Route, RouteSpec
 from app.llm.port import LLMClient, LLMResponse
 from app.llm.port import Message as LlmMessage
+from app.llm.pricing import estimate_route_cost_usd
 from app.llm.tokens import estimate_messages_tokens
 from app.services.prompts.registry import PromptRegistry
-from app.services.usage.service import DailyBudgetExceeded, UsageService
+from app.services.usage.service import DailyBudgetExceeded, GlobalBudgetExceeded, UsageService
 
 logger = get_logger(__name__)
 
@@ -132,13 +133,16 @@ class ConversationSummarizer:
             return state
 
         messages, kept = fitted
-        estimated = estimate_messages_tokens(messages) + self._route.max_tokens
+        input_tokens = estimate_messages_tokens(messages)
         try:
             await self._usage.ensure_available(
                 conversation.user_id,
-                estimated_tokens=estimated,
+                estimated_tokens=input_tokens + self._route.max_tokens,
             )
-        except DailyBudgetExceeded:
+            await self._usage.ensure_global_available(
+                estimated_cost_usd=estimate_route_cost_usd(self._route, input_tokens)
+            )
+        except (DailyBudgetExceeded, GlobalBudgetExceeded):
             logger.warning(
                 "summary_skipped",
                 conversation_id=conversation.id,

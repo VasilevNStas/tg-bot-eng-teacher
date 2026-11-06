@@ -11,6 +11,7 @@ MVP-каркас работает:
 - чат с LLM-персоной и expandable-коррекциями;
 - rolling summary длинного диалога, watermark и `/new`; cap на 200 сообщений;
 - LLM routing fast/smart/fallback, repair JSON, лимит сообщения и typing-индикатор;
+- глобальный месячный USD-бюджет ($2), price table и алерты 80/100% в админ-чат;
 - `/correction <текст>` — полный разбор ошибок;
 - `/menu` — разделы «Учёба», «Практика», «Прогресс», «Настройки»;
 - `/drill` — неправильные глаголы, mastery/streak, выход через `/cancel` или кнопку;

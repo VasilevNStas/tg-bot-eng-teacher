@@ -18,7 +18,7 @@ from app.llm.errors import (
     LLMUnavailable,
 )
 from app.services.prompts.errors import PromptTooLong
-from app.services.usage.service import DailyBudgetExceeded
+from app.services.usage.service import DailyBudgetExceeded, GlobalBudgetExceeded
 from app.texts import ru
 
 logger = get_logger(__name__)
@@ -38,6 +38,13 @@ async def answer_llm_error(
     elif isinstance(exc, DailyBudgetExceeded):
         logger.info(f"{operation}_budget_exhausted", user_id=user_id)
         await message.answer(ru.BUDGET_EXHAUSTED)
+    elif isinstance(exc, GlobalBudgetExceeded):
+        logger.error(
+            "global_budget_exhausted",
+            spent_usd=str(exc.spent_usd),
+            budget_usd=str(exc.budget_usd),
+        )
+        await message.answer(ru.SERVICE_BUDGET_EXHAUSTED)
     elif isinstance(exc, LLMBalanceExhausted):
         logger.error("llm_balance_exhausted")
         await message.answer(ru.LLM_UNAVAILABLE)

@@ -16,7 +16,7 @@ from app.llm.errors import LLMError
 from app.services.conversation.service import ConversationTurn
 from app.services.prompts.errors import PromptTemplateNotFound, PromptTooLong
 from app.services.prompts.registry import PromptTemplate
-from app.services.usage.service import DailyBudgetExceeded
+from app.services.usage.service import DailyBudgetExceeded, GlobalBudgetExceeded
 from app.texts import ru
 
 
@@ -66,7 +66,7 @@ async def handle_chat(
                 update_id=update_id,
                 scenario=scenario,
             )
-    except (PromptTooLong, DailyBudgetExceeded, LLMError) as exc:
+    except (PromptTooLong, DailyBudgetExceeded, GlobalBudgetExceeded, LLMError) as exc:
         await answer_llm_error(
             message,
             exc,

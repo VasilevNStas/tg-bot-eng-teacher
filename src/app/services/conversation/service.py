@@ -33,6 +33,7 @@ from app.llm.errors import LLMInvalidResponse
 from app.llm.models import Route, RouteSpec
 from app.llm.port import LLMClient, LLMResponse
 from app.llm.port import Message as LlmMessage
+from app.llm.pricing import estimate_route_cost_usd
 from app.services.conversation.summary import ConversationSummarizer
 from app.services.correction.schema import (
     CorrectionItem,
@@ -155,10 +156,16 @@ class ConversationService:
         structured = mode in STRUCTURED_MODES
         schema = CorrectionPayload if structured else None
 
-        # Refuse before spending money if this call would exceed the budget.
+        # Refuse before spending money if this call would exceed either budget.
         await self._usage.ensure_available(
             user.id,
             estimated_tokens=prompt.estimated_input_tokens + route.max_tokens,
+        )
+        await self._usage.ensure_global_available(
+            estimated_cost_usd=estimate_route_cost_usd(
+                route,
+                prompt.estimated_input_tokens,
+            )
         )
 
         response = await self._complete_with_repair(prompt.messages, route, schema)
