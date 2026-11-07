@@ -14,6 +14,8 @@ MVP-каркас работает:
 - глобальный месячный USD-бюджет ($2), price table и алерты 80/100% в админ-чат;
 - LLM-судья для переводов класса B только при расхождении с эталоном;
 - correlation id, runtime-метрики и `app.cli metrics`, опциональный Sentry;
+- продуктовые метрики: DAU/WAU/MAU, D1/D7 retention, completion сессий и
+  onboarding — `app.cli product-metrics`;
 - `/translate` — банк 100 фраз B1, deterministic-проверка + judge на mismatch;
 - `/correction <текст>` — полный разбор ошибок;
 - `/menu` — разделы «Учёба», «Практика», «Прогресс», «Настройки»;
@@ -102,6 +104,7 @@ uv run python -m app.cli content-report
 uv run python -m app.cli llm-report          # токены, стоимость, latency
 uv run python -m app.cli eval                # golden-диалоги: replay + baseline
 uv run python -m app.cli metrics             # runtime counters/timers
+uv run python -m app.cli product-metrics     # DAU, retention, completion
 ```
 
 Бот читает только SQLite; YAML — источник истины для git-ревью. Подробнее о

@@ -33,6 +33,7 @@ from app.services.admin.service import AdminService
 from app.services.health import check_health, format_health
 from app.services.metrics import read_metrics_snapshot
 from app.services.privacy.service import PrivacyService
+from app.services.product_metrics import ProductMetricsService, format_product_metrics
 from app.services.usage.report import build_usage_report, format_usage_report
 
 
@@ -187,6 +188,22 @@ async def metrics_report(*, as_json: bool) -> int:
         return 1
     print(
         json.dumps(snapshot, ensure_ascii=False, indent=2) if as_json else format_metrics(snapshot)
+    )
+    return 0
+
+
+async def product_metrics(*, days: int, as_json: bool) -> int:
+    """Show DAU, retention and session completion for the last ``days`` days."""
+    database = Database()
+    database.init(_db_path())
+    try:
+        report = await ProductMetricsService(database).build(days=days)
+    finally:
+        await database.dispose()
+    print(
+        json.dumps(report.as_dict(), ensure_ascii=False, indent=2)
+        if as_json
+        else format_product_metrics(report)
     )
     return 0
 
@@ -462,6 +479,22 @@ def main(argv: Sequence[str] | None = None) -> int:
         help="Emit machine-readable JSON",
     )
 
+    product_parser = subparsers.add_parser(
+        "product-metrics",
+        help="Show DAU, retention and session completion",
+    )
+    product_parser.add_argument(
+        "--days",
+        type=int,
+        default=7,
+        help="Reporting window in days (default: 7)",
+    )
+    product_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Emit machine-readable JSON",
+    )
+
     health_parser = subparsers.add_parser(
         "health",
         help="Check database, migration, content, heartbeat and disk",
@@ -503,6 +536,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         "llm-report",
         "eval",
         "metrics",
+        "product-metrics",
         "health",
         "admin",
     }
@@ -539,6 +573,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             )
         if args.command == "metrics":
             return asyncio.run(metrics_report(as_json=args.json))
+        if args.command == "product-metrics":
+            return asyncio.run(product_metrics(days=args.days, as_json=args.json))
         if args.command == "health":
             return asyncio.run(health(service=args.service, as_json=args.json))
         if args.command == "admin":
