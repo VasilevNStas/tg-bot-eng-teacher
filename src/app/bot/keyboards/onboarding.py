@@ -7,7 +7,7 @@ from collections.abc import Sequence
 from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from app.bot.callbacks import OnboardingCB
+from app.bot.callbacks import MenuCB, OnboardingCB
 from app.db.enums import CEFRLevel
 from app.texts import ru
 
@@ -50,7 +50,9 @@ def levels_keyboard() -> InlineKeyboardMarkup:
 
 
 def result_keyboard() -> InlineKeyboardMarkup:
-    """Offer to change the level after the placement result."""
+    """Offer goals setup and a level change after the placement result."""
     builder = InlineKeyboardBuilder()
+    builder.button(text=ru.MENU_GOALS, callback_data=MenuCB(target="goals"))
     builder.button(text=ru.BUTTON_CHANGE_LEVEL, callback_data=OnboardingCB(action="skip"))
+    builder.adjust(1)
     return builder.as_markup()

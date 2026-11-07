@@ -10,6 +10,7 @@ from dataclasses import dataclass, field
 from app.db.enums import CEFRLevel, ConversationMode
 from app.llm.port import Message
 from app.llm.tokens import estimate_messages_tokens
+from app.services.goals.model import PROFILE_SECTION, render_prompt_block
 from app.services.prompts.errors import PromptTooLong
 from app.services.prompts.registry import PromptRegistry, PromptTemplate
 
@@ -93,6 +94,10 @@ class PromptBuilder:
         if profile_block is not None:
             messages.append(Message(role="system", content=profile_block))
 
+        goals_block = render_prompt_block(context.profile)
+        if goals_block is not None:
+            messages.append(Message(role="system", content=goals_block))
+
         summary_message = self._summary_message(context.summary)
         if summary_message is not None:
             messages.append(summary_message)
@@ -125,11 +130,16 @@ class PromptBuilder:
 
     @staticmethod
     def _profile_block(profile: Mapping[str, object]) -> str | None:
-        """Serialize the learner profile deterministically (stable prompt hash)."""
-        if not profile:
+        """Serialize the learner profile deterministically (stable prompt hash).
+
+        The ``goals`` section has its own readable block, so it is removed here
+        to avoid sending the same preferences twice.
+        """
+        filtered = {key: value for key, value in profile.items() if key != PROFILE_SECTION}
+        if not filtered:
             return None
         payload = json.dumps(
-            profile,
+            filtered,
             ensure_ascii=False,
             sort_keys=True,
             separators=(",", ":"),

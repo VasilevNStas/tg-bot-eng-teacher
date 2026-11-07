@@ -58,12 +58,13 @@ def progress_keyboard() -> InlineKeyboardMarkup:
 def settings_keyboard() -> InlineKeyboardMarkup:
     """Profile and privacy settings."""
     builder = InlineKeyboardBuilder()
+    builder.button(text=ru.MENU_GOALS, callback_data=MenuCB(target="goals"))
     builder.button(text=ru.MENU_TIMEZONE, callback_data=MenuCB(target="timezone"))
     builder.button(text=ru.MENU_QUIET, callback_data=MenuCB(target="quiet"))
     builder.button(text=ru.MENU_ABOUT, callback_data=MenuCB(target="about"))
     builder.button(text=ru.MENU_DELETE, callback_data=MenuCB(target="delete"))
     builder.button(text=ru.MENU_BACK, callback_data=MenuCB(target="root"))
-    builder.adjust(2, 1, 1, 1)
+    builder.adjust(2, 2, 1, 1)
     return builder.as_markup()
 
 

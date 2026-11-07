@@ -16,6 +16,7 @@ from app.bot.callbacks import MenuCB
 from app.bot.handlers.common import handle_new
 from app.bot.handlers.correction import handle_correction
 from app.bot.handlers.drill import handle_drill
+from app.bot.handlers.goals import handle_goals
 from app.bot.handlers.preferences import handle_quiet, handle_timezone
 from app.bot.handlers.privacy import handle_about_me, handle_delete_me
 from app.bot.handlers.review import handle_review
@@ -122,6 +123,8 @@ async def _run_action(
         await handle_new(message, services)
     elif target == "stats":
         await handle_stats(message, services)
+    elif target == "goals":
+        await handle_goals(message, services)
     elif target == "timezone":
         await handle_timezone(message, services)
     elif target == "quiet":

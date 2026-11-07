@@ -109,12 +109,20 @@ class ExerciseService:
         self._rng = rng or random.Random()
         self._topic_slug = topic_slug
 
-    async def start_session(self, user: User) -> DrillSession:
+    async def start_session(
+        self,
+        user: User,
+        *,
+        session_size: int | None = None,
+    ) -> DrillSession:
         """Pick random verbs and open a new drill session.
 
-        Any previous active drill is abandoned first, so ``/drill`` always
-        starts cleanly instead of stacking sessions.
+        ``session_size`` lets the caller apply a per-user daily target; when
+        omitted the configured session size is used. Any previous active drill
+        is abandoned first, so ``/drill`` always starts cleanly instead of
+        stacking sessions.
         """
+        size = self._session_size if session_size is None else max(1, session_size)
         async with self._database.session() as session:
             content_repo = ContentRepository(session)
             topic = await content_repo.get_topic_by_slug(self._topic_slug)
@@ -126,7 +134,7 @@ class ExerciseService:
                 SelectionCriteria(
                     topic_slug=self._topic_slug,
                     kind=ContentKind.IRREGULAR_VERB,
-                    limit=self._session_size,
+                    limit=size,
                 )
             )
             if not selected:

@@ -31,6 +31,7 @@ from app.services.exercises.service import (
     DrillQuestion,
     SessionStats,
 )
+from app.services.goals.model import GoalsProfile
 from app.texts import ru
 
 
@@ -48,8 +49,12 @@ async def handle_drill(
         await message.answer(ru.ONBOARDING_REQUIRED, reply_markup=start_keyboard())
         return
 
+    goals = GoalsProfile.from_profile(user.profile)
     try:
-        session = await services.exercise.start_session(user)
+        session = await services.exercise.start_session(
+            user,
+            session_size=goals.daily_items,
+        )
     except DrillUnavailable:
         await message.answer(ru.DRILL_UNAVAILABLE)
         return

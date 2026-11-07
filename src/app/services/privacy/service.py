@@ -23,6 +23,7 @@ from app.db.models import (
     WordProgress,
 )
 from app.db.models import Message as DbMessage
+from app.services.goals.model import GoalsProfile
 
 
 @dataclass(frozen=True)
@@ -62,6 +63,9 @@ class UserDataSummary:
     word_progress: int
     reminders: int
     usage: int
+    goals: tuple[str, ...] = ()
+    interests: tuple[str, ...] = ()
+    daily_items: int | None = None
 
 
 class PrivacyService:
@@ -94,6 +98,7 @@ class PrivacyService:
             words = words_value if isinstance(words_value, dict) else {}
             card_size = words.get("card_size")
             card_direction = words.get("direction")
+            goals = GoalsProfile.from_profile(profile)
 
             return UserDataSummary(
                 tg_id=user.tg_id,
@@ -115,6 +120,9 @@ class PrivacyService:
                 word_progress=word_progress,
                 reminders=counts.reminders,
                 usage=counts.usage,
+                goals=goals.goals,
+                interests=goals.interests,
+                daily_items=goals.daily_items,
             )
 
     async def delete_user(self, tg_id: int) -> DeletionSummary | None:
