@@ -410,7 +410,10 @@ async def test_roleplay_conversations_are_isolated_by_scenario(tmp_path: Path) -
     assert len(conversations) == 2
     assert sum(conversation.ended_at is None for conversation in conversations) == 1
 
-    assert await service.stop_roleplay(user.id) == "airport"
+    stopped = await service.stop_roleplay(user.id)
+    assert stopped is not None
+    assert stopped.topic == "airport"
+    assert stopped.corrections == 0
     assert await service.active_roleplay(user.id) is None
 
     await database.dispose()

@@ -31,7 +31,7 @@ def test_routes_use_task_specific_models_and_limits() -> None:
     assert routes[Route.CORRECTION].max_tokens == 700
     assert routes[Route.CHAT].fallback == "qwen/qwen3.7-flash"
     assert routes[Route.CHAT].requires_json is True
-    assert routes[Route.ROLEPLAY].requires_json is False
+    assert routes[Route.ROLEPLAY].requires_json is True
 
 
 def test_route_overrides_are_honored() -> None:

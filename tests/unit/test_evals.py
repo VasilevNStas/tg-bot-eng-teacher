@@ -32,9 +32,7 @@ def test_load_all_cases() -> None:
     for case in cases:
         if case.suite == "roleplay":
             assert case.scenario is not None
-            assert isinstance(case.replay, str)
-        else:
-            assert isinstance(case.replay, dict)
+        assert isinstance(case.replay, dict)
 
 
 def test_load_cases_filtered_by_suite() -> None:

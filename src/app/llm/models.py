@@ -172,7 +172,7 @@ def build_routes(settings: Settings) -> dict[Route, RouteSpec]:
             model=settings.llm_model_roleplay or fast,
             temperature=settings.llm_temperature_roleplay,
             max_tokens=settings.llm_max_tokens_roleplay,
-            requires_json=False,
+            requires_json=True,
         ),
         Route.SUMMARY: spec(
             Route.SUMMARY,

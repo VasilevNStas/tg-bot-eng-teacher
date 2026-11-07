@@ -11,9 +11,10 @@ from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import CallbackQuery, Message
 
-from app.bot.callbacks import RoleplayCB
+from app.bot.callbacks import RoleplayCB, RoleplayReviewCB
+from app.bot.formatters import format_roleplay_review
 from app.bot.keyboards.onboarding import start_keyboard
-from app.bot.keyboards.roleplay import scenarios_keyboard
+from app.bot.keyboards.roleplay import review_keyboard, scenarios_keyboard
 from app.bot.user_context import resolve_user
 from app.core.di import AppServices
 from app.services.prompts.errors import PromptTemplateNotFound
@@ -90,12 +91,50 @@ async def handle_start(
 
 
 async def handle_stop(message: Message, services: AppServices) -> None:
-    """End the active role-play, if any."""
+    """End the active role-play and offer the full review when useful."""
     if message.from_user is None:
         return
     user = await resolve_user(services, message.from_user)
-    stopped = await services.conversation.stop_roleplay(user.id)
-    await message.answer(ru.ROLEPLAY_STOPPED if stopped else ru.ROLEPLAY_NONE)
+    session = await services.conversation.stop_roleplay(user.id)
+    if session is None:
+        await message.answer(ru.ROLEPLAY_NONE)
+        return
+    if session.corrections:
+        await message.answer(
+            ru.ROLEPLAY_STOPPED,
+            reply_markup=review_keyboard(session.conversation_id),
+        )
+        return
+    await message.answer(ru.ROLEPLAY_STOPPED)
+
+
+async def handle_roleplay_review(
+    callback: CallbackQuery,
+    callback_data: RoleplayReviewCB,
+    services: AppServices,
+) -> None:
+    """Show every correction collected during one role-play scene."""
+    if callback.from_user is None:
+        return
+    user = await resolve_user(services, callback.from_user)
+    review = await services.conversation.roleplay_review(
+        user.id,
+        callback_data.conversation_id,
+    )
+    if review is None:
+        await callback.answer(ru.ROLEPLAY_REVIEW_UNAVAILABLE)
+        return
+
+    title = review.topic
+    if review.topic is not None:
+        try:
+            title = services.prompts.scenario(review.topic).title or review.topic
+        except PromptTemplateNotFound:
+            title = review.topic
+
+    if isinstance(callback.message, Message):
+        await callback.message.edit_text(format_roleplay_review(review, title=title))
+    await callback.answer()
 
 
 def build_router() -> Router:
@@ -104,6 +143,7 @@ def build_router() -> Router:
     router.message.register(handle_roleplay, Command("roleplay"))
     router.message.register(handle_stop, Command("stop"))
     router.callback_query.register(handle_start, RoleplayCB.filter())
+    router.callback_query.register(handle_roleplay_review, RoleplayReviewCB.filter())
     return router
 
 

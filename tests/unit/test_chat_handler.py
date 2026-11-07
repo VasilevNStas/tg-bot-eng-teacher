@@ -16,14 +16,19 @@ from aiogram.types import CallbackQuery, Chat, Message
 from aiogram.types import User as TgUser
 from sqlalchemy import func, select
 
-from app.bot.callbacks import DeleteCB, ReviewCB, RoleplayCB
+from app.bot.callbacks import DeleteCB, ReviewCB, RoleplayCB, RoleplayReviewCB
 from app.bot.formatters import TELEGRAM_LIMIT
 from app.bot.handlers.chat import handle_chat
 from app.bot.handlers.common import handle_new
 from app.bot.handlers.correction import handle_correction
 from app.bot.handlers.privacy import handle_delete_callback, handle_delete_me
 from app.bot.handlers.review import handle_grade, handle_review
-from app.bot.handlers.roleplay import handle_roleplay, handle_start, handle_stop
+from app.bot.handlers.roleplay import (
+    handle_roleplay,
+    handle_roleplay_review,
+    handle_start,
+    handle_stop,
+)
 from app.bot.handlers.stats import handle_stats
 from app.bot.handlers.typing import typing_action
 from app.bot.handlers.vocab import handle_vocab
@@ -579,7 +584,7 @@ async def test_stats_empty_overview(tmp_path: Path) -> None:
 async def test_roleplay_select_start_text_and_stop(tmp_path: Path) -> None:
     database = await make_database(tmp_path)
     user = await make_onboarded_user(database)
-    llm = FakeLLM(plain_response("Welcome to the café!"))
+    llm = FakeLLM(structured_response(reply="Welcome to the café!"))
     services = make_services(database, llm)
     bot, session = await make_bot()
 
@@ -617,6 +622,67 @@ async def test_roleplay_select_start_text_and_stop(tmp_path: Path) -> None:
     await handle_stop(make_message(bot, "/stop"), services)
     assert await services.conversation.active_roleplay(user.id) is None
     assert session.methods[-1].text == ru.ROLEPLAY_STOPPED
+
+    await bot.session.close()
+    await database.dispose()
+
+
+async def test_roleplay_compact_corrections_and_full_review(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    await make_onboarded_user(database)
+    llm = FakeLLM(
+        structured_response(
+            reply="Sure! Anything else?",
+            corrections=[
+                correction(),
+                {
+                    "original": "I want",
+                    "corrected": "I'd like",
+                    "category": "register",
+                    "explanation_ru": "Вежливее сказать I'd like.",
+                },
+            ],
+        )
+    )
+    services = make_services(database, llm)
+    bot, session = await make_bot()
+
+    await handle_roleplay(make_message(bot, "/roleplay cafe"), services)
+    await handle_chat(make_message(bot, "I go to cafe. I want coffee."), services)
+
+    sent = session.methods[-1]
+    assert isinstance(sent, SendMessage)
+    assert "<blockquote expandable>" in sent.text
+    assert "I went" in sent.text
+    assert "I'd like" in sent.text
+
+    await handle_stop(make_message(bot, "/stop"), services)
+    stopped = session.methods[-1]
+    assert isinstance(stopped, SendMessage)
+    assert stopped.reply_markup is not None
+    review_buttons = [
+        RoleplayReviewCB.unpack(button.callback_data)
+        for row in stopped.reply_markup.inline_keyboard
+        for button in row
+        if button.callback_data
+    ]
+    assert len(review_buttons) == 1
+    review_data = review_buttons[0]
+
+    callback = CallbackQuery(
+        id="cb-review",
+        from_user=TgUser(id=100, is_bot=False, first_name="Tester"),
+        chat_instance="chat-instance",
+        message=make_message(bot, "stopped"),
+        data=review_data.pack(),
+    ).as_(bot)
+    await handle_roleplay_review(callback, review_data, services)
+
+    edits = [method for method in session.methods if isinstance(method, EditMessageText)]
+    report = edits[-1]
+    assert "Разбор ролевой сцены" in report.text
+    assert "I went" in report.text
+    assert "Вежливее" in report.text
 
     await bot.session.close()
     await database.dispose()

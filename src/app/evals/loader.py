@@ -107,11 +107,6 @@ def _parse_replay(
     path: Path,
     case_id: str,
 ) -> Mapping[str, object] | str:
-    if suite == "roleplay":
-        if not isinstance(value, str) or not value.strip():
-            raise EvalError(f"{path}/{case_id}: roleplay replay must be non-empty text")
-        return value.strip()
-
     if not isinstance(value, Mapping):
         raise EvalError(f"{path}/{case_id}: structured replay must be a mapping")
     try:
@@ -140,7 +135,7 @@ def _parse_expectation(
                 f"{path}/{case_id}: expected original is not in input: {item.original!r}"
             )
 
-    max_corrections = int(raw.get("max_corrections", 3 if suite != "roleplay" else 0))
+    max_corrections = int(raw.get("max_corrections", 2 if suite == "roleplay" else 3))
     if max_corrections < len(corrections):
         raise EvalError(f"{path}/{case_id}: max_corrections is lower than expected corrections")
 
@@ -152,9 +147,7 @@ def _parse_expectation(
         must_not_contain=forbidden,
         corrections=corrections,
         max_corrections=max_corrections,
-        require_russian_explanations=bool(
-            raw.get("require_russian_explanations", suite != "roleplay")
-        ),
+        require_russian_explanations=bool(raw.get("require_russian_explanations", True)),
         vocabulary=tuple(str(item) for item in raw.get("vocabulary", ())),
     )
 

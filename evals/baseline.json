@@ -99,52 +99,52 @@
     "roleplay-airport-a2-bag": {
       "failed_checks": [],
       "passed": true,
-      "prompt_version": "ad7f75505c0f",
+      "prompt_version": "7867591aea99",
       "suite": "roleplay"
     },
     "roleplay-airport-a2-checkin": {
       "failed_checks": [],
       "passed": true,
-      "prompt_version": "ad7f75505c0f",
+      "prompt_version": "7867591aea99",
       "suite": "roleplay"
     },
     "roleplay-cafe-a1-milk": {
       "failed_checks": [],
       "passed": true,
-      "prompt_version": "768c3760cebc",
+      "prompt_version": "71398e445780",
       "suite": "roleplay"
     },
     "roleplay-cafe-a1-order": {
       "failed_checks": [],
       "passed": true,
-      "prompt_version": "768c3760cebc",
+      "prompt_version": "71398e445780",
       "suite": "roleplay"
     },
     "roleplay-cafe-b2-complication": {
       "failed_checks": [],
       "passed": true,
-      "prompt_version": "0278b1a386b9",
+      "prompt_version": "7c5cd45589a2",
       "suite": "roleplay"
     },
     "roleplay-interview-b1-intro": {
       "failed_checks": [],
       "passed": true,
-      "prompt_version": "1f1d723bad32",
+      "prompt_version": "f2d0493c9eaa",
       "suite": "roleplay"
     },
     "roleplay-interview-b1-strength": {
       "failed_checks": [],
       "passed": true,
-      "prompt_version": "1f1d723bad32",
+      "prompt_version": "f2d0493c9eaa",
       "suite": "roleplay"
     },
     "roleplay-interview-c1-salary": {
       "failed_checks": [],
       "passed": true,
-      "prompt_version": "f41e5842f9d1",
+      "prompt_version": "2df1f2b52940",
       "suite": "roleplay"
     }
   },
-  "generated_at": "2026-11-06T13:26:26.956357+00:00",
+  "generated_at": "2026-11-07T21:01:19.662886+00:00",
   "mode": "replay"
 }

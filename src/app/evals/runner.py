@@ -360,7 +360,7 @@ def _replay_routes() -> dict[Route, RouteSpec]:
     return {
         Route.CHAT: RouteSpec(Route.CHAT, "replay/chat", None, 0.7, 600, True),
         Route.CORRECTION: RouteSpec(Route.CORRECTION, "replay/correction", None, 0.3, 800, True),
-        Route.ROLEPLAY: RouteSpec(Route.ROLEPLAY, "replay/roleplay", None, 0.8, 500, False),
+        Route.ROLEPLAY: RouteSpec(Route.ROLEPLAY, "replay/roleplay", None, 0.8, 500, True),
         Route.SUMMARY: RouteSpec(Route.SUMMARY, "replay/summary", None, 0.2, 300, False),
         Route.JUDGE: RouteSpec(Route.JUDGE, "replay/judge", None, 0.0, 200, True),
     }

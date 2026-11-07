@@ -4,62 +4,102 @@ cases:
     level: a1
     scenario: cafe
     input: "I want coffee."
-    replay: "Sure! Would you like a small or large coffee?"
+    replay:
+      reply: "Sure! Would you like a small or large coffee?"
+      corrections:
+        - original: "I want coffee"
+          corrected: "I'd like a coffee"
+          category: register
+          explanation_ru: "В кафе вежливее сказать I'd like…"
+      new_vocabulary: []
     expect:
       must_contain: ["coffee"]
+      max_corrections: 2
 
   - id: roleplay-cafe-a1-milk
     level: a1
     scenario: cafe
     input: "Can I get milk?"
-    replay: "Of course. Would you like hot or cold milk?"
+    replay:
+      reply: "Of course. Would you like hot or cold milk?"
+      corrections: []
+      new_vocabulary: []
     expect:
       must_contain: ["milk"]
+      max_corrections: 2
 
   - id: roleplay-airport-a2-checkin
     level: a2
     scenario: airport
     input: "I need check in for London."
-    replay: "Certainly. May I see your passport, please?"
+    replay:
+      reply: "Certainly. May I see your passport, please?"
+      corrections:
+        - original: "I need check in"
+          corrected: "I need to check in"
+          category: preposition
+          explanation_ru: "После need перед глаголом нужен to: need to check in."
+      new_vocabulary: []
     expect:
       must_contain: ["passport"]
+      max_corrections: 2
 
   - id: roleplay-airport-a2-bag
     level: a2
     scenario: airport
     input: "I have one bag."
-    replay: "Thank you. Would you like to check it in?"
+    replay:
+      reply: "Thank you. Would you like to check it in?"
+      corrections: []
+      new_vocabulary: []
     expect:
       must_contain: ["check"]
+      max_corrections: 2
 
   - id: roleplay-interview-b1-intro
     level: b1
     scenario: interview
     input: "I have five years of experience in marketing."
-    replay: "That is impressive. Could you tell me about a campaign you led?"
+    replay:
+      reply: "That is impressive. Could you tell me about a campaign you led?"
+      corrections: []
+      new_vocabulary: []
     expect:
       must_contain: ["campaign"]
+      max_corrections: 2
 
   - id: roleplay-interview-b1-strength
     level: b1
     scenario: interview
     input: "My strength is communication."
-    replay: "Good to know. Can you give me an example of how you use it at work?"
+    replay:
+      reply: "Good to know. Can you give me an example of how you use it at work?"
+      corrections: []
+      new_vocabulary: []
     expect:
       must_contain: ["example"]
+      max_corrections: 2
 
   - id: roleplay-cafe-b2-complication
     level: b2
     scenario: cafe
     input: "I would like the breakfast set."
-    replay: "I am sorry, the breakfast set is sold out today. Would you like to try our pastry instead?"
+    replay:
+      reply: "I am sorry, the breakfast set is sold out today. Would you like to try our pastry instead?"
+      corrections: []
+      new_vocabulary: []
     expect:
       must_contain: ["sold out"]
+      max_corrections: 2
 
   - id: roleplay-interview-c1-salary
     level: c1
     scenario: interview
     input: "I would like to discuss the salary."
-    replay: "Of course. What range did you have in mind for this role?"
+    replay:
+      reply: "Of course. What range did you have in mind for this role?"
+      corrections: []
+      new_vocabulary: []
     expect:
       must_contain: ["range"]
+      max_corrections: 2
