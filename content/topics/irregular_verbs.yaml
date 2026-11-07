@@ -202,6 +202,15 @@ items:
   base_ipa: baɪ
   past_ipa: bɔːt
   participle_ipa: bɔːt
+- slug: irregular-verb-cast
+  kind: irregular_verb
+  base: cast
+  past: cast
+  participle: cast
+  translation_ru: бросать, отливать
+  base_ipa: kɑːst
+  past_ipa: kɑːst
+  participle_ipa: kɑːst
 - slug: irregular-verb-catch
   kind: irregular_verb
   base: catch
@@ -283,6 +292,15 @@ items:
   base_ipa: dɪɡ
   past_ipa: dʌɡ
   participle_ipa: dʌɡ
+- slug: irregular-verb-dive
+  kind: irregular_verb
+  base: dive
+  past: [dived, dove]
+  participle: dived
+  translation_ru: нырять
+  base_ipa: daɪv
+  past_ipa: daɪvd / dəʊv
+  participle_ipa: daɪvd
 - slug: irregular-verb-do
   kind: irregular_verb
   base: do
@@ -328,6 +346,15 @@ items:
   base_ipa: draɪv
   past_ipa: drəʊv
   participle_ipa: ˈdrɪvn
+- slug: irregular-verb-dwell
+  kind: irregular_verb
+  base: dwell
+  past: [dwelt, dwelled]
+  participle: [dwelt, dwelled]
+  translation_ru: жить, обитать
+  base_ipa: dwel
+  past_ipa: dwelt / dweld
+  participle_ipa: dwelt / dweld
 - slug: irregular-verb-eat
   kind: irregular_verb
   base: eat
@@ -400,6 +427,15 @@ items:
   base_ipa: fliː
   past_ipa: flɛd
   participle_ipa: flɛd
+- slug: irregular-verb-fling
+  kind: irregular_verb
+  base: fling
+  past: flung
+  participle: flung
+  translation_ru: швырять
+  base_ipa: flɪŋ
+  past_ipa: flʌŋ
+  participle_ipa: flʌŋ
 - slug: irregular-verb-fly
   kind: irregular_verb
   base: fly
@@ -418,6 +454,15 @@ items:
   base_ipa: fəˈbɪd
   past_ipa: fəˈbæd
   participle_ipa: fəˈbɪdn
+- slug: irregular-verb-forecast
+  kind: irregular_verb
+  base: forecast
+  past: forecast
+  participle: forecast
+  translation_ru: прогнозировать
+  base_ipa: ˈfɔːkɑːst
+  past_ipa: ˈfɔːkɑːst
+  participle_ipa: ˈfɔːkɑːst
 - slug: irregular-verb-forget
   kind: irregular_verb
   base: forget
@@ -472,6 +517,15 @@ items:
   base_ipa: ɡəʊ
   past_ipa: wɛnt
   participle_ipa: ɡɒn
+- slug: irregular-verb-grind
+  kind: irregular_verb
+  base: grind
+  past: ground
+  participle: ground
+  translation_ru: молоть, перемалывать
+  base_ipa: ɡraɪnd
+  past_ipa: ɡraʊnd
+  participle_ipa: ɡraʊnd
 - slug: irregular-verb-grow
   kind: irregular_verb
   base: grow
@@ -562,6 +616,15 @@ items:
   base_ipa: niːl
   past_ipa: nɛlt / niːld
   participle_ipa: nɛlt / niːld
+- slug: irregular-verb-knit
+  kind: irregular_verb
+  base: knit
+  past: [knitted, knit]
+  participle: [knitted, knit]
+  translation_ru: вязать
+  base_ipa: nɪt
+  past_ipa: ˈnɪtɪd / nɪt
+  participle_ipa: ˈnɪtɪd / nɪt
 - slug: irregular-verb-know
   kind: irregular_verb
   base: know
@@ -697,6 +760,15 @@ items:
   base_ipa: miːt
   past_ipa: mɛt
   participle_ipa: mɛt
+- slug: irregular-verb-mow
+  kind: irregular_verb
+  base: mow
+  past: mowed
+  participle: [mown, mowed]
+  translation_ru: косить
+  base_ipa: məʊ
+  past_ipa: məʊd
+  participle_ipa: məʊn / məʊd
 - slug: irregular-verb-pay
   kind: irregular_verb
   base: pay
@@ -706,6 +778,24 @@ items:
   base_ipa: peɪ
   past_ipa: peɪd
   participle_ipa: peɪd
+- slug: irregular-verb-plead
+  kind: irregular_verb
+  base: plead
+  past: [pleaded, pled]
+  participle: [pleaded, pled]
+  translation_ru: умолять, заявлять
+  base_ipa: pliːd
+  past_ipa: ˈpliːdɪd / pled
+  participle_ipa: ˈpliːdɪd / pled
+- slug: irregular-verb-prove
+  kind: irregular_verb
+  base: prove
+  past: proved
+  participle: [proved, proven]
+  translation_ru: доказывать
+  base_ipa: pruːv
+  past_ipa: pruːvd
+  participle_ipa: pruːvd / ˈpruːvn
 - slug: irregular-verb-put
   kind: irregular_verb
   base: put
@@ -715,6 +805,15 @@ items:
   base_ipa: pʊt
   past_ipa: pʊt
   participle_ipa: pʊt
+- slug: irregular-verb-quit
+  kind: irregular_verb
+  base: quit
+  past: quit
+  participle: quit
+  translation_ru: бросать, увольняться
+  base_ipa: kwɪt
+  past_ipa: kwɪt
+  participle_ipa: kwɪt
 - slug: irregular-verb-read
   kind: irregular_verb
   base: read
@@ -724,6 +823,15 @@ items:
   base_ipa: riːd
   past_ipa: rɛd
   participle_ipa: rɛd
+- slug: irregular-verb-rid
+  kind: irregular_verb
+  base: rid
+  past: rid
+  participle: rid
+  translation_ru: избавлять
+  base_ipa: rɪd
+  past_ipa: rɪd
+  participle_ipa: rɪd
 - slug: irregular-verb-ride
   kind: irregular_verb
   base: ride
@@ -760,6 +868,15 @@ items:
   base_ipa: rʌn
   past_ipa: ræn
   participle_ipa: rʌn
+- slug: irregular-verb-saw
+  kind: irregular_verb
+  base: saw
+  past: sawed
+  participle: [sawn, sawed]
+  translation_ru: пилить
+  base_ipa: sɔː
+  past_ipa: sɔːd
+  participle_ipa: sɔːn / sɔːd
 - slug: irregular-verb-say
   kind: irregular_verb
   base: say
@@ -814,6 +931,15 @@ items:
   base_ipa: sɛt
   past_ipa: sɛt
   participle_ipa: sɛt
+- slug: irregular-verb-sew
+  kind: irregular_verb
+  base: sew
+  past: sewed
+  participle: [sewn, sewed]
+  translation_ru: шить
+  base_ipa: səʊ
+  past_ipa: səʊd
+  participle_ipa: səʊn / səʊd
 - slug: irregular-verb-shake
   kind: irregular_verb
   base: shake
@@ -823,6 +949,15 @@ items:
   base_ipa: ʃeɪk
   past_ipa: ʃʊk
   participle_ipa: ˈʃeɪkən
+- slug: irregular-verb-shed
+  kind: irregular_verb
+  base: shed
+  past: shed
+  participle: shed
+  translation_ru: проливать, сбрасывать
+  base_ipa: ʃed
+  past_ipa: ʃed
+  participle_ipa: ʃed
 - slug: irregular-verb-shine
   kind: irregular_verb
   base: shine
@@ -895,6 +1030,15 @@ items:
   base_ipa: sɪt
   past_ipa: sæt
   participle_ipa: sæt
+- slug: irregular-verb-slay
+  kind: irregular_verb
+  base: slay
+  past: slew
+  participle: slain
+  translation_ru: убивать
+  base_ipa: sleɪ
+  past_ipa: sluː
+  participle_ipa: sleɪn
 - slug: irregular-verb-sleep
   kind: irregular_verb
   base: sleep
@@ -913,6 +1057,24 @@ items:
   base_ipa: slaɪd
   past_ipa: slɪd
   participle_ipa: slɪd
+- slug: irregular-verb-sling
+  kind: irregular_verb
+  base: sling
+  past: slung
+  participle: slung
+  translation_ru: швырять, вешать через плечо
+  base_ipa: slɪŋ
+  past_ipa: slʌŋ
+  participle_ipa: slʌŋ
+- slug: irregular-verb-slit
+  kind: irregular_verb
+  base: slit
+  past: slit
+  participle: slit
+  translation_ru: разрезать
+  base_ipa: slɪt
+  past_ipa: slɪt
+  participle_ipa: slɪt
 - slug: irregular-verb-smell
   kind: irregular_verb
   base: smell
@@ -922,6 +1084,15 @@ items:
   base_ipa: smɛl
   past_ipa: smɛlt
   participle_ipa: smɛlt
+- slug: irregular-verb-sow
+  kind: irregular_verb
+  base: sow
+  past: sowed
+  participle: [sown, sowed]
+  translation_ru: сеять
+  base_ipa: səʊ
+  past_ipa: səʊd
+  participle_ipa: səʊn / səʊd
 - slug: irregular-verb-speak
   kind: irregular_verb
   base: speak
@@ -931,6 +1102,15 @@ items:
   base_ipa: spiːk
   past_ipa: spəʊk
   participle_ipa: ˈspəʊkən
+- slug: irregular-verb-speed
+  kind: irregular_verb
+  base: speed
+  past: [sped, speeded]
+  participle: [sped, speeded]
+  translation_ru: мчаться, ускорять
+  base_ipa: spiːd
+  past_ipa: sped / ˈspiːdɪd
+  participle_ipa: sped / ˈspiːdɪd
 - slug: irregular-verb-spell
   kind: irregular_verb
   base: spell
@@ -1057,6 +1237,15 @@ items:
   base_ipa: stɪŋk
   past_ipa: stæŋk / stʌŋk
   participle_ipa: stʌŋk / ˈstʌŋkən
+- slug: irregular-verb-stride
+  kind: irregular_verb
+  base: stride
+  past: strode
+  participle: stridden
+  translation_ru: шагать
+  base_ipa: straɪd
+  past_ipa: strəʊd
+  participle_ipa: ˈstrɪdn
 - slug: irregular-verb-strike
   kind: irregular_verb
   base: strike
@@ -1066,6 +1255,24 @@ items:
   base_ipa: straɪk
   past_ipa: strʌk
   participle_ipa: strʌk / ˈstrɪkən
+- slug: irregular-verb-string
+  kind: irregular_verb
+  base: string
+  past: strung
+  participle: strung
+  translation_ru: нанизывать
+  base_ipa: strɪŋ
+  past_ipa: strʌŋ
+  participle_ipa: strʌŋ
+- slug: irregular-verb-strive
+  kind: irregular_verb
+  base: strive
+  past: [strove, strived]
+  participle: [striven, strived]
+  translation_ru: стремиться
+  base_ipa: straɪv
+  past_ipa: strəʊv / straɪvd
+  participle_ipa: ˈstrɪvn / straɪvd
 - slug: irregular-verb-swear
   kind: irregular_verb
   base: swear
@@ -1156,6 +1363,15 @@ items:
   base_ipa: θɪŋk
   past_ipa: θɔːt
   participle_ipa: θɔːt
+- slug: irregular-verb-thrive
+  kind: irregular_verb
+  base: thrive
+  past: [thrived, throve]
+  participle: [thrived, thriven]
+  translation_ru: процветать
+  base_ipa: θraɪv
+  past_ipa: θraɪvd / θrəʊv
+  participle_ipa: θraɪvd / ˈθrɪvn
 - slug: irregular-verb-throw
   kind: irregular_verb
   base: throw
@@ -1165,6 +1381,24 @@ items:
   base_ipa: θrəʊ
   past_ipa: θruː
   participle_ipa: θrəʊn
+- slug: irregular-verb-thrust
+  kind: irregular_verb
+  base: thrust
+  past: thrust
+  participle: thrust
+  translation_ru: толкать
+  base_ipa: θrʌst
+  past_ipa: θrʌst
+  participle_ipa: θrʌst
+- slug: irregular-verb-tread
+  kind: irregular_verb
+  base: tread
+  past: trod
+  participle: [trodden, trod]
+  translation_ru: ступать
+  base_ipa: tred
+  past_ipa: trɒd
+  participle_ipa: ˈtrɒdn / trɒd
 - slug: irregular-verb-understand
   kind: irregular_verb
   base: understand
@@ -1201,6 +1435,15 @@ items:
   base_ipa: wiːv
   past_ipa: wəʊv / wiːvd
   participle_ipa: ˈwəʊvən / wiːvd
+- slug: irregular-verb-wed
+  kind: irregular_verb
+  base: wed
+  past: [wed, wedded]
+  participle: [wed, wedded]
+  translation_ru: жениться, выходить замуж
+  base_ipa: wed
+  past_ipa: wed / ˈwedɪd
+  participle_ipa: wed / ˈwedɪd
 - slug: irregular-verb-weep
   kind: irregular_verb
   base: weep
@@ -1210,6 +1453,15 @@ items:
   base_ipa: wiːp
   past_ipa: wɛpt
   participle_ipa: wɛpt
+- slug: irregular-verb-wet
+  kind: irregular_verb
+  base: wet
+  past: [wet, wetted]
+  participle: [wet, wetted]
+  translation_ru: мочить
+  base_ipa: wet
+  past_ipa: wet / ˈwetɪd
+  participle_ipa: wet / ˈwetɪd
 - slug: irregular-verb-win
   kind: irregular_verb
   base: win
@@ -1228,6 +1480,15 @@ items:
   base_ipa: wɪnd
   past_ipa: waʊnd
   participle_ipa: waʊnd
+- slug: irregular-verb-wring
+  kind: irregular_verb
+  base: wring
+  past: wrung
+  participle: wrung
+  translation_ru: выжимать
+  base_ipa: rɪŋ
+  past_ipa: rʌŋ
+  participle_ipa: rʌŋ
 - slug: irregular-verb-write
   kind: irregular_verb
   base: write
