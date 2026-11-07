@@ -1,0 +1,24 @@
+topic:
+  slug: goals-drill
+  title: Goals drill
+source: Test fixture
+license: unknown
+items:
+- slug: goals-irregular-go
+  kind: irregular_verb
+  base: go
+  past: went
+  participle: gone
+  translation_ru: идти
+- slug: goals-irregular-see
+  kind: irregular_verb
+  base: see
+  past: saw
+  participle: seen
+  translation_ru: видеть
+- slug: goals-irregular-take
+  kind: irregular_verb
+  base: take
+  past: took
+  participle: taken
+  translation_ru: брать

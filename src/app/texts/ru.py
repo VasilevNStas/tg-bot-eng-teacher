@@ -256,6 +256,59 @@ BUTTON_RETRY_WRONG = "Повторить ошибки"
 BUTTON_NEW_CARD = "Новая карточка"
 BUTTON_CANCEL_TASK = "Выйти из задания"
 
+GOALS_GOALS_TEXT = (
+    "<b>Цели обучения</b>\n\nВыбери, что хочешь подтянуть (можно несколько).\nСейчас: {goals}"
+)
+GOALS_INTERESTS_TEXT = (
+    "<b>Интересы</b>\n\nВыбери темы для примеров и диалогов.\nСейчас: {interests}"
+)
+GOALS_DAILY_TEXT = (
+    "<b>Дневная норма</b>\n\n"
+    "Сколько упражнений делать за подход?\n"
+    "Сейчас: <b>{daily}</b> упражнений"
+)
+GOALS_SUMMARY = (
+    "<b>Цели сохранены</b>\n\n"
+    "Цели: {goals}\n"
+    "Интересы: {interests}\n"
+    "Дневная норма: <b>{daily}</b> упражнений\n\n"
+    "Учту это в диалоге и в /drill."
+)
+GOALS_NONE = "не выбраны"
+GOALS_INVALID = "Не удалось сохранить настройку."
+GOAL_LABELS: dict[str, str] = {
+    "speaking": "Разговор",
+    "grammar": "Грамматика",
+    "tenses": "Времена",
+    "articles": "Артикли",
+    "prepositions": "Предлоги",
+    "vocabulary": "Слова",
+    "pronunciation": "Произношение",
+    "interview": "Собеседование",
+    "travel": "Путешествия",
+    "exams": "Экзамены",
+    "business": "Бизнес",
+    "daily": "Повседневное",
+}
+INTEREST_LABELS: dict[str, str] = {
+    "it": "IT",
+    "sports": "Спорт",
+    "music": "Музыка",
+    "movies": "Кино",
+    "travel": "Путешествия",
+    "science": "Наука",
+    "business": "Бизнес",
+    "gaming": "Игры",
+    "food": "Еда",
+    "books": "Книги",
+}
+BUTTON_GOALS_EDIT = "Изменить"
+BUTTON_GOALS_DONE = "Готово"
+BUTTON_GOALS_RESET = "Сбросить"
+BUTTON_GOALS_SCREEN_GOALS = "Цели"
+BUTTON_GOALS_SCREEN_INTERESTS = "Интересы"
+BUTTON_GOALS_SCREEN_DAILY = "Норма"
+
 MENU_TITLE = "<b>Меню</b>\n\nВыбери раздел:"
 MENU_LEARN = "Учёба"
 MENU_PRACTICE = "Практика"
@@ -278,6 +331,7 @@ MENU_ROLEPLAY = "Ролевая сцена"
 MENU_STOP = "Завершить сцену"
 MENU_NEW = "Новый диалог"
 MENU_STATS = "Статистика"
+MENU_GOALS = "Мои цели"
 MENU_TIMEZONE = "Часовой пояс"
 MENU_QUIET = "Тихие часы"
 MENU_ABOUT = "Мои данные"
@@ -302,6 +356,10 @@ ABOUT_ME = (
     "<b>Настройки карточек</b>\n"
     "Слов в карточке: {card_size}\n"
     "Направление: {direction}\n\n"
+    "<b>Цели обучения</b>\n"
+    "Цели: {goals}\n"
+    "Интересы: {interests}\n"
+    "Дневная норма: {daily}\n\n"
     "<b>Что хранится в базе</b>\n"
     "Диалоги: {conversations}\n"
     "Сообщения: {messages}\n"
@@ -337,6 +395,7 @@ HELP = (
     "<b>Прогресс</b>\n"
     "/stats — прогресс и слабые темы\n\n"
     "<b>Настройки</b>\n"
+    "/goals — цели, интересы и дневная норма\n"
     "/timezone — часовой пояс\n"
     "/quiet — тихие часы\n"
     "/about_me — какие данные хранятся\n"

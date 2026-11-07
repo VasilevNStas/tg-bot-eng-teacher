@@ -52,6 +52,21 @@ class WordsCB(CallbackData, prefix="wrd"):
     value: str = ""
 
 
+class GoalsCB(CallbackData, prefix="goal"):
+    """Personal goals navigation and multi-select toggles."""
+
+    action: Literal[
+        "open",
+        "screen",
+        "toggle_goal",
+        "toggle_interest",
+        "daily",
+        "reset",
+        "done",
+    ]
+    value: str = ""
+
+
 class MenuCB(CallbackData, prefix="menu"):
     """Main menu navigation and action shortcuts."""
 
@@ -74,6 +89,7 @@ class MenuCB(CallbackData, prefix="menu"):
         "stats",
         "timezone",
         "quiet",
+        "goals",
         "about",
         "delete",
     ]
