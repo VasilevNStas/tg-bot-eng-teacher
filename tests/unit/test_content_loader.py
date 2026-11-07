@@ -9,7 +9,7 @@ import yaml
 
 from app.curriculum.errors import ContentLoadError
 from app.curriculum.loader import load_content_file, load_content_path
-from app.curriculum.models import ContentFile, VocabularyPayload
+from app.curriculum.models import ContentFile, IrregularVerbPayload, VocabularyPayload
 from app.db.enums import CEFRLevel, ContentKind
 
 
@@ -281,8 +281,23 @@ def test_project_irregular_verbs_keep_full_ipa() -> None:
         for item in content.items
     ]
 
-    assert len(verbs) == 137
+    assert len(verbs) == 166
     for item in verbs:
         assert getattr(item.payload, "base_ipa", None), item.slug
         assert getattr(item.payload, "past_ipa", None), item.slug
         assert getattr(item.payload, "participle_ipa", None), item.slug
+
+
+def test_project_irregular_verbs_have_unique_bases() -> None:
+    root = Path(__file__).resolve().parents[2]
+    loaded = load_content_path(root / "content" / "topics")
+    verbs = [
+        item
+        for _, content in loaded
+        if content.topic.slug == "irregular-verbs"
+        for item in content.items
+    ]
+
+    bases = [item.payload.base for item in verbs if isinstance(item.payload, IrregularVerbPayload)]
+    assert len(bases) == len(verbs)
+    assert len(bases) == len(set(bases))
