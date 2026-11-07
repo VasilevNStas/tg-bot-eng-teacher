@@ -8,6 +8,7 @@ here means the importer and the bot only ever see well-formed data.
 
 from __future__ import annotations
 
+import re
 from collections import Counter
 from typing import Annotated, Any, Literal, Self
 
@@ -19,6 +20,8 @@ from app.db.enums import CEFRLevel, ContentKind
 # used for idempotent upserts, so changing a slug creates a "new" item and
 # loses the user's progress for the old one.
 SLUG_PATTERN = r"^[a-z0-9][a-z0-9-]{2,127}$"
+# Knowledge tags are goal/interest ids; two-letter ids such as ``it`` are valid.
+TAG_PATTERN = re.compile(r"^[a-z][a-z0-9-]{1,31}$")
 # Gap-fill sentences must contain a visible placeholder for the missing word.
 BLANK_MARKER = "...."
 
@@ -171,6 +174,52 @@ class VocabularyPayload(PayloadBase):
         return cleaned
 
 
+class KnowledgePayload(PayloadBase):
+    """A curated explanation reused across users.
+
+    Knowledge is admin-authored and tagged with goal/interest ids. The bot
+    injects matching entries into the system prompt; raw user dialogues are
+    never stored here (ADR-052, ADR-059).
+    """
+
+    kind: Literal[ContentKind.KNOWLEDGE] = ContentKind.KNOWLEDGE
+    title: str = Field(min_length=1, max_length=128)
+    body_md: str = Field(min_length=1, max_length=2000)
+    tags: list[str] = Field(min_length=1, max_length=8)
+    level: CEFRLevel | None = None
+
+    @field_validator("title")
+    @classmethod
+    def check_title(cls, value: str) -> str:
+        """Keep the title single-line: it is rendered as a Markdown heading."""
+        value = value.strip()
+        if not value:
+            raise ValueError("title must be non-empty")
+        if "\n" in value or "\r" in value:
+            raise ValueError("title must be a single line")
+        return value
+
+    @field_validator("body_md")
+    @classmethod
+    def check_body(cls, value: str) -> str:
+        """Trim the body and reject whitespace-only explanations."""
+        value = value.strip()
+        if not value:
+            raise ValueError("body_md must be non-empty")
+        return value
+
+    @field_validator("tags")
+    @classmethod
+    def check_tags(cls, tags: list[str]) -> list[str]:
+        """Normalize tags and reject unknown shapes or duplicates."""
+        cleaned = [tag.strip().casefold() for tag in tags]
+        if any(not TAG_PATTERN.fullmatch(tag) for tag in cleaned):
+            raise ValueError("tags must be lowercase ids (letters, digits, hyphen)")
+        if len(set(cleaned)) != len(cleaned):
+            raise ValueError("tags must be unique")
+        return cleaned
+
+
 # Discriminated union: Pydantic reads the ``kind`` field and validates the
 # matching payload, so callers get a concrete type instead of a loose dict.
 ContentPayload = Annotated[
@@ -179,7 +228,8 @@ ContentPayload = Annotated[
     | TranslationPayload
     | WordOrderPayload
     | MultipleChoicePayload
-    | VocabularyPayload,
+    | VocabularyPayload
+    | KnowledgePayload,
     Field(discriminator="kind"),
 ]
 

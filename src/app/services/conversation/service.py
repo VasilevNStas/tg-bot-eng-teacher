@@ -46,6 +46,8 @@ from app.services.correction.validation import (
     MAX_ROLEPLAY_CORRECTIONS,
     sanitize_payload,
 )
+from app.services.knowledge.model import KnowledgeSnippet
+from app.services.knowledge.service import KnowledgeService
 from app.services.prompts.builder import PromptBuilder, PromptContext
 from app.services.prompts.registry import PromptTemplate
 from app.services.usage.service import UsageService
@@ -134,6 +136,7 @@ class ConversationService:
         *,
         routes: Mapping[Route, RouteSpec],
         summarizer: ConversationSummarizer | None = None,
+        knowledge: KnowledgeService | None = None,
         idle_timeout: timedelta = timedelta(minutes=30),
         repair_attempts: int = 1,
         max_conversation_messages: int = 200,
@@ -155,6 +158,7 @@ class ConversationService:
             routes=routes,
             history_window=builder.history_window,
         )
+        self._knowledge = knowledge
         self._idle_timeout = idle_timeout
         self._repair_attempts = max(repair_attempts, 0)
         self._max_conversation_messages = max_conversation_messages
@@ -176,6 +180,7 @@ class ConversationService:
         conversation.summary = summary.text
         conversation.summarized_until_message_id = summary.summarized_until_message_id
 
+        knowledge = await self._knowledge_for(user, mode)
         prompt = self._builder.build(
             PromptContext(
                 level=user.level,
@@ -186,6 +191,7 @@ class ConversationService:
                 history=history,
                 native_language=user.native_lang,
                 scenario=scenario,
+                knowledge=knowledge,
             )
         )
 
@@ -515,6 +521,23 @@ class ConversationService:
             messages=total,
         )
         return True
+
+    async def _knowledge_for(
+        self,
+        user: User,
+        mode: ConversationMode,
+    ) -> tuple[KnowledgeSnippet, ...]:
+        """Select curated knowledge for free-form modes.
+
+        Role-play stays in character, so it deliberately receives no knowledge
+        block; drill is handled by ``ExerciseService`` and never reaches here.
+        """
+        if self._knowledge is None or mode not in (
+            ConversationMode.CHAT,
+            ConversationMode.CORRECTION,
+        ):
+            return ()
+        return await self._knowledge.select_for_profile(user.profile, level=user.level)
 
     async def _prepare(
         self,

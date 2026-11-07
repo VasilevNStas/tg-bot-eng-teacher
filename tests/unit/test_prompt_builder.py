@@ -123,3 +123,20 @@ def test_non_russian_native_language_is_declared() -> None:
     prompt = make_builder().build(make_context(native_language="de"))
 
     assert "Explain in de." in prompt.messages[0].content
+
+
+def test_knowledge_block_is_included() -> None:
+    from app.services.knowledge.model import KnowledgeSnippet
+
+    snippet = KnowledgeSnippet(
+        slug="knowledge-articles",
+        title="Articles",
+        body_md="Use **a** for one of many.",
+        tags=("articles",),
+    )
+
+    prompt = make_builder().build(make_context(knowledge=[snippet]))
+
+    knowledge = [m for m in prompt.messages if "Curated knowledge" in m.content]
+    assert len(knowledge) == 1
+    assert "### Articles" in knowledge[0].content

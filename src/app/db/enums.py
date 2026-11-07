@@ -53,6 +53,7 @@ class ContentKind(StrEnum):
     WORD_ORDER = "word_order"
     MULTIPLE_CHOICE = "multiple_choice"
     VOCABULARY = "vocabulary"
+    KNOWLEDGE = "knowledge"
 
 
 class ExerciseState(StrEnum):

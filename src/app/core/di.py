@@ -17,6 +17,7 @@ from app.llm.port import LLMClient
 from app.services.conversation.service import ConversationService
 from app.services.conversation.summary import ConversationSummarizer
 from app.services.exercises.service import ExerciseService
+from app.services.knowledge.service import KnowledgeService
 from app.services.prompts.builder import PromptBuilder
 from app.services.prompts.registry import PromptRegistry
 from app.services.translation.service import TranslationService
@@ -94,6 +95,11 @@ def build_services(database: Database, settings: Settings) -> AppServices:
         summary_max_chars=settings.summary_max_chars,
         max_input_tokens=settings.llm_max_input_tokens,
     )
+    knowledge = KnowledgeService(
+        database,
+        limit=settings.knowledge_max_items,
+        max_chars=settings.knowledge_max_chars,
+    )
     conversation = ConversationService(
         database,
         llm,
@@ -101,6 +107,7 @@ def build_services(database: Database, settings: Settings) -> AppServices:
         builder,
         routes=routes,
         summarizer=summarizer,
+        knowledge=knowledge,
         repair_attempts=settings.llm_repair_attempts,
         idle_timeout=timedelta(minutes=settings.conversation_idle_minutes),
         max_conversation_messages=settings.max_conversation_messages,
