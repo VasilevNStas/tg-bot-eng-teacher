@@ -91,7 +91,8 @@ def evaluate_case(
     checks.append(_check_must_contain(reply, case.expectation.must_contain))
     checks.append(_check_must_not_contain(reply, case.expectation.must_not_contain))
     if case.structured:
-        checks.append(_check_correction_count(raw_corrections, case.expectation.max_corrections))
+        max_corrections = 2 if case.suite == "roleplay" else case.expectation.max_corrections
+        checks.append(_check_correction_count(raw_corrections, max_corrections))
         checks.append(_check_correction_originals(raw_corrections, case.input))
         checks.append(_check_expected_corrections(corrections, case.expectation.corrections))
         checks.append(

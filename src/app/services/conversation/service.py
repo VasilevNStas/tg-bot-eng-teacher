@@ -25,7 +25,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.logging import get_logger
 from app.db.database import Database
-from app.db.enums import ConversationMode, MessageRole
+from app.db.enums import ConversationMode, ErrorCategory, MessageRole
 from app.db.models import Conversation, User
 from app.db.models import Correction as DbCorrection
 from app.db.models import Message as DbMessage
@@ -41,7 +41,11 @@ from app.services.correction.schema import (
     CorrectionPayload,
     NewVocabularyItem,
 )
-from app.services.correction.validation import sanitize_payload
+from app.services.correction.validation import (
+    MAX_CORRECTIONS,
+    MAX_ROLEPLAY_CORRECTIONS,
+    sanitize_payload,
+)
 from app.services.prompts.builder import PromptBuilder, PromptContext
 from app.services.prompts.registry import PromptTemplate
 from app.services.usage.service import UsageService
@@ -49,8 +53,11 @@ from app.services.usage.service import UsageService
 logger = get_logger(__name__)
 
 # These modes ask the LLM for a JSON payload with corrections and vocabulary.
-# Drill/roleplay replies are plain text.
-STRUCTURED_MODES = frozenset({ConversationMode.CHAT, ConversationMode.CORRECTION})
+# Role-play returns structured output too, but its feedback is capped to two
+# items and shown as a compact block under the in-character reply.
+STRUCTURED_MODES = frozenset(
+    {ConversationMode.CHAT, ConversationMode.CORRECTION, ConversationMode.ROLEPLAY}
+)
 
 _ROUTE_BY_MODE: dict[ConversationMode, Route] = {
     ConversationMode.CHAT: Route.CHAT,
@@ -85,6 +92,34 @@ class NewConversationResult:
     closed: int
     summarized: int
     had_roleplay: bool
+
+
+@dataclass(frozen=True, slots=True)
+class RoleplaySession:
+    """A closed role-play scene and how many corrections it collected."""
+
+    conversation_id: int
+    topic: str | None
+    corrections: int
+
+
+@dataclass(frozen=True, slots=True)
+class RoleplayCorrection:
+    """One correction stored during a role-play scene."""
+
+    original: str
+    corrected: str
+    category: ErrorCategory
+    explanation_ru: str
+
+
+@dataclass(frozen=True, slots=True)
+class RoleplayReview:
+    """Full correction review for one role-play scene."""
+
+    conversation_id: int
+    topic: str | None
+    corrections: tuple[RoleplayCorrection, ...]
 
 
 class ConversationService:
@@ -171,7 +206,14 @@ class ConversationService:
         )
 
         response = await self._complete_with_repair(prompt.messages, route, schema)
-        payload = sanitize_payload(self._payload(response, structured), text)
+        max_corrections = (
+            MAX_ROLEPLAY_CORRECTIONS if mode is ConversationMode.ROLEPLAY else MAX_CORRECTIONS
+        )
+        payload = sanitize_payload(
+            self._payload(response, structured),
+            text,
+            max_corrections=max_corrections,
+        )
 
         user_message_id, assistant_message_id = await self._persist(
             user=user,
@@ -238,8 +280,8 @@ class ConversationService:
                 reason="roleplay_switch",
             )
 
-    async def stop_roleplay(self, user_id: int) -> str | None:
-        """Close the newest active scenario and return its id."""
+    async def stop_roleplay(self, user_id: int) -> RoleplaySession | None:
+        """Close the newest active scenario and report its correction count."""
         now = datetime.now(UTC)
         async with self._database.session() as session:
             conversation = await session.scalar(
@@ -255,14 +297,61 @@ class ConversationService:
             if conversation is None:
                 return None
             conversation.ended_at = now
-            topic = conversation.topic
+            corrections = await session.scalar(
+                select(func.count())
+                .select_from(DbCorrection)
+                .join(DbMessage, DbCorrection.message_id == DbMessage.id)
+                .where(DbMessage.conversation_id == conversation.id)
+            )
+            result = RoleplaySession(
+                conversation_id=conversation.id,
+                topic=conversation.topic,
+                corrections=int(corrections or 0),
+            )
         await self._summarizer.finalize(conversation)
         logger.info(
             "conversation_closed",
             conversation_id=conversation.id,
             reason="roleplay_stop",
         )
-        return topic
+        return result
+
+    async def roleplay_review(
+        self,
+        user_id: int,
+        conversation_id: int,
+    ) -> RoleplayReview | None:
+        """Load all corrections stored during one role-play scene."""
+        async with self._database.session() as session:
+            conversation = await session.scalar(
+                select(Conversation).where(
+                    Conversation.id == conversation_id,
+                    Conversation.user_id == user_id,
+                    Conversation.mode == ConversationMode.ROLEPLAY,
+                )
+            )
+            if conversation is None:
+                return None
+            rows = await session.scalars(
+                select(DbCorrection)
+                .join(DbMessage, DbCorrection.message_id == DbMessage.id)
+                .where(DbMessage.conversation_id == conversation_id)
+                .order_by(DbCorrection.id)
+            )
+            corrections = tuple(
+                RoleplayCorrection(
+                    original=row.original,
+                    corrected=row.corrected,
+                    category=row.category,
+                    explanation_ru=row.explanation,
+                )
+                for row in rows
+            )
+            return RoleplayReview(
+                conversation_id=conversation.id,
+                topic=conversation.topic,
+                corrections=corrections,
+            )
 
     async def start_new(self, user_id: int) -> NewConversationResult:
         """Close every active conversation and finalize their summaries."""

@@ -33,6 +33,12 @@ class RoleplayCB(CallbackData, prefix="rp"):
     slug: str
 
 
+class RoleplayReviewCB(CallbackData, prefix="rpr"):
+    """Request the full correction review for one closed role-play scene."""
+
+    conversation_id: int
+
+
 class DeleteCB(CallbackData, prefix="del"):
     """Confirm or cancel account deletion."""
 

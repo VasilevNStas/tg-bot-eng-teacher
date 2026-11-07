@@ -13,7 +13,7 @@ from datetime import datetime
 from html import escape
 
 from app.db.models import Vocabulary
-from app.services.conversation.service import ConversationTurn
+from app.services.conversation.service import ConversationTurn, RoleplayReview
 from app.services.privacy.service import UserDataSummary
 from app.services.stats.service import StatsReport
 from app.services.vocabulary.srs import ReviewCard
@@ -107,6 +107,33 @@ def format_correction_report(
                 lines.append("…")
                 break
 
+    return "\n".join(lines)
+
+
+def format_roleplay_review(
+    review: RoleplayReview,
+    *,
+    title: str | None = None,
+    limit: int = TELEGRAM_LIMIT,
+) -> str:
+    """Render the full correction review for a closed role-play scene."""
+    scene = escape(title or review.topic or "—", quote=False)
+    lines = [ru.ROLEPLAY_REVIEW_HEADER.format(title=scene), ""]
+    if not review.corrections:
+        lines.append(ru.ROLEPLAY_REVIEW_EMPTY)
+        return "\n".join(lines)
+
+    for correction in review.corrections:
+        category = ru.ERROR_CATEGORY_RU.get(correction.category.value) or correction.category.value
+        line = ru.ROLEPLAY_REVIEW_CORRECTION.format(
+            original=escape(correction.original, quote=False),
+            corrected=escape(correction.corrected, quote=False),
+            category=escape(category, quote=False),
+            explanation=escape(correction.explanation_ru, quote=False),
+        )
+        if not _append_within(lines, line, limit):
+            lines.append("…")
+            break
     return "\n".join(lines)
 
 
@@ -267,7 +294,6 @@ def format_about_me(summary: UserDataSummary, retention_days: int) -> str:
         if summary.card_direction
         else "—"
     )
-
     return ru.ABOUT_ME.format(
         tg_id=summary.tg_id,
         username=username,

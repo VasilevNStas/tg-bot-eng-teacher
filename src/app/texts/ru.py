@@ -111,10 +111,19 @@ QUIET_INVALID = "Формат: <code>/quiet 22:00-08:00</code> или <code>/qui
 
 ROLEPLAY_CHOOSE = "<b>Ролевые сценарии</b>\n\nВыбери сцену:"
 ROLEPLAY_STARTED = (
-    "<b>Сцена: {title}</b>\n\nПиши по-английски — я останусь в роли. Чтобы выйти, отправь /stop."
+    "<b>Сцена: {title}</b>\n\n"
+    "Пиши по-английски — я останусь в роли. Поправки будут под ответом. "
+    "Чтобы выйти, отправь /stop."
 )
 ROLEPLAY_STOPPED = "Ролевая сцена завершена."
 ROLEPLAY_NONE = "Сейчас нет активной ролевой сцены."
+ROLEPLAY_REVIEW_HEADER = "<b>Разбор ролевой сцены</b>\n\nСцена: {title}"
+ROLEPLAY_REVIEW_EMPTY = "Ошибок не найдено."
+ROLEPLAY_REVIEW_UNAVAILABLE = "Разбор этой сцены уже недоступен."
+ROLEPLAY_REVIEW_CORRECTION = (
+    "• <b>{original}</b> → <b>{corrected}</b>\n<i>{category}</i>\n{explanation}"
+)
+BUTTON_ROLEPLAY_REVIEW = "Сделать полный разбор"
 ROLEPLAY_UNKNOWN = "Сцена не найдена. Открой список: /roleplay."
 ROLEPLAY_UNAVAILABLE = "Сценарии пока недоступны."
 

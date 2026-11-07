@@ -67,4 +67,4 @@ class EvalCase:
 
     @property
     def structured(self) -> bool:
-        return self.suite in {"chat", "correction"}
+        return self.suite in {"chat", "correction", "roleplay"}
