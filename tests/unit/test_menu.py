@@ -68,6 +68,7 @@ def test_practice_section_has_roleplay_and_stop() -> None:
 def test_progress_and_settings_sections() -> None:
     assert labels(progress_keyboard()) == [ru.MENU_STATS, ru.MENU_BACK]
     assert labels(settings_keyboard()) == [
+        ru.MENU_GOALS,
         ru.MENU_TIMEZONE,
         ru.MENU_QUIET,
         ru.MENU_ABOUT,

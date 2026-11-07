@@ -267,6 +267,11 @@ def format_about_me(summary: UserDataSummary, retention_days: int) -> str:
         if summary.card_direction
         else "—"
     )
+    goals = ", ".join(ru.GOAL_LABELS.get(goal, goal) for goal in summary.goals) or ru.GOALS_NONE
+    interests = (
+        ", ".join(ru.INTEREST_LABELS.get(item, item) for item in summary.interests) or ru.GOALS_NONE
+    )
+    daily = summary.daily_items if summary.daily_items is not None else "—"
 
     return ru.ABOUT_ME.format(
         tg_id=summary.tg_id,
@@ -278,6 +283,9 @@ def format_about_me(summary: UserDataSummary, retention_days: int) -> str:
         last_seen=_date(summary.last_seen_at),
         card_size=summary.card_size if summary.card_size is not None else "—",
         direction=direction,
+        goals=goals,
+        interests=interests,
+        daily=daily,
         conversations=summary.conversations,
         messages=summary.messages,
         corrections=summary.corrections,

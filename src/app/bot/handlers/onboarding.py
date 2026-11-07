@@ -179,7 +179,11 @@ async def handle_level(
     await resolve_user(services, callback.from_user)
     await _save_level(services, callback.from_user.id, level)
     await state.clear()
-    await _edit(callback, ru.LEVEL_SET.format(level=level.value))
+    await _edit(
+        callback,
+        ru.LEVEL_SET.format(level=level.value),
+        reply_markup=result_keyboard(),
+    )
     await callback.answer()
 
 
