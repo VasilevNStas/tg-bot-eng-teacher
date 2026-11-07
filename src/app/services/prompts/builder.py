@@ -11,6 +11,7 @@ from app.db.enums import CEFRLevel, ConversationMode
 from app.llm.port import Message
 from app.llm.tokens import estimate_messages_tokens
 from app.services.goals.model import PROFILE_SECTION, render_prompt_block
+from app.services.knowledge.model import KnowledgeSnippet, render_knowledge_block
 from app.services.prompts.errors import PromptTooLong
 from app.services.prompts.registry import PromptRegistry, PromptTemplate
 
@@ -27,6 +28,7 @@ class PromptContext:
     history: Sequence[Message] = field(default_factory=tuple)
     native_language: str = "ru"
     scenario: PromptTemplate | None = None
+    knowledge: Sequence[KnowledgeSnippet] = field(default_factory=tuple)
 
 
 @dataclass(frozen=True, slots=True)
@@ -98,6 +100,13 @@ class PromptBuilder:
         if goals_block is not None:
             messages.append(Message(role="system", content=goals_block))
 
+        knowledge_block = render_knowledge_block(context.knowledge)
+        knowledge_message = (
+            Message(role="system", content=knowledge_block) if knowledge_block is not None else None
+        )
+        if knowledge_message is not None:
+            messages.append(knowledge_message)
+
         summary_message = self._summary_message(context.summary)
         if summary_message is not None:
             messages.append(summary_message)
@@ -111,6 +120,9 @@ class PromptBuilder:
         ):
             if history:
                 history.pop(0)
+            elif knowledge_message is not None:
+                messages.remove(knowledge_message)
+                knowledge_message = None
             elif summary_message is not None:
                 messages.remove(summary_message)
                 summary_message = None

@@ -88,6 +88,7 @@ async def seed(*, dry_run: bool, prune: bool = False) -> int:
     base = Path(os.environ.get("CONTENT_DIR", "content"))
     topics = base / "topics"
     vocabulary = base / "vocabulary"
+    knowledge = base / "knowledge"
 
     if not topics.is_dir():
         print(f"error: content directory not found: {topics}", file=sys.stderr)
@@ -97,8 +98,10 @@ async def seed(*, dry_run: bool, prune: bool = False) -> int:
         return 1
 
     # One batch keeps the import in a single transaction and lets --prune see
-    # the complete desired set across topics and vocabulary.
+    # the complete desired set across topics, vocabulary and knowledge.
     loaded = load_content_path(topics) + load_content_path(vocabulary)
+    if knowledge.is_dir():
+        loaded += load_content_path(knowledge)
     return await _import_loaded(loaded, dry_run=dry_run, prune=prune)
 
 

@@ -19,6 +19,7 @@ from app.llm.errors import LLMInvalidResponse, LLMUnavailable
 from app.llm.models import build_routes
 from app.llm.port import LLMResponse
 from app.services.conversation.service import ConversationService
+from app.services.knowledge.model import KnowledgeSnippet
 from app.services.prompts.builder import PromptBuilder
 from app.services.prompts.registry import PromptRegistry
 from app.services.usage.service import DailyBudgetExceeded, GlobalBudgetExceeded, UsageService
@@ -117,12 +118,23 @@ async def make_user(database: Database, tg_id: int = 1) -> User:
     return user
 
 
+class FakeKnowledge:
+    def __init__(self, *snippets: KnowledgeSnippet) -> None:
+        self._snippets = snippets
+        self.calls: list[tuple[Any, Any]] = []
+
+    async def select_for_profile(self, profile: Any, *, level: Any = None) -> tuple:
+        self.calls.append((profile, level))
+        return self._snippets
+
+
 def make_service(
     database: Database,
     llm: FakeLLM,
     usage: UsageService,
     *,
     history_window: int = 12,
+    knowledge: Any = None,
 ) -> ConversationService:
     builder = PromptBuilder(
         PromptRegistry(PROMPTS_DIR),
@@ -143,6 +155,7 @@ def make_service(
         usage,
         builder,
         routes=build_routes(settings),
+        knowledge=knowledge,
         idle_timeout=timedelta(minutes=30),
     )
 
@@ -480,5 +493,61 @@ async def test_invented_correction_is_dropped(tmp_path: Path) -> None:
 
     assert turn.corrections == ()
     assert turn.reply == "Nice!"
+
+    await database.dispose()
+
+
+async def test_knowledge_is_injected_for_chat(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    user = await make_user(database)
+    knowledge = FakeKnowledge(
+        KnowledgeSnippet(
+            slug="knowledge-articles",
+            title="Articles",
+            body_md="Use **a** for one of many.",
+            tags=("articles",),
+        )
+    )
+    llm = FakeLLM(structured_response())
+    service = make_service(
+        database,
+        llm,
+        UsageService(database, daily_budget=10_000),
+        knowledge=knowledge,
+    )
+
+    await service.respond(user, "Hello")
+
+    assert knowledge.calls
+    sent = llm.calls[0]["messages"]
+    assert any("Curated knowledge" in message.content for message in sent)
+
+    await database.dispose()
+
+
+async def test_knowledge_is_not_injected_for_roleplay(tmp_path: Path) -> None:
+    database = await make_database(tmp_path)
+    user = await make_user(database)
+    knowledge = FakeKnowledge(
+        KnowledgeSnippet(
+            slug="knowledge-articles",
+            title="Articles",
+            body_md="Use **a** for one of many.",
+            tags=("articles",),
+        )
+    )
+    llm = FakeLLM(structured_response())
+    service = make_service(
+        database,
+        llm,
+        UsageService(database, daily_budget=10_000),
+        knowledge=knowledge,
+    )
+
+    await service.respond(user, "Hello", mode=ConversationMode.ROLEPLAY)
+
+    assert knowledge.calls == []
+    sent = llm.calls[0]["messages"]
+    assert not any("Curated knowledge" in message.content for message in sent)
 
     await database.dispose()

@@ -1,0 +1,143 @@
+topic:
+  slug: knowledge-grammar
+  title: Курируемая база знаний
+source: curated
+license: unknown
+items:
+- slug: knowledge-articles
+  kind: knowledge
+  title: "Артикли: a, an, the"
+  tags: [articles, grammar, exams]
+  body_md: |
+    **a / an** — один из многих, первое упоминание: *I saw a cat.*
+    **the** — конкретный предмет или уже упомянутый: *The cat was black.*
+    **без артикля** — множественное число и неисчисляемые в общем смысле:
+    *Cats are independent. Water boils at 100°C.*
+
+    Частая ошибка: *I like the dogs* вместо *I like dogs* (о собаках вообще).
+- slug: knowledge-present-perfect
+  kind: knowledge
+  title: "Present Perfect vs Past Simple"
+  tags: [tenses, grammar, exams]
+  body_md: |
+    **Past Simple** — законченное действие в известное время:
+    *I saw him yesterday. She lived in Paris in 2020.*
+    **Present Perfect** — результат важен сейчас, время не названо:
+    *I have seen this film. She has lived in Paris.*
+
+    Маркеры: *yesterday, last week, in 2020* → Past Simple;
+    *already, just, ever, never, since, for* → Present Perfect.
+- slug: knowledge-prepositions
+  kind: knowledge
+  title: "Предлоги in / on / at"
+  tags: [prepositions, grammar, travel, daily]
+  body_md: |
+    **at** — точка, время на часах, место встречи: *at 7 pm, at the bus stop.*
+    **on** — поверхность, день недели, дата: *on the table, on Monday.*
+    **in** — внутри, месяц, год, город: *in the box, in May, in London.*
+
+    Запомни: *in the morning*, но *on Monday morning*, *at night*.
+- slug: knowledge-conditionals
+  kind: knowledge
+  title: "Conditionals 1 и 2"
+  tags: [grammar, speaking, exams]
+  body_md: |
+    **First conditional** — реальное будущее:
+    *If it rains, I will stay home.*
+    **Second conditional** — нереальное или маловероятное настоящее:
+    *If I had more time, I would learn Spanish.*
+
+    После *if* не ставим *will*: *If it will rain* — ошибка.
+- slug: knowledge-reported-speech
+  kind: knowledge
+  title: "Reported speech"
+  tags: [grammar, exams, business]
+  body_md: |
+    При переводе в косвенную речь время обычно сдвигается назад:
+    *"I am busy" → He said he was busy.*
+    *"I saw her" → He said he had seen her.*
+
+    Местоимения и указатели меняются: *today → that day*, *here → there*.
+    Глагол *say* не требует объекта, *tell* требует: *tell me*.
+- slug: knowledge-phrasal-verbs
+  kind: knowledge
+  title: "Частые phrasal verbs"
+  tags: [vocabulary, speaking, daily]
+  body_md: |
+    - **give up** — сдаваться, бросать: *Don't give up.*
+    - **find out** — выяснять: *I found out the truth.*
+    - **look after** — заботиться: *She looks after her sister.*
+    - **turn on / off** — включать / выключать.
+    - **come up with** — придумывать: *He came up with a plan.*
+
+    Учить лучше в паре с примером, а не списком.
+- slug: knowledge-business-email
+  kind: knowledge
+  title: "Деловая переписка"
+  tags: [business, grammar, it]
+  body_md: |
+    Начало: *I am writing to ask about…*
+    Просьба: *Could you please send…*
+    Вложение: *Please find the report attached.*
+    Закрытие: *Best regards, …*
+
+    Избегай *I want* — вежливее *I would like*.
+    Одно письмо — одна цель; тема письма конкретная.
+- slug: knowledge-interview
+  kind: knowledge
+  title: "Ответы на собеседовании"
+  tags: [interview, speaking, business]
+  body_md: |
+    Структура ответа STAR: **Situation → Task → Action → Result.**
+    *In my last job, we had a tight deadline (S). I was responsible for the
+    release (T). I split the work and added tests (A). We shipped on time (R).*
+
+    Полезные фразы: *I have experience in…*, *My strength is…*,
+    *I am looking for a role where…*
+- slug: knowledge-travel
+  kind: knowledge
+  title: "Фразы для путешествий"
+  tags: [travel, speaking, daily]
+  body_md: |
+    - *Could you help me, please?*
+    - *How do I get to the station?*
+    - *I would like to book a room for two nights.*
+    - *Is breakfast included?*
+    - *Could I have the bill, please?*
+
+    Вежливость: *could / would* вместо *can / want*.
+- slug: knowledge-pronunciation-ed
+  kind: knowledge
+  title: "Окончание -ed"
+  tags: [pronunciation, speaking, grammar]
+  body_md: |
+    Три звука:
+    - **/t/** после глухих: *worked, stopped, watched.*
+    - **/d/** после звонких и гласных: *played, lived, opened.*
+    - **/ɪd/** после *t* и *d*: *wanted, needed, decided.*
+
+    Ошибка — произносить *worked* как *work-ed*.
+- slug: knowledge-it-vocab
+  kind: knowledge
+  title: "IT-лексика"
+  tags: [it, vocabulary, business]
+  body_md: |
+    - **deploy** — разворачивать: *We deploy every Friday.*
+    - **bug** — ошибка в коде.
+    - **release** — релиз, выпуск.
+    - **deadline** — крайний срок.
+    - **pull request** — запрос на слияние изменений.
+
+    В IT-командах часто говорят *ship it* — выпустить в прод.
+- slug: knowledge-exam-linkers
+  kind: knowledge
+  title: "Linkers для письма и эссе"
+  tags: [exams, grammar]
+  body_md: |
+    Причина: *because, since, as.*
+    Следствие: *so, therefore, as a result.*
+    Контраст: *however, although, whereas.*
+    Добавление: *moreover, in addition, furthermore.*
+    Пример: *for example, for instance.*
+
+    В эссе не начинай каждое предложение с *and* или *but*.

@@ -98,6 +98,8 @@ class Settings(BaseSettings):
     drill_session_size: int = Field(default=5, ge=1, le=20)
     translation_session_size: int = Field(default=3, ge=1, le=10)
     words_card_size: int = Field(default=10, ge=1, le=20)
+    knowledge_max_items: int = Field(default=2, ge=0, le=5)
+    knowledge_max_chars: int = Field(default=1200, ge=0, le=4000)
 
     db_path: Path = Path("./data/bot.db")
     daily_token_budget: int = Field(default=50_000, gt=0)
