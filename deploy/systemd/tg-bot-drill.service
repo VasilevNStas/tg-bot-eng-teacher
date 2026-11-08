@@ -1,0 +1,25 @@
+[Unit]
+Description=Monthly restore drill for tg-bot-eng-teacher
+Documentation=file:///srv/tg-bot-eng-teacher/DEPLOY.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=deploy
+Group=deploy
+WorkingDirectory=/srv/tg-bot-eng-teacher
+EnvironmentFile=/srv/tg-bot-eng-teacher/.env
+# Drill-only: never replaces the live database.
+ExecStart=/srv/tg-bot-eng-teacher/scripts/restore_r2.sh
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/srv/tg-bot-eng-teacher/backups
+
+[Install]
+WantedBy=multi-user.target

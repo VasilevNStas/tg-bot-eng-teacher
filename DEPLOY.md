@@ -438,12 +438,57 @@ sudo -u deploy ./scripts/db.sh restore backups/pre-release-20261029-120000.db
 На проде для этого дополнительно нужен `APP_ENV=production` и `--force`.
 Полный сценарий — `.opencode/_db_operations.md`.
 
-Off-site копия в R2 (нужны `rclone` и креды бакета; без них — `--dry-run`):
+### Off-site бэкапы в R2 (B-025)
 
-```bash
-sudo -u deploy env BACKUP_REMOTE=r2:<bucket>/backups \
-  ./scripts/backup_r2.sh
-```
+1. Настройте rclone remote (креды R2 не хранятся в git):
+
+   ```bash
+   sudo -u deploy rclone config
+   # S3-совместимый провайдер, endpoint https://<account>.r2.cloudflarestorage.com
+   ```
+
+2. Проверьте bucket и префикс (write/list/delete probe):
+
+   ```bash
+   sudo -u deploy env BACKUP_REMOTE=r2:<bucket>/backups \
+     ./scripts/setup_r2.sh --dry-run
+   sudo -u deploy env BACKUP_REMOTE=r2:<bucket>/backups \
+     ./scripts/setup_r2.sh --init
+   ```
+
+3. Сгенерируйте age-ключ (приватный — вне VDS, публичный — в `.env`):
+
+   ```bash
+   sudo -u deploy ./scripts/age_key.sh --file /srv/age-key.txt
+   sudo chmod 600 /srv/age-key.txt
+   ```
+
+4. В `.env`: `BACKUP_REMOTE`, `BACKUP_AGE_RECIPIENT`, `AGE_IDENTITY`,
+   `BACKUP_PING_URL`, `REMOTE_RETENTION_DAYS`.
+
+5. Ручной запуск с проверкой скачивания:
+
+   ```bash
+   sudo -u deploy env BACKUP_REMOTE=r2:<bucket>/backups \
+     ./scripts/backup_r2.sh --verify-download
+   ```
+
+6. Расписание — systemd units из `deploy/systemd/`:
+
+   ```bash
+   sudo cp deploy/systemd/tg-bot-backup.service \
+     deploy/systemd/tg-bot-backup.timer \
+     deploy/systemd/tg-bot-drill.service \
+     deploy/systemd/tg-bot-drill.timer /etc/systemd/system/
+   sudo systemctl daemon-reload
+   sudo systemctl enable --now tg-bot-backup.timer tg-bot-drill.timer
+   systemctl list-timers 'tg-bot-*'
+   ```
+
+7. R2 lifecycle — в dashboard Cloudflare (например, удалять объекты старше
+   90 дней); `--prune-remote` остаётся ручным fallback.
+8. Мониторинг бэкапа — `BACKUP_PING_URL` (healthchecks.io): успех пингует URL,
+   любая ошибка — `.../fail`; пропущенный ночной запуск вызывает алерт.
 
 Проверка восстановления без влияния на прод:
 
@@ -463,9 +508,9 @@ sudo -u deploy env BACKUP_REMOTE=r2:<bucket>/backups \
   ./scripts/restore_r2.sh --apply --yes
 ```
 
-Реальный R2-путь покрыт тестами на stub `rclone`/`age`, но первый
-end-to-end restore ещё не выполнен (нет кредов) — см. техдолг в
-`.opencode/_db_operations.md` и `runbooks/restore.md`.
+Код R2-пути, `--verify-download`, ping и systemd units покрыты тестами на
+stub `rclone`/`age`/`curl`; первый реальный upload/download/restore нужно
+выполнить после настройки кредов — см. `.opencode/_db_operations.md`.
 
 Ручной fallback без скрипта:
 
@@ -479,9 +524,6 @@ sudo -u deploy docker compose up -d
 ```
 
 После восстановления проверьте `/start`, `/drill`, `/words`.
-
-Рекомендуется дополнительно вывозить бэкапы с VDS (R2/S3) — это отдельная
-задача (B-025).
 
 ---
 

@@ -1,0 +1,11 @@
+[Unit]
+Description=Monthly restore drill for tg-bot-eng-teacher
+
+[Timer]
+OnCalendar=*-*-01 04:30:00
+Persistent=true
+RandomizedDelaySec=900
+Unit=tg-bot-drill.service
+
+[Install]
+WantedBy=timers.target

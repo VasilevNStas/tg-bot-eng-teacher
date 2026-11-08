@@ -144,12 +144,22 @@ BACKUP_REMOTE=r2:my-bucket/backups ./scripts/backup_r2.sh --dry-run
 BACKUP_REMOTE=r2:my-bucket/backups ./scripts/backup_r2.sh
 ```
 
+Первичная настройка R2 и ключа шифрования:
+
+```bash
+BACKUP_REMOTE=r2:my-bucket/backups ./scripts/setup_r2.sh --init
+./scripts/age_key.sh
+```
+
 Restore из R2 (drill + smoke, живая БД — только `--apply --yes`):
 
 ```bash
 BACKUP_REMOTE=r2:my-bucket/backups ./scripts/restore_r2.sh --dry-run
 BACKUP_REMOTE=r2:my-bucket/backups ./scripts/restore_r2.sh
 ```
+
+Ночное расписание — systemd units в `deploy/systemd/`; мониторинг бэкапа —
+`BACKUP_PING_URL`.
 
 `reset` без `--yes` отказывает; при `APP_ENV=production` требует `--force`.
 Перед `migrate`/`reset`/`restore` бэкап делается автоматически. Подробный
