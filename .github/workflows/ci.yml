@@ -30,7 +30,7 @@ jobs:
       - run: uv run ruff format --check .
 
       - name: Check shell scripts
-        run: bash -n scripts/db.sh scripts/deploy.sh scripts/backup_r2.sh scripts/restore_r2.sh
+        run: bash -n scripts/db.sh scripts/deploy.sh scripts/backup_r2.sh scripts/restore_r2.sh scripts/setup_r2.sh scripts/age_key.sh
 
       - run: uv run mypy src
 

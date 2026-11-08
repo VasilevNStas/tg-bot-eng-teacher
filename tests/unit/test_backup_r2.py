@@ -33,15 +33,27 @@ def make_database(path: Path) -> None:
         connection.close()
 
 
-def make_stubs(tmp_path: Path) -> tuple[Path, Path, Path]:
+def make_stubs(tmp_path: Path) -> tuple[Path, Path, Path, Path]:
     bin_dir = tmp_path / "bin"
     bin_dir.mkdir()
     rclone = bin_dir / "rclone"
     age = bin_dir / "age"
+    curl = bin_dir / "curl"
     log = tmp_path / "rclone.log"
     write_executable(
         rclone,
-        'printf \'%s\\n\' "$*" >> "$RCLONE_LOG"\nexit "${RCLONE_EXIT:-0}"\n',
+        """printf '%s\\n' "$*" >> "$RCLONE_LOG"
+if [ "$1" = "copyto" ]; then
+  case "$2" in
+    r2:*) cp "$RCLONE_SOURCE" "$3" ;;
+  esac
+fi
+exit "${RCLONE_EXIT:-0}"
+""",
+    )
+    write_executable(
+        curl,
+        'printf \'%s\\n\' "$*" >> "$PING_LOG"\nexit "${PING_EXIT:-0}"\n',
     )
     write_executable(
         age,
@@ -50,7 +62,8 @@ while [ "$#" -gt 0 ]; do
   case "$1" in
     --output) out="$2"; shift ;;
     --recipient) shift ;;
-    --encrypt) ;;
+    --identity) shift ;;
+    --encrypt|--decrypt) ;;
     *) input="$1" ;;
   esac
   shift
@@ -58,7 +71,7 @@ done
 cp "$input" "$out"
 """,
     )
-    return rclone, age, log
+    return rclone, age, curl, log
 
 
 def run_script(
@@ -68,7 +81,7 @@ def run_script(
 ) -> subprocess.CompletedProcess[str]:
     db_path = tmp_path / "bot.db"
     make_database(db_path)
-    rclone, age, log = make_stubs(tmp_path)
+    rclone, age, curl, log = make_stubs(tmp_path)
     env = os.environ.copy()
     env.update(
         {
@@ -77,7 +90,10 @@ def run_script(
             "BACKUP_REMOTE": "r2:test-bucket/backups",
             "RCLONE_BIN": str(rclone),
             "AGE_BIN": str(age),
+            "PING_BIN": str(curl),
             "RCLONE_LOG": str(log),
+            "PING_LOG": str(tmp_path / "ping.log"),
+            "RCLONE_SOURCE": str(db_path),
         }
     )
     if extra_env:
@@ -93,6 +109,11 @@ def run_script(
 
 def logs(tmp_path: Path) -> str:
     log = tmp_path / "rclone.log"
+    return log.read_text(encoding="utf-8") if log.exists() else ""
+
+
+def ping_logs(tmp_path: Path) -> str:
+    log = tmp_path / "ping.log"
     return log.read_text(encoding="utf-8") if log.exists() else ""
 
 
@@ -161,3 +182,71 @@ def test_prune_remote_dry_run_does_not_call_rclone(tmp_path: Path) -> None:
     assert result.returncode == 0
     assert "would delete remote objects" in result.stderr
     assert logs(tmp_path) == ""
+
+
+def test_pings_success_url(tmp_path: Path) -> None:
+    result = run_script(
+        tmp_path,
+        extra_env={"BACKUP_PING_URL": "https://hc-ping.com/backup-uuid"},
+    )
+
+    assert result.returncode == 0
+    assert "https://hc-ping.com/backup-uuid" in ping_logs(tmp_path)
+    assert "/fail" not in ping_logs(tmp_path)
+
+
+def test_pings_fail_url_on_error(tmp_path: Path) -> None:
+    result = run_script(
+        tmp_path,
+        extra_env={
+            "BACKUP_PING_URL": "https://hc-ping.com/backup-uuid",
+            "RCLONE_EXIT": "1",
+        },
+    )
+
+    assert result.returncode != 0
+    assert "https://hc-ping.com/backup-uuid/fail" in ping_logs(tmp_path)
+
+
+def test_dry_run_does_not_ping(tmp_path: Path) -> None:
+    result = run_script(
+        tmp_path,
+        "--dry-run",
+        extra_env={"BACKUP_PING_URL": "https://hc-ping.com/backup-uuid"},
+    )
+
+    assert result.returncode == 0
+    assert ping_logs(tmp_path) == ""
+
+
+def test_verify_download_round_trip(tmp_path: Path) -> None:
+    result = run_script(tmp_path, "--verify-download")
+
+    assert result.returncode == 0
+    assert "verify: ok" in result.stderr
+    assert logs(tmp_path).count("copyto") == 2
+
+
+def test_verify_download_age_requires_identity(tmp_path: Path) -> None:
+    result = run_script(
+        tmp_path,
+        "--verify-download",
+        extra_env={"BACKUP_AGE_RECIPIENT": "age1test"},
+    )
+
+    assert result.returncode != 0
+    assert "AGE_IDENTITY is required" in result.stderr
+
+
+def test_verify_download_age_with_identity(tmp_path: Path) -> None:
+    result = run_script(
+        tmp_path,
+        "--verify-download",
+        extra_env={
+            "BACKUP_AGE_RECIPIENT": "age1test",
+            "AGE_IDENTITY": str(tmp_path / "key.txt"),
+        },
+    )
+
+    assert result.returncode == 0
+    assert "verify: ok" in result.stderr

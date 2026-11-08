@@ -1,0 +1,11 @@
+[Unit]
+Description=Nightly off-site SQLite backup for tg-bot-eng-teacher
+
+[Timer]
+OnCalendar=*-*-* 03:15:00
+Persistent=true
+RandomizedDelaySec=600
+Unit=tg-bot-backup.service
+
+[Install]
+WantedBy=timers.target

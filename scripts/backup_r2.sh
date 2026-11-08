@@ -22,13 +22,19 @@ BACKUP_REMOTE="${BACKUP_REMOTE:-}"
 RCLONE_BIN="${RCLONE_BIN:-rclone}"
 AGE_BIN="${AGE_BIN:-age}"
 BACKUP_AGE_RECIPIENT="${BACKUP_AGE_RECIPIENT:-}"
+AGE_IDENTITY="${AGE_IDENTITY:-}"
 REMOTE_RETENTION_DAYS="${REMOTE_RETENTION_DAYS:-90}"
+BACKUP_PING_URL="${BACKUP_PING_URL:-}"
+PING_BIN="${PING_BIN:-curl}"
 
 export DB_PATH BACKUP_DIR BACKUP_RETENTION
 
 DRY_RUN=0
 NO_ENCRYPT=0
 PRUNE_REMOTE=0
+VERIFY_DOWNLOAD=0
+BACKUP_OK=0
+VERIFY_DIR=""
 
 usage() {
   cat <<'EOF'
@@ -41,6 +47,7 @@ Options:
   --dry-run        Create and verify the backup, print upload target, do not upload.
   --no-encrypt     Upload the plain .db even if BACKUP_AGE_RECIPIENT is set.
   --prune-remote   Delete remote objects older than REMOTE_RETENTION_DAYS.
+  --verify-download  Download the uploaded object back and check integrity.
   -h, --help       Show this help.
 
 Environment:
@@ -50,8 +57,12 @@ Environment:
   BACKUP_REMOTE             required, e.g. r2:my-bucket/backups
   RCLONE_BIN                default: rclone
   BACKUP_AGE_RECIPIENT      optional age public key; encrypts before upload
+  AGE_IDENTITY              private age key for --verify-download of .age
   AGE_BIN                   default: age
   REMOTE_RETENTION_DAYS     used by --prune-remote, default: 90
+  BACKUP_PING_URL           optional dead-man's switch; pinged on success,
+                            `.../fail` is pinged on any failure
+  PING_BIN                  default: curl
 
 Credentials:
   Configure an rclone remote (for example `rclone config`) or export the
@@ -72,12 +83,36 @@ info() {
   printf '==> %s\n' "$*" >&2
 }
 
+ping_backup() {
+  local url="$1"
+  [ -n "$url" ] || return 0
+  if command -v "$PING_BIN" >/dev/null 2>&1; then
+    "$PING_BIN" -fsS --max-time 10 "$url" >/dev/null 2>&1 || info "ping failed"
+  elif command -v wget >/dev/null 2>&1; then
+    wget -qO- --timeout=10 "$url" >/dev/null 2>&1 || info "ping failed"
+  else
+    info "ping skipped: curl/wget not found"
+  fi
+  return 0
+}
+
+on_exit() {
+  if [ -n "$VERIFY_DIR" ]; then
+    rm -rf "$VERIFY_DIR"
+  fi
+  if [ "$BACKUP_OK" -eq 0 ] && [ "$DRY_RUN" -eq 0 ]; then
+    ping_backup "${BACKUP_PING_URL%/}/fail"
+  fi
+}
+trap on_exit EXIT
+
 while [ "$#" -gt 0 ]; do
   case "$1" in
     --dry-run) DRY_RUN=1 ;;
     --no-encrypt) NO_ENCRYPT=1 ;;
     --prune-remote) PRUNE_REMOTE=1 ;;
-    -h|--help) usage; exit 0 ;;
+    --verify-download) VERIFY_DOWNLOAD=1 ;;
+    -h|--help) BACKUP_OK=1; usage; exit 0 ;;
     *) die "unknown option: $1" ;;
   esac
   shift
@@ -123,6 +158,30 @@ else
     || die "upload verification failed: $remote_target"
 fi
 
+if [ "$VERIFY_DOWNLOAD" -eq 1 ]; then
+  if [ "$DRY_RUN" -eq 1 ]; then
+    info "dry-run: would download and verify $remote_target"
+  else
+    VERIFY_DIR="$(mktemp -d "${TMPDIR:-/tmp}/backup-verify.XXXXXX")"
+    verify_file="$VERIFY_DIR/$(basename "$upload_file")"
+    info "download for verification"
+    "$RCLONE_BIN" copyto "$remote_target" "$verify_file"
+    verify_db="$verify_file"
+    case "$verify_file" in
+      *.age)
+        [ -n "$AGE_IDENTITY" ] || die "AGE_IDENTITY is required to verify encrypted download"
+        command -v "$AGE_BIN" >/dev/null 2>&1 \
+          || die "age is required to verify encrypted download (AGE_BIN=$AGE_BIN)"
+        verify_db="$VERIFY_DIR/verify.db"
+        "$AGE_BIN" --decrypt --identity "$AGE_IDENTITY" --output "$verify_db" "$verify_file"
+        ;;
+    esac
+    result="$(sqlite3 "$verify_db" 'PRAGMA integrity_check;' 2>&1 || true)"
+    [ "$result" = "ok" ] || die "downloaded backup integrity check failed: $result"
+    info "verify: ok"
+  fi
+fi
+
 if [ "$PRUNE_REMOTE" -eq 1 ]; then
   if [ "$DRY_RUN" -eq 1 ]; then
     info "dry-run: would delete remote objects older than ${REMOTE_RETENTION_DAYS}d"
@@ -131,6 +190,11 @@ if [ "$PRUNE_REMOTE" -eq 1 ]; then
     info "delete remote objects older than ${REMOTE_RETENTION_DAYS}d"
     "$RCLONE_BIN" delete "$BACKUP_REMOTE" --min-age "${REMOTE_RETENTION_DAYS}d"
   fi
+fi
+
+BACKUP_OK=1
+if [ "$DRY_RUN" -eq 0 ]; then
+  ping_backup "$BACKUP_PING_URL"
 fi
 
 printf 'local backup: %s\n' "$backup_path"
