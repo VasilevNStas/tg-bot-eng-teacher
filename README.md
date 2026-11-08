@@ -144,6 +144,13 @@ BACKUP_REMOTE=r2:my-bucket/backups ./scripts/backup_r2.sh --dry-run
 BACKUP_REMOTE=r2:my-bucket/backups ./scripts/backup_r2.sh
 ```
 
+Restore из R2 (drill + smoke, живая БД — только `--apply --yes`):
+
+```bash
+BACKUP_REMOTE=r2:my-bucket/backups ./scripts/restore_r2.sh --dry-run
+BACKUP_REMOTE=r2:my-bucket/backups ./scripts/restore_r2.sh
+```
+
 `reset` без `--yes` отказывает; при `APP_ENV=production` требует `--force`.
 Перед `migrate`/`reset`/`restore` бэкап делается автоматически. Подробный
 сценарий, миграции и recovery — в `.opencode/_db_operations.md`.
