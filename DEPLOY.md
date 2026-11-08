@@ -449,9 +449,22 @@ sudo -u deploy env BACKUP_REMOTE=r2:<bucket>/backups \
 
 ```bash
 sudo -u deploy ./scripts/db.sh drill
+sudo -u deploy ./scripts/db.sh smoke
 ```
 
-Реальный R2-путь ещё не проверен (нет кредов) — см. техдолг в
+Restore из R2 (скачивание, decrypt, drill/smoke; живая БД — только
+`--apply --yes`):
+
+```bash
+sudo -u deploy env BACKUP_REMOTE=r2:<bucket>/backups \
+  ./scripts/restore_r2.sh
+# заменить БД после успешного drill:
+sudo -u deploy env BACKUP_REMOTE=r2:<bucket>/backups \
+  ./scripts/restore_r2.sh --apply --yes
+```
+
+Реальный R2-путь покрыт тестами на stub `rclone`/`age`, но первый
+end-to-end restore ещё не выполнен (нет кредов) — см. техдолг в
 `.opencode/_db_operations.md` и `runbooks/restore.md`.
 
 Ручной fallback без скрипта:

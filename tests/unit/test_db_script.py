@@ -45,8 +45,11 @@ def make_database(path: Path, marker: str = "initial") -> None:
         connection.execute("INSERT INTO alembic_version VALUES ('test-revision')")
         connection.execute("CREATE TABLE marker(value TEXT)")
         connection.execute("INSERT INTO marker VALUES (?)", (marker,))
-        for table in ("users", "content_items", "exercise_sessions", "word_progress"):
-            connection.execute(f"CREATE TABLE {table}(id INTEGER)")
+        connection.execute("CREATE TABLE users(id INTEGER)")
+        connection.execute("CREATE TABLE content_items(id INTEGER, is_active INTEGER)")
+        connection.execute("CREATE TABLE exercise_sessions(id INTEGER)")
+        connection.execute("CREATE TABLE exercise_attempts(id INTEGER)")
+        connection.execute("CREATE TABLE word_progress(id INTEGER)")
         connection.commit()
     finally:
         connection.close()
@@ -174,6 +177,8 @@ def test_drill_verifies_backup(tmp_path: Path) -> None:
     drill_log = backup_dir / "drills.log"
     assert drill_log.exists()
     assert "ok source=" in drill_log.read_text(encoding="utf-8")
+    assert "duration_s=" in drill_log.read_text(encoding="utf-8")
+    assert "duration_s:" in result.stdout
 
 
 def test_drill_uses_latest_backup_by_default(tmp_path: Path) -> None:
@@ -204,6 +209,46 @@ def test_drill_fails_without_backups(tmp_path: Path) -> None:
     db_path = tmp_path / "bot.db"
 
     result = run(db_path, tmp_path / "backups", "drill", check=False)
+
+    assert result.returncode != 0
+    assert "no backups found" in result.stderr
+
+
+def test_smoke_reports_counts(tmp_path: Path) -> None:
+    db_path = tmp_path / "bot.db"
+    make_database(db_path)
+    connection = sqlite3.connect(db_path)
+    try:
+        connection.execute("INSERT INTO users VALUES (1)")
+        connection.execute("INSERT INTO content_items VALUES (1, 1)")
+        connection.execute("INSERT INTO exercise_sessions VALUES (1)")
+        connection.execute("INSERT INTO exercise_attempts VALUES (1)")
+        connection.execute("INSERT INTO word_progress VALUES (1)")
+        connection.commit()
+    finally:
+        connection.close()
+
+    result = run(db_path, tmp_path / "backups", "smoke", str(db_path))
+
+    assert "smoke: ok" in result.stdout
+    assert "users: 1" in result.stdout
+    assert "content_items: 1 active: 1" in result.stdout
+    assert "exercise_attempts: 1" in result.stdout
+    assert "word_progress: 1" in result.stdout
+
+
+def test_smoke_rejects_corrupt_database(tmp_path: Path) -> None:
+    corrupt = tmp_path / "corrupt.db"
+    corrupt.write_text("not a database", encoding="utf-8")
+
+    result = run(tmp_path / "bot.db", tmp_path / "backups", "smoke", str(corrupt), check=False)
+
+    assert result.returncode != 0
+    assert "integrity check failed" in result.stderr
+
+
+def test_smoke_fails_without_backups(tmp_path: Path) -> None:
+    result = run(tmp_path / "bot.db", tmp_path / "backups", "smoke", check=False)
 
     assert result.returncode != 0
     assert "no backups found" in result.stderr

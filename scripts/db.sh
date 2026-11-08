@@ -39,6 +39,7 @@ Commands:
         [--no-backup] [--no-start]
   prune                  Deactivate content items missing from bundled YAML.
   drill [file]           Restore a backup into a temp dir and verify it.
+  smoke [file]           Read-only smoke: integrity, schema, key row counts.
 
 Global options:
   --local    Use uv/alembic directly instead of Docker Compose.
@@ -297,6 +298,8 @@ cmd_drill() {
   fi
   [ -f "$source" ] || die "backup file not found: $source"
 
+  local started
+  started="$(date +%s)"
   local work
   work="$(mktemp -d "${TMPDIR:-/tmp}/db-drill.XXXXXX")"
   # shellcheck disable=SC2064
@@ -325,11 +328,13 @@ cmd_drill() {
   sessions="$(count_rows "$work/bot.db" exercise_sessions)"
   progress="$(count_rows "$work/bot.db" word_progress)"
 
+  local duration=$(( $(date +%s) - started ))
+
   [ -n "$DRILL_LOG" ] || DRILL_LOG="$BACKUP_DIR/drills.log"
   mkdir -p "$(dirname "$DRILL_LOG")"
-  printf '%s ok source=%s revision=%s users=%s content_items=%s sessions=%s word_progress=%s\n' \
+  printf '%s ok source=%s revision=%s users=%s content_items=%s sessions=%s word_progress=%s duration_s=%s\n' \
     "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$source" "$revision" \
-    "$users" "$items" "$sessions" "$progress" >> "$DRILL_LOG"
+    "$users" "$items" "$sessions" "$progress" "$duration" >> "$DRILL_LOG"
 
   printf 'source: %s\n' "$source"
   printf 'integrity: ok\n'
@@ -338,7 +343,63 @@ cmd_drill() {
   printf 'content_items: %s\n' "$items"
   printf 'exercise_sessions: %s\n' "$sessions"
   printf 'word_progress: %s\n' "$progress"
+  printf 'duration_s: %s\n' "$duration"
   printf 'log: %s\n' "$DRILL_LOG"
+}
+
+cmd_smoke() {
+  local source=""
+  while [ "$#" -gt 0 ]; do
+    case "$1" in
+      -h|--help) usage; return 0 ;;
+      -*) die "unknown option for smoke: $1" ;;
+      *)
+        [ -z "$source" ] || die "usage: db.sh smoke [file]"
+        source="$1"
+        ;;
+    esac
+    shift
+  done
+
+  if [ -z "$source" ]; then
+    source="$(latest_backup)"
+    [ -n "$source" ] || die "no backups found in $BACKUP_DIR"
+  fi
+  [ -f "$source" ] || die "backup file not found: $source"
+
+  info "smoke $source"
+  check_integrity "$source"
+
+  local revision
+  revision="$(sqlite3 "$source" 'SELECT version_num FROM alembic_version;' 2>/dev/null || true)"
+  [ -n "$revision" ] || die "database has no alembic_version: $source"
+
+  local required="users content_items exercise_sessions exercise_attempts word_progress"
+  local table missing=""
+  for table in $required; do
+    if [ -z "$(sqlite3 "$source" "SELECT name FROM sqlite_master WHERE type='table' AND name='$table';" 2>/dev/null)" ]; then
+      missing="$missing $table"
+    fi
+  done
+  [ -z "$missing" ] || die "database is missing tables:$missing"
+
+  local users items active sessions attempts progress
+  users="$(count_rows "$source" users)"
+  items="$(count_rows "$source" content_items)"
+  active="$(sqlite3 "$source" 'SELECT COUNT(*) FROM content_items WHERE is_active = 1;' 2>/dev/null || printf 'n/a')"
+  sessions="$(count_rows "$source" exercise_sessions)"
+  attempts="$(count_rows "$source" exercise_attempts)"
+  progress="$(count_rows "$source" word_progress)"
+
+  printf 'source: %s\n' "$source"
+  printf 'integrity: ok\n'
+  printf 'revision: %s\n' "$revision"
+  printf 'users: %s\n' "$users"
+  printf 'content_items: %s active: %s\n' "$items" "$active"
+  printf 'exercise_sessions: %s\n' "$sessions"
+  printf 'exercise_attempts: %s\n' "$attempts"
+  printf 'word_progress: %s\n' "$progress"
+  printf 'smoke: ok\n'
 }
 
 while [ "$#" -gt 0 ]; do
@@ -362,6 +423,7 @@ case "$command" in
   restore) cmd_restore "$@" ;;
   prune) cmd_prune "$@" ;;
   drill) cmd_drill "$@" ;;
+  smoke) cmd_smoke "$@" ;;
   help) usage ;;
   *)
     usage >&2
