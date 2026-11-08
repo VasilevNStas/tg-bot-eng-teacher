@@ -15,7 +15,7 @@ from app.bot.middlewares.dedupe import prune_processed_updates
 from app.core.config import BotMode, Settings, get_settings
 from app.core.di import build_services
 from app.core.logging import get_logger, setup_logging
-from app.core.sentry import setup_sentry
+from app.core.sentry import setup_sentry, shutdown_sentry
 from app.db.database import Database
 from app.services.health import heartbeat_loop
 from app.services.metrics import metrics_loop
@@ -55,8 +55,18 @@ async def run_polling(settings: Settings) -> None:
         ).run_forever(),
         name="reminder-scheduler",
     )
+    uptime_url = (
+        settings.uptime_ping_url.get_secret_value().strip()
+        if settings.uptime_ping_url is not None
+        else ""
+    )
     heartbeat_task = asyncio.create_task(
-        heartbeat_loop(settings.db_path, "bot"),
+        heartbeat_loop(
+            settings.db_path,
+            "bot",
+            ping_url=uptime_url or None,
+            ping_timeout_seconds=settings.uptime_ping_timeout_seconds,
+        ),
         name="heartbeat",
     )
     budget_task = asyncio.create_task(
@@ -120,7 +130,7 @@ def main() -> None:
         raise SystemExit(2) from exc
 
     setup_logging(settings.log_level, json_logs=settings.log_json)
-    setup_sentry(settings)
+    setup_sentry(settings, service="bot")
 
     if settings.bot_mode is BotMode.WEBHOOK:
         logger.error("webhook_mode_not_implemented", hint="use BOT_MODE=polling (ADR-013)")
@@ -130,6 +140,8 @@ def main() -> None:
         asyncio.run(run_polling(settings))
     except KeyboardInterrupt:
         logger.info("bot_interrupted")
+    finally:
+        shutdown_sentry()
 
 
 if __name__ == "__main__":

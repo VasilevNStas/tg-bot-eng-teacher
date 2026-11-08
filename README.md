@@ -39,11 +39,12 @@ MVP-каркас работает:
 - coverage-отчёт и CI-валидация контента;
 - отдельный админ-бот: `/admin`, `/health`, `/users`, `/user`, `/block`,
   `/mute`, `/unblock`, `/audit`; общая БД, свой токен и allowlist;
-- `app.cli health` + heartbeat + Docker healthcheck;
+- `app.cli health` + heartbeat + Docker healthcheck + внешний uptime-пинг
+  (dead-man's switch) и опциональный Sentry;
 - `admin_audit` и containment (`block`/`mute`) в пользовательском боте.
 
-Ещё не реализованы: webhook, голос, внешний uptime/VPS-мониторинг — см. локальный
-план в `.opencode/_backlog.md`.
+Ещё не реализованы: webhook, голос, VPS-мониторинг (uptime вынесен на внешний
+сервис) — см. локальный план в `.opencode/_backlog.md`.
 
 ## Стек
 
@@ -182,6 +183,16 @@ docker compose --profile admin up -d   # если настроен ADMIN_BOT_TOK
 ```bash
 docker compose exec bot python -m app.cli health
 ```
+
+Мониторинг (подробно — `DEPLOY.md`, раздел 12):
+
+- `UPTIME_PING_URL` — dead-man's switch (healthchecks.io/UptimeRobot). Бот
+  пингует URL после каждого heartbeat; тишина → внешний алерт.
+- `python -m app.cli uptime` — разовая проверка URL.
+- `SENTRY_DSN`, `SENTRY_ENVIRONMENT`, `SENTRY_RELEASE` — ошибки и алерты;
+  `send_default_pii=False`, request-данные вырезаются.
+- `python -m app.cli metrics` / `product-metrics` — runtime и продуктовые
+  метрики.
 
 Каждый бот запускается своим compose-проектом: имя `tg-bot-eng-teacher` задано
 в `docker-compose.yml`, контейнеры и сети изолированы от других ботов на VDS.

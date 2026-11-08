@@ -32,8 +32,23 @@ def test_defaults() -> None:
     assert settings.admin_alert_chat_id is None
     assert settings.sentry_dsn is None
     assert settings.sentry_environment == "production"
+    assert settings.sentry_release is None
     assert settings.sentry_traces_sample_rate == 0.0
+    assert settings.uptime_ping_url is None
+    assert settings.uptime_ping_timeout_seconds == 5.0
     assert settings.metrics_snapshot_seconds == 60
+
+
+def test_uptime_ping_url_accepts_http_urls() -> None:
+    settings = make_settings(uptime_ping_url="https://hc-ping.com/abc")
+
+    assert settings.uptime_ping_url is not None
+    assert settings.uptime_ping_url.get_secret_value() == "https://hc-ping.com/abc"
+
+
+def test_uptime_ping_url_rejects_non_http_urls() -> None:
+    with pytest.raises(ValidationError, match="UPTIME_PING_URL"):
+        make_settings(uptime_ping_url="hc-ping.com/abc")
 
 
 def test_webhook_mode_requires_public_url() -> None:

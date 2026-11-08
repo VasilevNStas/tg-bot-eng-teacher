@@ -51,7 +51,10 @@ class Settings(BaseSettings):
     admin_alert_chat_id: int | None = None
     sentry_dsn: SecretStr | None = None
     sentry_environment: str = "production"
+    sentry_release: str | None = None
     sentry_traces_sample_rate: float = Field(default=0.0, ge=0, le=1)
+    uptime_ping_url: SecretStr | None = None
+    uptime_ping_timeout_seconds: float = Field(default=5.0, gt=0, le=30)
 
     llm_base_url: str = "https://openrouter.ai/api/v1"
     llm_api_key: SecretStr
@@ -135,6 +138,10 @@ class Settings(BaseSettings):
                 raise ValueError("WEBHOOK_SECRET is required when BOT_MODE=webhook")
         if not self.webhook_path.startswith("/"):
             raise ValueError("WEBHOOK_PATH must start with '/'")
+        if self.uptime_ping_url is not None:
+            uptime_url = self.uptime_ping_url.get_secret_value().strip()
+            if uptime_url and not uptime_url.startswith(("http://", "https://")):
+                raise ValueError("UPTIME_PING_URL must start with http:// or https://")
         return self
 
 

@@ -474,6 +474,47 @@ sudo -u deploy docker compose up -d
 
 ## 12. Диагностика
 
+### Мониторинг и алерты
+
+Три уровня, все опциональны и не требуют inbound-порта (бот работает на polling):
+
+1. **Liveness внутри хоста** — heartbeat-файл `data/health/bot.heartbeat`
+   (обновляется каждые 30 с) + Docker healthcheck `app.cli health`.
+2. **Внешний uptime (dead-man's switch)** — healthchecks.io / UptimeRobot:
+   - создайте check с периодом 60 с и grace 120 с;
+   - скопируйте ping-URL в `UPTIME_PING_URL` (это секрет: URL содержит токен);
+   - бот пингует URL после каждого heartbeat; если процесс умер или завис,
+     пинги прекращаются и сервис шлёт алерт (email/Telegram/webhook);
+   - проверка: `sudo -u deploy docker compose exec bot python -m app.cli uptime`.
+3. **Ошибки приложения** — Sentry:
+   - `SENTRY_DSN`, `SENTRY_ENVIRONMENT`, `SENTRY_RELEASE` (например, git SHA);
+   - `send_default_pii=False`, тело/заголовки запросов вырезаются;
+   - в Sentry настройте Issue Alert «first event» и Metric Alert на рост
+     error rate; уведомления — email или Telegram integration.
+
+Runtime- и продуктовые метрики:
+
+```bash
+sudo -u deploy docker compose exec bot python -m app.cli health --json
+sudo -u deploy docker compose exec bot python -m app.cli metrics --json
+sudo -u deploy docker compose exec bot python -m app.cli product-metrics --days 7
+```
+
+Если пришёл алерт:
+
+```bash
+cd /srv/tg-bot-eng-teacher
+sudo -u deploy docker compose ps -a
+sudo -u deploy docker compose logs --tail=200 bot
+sudo -u deploy docker compose exec bot python -m app.cli health
+# после устранения причины:
+sudo -u deploy docker compose up -d --force-recreate bot
+```
+
+Runbook: `.opencode/runbooks/monitoring.md`.
+
+### Типовые ошибки
+
 | Симптом | Причина | Решение |
 | ------- | ------- | ------- |
 | `Permission denied (publickey)` | ключ не в `authorized_keys` или неверные права | `chmod 700 ~deploy/.ssh`, `chmod 600 authorized_keys`, владелец `deploy` |

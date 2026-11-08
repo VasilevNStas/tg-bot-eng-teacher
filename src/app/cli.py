@@ -30,7 +30,7 @@ from app.db.database import Database
 from app.evals.errors import EvalError
 from app.evals.runner import run_evals
 from app.services.admin.service import AdminService
-from app.services.health import check_health, format_health
+from app.services.health import check_health, format_health, ping_uptime
 from app.services.metrics import read_metrics_snapshot
 from app.services.privacy.service import PrivacyService
 from app.services.product_metrics import ProductMetricsService, format_product_metrics
@@ -221,6 +221,13 @@ async def health(*, service: str, as_json: bool) -> int:
     report = await check_health(_db_path(), service)
     print(report.to_json() if as_json else format_health(report))
     return 0 if report.ok else 1
+
+
+async def uptime_ping(*, url: str, timeout_seconds: float) -> int:
+    """Ping the external uptime check once and report the result."""
+    ok = await ping_uptime(url, timeout_seconds=timeout_seconds)
+    print("ok" if ok else "fail")
+    return 0 if ok else 1
 
 
 async def admin_users(*, limit: int) -> int:
@@ -502,6 +509,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     health_parser.add_argument("--service", default="bot", help="Heartbeat name (bot/admin)")
     health_parser.add_argument("--json", action="store_true", help="Emit JSON")
 
+    uptime_parser = subparsers.add_parser(
+        "uptime",
+        help="Ping the external uptime check once",
+    )
+    uptime_parser.add_argument("--url", default=None, help="Override UPTIME_PING_URL")
+    uptime_parser.add_argument("--timeout", type=float, default=None)
+
     admin_parser = subparsers.add_parser("admin", help="Administrative lookups and containment")
     admin_sub = admin_parser.add_subparsers(dest="admin_command", required=True)
 
@@ -538,6 +552,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         "metrics",
         "product-metrics",
         "health",
+        "uptime",
         "admin",
     }
     setup_logging(
@@ -577,6 +592,17 @@ def main(argv: Sequence[str] | None = None) -> int:
             return asyncio.run(product_metrics(days=args.days, as_json=args.json))
         if args.command == "health":
             return asyncio.run(health(service=args.service, as_json=args.json))
+        if args.command == "uptime":
+            url = args.url or os.environ.get("UPTIME_PING_URL", "")
+            if not url.strip():
+                print("error: UPTIME_PING_URL is not set", file=sys.stderr)
+                return 2
+            timeout = (
+                args.timeout
+                if args.timeout is not None
+                else float(os.environ.get("UPTIME_PING_TIMEOUT_SECONDS", "5"))
+            )
+            return asyncio.run(uptime_ping(url=url.strip(), timeout_seconds=timeout))
         if args.command == "admin":
             if args.admin_command == "users":
                 return asyncio.run(admin_users(limit=args.limit))

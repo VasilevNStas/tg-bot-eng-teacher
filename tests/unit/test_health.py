@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import asyncio
 from pathlib import Path
 
+import httpx
+import pytest
 from sqlalchemy import text
 
 from app.db.base import Base
@@ -11,7 +14,9 @@ from app.services.health import (
     _head_revision,
     check_health,
     format_health,
+    heartbeat_loop,
     heartbeat_path,
+    ping_uptime,
     write_heartbeat,
 )
 
@@ -94,3 +99,56 @@ async def test_heartbeat_path_is_next_to_database(tmp_path: Path) -> None:
     path = heartbeat_path(tmp_path / "bot.db", "admin")
 
     assert path == tmp_path / "health" / "admin.heartbeat"
+
+
+async def test_ping_uptime_success() -> None:
+    transport = httpx.MockTransport(lambda request: httpx.Response(200))
+    async with httpx.AsyncClient(transport=transport) as client:
+        assert await ping_uptime("https://hc-ping.com/abc", client=client)
+
+
+async def test_ping_uptime_reports_failure() -> None:
+    transport = httpx.MockTransport(lambda request: httpx.Response(503))
+    async with httpx.AsyncClient(transport=transport) as client:
+        assert not await ping_uptime("https://hc-ping.com/abc", client=client)
+
+
+async def test_ping_uptime_swallows_network_errors() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        raise httpx.ConnectError("boom", request=request)
+
+    transport = httpx.MockTransport(handler)
+    async with httpx.AsyncClient(transport=transport) as client:
+        assert not await ping_uptime("https://hc-ping.com/abc", client=client)
+
+
+class _RecordingPingClient:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def get(self, url: str, *, timeout: float | None = None) -> httpx.Response:
+        self.calls += 1
+        return httpx.Response(200)
+
+    async def aclose(self) -> None:
+        return None
+
+
+async def test_heartbeat_loop_pings_uptime(tmp_path: Path) -> None:
+    client = _RecordingPingClient()
+    task = asyncio.create_task(
+        heartbeat_loop(
+            tmp_path / "bot.db",
+            "bot",
+            interval_seconds=1,
+            ping_url="https://hc-ping.com/abc",
+            ping_client=client,  # type: ignore[arg-type]
+        )
+    )
+    await asyncio.sleep(0.05)
+    task.cancel()
+    with pytest.raises(asyncio.CancelledError):
+        await task
+
+    assert client.calls >= 1
+    assert heartbeat_path(tmp_path / "bot.db", "bot").is_file()
