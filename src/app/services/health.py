@@ -14,12 +14,16 @@ from dataclasses import asdict, dataclass
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
+import httpx
 from alembic.config import Config
 from alembic.script import ScriptDirectory
 from sqlalchemy import func, select, text
 
+from app.core.logging import get_logger
 from app.db.database import Database
 from app.db.models import ContentItem, ProcessedUpdate
+
+logger = get_logger(__name__)
 
 _MIN_FREE_MB = 50
 _HEARTBEAT_MAX_AGE = timedelta(seconds=120)
@@ -69,16 +73,57 @@ def write_heartbeat(db_path: Path, service: str) -> None:
     path.write_text(datetime.now(UTC).isoformat(), encoding="utf-8")
 
 
+async def ping_uptime(
+    url: str,
+    *,
+    timeout_seconds: float = 5.0,
+    client: httpx.AsyncClient | None = None,
+) -> bool:
+    """Ping an external dead-man's-switch URL; never raises or logs the URL."""
+    owns_client = client is None
+    http = client or httpx.AsyncClient(timeout=timeout_seconds)
+    try:
+        response = await http.get(url, timeout=timeout_seconds)
+    except Exception as exc:
+        logger.warning("uptime_ping_failed", error=exc.__class__.__name__)
+        return False
+    finally:
+        if owns_client:
+            await http.aclose()
+    if response.is_success:
+        return True
+    logger.warning("uptime_ping_failed", status=response.status_code)
+    return False
+
+
 async def heartbeat_loop(
     db_path: Path,
     service: str,
     *,
     interval_seconds: float = 30.0,
+    ping_url: str | None = None,
+    ping_timeout_seconds: float = 5.0,
+    ping_client: httpx.AsyncClient | None = None,
 ) -> None:
-    """Keep the heartbeat fresh for the lifetime of the process."""
-    while True:
-        write_heartbeat(db_path, service)
-        await asyncio.sleep(interval_seconds)
+    """Keep the heartbeat fresh and, when configured, ping external uptime."""
+    client = ping_client
+    owns_client = False
+    if ping_url and client is None:
+        client = httpx.AsyncClient(timeout=ping_timeout_seconds)
+        owns_client = True
+    try:
+        while True:
+            write_heartbeat(db_path, service)
+            if ping_url and client is not None:
+                await ping_uptime(
+                    ping_url,
+                    timeout_seconds=ping_timeout_seconds,
+                    client=client,
+                )
+            await asyncio.sleep(interval_seconds)
+    finally:
+        if owns_client and client is not None:
+            await client.aclose()
 
 
 async def check_health(

@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from unittest.mock import patch
+from typing import Any
 
 from app.core.config import Settings
-from app.core.sentry import setup_sentry
+from app.core.sentry import _scrub_event, setup_sentry, shutdown_sentry
 
 
 def make_settings(**overrides: object) -> Settings:
@@ -17,37 +17,60 @@ def make_settings(**overrides: object) -> Settings:
     return Settings(_env_file=None, **values)  # type: ignore[arg-type]
 
 
-def test_sentry_is_disabled_without_dsn() -> None:
-    settings = make_settings()
+def test_setup_sentry_is_disabled_without_dsn(monkeypatch: Any) -> None:
+    calls: list[dict[str, object]] = []
+    monkeypatch.setattr("app.core.sentry.sentry_sdk.init", lambda **kwargs: calls.append(kwargs))
 
-    with patch("app.core.sentry.sentry_sdk.init") as init:
-        assert setup_sentry(settings) is False
-
-    init.assert_not_called()
-
-
-def test_sentry_is_disabled_for_empty_dsn() -> None:
-    settings = make_settings(sentry_dsn="")
-
-    with patch("app.core.sentry.sentry_sdk.init") as init:
-        assert setup_sentry(settings) is False
-
-    init.assert_not_called()
+    assert setup_sentry(make_settings()) is False
+    assert calls == []
 
 
-def test_sentry_initializes_without_pii() -> None:
+def test_setup_sentry_passes_production_options(monkeypatch: Any) -> None:
+    calls: list[dict[str, object]] = []
+    tags: dict[str, str] = {}
+    monkeypatch.setattr("app.core.sentry.sentry_sdk.init", lambda **kwargs: calls.append(kwargs))
+    monkeypatch.setattr(
+        "app.core.sentry.sentry_sdk.set_tag",
+        lambda key, value: tags.__setitem__(key, value),
+    )
+
     settings = make_settings(
-        sentry_dsn="https://public@example.ingest.sentry.io/1",
+        sentry_dsn="https://key@example.com/1",
         sentry_environment="staging",
+        sentry_release="abc123",
         sentry_traces_sample_rate=0.25,
     )
 
-    with patch("app.core.sentry.sentry_sdk.init") as init:
-        assert setup_sentry(settings) is True
+    assert setup_sentry(settings, service="bot") is True
+    assert calls == [
+        {
+            "dsn": "https://key@example.com/1",
+            "environment": "staging",
+            "release": "abc123",
+            "traces_sample_rate": 0.25,
+            "send_default_pii": False,
+            "max_request_body_size": "never",
+            "before_send": _scrub_event,
+        }
+    ]
+    assert tags == {"service": "bot"}
 
-    init.assert_called_once_with(
-        dsn="https://public@example.ingest.sentry.io/1",
-        environment="staging",
-        traces_sample_rate=0.25,
-        send_default_pii=False,
+
+def test_scrub_event_removes_request_data() -> None:
+    event = {"message": "boom", "request": {"url": "https://hc-ping.com/secret"}}
+
+    scrubbed = _scrub_event(event, {})
+
+    assert scrubbed == {"message": "boom"}
+
+
+def test_shutdown_sentry_flushes(monkeypatch: Any) -> None:
+    timeouts: list[float] = []
+    monkeypatch.setattr(
+        "app.core.sentry.sentry_sdk.flush",
+        lambda timeout: timeouts.append(timeout),
     )
+
+    shutdown_sentry()
+
+    assert timeouts == [2.0]

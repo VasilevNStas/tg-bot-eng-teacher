@@ -374,3 +374,36 @@ def test_cli_metrics(
     assert main(["metrics", "--json"]) == 0
     payload = json.loads(capsys.readouterr().out)
     assert payload["counters"]["updates_total"] == 1.0
+
+
+def test_cli_uptime(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    calls: list[tuple[str, float]] = []
+
+    async def fake_ping(
+        url: str,
+        *,
+        timeout_seconds: float = 5.0,
+        client: object = None,
+    ) -> bool:
+        calls.append((url, timeout_seconds))
+        return url.endswith("/ok")
+
+    monkeypatch.setattr("app.cli.ping_uptime", fake_ping)
+    monkeypatch.delenv("UPTIME_PING_URL", raising=False)
+
+    assert main(["uptime"]) == 2
+    assert main(["uptime", "--url", "https://hc-ping.com/ok", "--timeout", "2"]) == 0
+    assert main(["uptime", "--url", "https://hc-ping.com/fail"]) == 1
+
+    monkeypatch.setenv("UPTIME_PING_URL", "https://hc-ping.com/env/ok")
+    assert main(["uptime"]) == 0
+
+    assert calls == [
+        ("https://hc-ping.com/ok", 2.0),
+        ("https://hc-ping.com/fail", 5.0),
+        ("https://hc-ping.com/env/ok", 5.0),
+    ]
+    assert capsys.readouterr().out.count("ok") >= 2
